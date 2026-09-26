@@ -24,7 +24,7 @@ The whole Trace model at a glance:
 
 import from graph.nodes {
     Incident, Person, Claim, Source, Media, Location,
-    VerificationSignal, Subscription, Alert
+    VerificationSignal, Subscription, Alert, IdentityDecision
 }
 
 edge Involves: Incident --> Person {}
@@ -46,3 +46,7 @@ edge HasSignal: Media --> VerificationSignal {}
 edge HasSubscription: Person --> Subscription {}
 
 edge Receives: Subscription --> Alert {}
+
+# Human identity review -> each of the two Person records it concerns.
+# PROPOSED by Gabriel (People) - schema owner: Miguel.
+edge Reviews: IdentityDecision --> Person {}

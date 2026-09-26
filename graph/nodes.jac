@@ -89,6 +89,29 @@ node Alert {
         severity: str = "info";
 }
 
+# A human review of whether two Person records refer to the same person.
+# PROPOSED by Gabriel (People) - schema owner: Miguel.
+# It never merges or edits the Person nodes; it only records a decision that
+# points at BOTH original records (edge Reviews: IdentityDecision --> Person).
+# One node per pair (pair_key = the two Person jids sorted and joined by "|"),
+# so repeating the same decision cannot create a duplicate association.
+# A changed decision keeps the earlier one in f"history".
+node IdentityDecision {
+    has pair_key: str,
+        person_a_id: str,
+        person_b_id: str,
+        person_a_name: str = "",
+        person_b_name: str = "",
+        decision: str = "PENDING",          # CONFIRMED | REJECTED
+        reviewer: str = "",
+        decided_at: str = "",
+        note: str = "",
+        # Rule reasons shown to the reviewer at decision time.
+        basis: list[str] = [],
+        # Earlier decisions on this pair: "REJECTED by X at T" strings.
+        history: list[str] = [];
+}
+
 # One line in the "Agent activity" feed: which walker did what, and when.
 # Attached straight to root so the UI can list them in order.
 node ActivityEntry {
