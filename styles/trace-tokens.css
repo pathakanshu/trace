@@ -1,3 +1,7 @@
+/* This file is the CSS entry (imported by main.jac). It pulls in the
+   generated theme first, so Tailwind sees both sets of tokens in one pass. */
+@import "./global.css";
+
 /*
   Trace design tokens.
 
