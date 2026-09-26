@@ -1,4 +1,4 @@
-# CrisisGraph Agent Guide
+# Trace Agent Guide
 
 ## Mission
 
