@@ -54,6 +54,9 @@ jac test tests/test_trace.jac
 | `demo/seed.jac` | Deterministic demo data + reset | anyone |
 | `services/trace.jac` | `def:pub` endpoints + view objects for the UI | Person 1 |
 | `components/` | Dashboard page + panels (UI) | Person 2 |
+| `components/IncidentMap.jac` | MapLibre GL map (no token, works offline) | Person 2 |
+| `services/geo.jac` | Serves `geometry.topo.json` (provinces + districts, simplified, cached) | Person 2 |
+| `styles/trace-tokens.css` | CSS entry + Trace colour tokens (light + dark) | Person 2 |
 | `tests/` | Small deterministic tests | anyone |
 
 The graph:
@@ -69,7 +72,7 @@ Person -HasSubscription-> Subscription -Receives-> Alert
 ## 6. Intentionally simplified
 
 - Demo data is hardcoded. There is no scraping and no external APIs.
-- The map is a schematic placeholder (plotted from lat/lng), not a real map.
+- The map uses MapLibre GL with only the district/province borders from `geometry.topo.json` (no street tiles, so no token and no internet needed). Constituencies are in the file but not drawn yet.
 - Verification signals come from demo fields on `Media` (`exif_gps_present`, `content_hash`, `community_location`).
 - Name matching in ResolveWalker is a simple rule, not AI.
 - No auth. Alerts are shown in the UI, not sent anywhere.
