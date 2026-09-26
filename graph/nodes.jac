@@ -69,7 +69,11 @@ node Media {
         # EXIF parsing / perceptual hashing (Python libs via Jac interop).
         exif_gps_present: bool = False,
         content_hash: str = "",
-        community_location: str = "";
+        community_location: str = "",
+        # Aidana: "seed" or "upload". content_hash holds the real SHA-256 for uploads.
+        origin: str = "seed",
+        uploaded_by: str = "",
+        uploaded_at: str = "";
 }
 
 # A place on the map.
@@ -85,7 +89,9 @@ node VerificationSignal {
     has signal_type: str,
         value: str = "",
         confidence: str = "UNKNOWN",
-        explanation: str = "";
+        explanation: str = "",
+        # How the signal was produced. "simulated" until a real check runs.
+        method: str = "simulated";
 }
 
 # Someone following a person (fictional contact for the demo).
@@ -102,13 +108,38 @@ node Alert {
         claim_id: str = "";
 }
 
+# A human review of whether two Person records refer to the same person.
+# PROPOSED by Gabriel (People) - schema owner: Miguel.
+# It never merges or edits the Person nodes; it only records a decision that
+# points at BOTH original records (edge Reviews: IdentityDecision --> Person).
+# One node per pair (pair_key = the two Person jids sorted and joined by "|"),
+# so repeating the same decision cannot create a duplicate association.
+# A changed decision keeps the earlier one in f"history".
+node IdentityDecision {
+    has pair_key: str,
+        person_a_id: str,
+        person_b_id: str,
+        person_a_name: str = "",
+        person_b_name: str = "",
+        decision: str = "PENDING",          # CONFIRMED | REJECTED
+        reviewer: str = "",
+        decided_at: str = "",
+        note: str = "",
+        # Rule reasons shown to the reviewer at decision time.
+        basis: list[str] = [],
+        # Earlier decisions on this pair: "REJECTED by X at T" strings.
+        history: list[str] = [];
+}
+
 # One line in the "Agent activity" feed: which walker did what, and when.
 # Attached straight to root so the UI can list them in order.
 node ActivityEntry {
     has walker_name: str,
         message: str,
         created_at: str = "",
-        incident_id: str = "";
+        incident_id: str = "",
+        # jids of the records this step touched (Graph tab draws derived links).
+        target_ids: list[str] = [];
 }
 
 # A small cited report investigation. Structured step history lives in result_json.
