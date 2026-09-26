@@ -45,8 +45,18 @@ def:pub upload_image(incident: str, filename: str, source_reference: str, data_u
         raise ValueError("Choose a non-empty image under 6 MB.");
     }
     mime = parts[0].lower();
-    if not (mime.startswith("data:image/png;") or mime.startswith("data:image/jpeg;") or mime.startswith("data:image/gif;") or mime.startswith("data:image/webp;")) {
-        raise ValueError("Supported image types are PNG, JPEG, GIF, and WebP.");
+    supported = False;
+    if mime.startswith("data:image/png;") {
+        supported = content.startswith(b"\x89PNG\r\n\x1a\n");
+    } elif mime.startswith("data:image/jpeg;") {
+        supported = content.startswith(b"\\xff\\xd8\\xff");
+    } elif mime.startswith("data:image/gif;") {
+        supported = content.startswith(b"GIF87a") or content.startswith(b"GIF89a");
+    } elif mime.startswith("data:image/webp;") {
+        supported = len(content) >= 12 and content[:4] == b"RIFF" and content[8:12] == b"WEBP";
+    }
+    if not supported {
+        raise ValueError("The file bytes do not match a valid PNG, JPEG, GIF, or WebP image. Re-export the image and try again.");
     }
     digest = hashlib.sha256(content).hexdigest();
     matches = [m for m in [root -->][?:IncidentImageUpload]
@@ -57,9 +67,11 @@ def:pub upload_image(incident: str, filename: str, source_reference: str, data_u
         uploaded_at=datetime.now(timezone.utc).isoformat(), sha256=digest,
         data_url=data_url, duplicate_ids=[jid(m) for m in matches]
     );
-    # Keep the relationship symmetric in record metadata without creating result nodes.
+    # Matching is SHA-256 only; incident names are normalized solely for scoping.
     for old in matches {
-        old.duplicate_ids = old.duplicate_ids + [jid(new_record)];
+        if jid(new_record) not in old.duplicate_ids {
+            old.duplicate_ids = old.duplicate_ids + [jid(new_record)];
+        }
     }
     return _record_view(new_record);
 }
