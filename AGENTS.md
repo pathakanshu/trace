@@ -64,3 +64,14 @@ Bound external calls; optional failures cannot block core work. Fall back to pas
 Test persistence, invalid/repeated ingestion, identity provenance, positive/negative media matches, conflicting updates, correct alerts once, reset, and integration failures. Rehearse twice with reset/fallbacks and on another laptop.
 Freeze the demo before expansion; cut breadth before provenance, Jac depth, or repeatability. Prepare required submissions, a four-minute pitch, and 90-second backup video.
 Read this guide and relevant code; choose the smallest change. Done: working behavior, relevant checks/UI exercised, reset/fallback support, updated docs. Report changes, actual tests, and limitations; never claim untested functionality.
+
+## Team ownership and tab integration
+
+See `docs/TEAM.md` for the tab contract and merge workflow. Aidana owns
+`features/media/`; Gabriel owns `features/people/`; Miguel owns
+`features/graph/` and coordinates `graph/` schema changes; Anshu owns
+`features/organizations/`, `features/map/`, and shared integration.
+Keep feature-specific components, adapters, and tests in the owned folder.
+All tabs use the same graph snapshot and refresh callback. Coordinate changes
+to the shared shell, endpoints, snapshot types, dependencies, and styles with
+Anshu; coordinate graph schema changes with Miguel and the affected producer.

@@ -63,3 +63,24 @@ impl TraceDashboard.handleRunResolve -> None {
     }
     busy = "";
 }
+
+# Keyboard navigation follows the same in-place state change as a mouse click.
+impl TraceDashboard.handleTabKey(event: any, index: int) -> None {
+    nextIndex = index;
+    if event.key == "ArrowRight" {
+        nextIndex = (index + 1) % len(DASHBOARD_TABS);
+    } elif event.key == "ArrowLeft" {
+        nextIndex = (index + len(DASHBOARD_TABS) - 1) % len(DASHBOARD_TABS);
+    } elif event.key == "Home" {
+        nextIndex = 0;
+    } elif event.key == "End" {
+        nextIndex = len(DASHBOARD_TABS) - 1;
+    } else {
+        return;
+    }
+    event.preventDefault();
+    nextTab = DASHBOARD_TABS[nextIndex];
+    activeTab = nextTab;
+    target: any = document.getElementById("tab-" + nextTab);
+    if target { target.focus(); }
+}

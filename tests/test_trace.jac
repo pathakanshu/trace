@@ -1,4 +1,4 @@
-"""Small deterministic tests for the Trace demo. Run: jac test tests/trace.test.jac"""
+"""Small deterministic tests for the Trace demo. Run: jac test tests/test_trace.jac"""
 
 import from services.trace { reset_demo, add_hospital_update, run_resolve, run_watch, get_dashboard }
 

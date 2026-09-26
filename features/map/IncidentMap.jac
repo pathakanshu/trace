@@ -17,9 +17,9 @@ JS interop notes (see f"jac guide jac-cl-js-interop"):
 import from "maplibre-gl" { Map as MapLibreMap, Marker, NavigationControl }
 import "maplibre-gl/dist/maplibre-gl.css";
 import from "topojson-client" { feature }
-import from ..lib.utils { cn }
-sv import from ..services.geo { get_boundaries }
-sv import from ..services.trace { LocationView }
+import from ...lib.utils { cn }
+sv import from ...services.geo { get_boundaries }
+sv import from ...services.trace { LocationView }
 
 # The incident's district in geometry.topo.json (सिन्धुपाल्चोक / Sindhupalchok).
 glob INCIDENT_DISTRICT_ID: int = 30;
@@ -86,7 +86,7 @@ def make_pin(label: str) -> any {
     return el;
 }
 
-def:pub IncidentMap(locations: list[LocationView], className: str = "") -> JsxElement {
+def:pub IncidentMap(locations: list[LocationView], active: bool = True, className: str = "") -> JsxElement {
     has containerRef: Ref[HTMLDivElement] = Ref(),
         mapRef: Ref[any] = Ref(None),
         markersRef: Ref[list] = Ref([]),
@@ -130,6 +130,13 @@ def:pub IncidentMap(locations: list[LocationView], className: str = "") -> JsxEl
             fresh.append(marker);
         }
         markersRef.current = fresh;
+    }
+
+    # Tab panels stay mounted. Recalculate the canvas after the map becomes visible.
+    can with [active, status] entry {
+        if active and status == "ready" and mapRef.current {
+            mapRef.current.resize();
+        }
     }
 
     # Remove the map when the component unmounts.

@@ -8,7 +8,11 @@ All people, sources and media in this repo are fictional.
 
 ## 1. Install
 
-You need Jac 0.34.x (`pip install jaclang`). Then, from the project folder:
+Use the Jac 0.34.x native binary to match this JacHammer scaffold (validation uses 0.34.1).
+Check `jac --version` first; the 0.37 CLI has incompatible configuration/commands.
+Jac 0.34 is distributed as a binary, not the `jaclang` package on PyPI. See the
+[official installation guide](https://docs.jaseci.org/quick-guide/install/) for
+versioned binary installation. Then, from the project folder:
 
 ```bash
 jac install
@@ -24,15 +28,15 @@ Open the URL it prints (usually http://localhost:8000). In JacHammer the live pr
 
 ## 3. The demo (about 30 seconds)
 
-1. The dashboard auto-seeds **Bhote Koshi Flood Demo**. Maya Gurung is **MISSING** (claim by *Nepal Police Demo*).
+1. The dashboard auto-seeds **Bhote Koshi Flood Demo** and opens Map. Switch to **People**: Maya Gurung is **MISSING** (claim by *Nepal Police Demo*).
 2. See "Maya G." flagged as a **potential duplicate**. ResolveWalker never merges people.
-3. Click **Add hospital update**. IngestWalker adds *Central Hospital Demo*: **FOUND_SAFE**, then WatchWalker runs.
+3. Open **Demo controls** and click **Simulate hospital report**. IngestWalker adds *Central Hospital Demo*: **FOUND_SAFE**, then WatchWalker runs.
 4. You should see:
    - both claims kept on Maya's timeline (the police claim is not overwritten)
-   - a "Conflicting or updated status information detected" banner
+   - a banner explaining that the reports say different things
    - an alert for Maya's subscriber, Asha
-   - the new entries in the agent activity feed and the graph view
-5. Click **Reset demo** to start again. **Run WatchWalker** is safe to repeat, because claims it has already seen are skipped.
+   - the same hospital report in **Organizations** and **Graph**, plus the shared activity feed
+5. Click **Reset demo** to start again. **Check for updates** reruns WatchWalker; claims it has already seen are skipped.
 
 ## 4. Tests
 
@@ -40,24 +44,29 @@ Open the URL it prints (usually http://localhost:8000). In JacHammer the live pr
 jac test tests/test_trace.jac
 ```
 
-## 5. Folder guide
+## 5. Five tabs and team ownership
 
-| Folder | What lives there | Suggested owner |
-|---|---|---|
-| `graph/nodes.jac` | The 9 node types (+ ActivityEntry) | Person 1 |
-| `graph/edges.jac` | The 10 relationships, with a diagram | Person 1 |
-| `graph/activity.jac` | `now_iso()` + `log_activity()` for the activity feed | anyone |
-| `walkers/ingest.jac` | IngestWalker: report -> Source/Claim/Person | Person 4 |
-| `walkers/resolve.jac` | ResolveWalker: duplicate candidates | Person 1/4 |
-| `walkers/evidence.jac` | EvidenceWalker: verification signals on media | Person 3 |
-| `walkers/watch.jac` | WatchWalker: status changes -> alerts | Person 4 |
-| `demo/seed.jac` | Deterministic demo data + reset | anyone |
-| `services/trace.jac` | `def:pub` endpoints + view objects for the UI | Person 1 |
-| `components/` | Dashboard page + panels (UI) | Person 2 |
-| `components/IncidentMap.jac` | MapLibre GL map (no token, works offline) | Person 2 |
-| `services/geo.jac` | Serves `geometry.topo.json` (provinces + districts, simplified, cached) | Person 2 |
-| `styles/trace-tokens.css` | CSS entry + Trace colour tokens (light + dark) | Person 2 |
-| `tests/` | Small deterministic tests | anyone |
+The dashboard switches between **Map, People, Media, Organizations, Graph** in
+place. Tabs preserve their local search/selection state and share one graph
+snapshot. Notifications and activity remain visible beside every tab.
+
+Read [docs/TEAM.md](docs/TEAM.md) before starting parallel work. It defines the
+component contract, backend ownership, merge workflow, product guardrails, and
+manual acceptance checks.
+
+| Owner | Folder | Main entry |
+| --- | --- | --- |
+| Aidana | `features/media/` | `MediaTab.jac` |
+| Gabriel | `features/people/` | `PeopleTab.jac` |
+| Miguel | `features/graph/` | `GraphTab.jac` |
+| Anshu | `features/organizations/` | `OrganizationsTab.jac` |
+| Anshu | `features/map/` | `MapTab.jac` |
+
+Shared integration lives in `components/TraceDashboard*`, `components/shared/`,
+`services/trace.jac`, `main.jac`, and `jac.toml`. The graph schema stays in `graph/`
+and graph behavior stays in `walkers/`. Anshu coordinates shared integration;
+Miguel coordinates graph schema changes. Feature folders also hold their own
+helpers, adapters, and tests as those are added.
 
 The graph:
 
@@ -72,6 +81,7 @@ Person -HasSubscription-> Subscription -Receives-> Alert
 ## 6. Intentionally simplified
 
 - Demo data is hardcoded. There is no scraping and no external APIs.
+- The tab split provides workspaces, not implemented comments, voting, anonymous posting, uploads, or institutional publishing. Organizations currently groups existing institutional reports by source; it does not yet have Organization nodes.
 - The map uses MapLibre GL with only the district/province borders from `geometry.topo.json` (no street tiles, so no token and no internet needed). Constituencies are in the file but not drawn yet.
 - Verification signals come from demo fields on `Media` (`exif_gps_present`, `content_hash`, `community_location`).
 - Name matching in ResolveWalker is a simple rule, not AI.
@@ -83,7 +93,7 @@ Person -HasSubscription-> Subscription -Receives-> Alert
 - **Real EXIF / perceptual hashing / C2PA**: new `add_signal(...)` calls in `walkers/evidence.jac` (use Python libraries through Jac imports).
 - **AI identity resolution**: replace `score_pair` in `walkers/resolve.jac`. Keep the output a *candidate*.
 - **Notifications**: after the `Alert` is created in `walkers/watch.jac`.
-- **Interactive map / graph viz**: `MapPanel` / `GraphTreePanel` in `components/DashboardPanels.jac`.
-- **New endpoint**: add a `def:pub` in `services/trace.jac` **and** list it in the import in `main.jac`.
+- **Interactive map / graph viz**: `features/map/` / `features/graph/`.
+- **New endpoint**: put the feature action in `features/<tab>/services.jac`; coordinate its registration in `main.jac` and any snapshot additions with Anshu.
 
 Ground rules: every claim keeps its source, every signal keeps its explanation, conflicting claims stay visible, and AI or community output is evidence, not truth.
