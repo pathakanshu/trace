@@ -100,6 +100,31 @@ def:pub MapPanel(locations: list[LocationView], region: str) -> JsxElement {
     </Card>;
 }
 
+# ---------------- Full-bleed map (left side of the dashboard) ----------------
+# Fills its parent. Placeholder: plots lat/lng in a box. Swap for Leaflet/MapLibre later.
+def:pub MapCanvas(locations: list[LocationView], region: str) -> JsxElement {
+    min_lat = 999.0; max_lat = -999.0; min_lng = 999.0; max_lng = -999.0;
+    for loc in locations {
+        min_lat = min(min_lat, loc.latitude); max_lat = max(max_lat, loc.latitude);
+        min_lng = min(min_lng, loc.longitude); max_lng = max(max_lng, loc.longitude);
+    }
+    lat_span = max(max_lat - min_lat, 0.001);
+    lng_span = max(max_lng - min_lng, 0.001);
+
+    return <div className="relative h-full w-full overflow-hidden bg-muted/30 bg-[radial-gradient(circle_at_1px_1px,var(--border)_1px,transparent_0)] bg-[size:22px_22px]">
+        <div className="pointer-events-none absolute -left-10 -right-10 top-1/2 h-16 -translate-y-1/2 -rotate-6 bg-primary/10" />
+        <span className="absolute bottom-3 left-4 text-xs text-muted-foreground">{(region or "Map") + " - Bhote Koshi river (schematic)"}</span>
+        {len(locations) == 0 and <div className="absolute inset-0 flex items-center justify-center text-sm text-muted-foreground">{"No locations yet"}</div>}
+        {for loc in locations {
+            <div key={loc.name} className="absolute flex -translate-x-1/2 -translate-y-full flex-col items-center gap-1"
+                style={{"left": str(20 + 60 * (loc.longitude - min_lng) / lng_span) + "%", "top": str(75 - 50 * (loc.latitude - min_lat) / lat_span) + "%"}}>
+                <span className="whitespace-nowrap rounded-md border bg-card pt-0.5 pb-0.5 pl-2 pr-2 text-xs font-medium shadow-sm">{loc.name}</span>
+                <HugeiconsIcon icon={Location01Icon} strokeWidth={2} className="size-5 text-primary" />
+            </div>
+        }}
+    </div>;
+}
+
 # ---------------- People ----------------
 def:pub PeoplePanel(
     people: list[PersonView],

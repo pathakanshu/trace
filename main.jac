@@ -11,6 +11,7 @@ import from services.trace {
 }
 
 import ".styles.global.css";
+import ".styles.trace-tokens.css";   # Trace colour/font tokens (light + dark)
 import from "@jac/runtime" { Router, Routes, Route }
 import from .components.TraceDashboard { TraceDashboard }
 
