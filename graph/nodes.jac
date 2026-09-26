@@ -35,7 +35,19 @@ node Claim {
         notes: str = "",
         # Set to True once WatchWalker has looked at this claim, so running
         # WatchWalker twice never sends the same alert twice.
-        seen_by_watch: bool = False;
+        seen_by_watch: bool = False,
+        incident_id: str = "",
+        ingested_at: str = "",
+        original_content: str = "",
+        source_reference: str = "",
+        extraction_method: str = "",
+        ingestion_key: str = "",
+        payload_hash: str = "";
+}
+
+# Demo institutions are selectable publishers, not authenticated identities.
+node Organization {
+    has name: str, organization_type: str = "", is_demo: bool = True;
 }
 
 # Who made a claim: police, hospital, NGO, community report, registry...
@@ -86,7 +98,8 @@ node Subscription {
 node Alert {
     has message: str,
         created_at: str = "",
-        severity: str = "info";
+        severity: str = "info",
+        claim_id: str = "";
 }
 
 # One line in the "Agent activity" feed: which walker did what, and when.
@@ -94,5 +107,6 @@ node Alert {
 node ActivityEntry {
     has walker_name: str,
         message: str,
-        created_at: str = "";
+        created_at: str = "",
+        incident_id: str = "";
 }

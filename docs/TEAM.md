@@ -50,15 +50,15 @@ existing fields while someone else's branch still consumes them.
 
 | Tab | Present now | Next useful slice |
 | --- | --- | --- |
-| Map | Nepal boundaries and seeded graph location pins | Select a reported place and inspect its linked claims/media; distinguish claimed and checked locations |
+| Map | Selectable graph-backed pins and linked claims/media; explicit unverified-location label | Optional cross-tab selection |
 | People | Search, sourced timelines, explained duplicate candidates | Confirm/reject an identity candidate with an attributed association; retain both reports |
 | Media | Search/type filter and clearly labeled simulated evidence cards | Upload one controlled image, compute real metadata/hashes, attach check results and limitations |
-| Organizations | Read/search existing institutional reports grouped by source name | Publish a validated institutional report into the shared graph, then run WatchWalker |
+| Organizations | Review/publish structured demo reports, retain provenance, deduplicate retries, run WatchWalker | Integration with teammates’ slices |
 | Graph | Person/source/claim/subscription relationship tree | Render actual node IDs and typed edges, including media; expose real walker activity |
 
-Organizations currently projects `Source` information; it does not invent
-Organization nodes or infer that community contributors are institutions. Agree
-on `Organization -> Source` with Miguel before adding organization publishing.
+Organizations now publishes structured demo reports through real
+`Organization -> Source -> Claim` relationships. See `docs/PUBLISHING.md` for
+the exact additive schema and endpoint contract before changing these fields.
 The Graph tab is an inspector over the same graph, not a second database and not
 a prerequisite for other features to write their claims.
 
@@ -74,16 +74,18 @@ a prerequisite for other features to write their claims.
 - Do not build social posting, voting, anonymous publishing, video analysis,
   and a polished graph all at once. Complete one source-to-alert flow first.
 - Only advertise checks actually run. Existing media results are simulated.
-- Before enabling general publishing, fix duplicate ingestion, identity matching,
-  incident-scoped reset, and claim provenance. This tab split does not fix them.
+- Structured demo publishing now validates explicit person IDs, preserves
+  provenance, rejects reused references with changed content, and deduplicates
+  sequential retries. Reset is incident-scoped. General public publishing still
+  requires authentication and stronger concurrency controls.
 
 ## Merge workflow
 
 1. Everyone starts from the same integrated tab-split commit. If someone already
    has edits to the old panels, move those edits into their new feature folder
    before deleting/replacing anything on their branch.
-2. Use one branch per owner, for example `codex/media`, `codex/people`,
-   `codex/graph`, and `codex/map-organizations`. Separate folders reduce conflicts;
+2. Use one branch per owner, `codex/aidana`, `codex/gabriel`,
+   `codex/miguel`, and `codex/anshu`. Separate folders reduce conflicts;
    sharing one mutable JacHammer workspace does not provide Git isolation.
 3. Keep normal feature edits in the owned folder and assigned walker. Ask for
    a shared-interface change before depending on it; don't silently change it.
@@ -103,8 +105,8 @@ a prerequisite for other features to write their claims.
 - Pan/zoom Map, switch away and back: the viewport remains and fills the panel.
 - Simulate the hospital report from any tab: People, Organizations, Graph, and
   notifications reflect the same update without resetting the active tab.
-- Reset the isolated demo and check all tabs again. Do not run the existing reset
-  against a graph containing unrelated data: its broad deletion is still pending.
+- Reset the isolated demo and check all tabs again. Unrelated incidents and
+  nodes referenced outside the demo must survive.
 - At phone width, the tab strip scrolls and activity moves below the active panel.
 
 This is a division of implementation ownership, not a claim that every feature
@@ -124,3 +126,10 @@ in the planning table already exists.
 - Uploads, publishing, identity confirmation, comments/votes, phone layout, and
   the complete cross-tab hospital/reset rehearsal are not verified by this check.
   The backend's four existing demo tests cover the scripted update/reset logic.
+
+## Anshu integration update
+
+The original scaffold verification above describes the earlier tab split.
+For the implemented Organizations/Map slice and its tested limits, read
+`docs/PUBLISHING.md`. Other feature owners should retain their own UI work and
+merge the additive shared contract rather than replacing shared files wholesale.

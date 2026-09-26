@@ -1,11 +1,14 @@
 # Organizations — Anshu
 
-Entry component: `OrganizationsTab.jac`.
+`OrganizationsTab.jac` reads institutional reports from the shared snapshot.
+`PublishReport.jac` and its implementation provide a structured form, explicit
+person selection, local preview, and publish/retry feedback. `services.jac`
+validates IDs and content, calls IngestWalker, then runs WatchWalker.
 
-Own institutional reports and publishing. Current cards group existing institutional Source claims; coordinate Organization nodes with Miguel before adding the publisher.
+These are fictional institutions, not authenticated publishers. Preserve each
+report's original text and reference. Corrections use new references; exact
+retries return the saved claim without another alert.
 
-Keep feature components, helpers, new server adapters, and focused tests in this folder.
-All tabs receive a read-only `DashboardSnapshot` and async `onRefresh` callback.
-After a successful server write, `await onRefresh()` to update all views.
-
-See [the team contract](../../docs/TEAM.md) before changing shared interfaces.
+See [the publishing contract](../../docs/PUBLISHING.md) for shared additions and
+[the team contract](../../docs/TEAM.md) for ownership. No uploads or LLM parsing
+are implemented in this slice.

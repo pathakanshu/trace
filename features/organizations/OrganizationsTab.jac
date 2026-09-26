@@ -1,25 +1,16 @@
-"""Anshu's workspace. Current institutional sources projected from existing claims.
-
-This does not create Organization nodes or infer that community posters are institutions.
-Coordinate the future Organization -> Source relationship with the graph schema owner.
-"""
+"""Anshu: institutional reports and a structured, reviewed publishing form."""
+import from .PublishReport { PublishReport }
 import from ...components.shared.Display { SectionHeading, source_kind, status_sentence, friendly_time }
 sv import from ...services.trace { DashboardSnapshot }
 
 def:pub OrganizationsTab(snapshot: DashboardSnapshot, onRefresh: Callable[[], any]) -> JsxElement {
     has query: str = "";
     q = query.strip().lower();
-    institutions: list[str] = [];
-    for p in snapshot.people {
-        for c in p.claims {
-            if c.source_type in ["POLICE", "HOSPITAL", "NGO", "GOVERNMENT"] and c.source_name not in institutions {
-                institutions.append(c.source_name);
-            }
-        }
-    }
+    institutions = [o.name for o in snapshot.organizations];
     visible = [name for name in institutions if q == "" or q in name.lower()];
     return <div className="flex flex-col gap-5">
         <SectionHeading title="Organizations" subtitle="Read reports published by police, hospitals, government, and aid organizations." />
+        <PublishReport snapshot={snapshot} onRefresh={onRefresh} />
         <label className="flex max-w-xl flex-col gap-2 text-sm">
             <span className="font-medium">{"Search organizations"}</span>
             <input type="search" value={query}
@@ -41,6 +32,12 @@ def:pub OrganizationsTab(snapshot: DashboardSnapshot, onRefresh: Callable[[], an
                                 <span className="text-xs text-muted-foreground">{source_kind(c.source_type) + " · " + friendly_time(c.timestamp)}</span>
                                 <span className="text-sm font-medium">{p.name + " · " + status_sentence(c.claim_type)}</span>
                                 <p className="text-sm">{c.value}</p>
+                                <p className="text-xs text-muted-foreground">{"Report: " + (c.source_reference or "unknown reference") + " · Ingested: " + (c.ingested_at or "unknown")}</p>
+                                <details className="text-xs">
+                                    <summary className="cursor-pointer text-primary">{"Source record and original text"}</summary>
+                                    <p className="mt-2 whitespace-pre-wrap">{c.original_content or "Original text not recorded in this legacy fixture."}</p>
+                                    <p className="mt-2 break-all text-muted-foreground">{"Claim: " + c.id + " · Source: " + c.source_id + " · Method: " + (c.extraction_method or "unknown")}</p>
+                                </details>
                                 {c.notes and <p className="text-xs text-muted-foreground">{c.notes}</p>}
                             </article>
                             }

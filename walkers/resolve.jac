@@ -89,7 +89,7 @@ walker ResolveWalker {
         }
         log_activity(
             "ResolveWalker",
-            f"Looked for records that may be the same person: found {len(self.candidates)} possible match(es). Nothing was combined; a person must confirm."
+            f"Looked for records that may be the same person: found {len(self.candidates)} possible match(es). Nothing was combined; a person must confirm.", jid(here)
         );
     }
 }

@@ -3,12 +3,12 @@
 Every walker calls f"log_activity(...)" so the UI can show what the agents did.
 """
 
-import from datetime { datetime }
+import from datetime { datetime, timezone }
 import from graph.nodes { ActivityEntry }
 
 # Current time as a short ISO string, e.g. "2026-09-20T14:30:05".
 def now_iso() -> str {
-    return datetime.now().isoformat(timespec="seconds");
+    return datetime.now(timezone.utc).isoformat(timespec="seconds");
 }
 
 # Claim types stay as codes in the graph (MISSING, FOUND_SAFE...). This turns
@@ -27,8 +27,8 @@ def plain_status(claim_type: str) -> str {
 
 # Attach one ActivityEntry to root. f"root ++> X" connects X to the graph root,
 # which is also what makes Jac persist it.
-def log_activity(walker_name: str, message: str) -> None {
+def log_activity(walker_name: str, message: str, incident_id: str = "") -> None {
     root ++> ActivityEntry(
-        walker_name=walker_name, message=message, created_at=now_iso()
+        walker_name=walker_name, message=message, created_at=now_iso(), incident_id=incident_id
     );
 }

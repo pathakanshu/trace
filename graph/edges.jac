@@ -24,7 +24,7 @@ The whole Trace model at a glance:
 
 import from graph.nodes {
     Incident, Person, Claim, Source, Media, Location,
-    VerificationSignal, Subscription, Alert
+    VerificationSignal, Subscription, Alert, Organization
 }
 
 edge Involves: Incident --> Person {}
@@ -46,3 +46,6 @@ edge HasSignal: Media --> VerificationSignal {}
 edge HasSubscription: Person --> Subscription {}
 
 edge Receives: Subscription --> Alert {}
+
+edge HasOrganization: Incident --> Organization {}
+edge Publishes: Organization --> Source {}

@@ -26,22 +26,33 @@ jac start --dev main.jac
 
 Open the URL it prints (usually http://localhost:8000). In JacHammer the live preview is already running.
 
-## 3. The demo (about 30 seconds)
+## 3. The demo
 
-1. The dashboard auto-seeds **Bhote Koshi Flood Demo** and opens Map. Switch to **People**: Maya Gurung is **MISSING** (claim by *Nepal Police Demo*).
-2. See "Maya G." flagged as a **potential duplicate**. ResolveWalker never merges people.
-3. Open **Demo controls** and click **Simulate hospital report**. IngestWalker adds *Central Hospital Demo*: **FOUND_SAFE**, then WatchWalker runs.
-4. You should see:
-   - both claims kept on Maya's timeline (the police claim is not overwritten)
-   - a banner explaining that the reports say different things
-   - an alert for Maya's subscriber, Asha
-   - the same hospital report in **Organizations** and **Graph**, plus the shared activity feed
-5. Click **Reset demo** to start again. **Check for updates** reruns WatchWalker; claims it has already seen are skipped.
+1. If upgrading an existing starter graph, use **Demo controls → Reset demo** once
+   to load the new fictional institutions. Reset is now incident-scoped.
+2. Open **Organizations → Load hospital example → Review report**. Check the
+   institution, explicit person record, source reference, and original text.
+3. **Publish demo report** adds the source claim, then runs WatchWalker. Inspect
+   the new report in Organizations, People, Graph, and the notification panel.
+   The earlier police claim remains. A strictly newer dated status is an update,
+   while differing latest/undated claims are labeled for review.
+4. Review and publish the same form again: the same claim ID is returned, with
+   no duplicate claim or alert. Changing content under the same report reference
+   is rejected; a correction uses a new reference.
+5. Reload: the graph data survives. Open **Map** and select the bridge pin to see
+   its linked police claim, source, reported time, and media record.
+6. **Reset demo** restores the starting scenario. Other incidents and shared
+   nodes are preserved. The scripted hospital button remains as a fallback.
+
+The form is for fictional demo publishers; it does not authenticate institutions.
+All entered times are UTC; blank reported time stays unknown. Ingestion time is
+recorded separately. No external API or model is required for this workflow.
 
 ## 4. Tests
 
 ```bash
-jac test tests/test_trace.jac
+jac test tests/test_trace.jac tests/test_publishing.jac
+jac build --check_only
 ```
 
 ## 5. Five tabs and team ownership
@@ -71,6 +82,7 @@ helpers, adapters, and tests as those are added.
 The graph:
 
 ```
+Incident -HasOrganization-> Organization -Publishes-> Source
 Incident -Involves-> Person <-About- Claim <-Asserts- Source
 Incident -Contains-> Media -LocatedAt-> Location
                      Media -HasSignal-> VerificationSignal
@@ -81,11 +93,13 @@ Person -HasSubscription-> Subscription -Receives-> Alert
 ## 6. Intentionally simplified
 
 - Demo data is hardcoded. There is no scraping and no external APIs.
-- The tab split provides workspaces, not implemented comments, voting, anonymous posting, uploads, or institutional publishing. Organizations currently groups existing institutional reports by source; it does not yet have Organization nodes.
+- Structured institutional publishing and map evidence inspection work. Comments, voting, anonymous posting, uploads, and human identity confirmation remain assigned follow-up work.
 - The map uses MapLibre GL with only the district/province borders from `geometry.topo.json` (no street tiles, so no token and no internet needed). Constituencies are in the file but not drawn yet.
 - Verification signals come from demo fields on `Media` (`exif_gps_present`, `content_hash`, `community_location`).
 - Name matching in ResolveWalker is a simple rule, not AI.
-- No auth. Alerts are shown in the UI, not sent anywhere.
+- No auth. Alerts are shown in the UI, not sent anywhere. Publishing is demo-only.
+- Retry deduplication is tested sequentially in one local runtime. This is not a distributed exactly-once delivery system.
+- The supplied JacHammer preview redirects to sign-in in a fresh browser session; a public deployment still needs verification.
 
 ## 7. Where to add things
 
@@ -97,3 +111,8 @@ Person -HasSubscription-> Subscription -Receives-> Alert
 - **New endpoint**: put the feature action in `features/<tab>/services.jac`; coordinate its registration in `main.jac` and any snapshot additions with Anshu.
 
 Ground rules: every claim keeps its source, every signal keeps its explanation, conflicting claims stay visible, and AI or community output is evidence, not truth.
+
+## 8. Publishing integration contract
+
+See [docs/PUBLISHING.md](docs/PUBLISHING.md) for the additive schema fields,
+endpoint arguments, ownership notes, and verification evidence for this slice.

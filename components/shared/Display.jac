@@ -55,13 +55,15 @@ cl def:pub status_dot(claim_type: str) -> str {
 
 # "2026-09-21T09:15:00" -> "Sep 21, 9:15 AM"
 cl def:pub friendly_time(iso: str) -> str {
+    if not iso { return "Time unknown"; }
     if len(iso) < 16 { return iso; }
     months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     hour = int(iso[11:13]);
     suffix = "AM" if hour < 12 else "PM";
     hour12 = hour % 12;
     if hour12 == 0 { hour12 = 12; }
-    return months[int(iso[5:7]) - 1] + " " + str(int(iso[8:10])) + ", " + str(hour12) + ":" + iso[14:16] + " " + suffix;
+    zone = " UTC" if iso.endswith("+00:00") or iso.endswith("Z") else "";
+    return months[int(iso[5:7]) - 1] + " " + str(int(iso[8:10])) + ", " + str(hour12) + ":" + iso[14:16] + " " + suffix + zone;
 }
 
 cl def:pub plural(n: int, word: str) -> str {

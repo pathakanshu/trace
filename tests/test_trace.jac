@@ -25,11 +25,14 @@ test "hospital update keeps both claims and creates one alert" {
     assert created == 1;
     snap = get_dashboard();
     maya = [p for p in snap.people if p.name == "Maya Gurung"][0];
-    assert maya.has_conflict;
+    assert not maya.has_conflict;
+    assert maya.latest_status == "FOUND_SAFE";
     assert [c.claim_type for c in maya.claims] == ["MISSING", "FOUND_SAFE"];
     assert len(snap.alerts) == 1;
     # Running WatchWalker again must not duplicate the alert.
     assert run_watch() == 0;
+    assert add_hospital_update() == 0;
+    assert len(get_dashboard().alerts) == 1;
 }
 
 test "reset clears alerts" {
