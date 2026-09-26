@@ -60,7 +60,7 @@ walker EvidenceWalker {
         self.add_signal(here, "SYNTHETIC_MEDIA", "No signal available", "NONE",
             "No synthetic-media detector was run in the starter.");
 
-        log_activity("EvidenceWalker", f"Attached signals to media: {here.description}");
+        log_activity("EvidenceWalker", f"Checked a photo or video for clues: {here.description}");
     }
 
     def add_signal(media: Media, signal_type: str, value: str, confidence: str, explanation: str) -> None {

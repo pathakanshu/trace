@@ -17,7 +17,7 @@ It never deletes or overwrites the old claim. Both stay in the graph.
 
 import from graph.nodes { Incident, Person, Claim, Source, Subscription, Alert }
 import from graph.edges { Involves, Asserts, About, HasSubscription, Receives }
-import from graph.activity { log_activity, now_iso }
+import from graph.activity { log_activity, now_iso, plain_status }
 
 # Claim types that describe a person's status (vs e.g. SEEN_AT_LOCATION).
 glob STATUS_CLAIMS: list[str] = ["MISSING", "FOUND_SAFE", "INJURED", "DECEASED"];
@@ -56,7 +56,8 @@ walker WatchWalker {
                 continue;   # first status we have heard, nothing changed
             }
             source_name = self.source_of(claim);
-            message = f"New status information for {here.name}: {source_name} reports {claim.claim_type}. Earlier claims ({', '.join(earlier_types)}) are kept.";
+            earlier_words = " and ".join([plain_status(t) for t in earlier_types]);
+            message = f"Update on {here.name}: {source_name} has {plain_status(claim.claim_type)}. Earlier they were {earlier_words}. Both reports are shown so you can see who said what.";
             for sub in subscriptions {
                 sub +>:Receives():+> Alert(
                     message=message, created_at=now_iso(), severity="high"
@@ -65,12 +66,12 @@ walker WatchWalker {
             }
             log_activity(
                 "WatchWalker",
-                f"Conflicting/updated status for {here.name} ({', '.join(earlier_types)} -> {claim.claim_type}); alerted {len(subscriptions)} subscriber(s)"
+                f"Noticed new information about {here.name} and notified {len(subscriptions)} " + ("person" if len(subscriptions) == 1 else "people") + " following them"
             );
         }
 
         if not new_claims and subscriptions {
-            log_activity("WatchWalker", f"No new claims about {here.name}");
+            log_activity("WatchWalker", f"Checked for updates on {here.name}: nothing new");
         }
     }
 

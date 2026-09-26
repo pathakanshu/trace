@@ -14,7 +14,7 @@ then hand clean fields to this walker so provenance is always preserved.
 
 import from graph.nodes { Incident, Person, Claim, Source }
 import from graph.edges { Involves, Asserts, About }
-import from graph.activity { log_activity }
+import from graph.activity { log_activity, plain_status }
 
 walker IngestWalker {
     # Input fields (one report). These are the walker's "arguments".
@@ -64,7 +64,7 @@ walker IngestWalker {
         self.person_id = jid(person);
         log_activity(
             "IngestWalker",
-            f"{source.name} asserts {self.claim_type} about {person.name}"
+            f"New report added: {source.name} says {person.name} was {plain_status(self.claim_type)}"
         );
     }
 
