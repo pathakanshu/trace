@@ -6,6 +6,12 @@ Trace is a graph-native disaster intelligence platform that connects people, cla
 
 All people, sources and media in this repo are fictional.
 
+The planned larger corpus is specified in [Test data rules](docs/TEST_DATA_RULES.md):
+1,000 fictional individuals, 200 controlled images, and the broader disaster
+graph, using cited 2016 Bhote Koshi context. This is a specification only;
+the data has not been generated. For a later generation task, use the
+[generator prompt](docs/TEST_DATA_GENERATOR_PROMPT.md) with its linked contracts.
+
 ## 1. Install
 
 Use the Jac 0.34.x native binary to match this JacHammer scaffold (validation uses 0.34.1).
