@@ -34,12 +34,14 @@ Next: pitch, backup video, Devpost.
 
 ## Anshu (map, integration)
 
-Working on: geographic-input integrity checks in `tools/test_data/audit_geography.py`
-and tests, strict audit/report and README/repair notes. Reconcile preserved OSM
-input hashes and feature coordinates with the 170 existing locations; no new
-locations, geographic assumptions or application imports. Media recipe 9b7748d
-pushed: all 40 derivative hashes reproduced in memory. Fresh media audit is
-10 pass / 0 fail / 1 blocked; 112 tooling tests pass (101 + 11 media).
+Working on: explicit public-input/private-oracle boundary check in
+`tools/test_data/audit_public_inputs.py` and tests; strict report and README.
+Check only delivered catalog/raw inputs and their allowed file paths; no app
+security claim or source-instruction execution. Geography b77e59d is pushed.
+Fresh shallow clone at b77e59d, GitHub bundle download and restore all succeeded;
+119 tooling tests pass, and fresh audits exactly reproduce published checks.
+No tracked clone changes or runtime store were created. Local rehearsal server
+8092 has been stopped; hosted/running developer services were not changed.
 
 App handoff: all four overnight tasks complete; draft PR #4 ready:
 https://github.com/pathakanshu/trace/pull/4 (branch `codex/anshu-night`).
@@ -65,9 +67,9 @@ ab3fc56. No Linguist overrides/exclusions added. Not organizer eligibility proof
 
 Corpus published on origin/codex/test-data: e710475 control pack (26 records),
 23f81dd 40 cited queries, a65364f checkpoint diagnostics, fb64b72 40 concrete
-negative cases. **112 distinct tooling tests pass across schema/Pillow environments**
-(101 + eleven separately run media checks). Primary 8,027 records and binary
-bundle are unchanged. Strict audit: **18 pass / 15 fail / 2 blocked**.
+negative cases. **119 distinct tooling tests pass across schema/Pillow environments**
+(108 + eleven separately run media checks). Primary 8,027 records and binary
+bundle are unchanged. Strict audit: **20 pass / 15 fail / 2 blocked**.
 New measured defects: T+72 fixture summary is 353 missing / 547 safe / 50 injured /
 50 unresolved, target 650 / 250 / 50 / 50. The generator assigns 297 safe follow-ups
 outside its intended cohort. Six death rumors lack required equal/unknown-time
@@ -138,3 +140,5 @@ Working on: (fill in)
 - 06:09 codex/anshu-night ae827d4 / codex/test-data 6704431: private identities now contract-shaped, 20 ambiguous hard negatives and two cyclic review joins exposed. 104 tooling tests pass; strict audit 18/15/2. Fresh media audit next; no corpus load or original-byte changes.
 
 - 06:20 codex/test-data 0fc9840/9b7748d: fresh 400-file media checks and all 40 derivative hashes pass; no asset bytes changed. 112 tooling tests pass; geography provenance audit next, no new coordinates.
+
+- 06:34 codex/test-data b77e59d: clean-clone handoff rehearsed with fresh GitHub asset download; 119 tests and both published audits reproduced. No runtime store created. PR #4 now links STATUS and the private data repair guide.
