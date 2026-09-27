@@ -34,11 +34,13 @@ Next: pitch, backup video, Devpost.
 
 ## Anshu (map, integration)
 
-Working on: corpus audit/tooling only, on `codex/test-data`. Next files:
-`tools/test_data/audit_sources.py`, its tests, `audit_contracts.py`,
-`unpack_assets.py` and unpacker tests; measured audit and dataset/tooling READMEs.
-Primary reports/assets remain unchanged. Check raw-envelope conformity and
-exercise asset restore failures before claiming readiness. No app import.
+Working on: corpus tooling only on `codex/test-data`. Raw-source audit 3866853
+and asset restore 4039c8d are pushed. Next: `tools/test_data/generate_hero.py`,
+hero tests, `validate_dataset.py` hero-export hookup, strict audit and READMEs.
+Hero closure is missing its incident and two referenced locations; repair the
+private selection from unchanged public records, preserving all primary bytes.
+Scenario names/focal references also need a separate semantic audit; do not
+claim all twelve stories are executable merely because their IDs are listed.
 
 App handoff: all four overnight tasks complete; draft PR #4 ready:
 https://github.com/pathakanshu/trace/pull/4 (branch `codex/anshu-night`).
@@ -64,15 +66,18 @@ ab3fc56. No Linguist overrides/exclusions added. Not organizer eligibility proof
 
 Corpus published on origin/codex/test-data: e710475 control pack (26 records),
 23f81dd 40 cited queries, a65364f checkpoint diagnostics, fb64b72 40 concrete
-negative cases. **45 distinct tooling tests pass across schema/Pillow environments**
-(42 + three separately run decoder checks). Primary 8,027 records and binary
-bundle are unchanged. Strict audit: **13 pass / 10 fail / 2 blocked**.
+negative cases. **60 distinct tooling tests pass across schema/Pillow environments**
+(57 + three separately run decoder checks). Primary 8,027 records and binary
+bundle are unchanged. Strict audit: **14 pass / 11 fail / 2 blocked**.
 New measured defects: T+72 fixture summary is 353 missing / 547 safe / 50 injured /
 50 unresolved, target 650 / 250 / 50 / 50. The generator assigns 297 safe follow-ups
 outside its intended cohort. Six death rumors lack required equal/unknown-time
 opposition at release. Sources must not be silently rewritten; coordinate a
 versioned repair. Also 153 future references, legacy support shapes and only
 170/1,000 locations remain. Retry/injection cases are plans, not executed results.
+All 1,800 raw hashes match, but 1,260 JSON reports fail the required envelope
+shape. Bundle restore twice verified 400 files and preserved bytes/mtimes;
+unpacker now rejects symlink escapes, corrupt inventory and overwrites.
 No corpus importer/replay/reset or model answers were fabricated or run.
 
 Coordination: branch only, ready for Miguel to integrate. Keeping original
@@ -121,3 +126,5 @@ Working on: (fill in)
 - 05:15 codex/test-data 23f81dd: 40 cited private questions and 26 control records published; 25 tooling tests pass. Audit still reports corpus failures. Investigating final-cohort drift before any source rewrite.
 
 - 05:34 codex/test-data fb64b72: 40 concrete negatives, 40 cited queries, 26 controls; 45 distinct offline tooling tests pass. Audit 13/10/2 and final-cohort/rumor defects documented. Published corpus bytes preserved; raw-envelope/asset-unpacker audit next.
+
+- 05:41 codex/test-data 3866853/4039c8d: source envelope mismatch documented; real 400-file asset restore rehearsed twice. 60 tooling tests pass across two environments; hero reference-closure fix next.
