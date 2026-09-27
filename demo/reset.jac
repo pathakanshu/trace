@@ -4,12 +4,13 @@ Unknown node types and legacy unscoped activity are deliberately left alone.
 import from graph.nodes { Incident, ActivityEntry }
 import from graph.edges {
     Involves, Contains, About, Asserts, HasOrganization, Publishes,
-    HasSubscription, Receives, LocatedAt, HasSignal
+    HasSubscription, Receives, LocatedAt, HasSignal, HasInvestigation
 }
 
 def clear_incident(incident_name: str) -> None {
     for incident in [root -->[?:Incident, name == incident_name]] {
         found: dict = {jid(incident): incident};
+        for run in [incident ->:HasInvestigation:->] { found[jid(run)] = run; }
         for person in [incident ->:Involves:->] {
             found[jid(person)] = person;
             for claim in [person <-:About:<-] {

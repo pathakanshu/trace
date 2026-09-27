@@ -10,10 +10,10 @@ You are preparing Trace's fictional disaster-response test corpus. Read these
 repository files in order:
 
 1. `AGENTS.md` and `docs/TEAM.md` for product boundaries and team ownership.
-2. `docs/TEST_DATA_RULES.md` for the historical scenario, quotas, semantics,
+2. `docs/plans/test-data/TEST_DATA_RULES.md` for the historical scenario, quotas, semantics,
    presentation, assets, evaluation, and current implementation gaps.
-3. `demo/spec/quotas.json` for exact counts.
-4. `demo/spec/record-contract.md` and `demo/spec/trace-record.schema.json` for
+3. `docs/plans/test-data/quotas.json` for exact counts.
+4. `docs/plans/test-data/record-contract.md` and `docs/plans/test-data/trace-record.schema.json` for
    exact file formats and fields.
 
 The working historical setting is the **5 July 2016 Bhote Koshi flood in

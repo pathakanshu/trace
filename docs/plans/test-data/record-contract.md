@@ -1,7 +1,7 @@
 # Trace catalog record contract 1.0
 
 This is a generation contract, not fixture data or an implemented importer.
-Read [the rules](../../docs/TEST_DATA_RULES.md) and [quotas](quotas.json) first.
+Read [the rules](TEST_DATA_RULES.md) and [quotas](quotas.json) first.
 `trace-record.schema.json` is JSON Schema 2020-12 for **one JSONL object**.
 There are **17** catalog kinds. All objects reject unknown fields. All listed
 fields are required; only fields marked `?` may be `null`. Empty strings do not
@@ -205,7 +205,7 @@ use the same syntax; actual generation/retrieval times are distinct from replay.
 Arrays contain unique IDs unless an ordered action sequence intentionally retries
 an action. All paths are project-relative; file integrity checks reject symlinks
 escaping approved roots. Support files and oracles are never served to clients. Manifest schema_path and
-quota_path are `demo/spec/trace-record.schema.json` and `demo/spec/quotas.json`.
+quota_path are `docs/plans/test-data/trace-record.schema.json` and `docs/plans/test-data/quotas.json`.
 Its file inventory excludes the manifest itself and validation-report.json,
 avoiding recursive hashes; the report records the manifest hash as check evidence.
 

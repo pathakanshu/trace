@@ -110,3 +110,10 @@ node ActivityEntry {
         created_at: str = "",
         incident_id: str = "";
 }
+
+# A small cited report investigation. Structured step history lives in result_json.
+# Model observations never become source Claim nodes or change Person identity.
+node InvestigationRun {
+    has person_id: str, fingerprint: str, result_json: str,
+        created_at: str = "";
+}

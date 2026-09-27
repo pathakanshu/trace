@@ -4,8 +4,8 @@
 fixtures, or runtime graph records are created by this change. It covers the
 planned product, including features the current scaffold cannot import yet.
 
-Read this together with [the quotas](../demo/spec/quotas.json),
-[the record contract](../demo/spec/record-contract.md), and
+Read this together with [the quotas](quotas.json),
+[the record contract](record-contract.md), and
 [the generation prompt](TEST_DATA_GENERATOR_PROMPT.md). Requirements using MUST
 are acceptance criteria. Counts describe the complete authored catalog after
 all replay steps, not everything visible at the start of the demo.
@@ -22,7 +22,7 @@ data specification.
 
 Working assumption: **the night of 5 July 2016 Bhote Koshi flood in
 Sindhupalchok**, not a different Bhote Koshi flood or the Rasuwa/Trishuli river
-system. The user has been asked to confirm the event. If they specify another
+system. Confirm this assumption when starting dataset work. If the user specifies another
 event, revise the geography, bibliography, and clock before generation.
 
 The resulting presentation must say:
@@ -115,7 +115,7 @@ Project root on this machine: `/Users/anshu/Developer/jachacks/trace`.
 Paths below are a proposed contract; generation/import tooling is not implemented.
 
 ```text
-demo/spec/                                  # rules only, created now
+docs/plans/test-data/                       # specifications only
   quotas.json
   record-contract.md
   trace-record.schema.json
