@@ -14,7 +14,8 @@ Rules:
 ## Deadlines (organizers on Discord)
 
 - 9:00 AM Sun: first Devpost draft, required for judging consideration.
-- 12:00 PM Sun: final Devpost submission. Judging 12:30 to 2:00.
+- 11:00 AM EDT Sun: final Devpost submission (the Devpost page shows 11:00;
+  Discord said noon; asked organizers to confirm). Judging 12:30 to 2:00.
 
 ## Current main
 
@@ -86,3 +87,5 @@ Working on: (fill in)
 - 04:33 main 3a6e013: prompt v4 sends label definitions (byLLM dropped enum-field sem), DIRECT-with-source goes to review, 45 s call limit, seeded runs re-recorded (police now NEEDS_REVIEW), five-case eval in docs/INVESTIGATION.md. Redeploy JacHammer: fixtures and prompt changed.
 
 - 04:39 codex/anshu-night 7f6a866: Jac share 94.501%; offline full demo regression, two resets and replay citation/provenance checks. 56 tests and 52-file compiler gate pass. Next: minimal People report-to-Map callback (Gabriel), then 375px checks.
+- 05:05 main edee489: Anshu's offline demo regression test and language audit (Jac 94.5%) landed.
+- 05:05 JacHammer re-pulled and restarted after stage 4: REPLAYED runs show the v4 recordings. Stage 5 drafts (pitch, video script, morning checklist) are with Miguel; Devpost story updated.
