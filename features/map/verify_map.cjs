@@ -52,7 +52,7 @@ async function waitText(locator, text) {
     assert.match(await currentPanel(page).innerText(), /Central Hospital Demo/);
     assert.match(await page.getByLabel('Location evidence', { exact: true }).innerText(), /Nepal Police Demo/);
     assert.match(await page.getByRole('button', { name: 'Inspect Bhote Koshi Bridge · Reported safe', exact: true }).locator('span').first().getAttribute('class'), /bg-status-safe/);
-    await page.getByText(/WatchWalker created 1 alert/).waitFor();
+    await page.getByText(/Trace sent 1 alert/).waitFor();
     pass('hospital refresh changes pin and citation, preserves police evidence, creates one alert');
 
     // Move the map using its real controls, then compare marker positions and canvas identity.

@@ -10,7 +10,7 @@ information: NVIDIA Nemotron labels the attribution, and Jac decides what happen
 next (stop, retrieve the named source and compare, or hand it to a person). Labels
 come from the model; every action, traversal, timestamp and number comes from Jac.
 
-It is one Jac app with five tabs: Map, People, Media, Organizations, and Graph. All
+It is one Jac app with five tabs: Map, People, Media, Sources, and Graph. All
 people and reports are fictional.
 
 ## Start here
@@ -60,7 +60,7 @@ in [docs/INVESTIGATION.md](docs/INVESTIGATION.md).
 
 ## Current behavior and limits
 
-- Organizations previews and publishes structured demo reports for an explicit person ID.
+- Sources (organizations) previews and publishes structured demo reports for an explicit person ID.
   Identical retries return the existing claim; changed content requires a new reference.
 - WatchWalker creates in-app alerts from new source claims. Strictly newer dated
   reports are updates; differing latest or undated reports require review.
@@ -187,7 +187,17 @@ location loop; no changes to the investigation snapshot fields or seed are neede
 
 ## Demo and checks
 
-The story, in order:
+**Guided story bar.** In the Maya story, a bar under the header walks through four
+steps: reported missing, same person?, hospital says safe, where did it come from?
+Each step switches to the right tab and shows a large caption; its button runs the
+real action (open the reports, open the match review, publish the prepared hospital
+report, scroll to the source check). The hospital step shows a large banner built
+from the stored alert, with the police report still listed beside it. **Start over**
+is the same Reset. The sun/moon button switches light and dark themes (remembered in
+this browser; projectors usually read better in light). The map legend sits inside
+the map; caveats are behind the (i) buttons and "How to read this map".
+
+The detailed story, in order:
 
 1. **Reset demo** (Demo controls) loads the fixtures and re-creates two recorded runs.
 2. **People**: select the community report ("According to Nepal Police Demo...").
@@ -195,9 +205,9 @@ The story, in order:
    names and cites both excerpts. The police report itself is labeled RELAY with no
    named source (the officer recorded what the family said), so it also goes to a
    person rather than being accepted as first-hand. No model call.
-3. **Organizations**: **Load hospital example → Review report → Publish demo report**.
+3. **Sources**: **Load hospital example → Review report → Publish demo report**.
    One new alert for Asha Gurung's subscription; the police MISSING claim stays.
-4. **Organizations**: publish a Flood Relief Demo report for Maya Gurung whose text
+4. **Sources**: publish a Flood Relief Demo report for Maya Gurung whose text
    relays the hospital, for example: "According to Central Hospital Demo, Maya
    Gurung, 24, was admitted in stable condition this morning. Our team has not seen
    her." (a new reference, e.g. `NGO-RELAY-001`). No new alert: the status is unchanged.

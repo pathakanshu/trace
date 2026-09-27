@@ -337,8 +337,9 @@ def:pub IncidentMap(locations: list[LocationView], people: list[PersonView], act
         places = [p for p in locations if p.id == focusLocationId];
         if not places { return; }
         mapRef.current.resize();
-        mapRef.current.jumpTo({"center": [places[0].longitude, places[0].latitude],
-            "zoom": max(mapRef.current.getZoom(), 13)});
+        # flyTo animates for the audience; MapLibre jumps instead under reduced motion.
+        mapRef.current.flyTo({"center": [places[0].longitude, places[0].latitude],
+            "zoom": max(mapRef.current.getZoom(), 13), "duration": 1400});
         lastFocusRequest.current = focusRequest;
     }
 
