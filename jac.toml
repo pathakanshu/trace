@@ -14,6 +14,7 @@ radius = "small"
 menuAccent = "subtle"
 menuColor = "default"
 [dependencies]
+litellm = "==1.102.1"
 [dependencies.npm]
 "@fontsource-variable/geist" = "*"
 react = "^18.2.0"
