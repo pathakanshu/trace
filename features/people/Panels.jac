@@ -22,6 +22,26 @@ def status_source(p: PersonView) -> str {
     return ("according to " + name) if name else "no one has reported a status yet";
 }
 
+def initials(name: str) -> str {
+    parts = [t for t in name.replace(".", " ").split() if t];
+    if len(parts) == 0 { return "?"; }
+    if len(parts) == 1 { return parts[0][0].upper(); }
+    return (parts[0][0] + parts[-1][0]).upper();
+}
+
+def soft_bg(claim_type: str) -> str {
+    if claim_type == "MISSING" { return "bg-status-missing-soft text-status-missing"; }
+    if claim_type == "FOUND_SAFE" { return "bg-status-safe-soft text-status-safe"; }
+    if claim_type == "INJURED" { return "bg-status-warning-soft text-status-warning"; }
+    return "bg-status-neutral-soft text-status-neutral";
+}
+
+def match_tone(decision: str) -> str {
+    if decision == "CONFIRMED" { return "border-status-safe/40 bg-status-safe-soft"; }
+    if decision == "REJECTED" { return "border-status-missing/30 bg-status-missing-soft"; }
+    return "border-primary/30 bg-primary/5";
+}
+
 # ---------------- People list ----------------
 def:pub PeoplePanel(
     people: list[PersonView],
@@ -33,12 +53,13 @@ def:pub PeoplePanel(
     return <section className="flex flex-col gap-3">
         <SectionHeading title="People" subtitle="Select someone to see every report about them." />
         {len(people) == 0 and <EmptyPanel icon={UserMultipleIcon} title="No one listed yet" text="People appear here as soon as someone reports about them." />}
-        <div className="flex flex-col divide-y divide-border border-t border-b border-border">
+        <div className="flex flex-col gap-2">
             {for p in people {
                 <button key={p.id} type="button" onClick={lambda { onSelect(p.id); }}
-                    className={cn("flex w-full items-center gap-3 pt-3 pb-3 pl-2 pr-2 text-left transition-colors hover:bg-accent",
-                        "bg-accent" if p.id == selectedId else "")}>
-                    <span className={cn("size-2.5 shrink-0 rounded-full", status_dot(p.latest_status))} />
+                    className={cn("relative flex w-full items-center gap-3 overflow-hidden rounded-lg border bg-card pt-3 pb-3 pl-4 pr-3 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md",
+                        "border-primary ring-1 ring-primary/30" if p.id == selectedId else "border-border")}>
+                    <span className={cn("absolute left-0 top-0 h-full w-1", status_dot(p.latest_status))} />
+                    <span className={cn("flex size-9 shrink-0 items-center justify-center rounded-full text-xs font-semibold", soft_bg(p.latest_status))}>{initials(p.name)}</span>
                     <div className="flex min-w-0 flex-1 flex-col">
                         <span className="truncate text-sm font-medium">{p.name}</span>
                         <span className="text-xs text-muted-foreground">{"Age " + str(p.age) + " - " + plural(len(p.claims), "report")}</span>
@@ -52,12 +73,21 @@ def:pub PeoplePanel(
             }}
         </div>
         {for d in duplicates {
-            <div key={d.person_a_id + d.person_b_id} className="flex flex-col gap-1.5 rounded-md border border-dashed border-border bg-muted/50 pt-3 pb-3 pl-3 pr-3">
+            <div key={d.person_a_id + d.person_b_id} className={cn("flex flex-col gap-2 rounded-lg border pt-3 pb-3 pl-3 pr-3", match_tone(d.decision))}>
                 <div className="flex items-center gap-2 text-sm font-medium">
-                    <HugeiconsIcon icon={UserSearch01Icon} strokeWidth={2} className="size-4 text-primary" />
+                    <span className="flex size-7 items-center justify-center rounded-md bg-primary/10 text-primary">
+                        <HugeiconsIcon icon={UserSearch01Icon} strokeWidth={2} className="size-4" />
+                    </span>
                     <span>{"Could these be the same person?"}</span>
+                    {d.proposed_by and <Badge variant="outline" className="ml-auto">{"Agent proposal"}</Badge>}
                 </div>
-                <span className="text-sm">{d.person_a + " and " + d.person_b}</span>
+                <div className="flex items-center gap-2">
+                    <span className="flex size-7 items-center justify-center rounded-full bg-card text-[11px] font-semibold ring-1 ring-border">{initials(d.person_a)}</span>
+                    <span className="text-sm font-medium">{d.person_a}</span>
+                    <span className="text-xs text-muted-foreground">{"and"}</span>
+                    <span className="flex size-7 items-center justify-center rounded-full bg-card text-[11px] font-semibold ring-1 ring-border">{initials(d.person_b)}</span>
+                    <span className="text-sm font-medium">{d.person_b}</span>
+                </div>
                 <span className="text-xs text-muted-foreground">{"Why we think so: " + ", ".join(d.reasons)}</span>
                 {d.decision == "PENDING" and <span className="text-xs italic text-muted-foreground">{"We keep them separate until someone who knows them confirms."}</span>}
                 {d.decision != "PENDING" and <span className={cn("text-xs font-medium", "text-status-safe" if d.decision == "CONFIRMED" else "text-status-missing")}>
@@ -93,7 +123,8 @@ def:pub ClaimsPanel(person: PersonView | None, mappedClaimIds: list[str] = [], o
             {for c in person.claims {
                 <li key={c.id} className="relative animate-in fade-in slide-in-from-bottom-1 duration-500">
                     <span className={cn("absolute -left-[26px] top-3.5 size-2.5 rounded-full ring-4 ring-background", status_dot(c.claim_type))} />
-                    <div className="flex flex-col gap-1.5 rounded-md border border-border bg-card pt-3 pb-3 pl-3 pr-3">
+                    <div className="relative flex flex-col gap-1.5 overflow-hidden rounded-lg border border-border bg-card pt-3 pb-3 pl-4 pr-3 shadow-sm">
+                        <span className={cn("absolute left-0 top-0 h-full w-1", status_dot(c.claim_type))} />
                         <div className="flex flex-wrap items-center justify-between gap-2">
                             <span className={cn("text-sm font-semibold", status_text(c.claim_type))}>{status_sentence(c.claim_type)}</span>
                             <span className="flex items-center gap-1 text-xs text-muted-foreground">
