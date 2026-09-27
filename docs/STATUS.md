@@ -27,10 +27,17 @@ Rules:
 
 ## Miguel (investigation stages)
 
-Working on: stage 4 done locally (live eval, prompt v4, 45 s call limit,
-re-recorded seeded runs). Pending: redeploy JacHammer and run the live step
-from `docs/DEPLOY_CHECKLIST.md`.
-Next: pitch, backup video, Devpost.
+Done: stages 0 to 4 on main (Nemotron boundary, replayed runs, panel and Graph
+nodes, five-case live eval, docs). JacHammer LATEST TRACE runs main; after a
+pull use Stop then Run Preview.
+Working on: stage 5 with the team: pitch, demo video, Devpost pass.
+Pending humans: one LIVE Investigate on JacHammer (passphrase typed in the
+panel), demo video link, subtrack check, organizer answer on 11:00 vs noon.
+Corpus (`codex/test-data`): not imported before the deadline. Reasons: no
+importer, 25/16/2 contract audit, 170/1,000 locations, and the demo incident
+must stay identical after reset. Proposed after judging: import only the hero
+slice (748 records, 50 people) into a separate incident behind its own reset,
+never the demo incident, with private fixtures kept out of app inputs.
 
 ## Anshu (map, integration)
 
@@ -166,3 +173,4 @@ Working on: (fill in)
 - 07:46 codex/test-data e43e471: 170 existing points pass full district-30 polygon membership; 206 tests, strict audit 25/15/2. Boundary epoch/terrain/approved zones remain unverified. Candidate contextual evidence/support-needs coverage next.
 
 - 07:52 codex/test-data 814efd9: 216 tests (201 core + 15 Pillow) pass. Candidate context/support requests pass full disposable corpus checks; delivered audit honestly 25/16/2, with zero support coverage newly exposed. Stopping at Anshu’s request; PR #4, asset release and private repair guide are the handoff. No merge/deploy/import.
+- 05:25 main 7e694be: PR #4 squash-merged (People to Map, phone wrapping, demo regression; 57 tests, gate passed). Corpus import deferred until after judging (see Miguel section).
