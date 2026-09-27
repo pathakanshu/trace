@@ -65,17 +65,20 @@ checkpoint oracle, replay and validation-report
 support shapes differ from the documented contract. The separate 26-record
 control pack now passes its file checks. See each rule's measured examples; no application replay was run.
 
-The separate fresh `media-audit.json` reports **10 passed, 0 failed, 1 blocked**:
+The separate fresh `media-audit.json` reports **10 passed, 1 failed, 1 blocked**:
 200 images + 200 thumbnails decoded, 160 unique image hashes, all five family
 classes and 36/24/60 base EXIF coverage verified from files. Total actual asset
 bytes are 6,022,750. All 40 derivative hashes reproduce exactly from the in-memory
-generator recipe. No image was changed. The blocked check is application media
-verification; these file checks do not prove crop matching or caption truth.
+generator recipe. No image was changed. The failed check exposes all 200 catalog creation timestamps (07:06Z) following
+saved asset measurements (00:42:47Z on the same date, 2026-09-27). The original
+creation tool version was not recorded. No timestamp/version was invented to
+repair the license inventory. The blocked check is application media verification;
+these file checks do not prove crop matching or caption truth.
 
 This audit leaves the catalog, stable IDs, media bundle and previous reports
 unchanged. Repair release dependencies and support contracts before building a
 complete importer/replay around this preview. Top-level shape checks do not
-exhaustively validate nested semantics. The data tools' 125 distinct tests pass across schema and Pillow environments;
+exhaustively validate nested semantics. The data tools' 129 distinct tests pass across schema and Pillow environments;
 its corpus audit intentionally exits 1 for the observed data failures.
 
 - All 1,800 original source hashes match. However, the 1,260 JSON sources use

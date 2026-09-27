@@ -98,6 +98,40 @@ Resize JPEG quality 86 and optimize=True are explicit defaults from
     return output.getvalue()
 
 
+def creation_provenance_errors(media,measurements,measured):
+    """Compare saved generation-time assertions, never infer times from mtimes."""
+    errors=[]
+    def utc(value):
+        import re
+        if not isinstance(value,str) or not re.fullmatch(r'\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ',value):
+            raise ValueError('expected whole-second UTC timestamp ending Z')
+        return datetime.fromisoformat(value.replace('Z','+00:00'))
+    if measurements.get('dataset_id')!=DATASET:errors.append('Asset measurements belong to a different dataset')
+    try:measurement_time=utc(measurements.get('generated_at'))
+    except ValueError as error:
+        errors.append('Asset measurement timestamp: '+str(error));measurement_time=None
+    saved={}
+    for item in measurements.get('images',[]):
+        ident=item.get('media_id')
+        if ident in saved:errors.append(str(ident)+': duplicate saved measurement')
+        saved[ident]=item
+    ids={row['id'] for row in media}
+    if set(saved)!=ids:errors.append('Saved measurements must cover each catalog upload exactly once')
+    for row in media:
+        ident=row['id']
+        try:
+            created=utc(row.get('actual_created_at'))
+            if measurement_time is not None and created>measurement_time:
+                errors.append(ident+': claimed creation follows saved asset measurement time')
+        except ValueError as error:errors.append(ident+': invalid actual creation time: '+str(error))
+        if ident not in saved or ident not in measured:continue
+        item=saved[ident]
+        if item.get('path')!=row['asset_path']:errors.append(ident+': saved measurement path differs')
+        for field in ('sha256','byte_size','width_px','height_px','mime_type','exif_present','gps_present'):
+            if item.get(field)!=measured[ident][field]:errors.append(ident+': saved measurement '+field+' differs from file')
+    return errors
+
+
 def run_media_audit(root):
     root=root.resolve();data=root/'demo/datasets'/DATASET;fixtures=root/'tests/fixtures'/DATASET
     catalog=read_catalog(root);media=sorted((r for r in catalog.values() if r['kind']=='media'),key=lambda r:r['id'])
@@ -130,6 +164,21 @@ def run_media_audit(root):
     checks[-1]['observed']['manifest_sha256']=hashlib.sha256((data/'manifest.json').read_bytes()).hexdigest()
     checks[-1]['evidence_paths'].extend([f'demo/datasets/{DATASET}/records/media',f'demo/datasets/{DATASET}/manifest.json'])
     add('decoded_thumbnails',thumb_errors,{'decoded':len(thumbs)},'200 decoded thumbnails, measured hashes and 320-pixel long edge')
+    provenance_path=data/'asset-measurements.json'
+    try:
+        measurements=strict_json_loads(provenance_path.read_text(encoding='utf-8'))
+        provenance_errors=creation_provenance_errors(media,measurements,measured)
+        provenance_observed={'saved_measurement_time':measurements.get('generated_at'),
+                             'catalog_creation_times':sorted({m['actual_created_at'] for m in media}),
+                             'saved_measurement_count':len(measurements.get('images',[]))}
+    except (OSError,ValueError,TypeError,AttributeError,KeyError) as error:
+        provenance_errors=[str(error).replace(str(root),'<repo>')];provenance_observed={}
+    add('asset_creation_provenance_consistency',provenance_errors,provenance_observed,
+        'Saved measurements match current bytes and cannot precede actual asset creation',
+        ['Checks consistency of saved provenance assertions, not independent proof of capture/generation time. No timestamp is inferred from file mtime or rewritten.',
+         'Original generation-tool version is not recorded in the legacy inventory; current recipe reproduction does not establish that historical tool version.'])
+    checks[-1]['evidence_paths']=[f'demo/datasets/{DATASET}/asset-measurements.json',f'demo/datasets/{DATASET}/records/media']
+
     distinct=len({item['sha256'] for item in measured.values()})
     add('distinct_image_hashes',[] if distinct==quota['unique_sha256'] else ['Distinct hash quota mismatch'],{'unique_sha256':distinct},quota['unique_sha256'])
     family_errors=[];members=[m['media_id'] for family in families for m in family['members']]
@@ -197,7 +246,7 @@ def run_media_audit(root):
                    'evidence_paths':[],'limitations':['Caption/GPS conflict semantics, human visual review and scene authenticity are not established by these file checks.']})
     totals=Counter(c['status'] for c in checks)
     return {'dataset_id':DATASET,'generated_at':datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
-            'tools':[{'name':'tools/test_data/audit_media.py','version':'1.1'},{'name':'Pillow','version':PILLOW_VERSION},{'name':'Python','version':platform.python_version()}],
+            'tools':[{'name':'tools/test_data/audit_media.py','version':'1.2'},{'name':'Pillow','version':PILLOW_VERSION},{'name':'Python','version':platform.python_version()}],
             'checks':checks,'summary':{key:totals[key] for key in ('pass','fail','blocked')}}
 
 

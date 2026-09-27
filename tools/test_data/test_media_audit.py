@@ -7,7 +7,7 @@ from tempfile import TemporaryDirectory
 import unittest
 from generate_invalid import png_pixel
 try:
-    from audit_media import inspect_image,property_errors,check_family_geometry,reproduce_derivative
+    from audit_media import inspect_image,property_errors,check_family_geometry,reproduce_derivative,creation_provenance_errors
     from PIL import Image
     PILLOW=True
 except ImportError:
@@ -87,6 +87,42 @@ class MediaAuditTests(unittest.TestCase):
         self.assertTrue(any('missing decoded member' in e for e in check_family_geometry(family,measured)))
         family,measured=self.family('resize');family['members'][1]['parent_media_id']='med-899999'
         self.assertTrue(any('directly from base' in e for e in check_family_geometry(family,measured)))
+
+    def provenance(self):
+        from generate_queries import DATASET
+        fields={'sha256':'a'*64,'byte_size':100,'width_px':10,'height_px':10,'mime_type':'image/png','exif_present':False,'gps_present':False}
+        media=[{'id':'med-000001','asset_path':'images/a.png','actual_created_at':'2026-09-27T00:40:00Z'}]
+        saved={'dataset_id':DATASET,'generated_at':'2026-09-27T00:42:47Z','images':[{'media_id':'med-000001','path':'images/a.png',**fields}]}
+        return media,saved,{'med-000001':fields}
+
+    def test_creation_precedes_measurement_and_bytes_match(self):
+        media,saved,actual=self.provenance();self.assertEqual(creation_provenance_errors(media,saved,actual),[])
+        media[0]['actual_created_at']=saved['generated_at']
+        self.assertEqual(creation_provenance_errors(media,saved,actual),[])
+
+    def test_creation_after_saved_measurement_is_a_provenance_failure(self):
+        media,saved,actual=self.provenance();media[0]['actual_created_at']='2026-09-27T07:06:00Z'
+        self.assertEqual(len(creation_provenance_errors(media,saved,actual)),1)
+        self.assertIn('creation follows',creation_provenance_errors(media,saved,actual)[0])
+
+    def test_measurement_coverage_duplicates_and_altered_bytes_fail(self):
+        for change in ('missing','duplicate','hash','path','dataset'):
+            media,saved,actual=self.provenance()
+            if change=='missing':saved['images']=[]
+            if change=='duplicate':saved['images']*=2
+            if change=='hash':saved['images'][0]['sha256']='b'*64
+            if change=='path':saved['images'][0]['path']='images/other.png'
+            if change=='dataset':saved['dataset_id']='another-dataset'
+            with self.subTest(change=change):self.assertTrue(creation_provenance_errors(media,saved,actual))
+
+    def test_unknown_or_invalid_creation_and_measurement_times_fail(self):
+        for target in ('creation','measurement'):
+            for value in (None,'unknown','2016-01-01','2026-09-27T00:42:47+00:00','2026-02-30T00:00:00Z'):
+                media,saved,actual=self.provenance()
+                if target=='creation':media[0]['actual_created_at']=value
+                else:saved['generated_at']=value
+                with self.subTest(target=target,value=value):self.assertTrue(creation_provenance_errors(media,saved,actual))
+
 
 
 if __name__=='__main__':unittest.main()

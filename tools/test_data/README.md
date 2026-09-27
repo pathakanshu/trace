@@ -117,11 +117,11 @@ cases use analysis without publishing: hostile text stays source data. None of
 these eight runtime cases has run; no agent response or success is prefilled.
 No nonexistent replay-action IDs are used as prerequisites.
 
-Actual tooling results: **125 distinct tests pass across two environments**.
-The schema environment runs 114 and explicitly skips eleven Pillow tests. Run the
-eleven media checks with a Pillow-equipped tooling Python:
+Actual tooling results: **129 distinct tests pass across two environments**.
+The schema environment runs 114 and explicitly skips fifteen Pillow tests. Run the
+fifteen media checks with a Pillow-equipped tooling Python:
 `python3 -m unittest discover -s tools/test_data -p '*media*.py'`.
-That separate run passes all eleven. Do not count skipped decoder checks as passes
+That separate run passes all fifteen. Do not count skipped decoder checks as passes
 when only one environment is available. No application dependency was added.
 
 ## Immutable raw-source audit
@@ -250,7 +250,7 @@ In a Pillow-equipped tooling environment, run:
 measured validation results. Exit 2 means the implemented file checks passed but
 application verification is blocked; it is not a successful EvidenceWalker run.
 
-Actual run: Pillow 12.3.0 / Python 3.12.14, **10 pass / 0 fail / 1 blocked**.
+Actual run: Pillow 12.3.0 / Python 3.12.14, **10 pass / 1 fail / 1 blocked**.
 Decoded all 200 images and 200 thumbnails; actual SHA-256/bytes/dimensions/MIME
 match the catalog and manifest. There are 160 distinct image hashes, 120 disjoint
 families (40 exact, 20 resize, 10 reencode, 10 crop, 40 singleton), 36 GPS/24
@@ -264,7 +264,7 @@ integrity. A further in-memory check reproduces all 40 derivative hashes exactly
 Pillow/encoder version; resize JPEG quality 86 and optimize=True are explicit
 source-code defaults. No asset is written. This does not establish general
 near-copy detection performance, caption truth, geolocation, authenticity, human
-visual similarity or an application verification result. Eight media-auditor
+visual similarity or an application verification result. Twelve media-auditor
 unit tests run alongside the three negative-decoder tests in the Pillow suite.
 No image or thumbnail was modified.
 
@@ -305,3 +305,12 @@ the published checks exactly (excluding run timestamps): contract 20/15/2 and
 media 10/0/1. Bundle restore verified all 400 files and the documented SHA-256;
 tracked files stayed clean and no .jac runtime store was created. This was a
 fresh checkout on the same laptop, not a second-laptop application rehearsal.
+
+The media creation-provenance consistency check finds 200 contradictory time
+assertions: catalog actual_created_at is 2026-09-27T07:06:00Z but the matching
+saved asset measurements have generated_at 2026-09-27T00:42:47Z. Measurement
+hashes, sizes, dimensions and EXIF flags still match all actual files. Original
+generation-tool version was not captured. License conversion is deferred until
+provenance is reconciled; no timestamp is inferred from mtime or replaced with
+the audit clock. Four regressions cover valid/equal ordering, reversed times,
+measurement coverage/byte drift and invalid/unknown timestamps.

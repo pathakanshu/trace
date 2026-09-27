@@ -1,10 +1,10 @@
 {
   "dataset_id": "bhotekoshi-2016-exercise-v1",
-  "generated_at": "2026-09-27T10:17:18Z",
+  "generated_at": "2026-09-27T10:42:50Z",
   "tools": [
     {
       "name": "tools/test_data/audit_media.py",
-      "version": "1.1"
+      "version": "1.2"
     },
     {
       "name": "Pillow",
@@ -48,6 +48,41 @@
         "tests/fixtures/bhotekoshi-2016-exercise-v1/oracle/media-families.jsonl"
       ],
       "limitations": []
+    },
+    {
+      "rule_id": "asset_creation_provenance_consistency",
+      "status": "fail",
+      "observed": {
+        "failure_count": 200,
+        "examples": [
+          "med-000001: claimed creation follows saved asset measurement time",
+          "med-000002: claimed creation follows saved asset measurement time",
+          "med-000003: claimed creation follows saved asset measurement time",
+          "med-000004: claimed creation follows saved asset measurement time",
+          "med-000005: claimed creation follows saved asset measurement time",
+          "med-000006: claimed creation follows saved asset measurement time",
+          "med-000007: claimed creation follows saved asset measurement time",
+          "med-000008: claimed creation follows saved asset measurement time",
+          "med-000009: claimed creation follows saved asset measurement time",
+          "med-000010: claimed creation follows saved asset measurement time",
+          "med-000011: claimed creation follows saved asset measurement time",
+          "med-000012: claimed creation follows saved asset measurement time"
+        ],
+        "saved_measurement_time": "2026-09-27T00:42:47Z",
+        "catalog_creation_times": [
+          "2026-09-27T07:06:00Z"
+        ],
+        "saved_measurement_count": 200
+      },
+      "expected": "Saved measurements match current bytes and cannot precede actual asset creation",
+      "evidence_paths": [
+        "demo/datasets/bhotekoshi-2016-exercise-v1/asset-measurements.json",
+        "demo/datasets/bhotekoshi-2016-exercise-v1/records/media"
+      ],
+      "limitations": [
+        "Checks consistency of saved provenance assertions, not independent proof of capture/generation time. No timestamp is inferred from file mtime or rewritten.",
+        "Original generation-tool version is not recorded in the legacy inventory; current recipe reproduction does not establish that historical tool version."
+      ]
     },
     {
       "rule_id": "distinct_image_hashes",
@@ -221,7 +256,7 @@
   ],
   "summary": {
     "pass": 10,
-    "fail": 0,
+    "fail": 1,
     "blocked": 1
   }
 }
