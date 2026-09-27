@@ -40,6 +40,19 @@ test "reasoning-off switch rides only on requests for the Nemotron model" {
     assert with_reasoning_off(other) == other;
 }
 
+test "a missing litellm is reported instead of raised" {
+    import sys;
+    import from integrations.nemotron { install_request_defaults }
+    assert install_request_defaults();
+    hide = patch.dict(sys.modules, {"litellm": None});
+    hide.start();
+    try {
+        assert not install_request_defaults();
+    } finally {
+        hide.stop();
+    }
+}
+
 test "an out-of-menu label fails once without a corrective retry" {
     mock = mock_replies(['{"label": "MAYBE"}', '{"label": "NO"}']);
     failed = False;

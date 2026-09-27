@@ -5,7 +5,6 @@ NVIDIA_NIM_API_KEY from the environment and talks to NVIDIA's hosted API.
 For now this module holds the model configuration and a tiny typed probe that
 checks the dependency and the live path; investigation questions come later.
 """
-import litellm;
 import from jaclang.byllm.lib { Model }
 
 # One string names the model everywhere: the litellm route, run fingerprints
@@ -32,11 +31,18 @@ def with_reasoning_off(kwargs: dict) -> dict {
 litellm drops a per-call max_retries for nvidia_nim, which would leave the
 OpenAI SDK retrying 408/409/429/5xx twice per call; its OpenAIConfig class
 attributes are merged into every request, so a request is sent exactly once.
+Returns False when litellm is missing: byLLM cannot reach the model then, and
+the server must still boot so the rest of the demo keeps working.
 """
-def install_request_defaults -> None {
+def install_request_defaults -> bool {
+    try {
+        import litellm;
+    } except ImportError {
+        return False;
+    }
     original = litellm.completion;
     if getattr(original, "trace_reasoning_off", False) {
-        return;
+        return True;
     }
     def completion(*args: any, **kwargs: any) -> any {
         return original(*args, **with_reasoning_off(kwargs));
@@ -44,6 +50,7 @@ def install_request_defaults -> None {
     setattr(completion, "trace_reasoning_off", True);
     setattr(litellm, "completion", completion);
     setattr(litellm.OpenAIConfig, "max_retries", 0);
+    return True;
 }
 
 with entry {
