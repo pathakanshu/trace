@@ -1,3 +1,4 @@
+import from .CommunityGallery { CommunityGallery }
 import from ...components.shared.Display { SectionHeading }
 sv import from ...services.trace { DashboardSnapshot }
 sv import from .media_upload { UploadRecord, upload_image, list_incident_media, check_media_duplicates, edit_media, delete_media, add_media_comment, add_media_assertion }
@@ -167,6 +168,10 @@ def:pub MediaTab(snapshot: DashboardSnapshot, onRefresh: Callable[[], any]) -> J
         or q in ", ".join([c.body + " " + c.author for c in m.comments]).lower()];
 
     return <div className="flex flex-col gap-5">
+        <CommunityGallery />
+        <details className="rounded-lg border border-border p-4">
+        <summary className="cursor-pointer font-medium">{"Incident records and uploads (" + str(len(media_items)) + ")"}</summary>
+        <div className="mt-4 flex flex-col gap-5">
         <SectionHeading title="Incident media" subtitle="One incident-scoped collection for uploaded files, seeded media, sources, comments, and attributed claims." />
         {snapshot.is_corpus and <p className="rounded-md border border-border bg-muted/30 p-3 text-sm text-muted-foreground">{str(len(media_items)) + " generated exercise media records with their descriptions and captions. Image files are not imported, so uploads, duplicate checks and edits are off for this incident."}</p>}
         {not snapshot.is_corpus and <section className="grid gap-4 rounded-xl border bg-card p-4 shadow-sm md:grid-cols-2 md:p-6">
@@ -195,5 +200,7 @@ def:pub MediaTab(snapshot: DashboardSnapshot, onRefresh: Callable[[], any]) -> J
                 {records == [] and <div className="rounded-lg border border-dashed bg-muted/20 p-8 text-center"><h3 className="font-medium">No matching media</h3><p className="mt-1 text-sm text-muted-foreground">Upload an image or change the search.</p></div>}
             <div className="grid gap-4 lg:grid-cols-2">{for item in records {<MediaRecordCard key={item.id} item={item} onRefresh={refresh_media} readOnly={snapshot.is_corpus} />}}</div>
         </section>
+        </div>
+        </details>
     </div>;
 }
