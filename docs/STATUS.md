@@ -34,13 +34,14 @@ Next: pitch, backup video, Devpost.
 
 ## Anshu (map, integration)
 
-Working on: last legacy validator/replay-plan checks on `codex/test-data`:
-`tools/test_data/audit_review_plan.py` + tests, `validate_dataset.py` dependency
-guard, strict audit/report and README/repair notes. Reject stale schema-result
-fallback when jsonschema is absent; diagnose two cyclic planned confirmations
-(80 reviews currently imply 78 forest joins). No replay execution or public edits.
-Pair audit 32eebe9 pushed: labels/coverage pass, but 20 same-name/age negatives
-have indistinguishable supplied context. 98 tooling tests pass (95 + 3 decoder).
+Working on: fresh read-only media-file audit on `codex/test-data`:
+`tools/test_data/audit_media.py`, decoder tests, measured `media-audit.json` and
+README/repair notes. Recheck all 200 actual images and thumbnails, hashes,
+dimensions/MIME, EXIF coverage, duplicate family structure and publication times.
+Do not manufacture app evidence signals or claim near-copy detection support.
+6704431 pushed: replay has two redundant joins; legacy validator now blocks
+without jsonschema rather than accepting a cached schema report. Actual blocked
+run preserved bytes/mtimes of all 1,903 dataset files. 104 tooling tests pass.
 
 App handoff: all four overnight tasks complete; draft PR #4 ready:
 https://github.com/pathakanshu/trace/pull/4 (branch `codex/anshu-night`).
@@ -66,9 +67,9 @@ ab3fc56. No Linguist overrides/exclusions added. Not organizer eligibility proof
 
 Corpus published on origin/codex/test-data: e710475 control pack (26 records),
 23f81dd 40 cited queries, a65364f checkpoint diagnostics, fb64b72 40 concrete
-negative cases. **98 distinct tooling tests pass across schema/Pillow environments**
-(95 + three separately run decoder checks). Primary 8,027 records and binary
-bundle are unchanged. Strict audit: **18 pass / 14 fail / 2 blocked**.
+negative cases. **104 distinct tooling tests pass across schema/Pillow environments**
+(101 + three separately run decoder checks). Primary 8,027 records and binary
+bundle are unchanged. Strict audit: **18 pass / 15 fail / 2 blocked**.
 New measured defects: T+72 fixture summary is 353 missing / 547 safe / 50 injured /
 50 unresolved, target 650 / 250 / 50 / 50. The generator assigns 297 safe follow-ups
 outside its intended cohort. Six death rumors lack required equal/unknown-time
@@ -135,3 +136,5 @@ Working on: (fill in)
 - 05:41 codex/test-data 3866853/4039c8d: source envelope mismatch documented; real 400-file asset restore rehearsed twice. 60 tooling tests pass across two environments; hero reference-closure fix next.
 
 - 05:51 codex/test-data 80b89c4/17dfdc3: fixed hero closure (658 records), added community checks and private REPAIR_PLAN. 74 tooling tests pass; strict audit 15/14/2 exposes unresolved corpus defects. Primary records/media unchanged.
+
+- 06:09 codex/anshu-night ae827d4 / codex/test-data 6704431: private identities now contract-shaped, 20 ambiguous hard negatives and two cyclic review joins exposed. 104 tooling tests pass; strict audit 18/15/2. Fresh media audit next; no corpus load or original-byte changes.
