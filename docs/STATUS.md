@@ -55,8 +55,8 @@ import quadratic); corpus lookups use a field filter so they walk real edges.
 
 ## Anshu (map, integration)
 
-Ready for review: **`codex/media-voting`**, integrated with main **8c021c8**.
-Assets **f5cb70d**; gallery/voting/tooling **492f396**; main integrations **09ea1d5/c7f3fd7**; Jac 0.34.1 compatibility **fa48bf9**.
+Ready for review: **`codex/media-voting`**, integrated with main **bd69ba7**.
+Assets **f5cb70d**; gallery/voting/tooling **492f396**; main integration **a097641**, preserving Miguel's shared UI fixes.
 No push to main. Original primary checkout is still on its existing branch.
 
 - 20 supplied photos + nine clips, all with small JPEG thumbnails; search,
@@ -85,11 +85,11 @@ No push to main. Original primary checkout is still on its existing branch.
   dimensions, codec/duration and fast-start properties against preserved originals.
   Server restart retained the vote, canonical graph IDs, both incidents and Maya
   source/alert state; all temporary test votes were removed.
-- Latest-main compatibility: three inherited native 0.34.1 type errors in
-  TraceDashboard/AlertBanner were fixed with four lines (materialize locations
-  after the null guard, guard banner people, stringify banner text). Existing
-  behavior retained; no changes to Miguel's investigation, map, graph or services.
-  Integrated story reset/hospital/banner/map action also checked in the local browser.
+- Latest-main compatibility: Miguel independently fixed the same three native
+  type errors in **bd69ba7**. Integration **a097641** keeps his shared files exactly;
+  no final diff to the dashboard/banner, investigation, map, existing graph or services.
+  Local browser also passed reset → hospital banner → Show on map, retaining both
+  claims and exactly one alert, with no overflow at 375px.
 - Limits: one removable vote per browser, no authenticated voter uniqueness.
   Jac 0.34.1 static serving ignores Range (200/full file): the **clicked** clip may
   buffer fully; the gallery does not download any video before Play. No EXIF,
