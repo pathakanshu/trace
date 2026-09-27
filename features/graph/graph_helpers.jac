@@ -53,6 +53,28 @@ cl def:pub badge_tone(badge: str) -> str {
     return "border-border bg-muted/60 text-muted-foreground";
 }
 
+# Diagram node colour per record kind. SVG fill token classes only.
+cl def:pub kind_fill(kind: str) -> str {
+    fills = {
+        "Incident": "fill-foreground", "Person": "fill-primary",
+        "IdentityDecision": "fill-status-safe", "Claim": "fill-status-warning",
+        "Source": "fill-status-neutral", "Organization": "fill-status-neutral",
+        "Alert": "fill-status-missing", "Subscription": "fill-chart-1",
+        "Media": "fill-chart-3", "Signal": "fill-chart-4", "Location": "fill-chart-2",
+        "Investigation": "fill-chart-5", "Activity": "fill-muted-foreground"
+    };
+    return fills.get(kind, "fill-muted-foreground");
+}
+
+# Diagram edge colour per provenance status, matching badge_tone's meanings.
+cl def:pub edge_stroke(status: str) -> str {
+    if status == "confirmed" { return "stroke-status-safe"; }
+    if status == "rejected" { return "stroke-status-missing"; }
+    if status == "candidate" { return "stroke-status-warning"; }
+    if status == "derived" { return "stroke-primary"; }
+    return "stroke-muted-foreground";
+}
+
 cl def:pub badge_hint(badge: str) -> str {
     hints = {
         "stored": "Persisted in the graph",
