@@ -5,6 +5,7 @@ access token, so the demo keeps working offline.
 
 What it draws:
   - district + province borders from geometry.topo.json (via get_boundaries)
+  - Natural Earth rivers across Nepal as muted context (via get_nepal_rivers)
   - current OSM river corridor and settlement labels, with district outline
   - one pin per Location node from the Trace graph
 
@@ -20,7 +21,7 @@ import from "topojson-client" { feature }
 import from ...lib.utils { cn }
 import from .Density { density_geojson }
 import from .Status { linked_people, pin_status, pin_label, pin_dot }
-sv import from ...services.geo { get_boundaries, get_bhotekoshi_corridor }
+sv import from ...services.geo { get_boundaries, get_bhotekoshi_corridor, get_nepal_rivers }
 sv import from ...services.trace { LocationView, PersonView }
 
 # The incident's district in geometry.topo.json (सिन्धुपाल्चोक / Sindhupalchok).
@@ -72,13 +73,32 @@ def add_boundary_layers(map_obj: any, topo: any) -> None {
         "id": "province-line", "type": "line", "source": "provinces",
         "paint": {"line-color": css_var("--muted-foreground"), "line-width": 1.2, "line-opacity": 0.6}
     });
-    # Requests may finish in either order; late boundaries stay under the river.
-    first_overlay = "report-heat" if map_obj.getLayer("report-heat") else "corridor-band";
-    if map_obj.getLayer(first_overlay) {
+    # Requests may finish in any order; late boundaries stay under every river.
+    above = first_layer(map_obj, ["nepal-rivers", "report-heat", "corridor-band"]);
+    if above {
         for layer in ["district-fill", "district-line", "province-line"] {
-            map_obj.moveLayer(layer, first_overlay);
+            map_obj.moveLayer(layer, above);
         }
     }
+}
+
+# First existing layer id from a bottom-to-top list, or None.
+def first_layer(map_obj: any, ids: list[str]) -> any {
+    for layer_id in ids {
+        if map_obj.getLayer(layer_id) { return layer_id; }
+    }
+    return None;
+}
+
+# Context rivers stay thin and muted so the affected Bhote Koshi reads first.
+def add_river_layers(map_obj: any, rivers: any) -> None {
+    map_obj.addSource("nepal-rivers", {"type": "geojson", "data": rivers,
+        "attribution": "Rivers: <a href='https://www.naturalearthdata.com/' target='_blank' rel='noopener noreferrer'>Natural Earth</a>"});
+    map_obj.addLayer({"id": "nepal-rivers", "type": "line", "source": "nepal-rivers",
+        "layout": {"line-cap": "round", "line-join": "round"},
+        "paint": {"line-color": css_var("--map-water", 1.0), "line-opacity": 0.55,
+            "line-width": ["interpolate", ["linear"], ["zoom"], 6, 0.6, 10, 1.2, 14, 2]}},
+        first_layer(map_obj, ["report-heat", "corridor-band"]));
 }
 
 
@@ -88,12 +108,13 @@ def add_corridor_layers(map_obj: any, corridor: any) -> list {
     map_obj.addLayer({"id": "corridor-band", "type": "line", "source": "bhotekoshi-corridor",
         "filter": ["==", ["geometry-type"], "LineString"],
         "layout": {"line-cap": "round", "line-join": "round"},
-        "paint": {"line-color": css_var("--map-water", 1.0), "line-opacity": 0.13,
+        "paint": {"line-color": css_var("--status-warning", 1.0), "line-opacity": 0.13,
             "line-width": ["interpolate", ["linear"], ["zoom"], 8, 10, 12, 28, 16, 52]}});
+    # Warning colour keeps the affected river distinct from the blue context rivers.
     map_obj.addLayer({"id": "corridor-river", "type": "line", "source": "bhotekoshi-corridor",
         "filter": ["==", ["geometry-type"], "LineString"],
         "layout": {"line-cap": "round", "line-join": "round"},
-        "paint": {"line-color": css_var("--map-water", 1.0), "line-opacity": 0.9,
+        "paint": {"line-color": css_var("--status-warning", 1.0), "line-opacity": 0.95,
             "line-width": ["interpolate", ["linear"], ["zoom"], 8, 1.5, 12, 3.5, 16, 6]}});
     if map_obj.getLayer("report-heat") { map_obj.moveLayer("report-heat", "corridor-band"); }
     if map_obj.getLayer("report-circles") { map_obj.moveLayer("report-circles"); }
@@ -187,6 +208,11 @@ def:pub IncidentMap(locations: list[LocationView], people: list[PersonView], act
                 "style": blank_style(),
                 "bounds": [[85.82, 27.74], [86.00, 28.06]],
                 "fitBoundsOptions": {"padding": 42},
+                # Zoom out no further than all of Nepal; one world copy only.
+                "minZoom": 6.5,
+                "maxZoom": 14,
+                "maxBounds": [[79.0, 25.5], [89.5, 31.2]],
+                "renderWorldCopies": False,
                 "attributionControl": False
             });
             mapRef.current = map_obj;
@@ -199,6 +225,7 @@ def:pub IncidentMap(locations: list[LocationView], people: list[PersonView], act
                 # Later refreshes and tab switches preserve the viewport.
                 status = "ready";
                 load_boundaries(map_obj);
+                load_rivers(map_obj);
                 load_corridor(map_obj);
                 map_obj.on("click", "report-circles", lambda (event: any) {
                     if event.features and len(event.features) > 0 and onSettlementRef.current {
@@ -237,6 +264,16 @@ def:pub IncidentMap(locations: list[LocationView], people: list[PersonView], act
             if mapRef.current == map_obj { boundaryStatus = "unavailable"; }
         } finally {
             if boundaryTimerRef.current { clearTimeout(boundaryTimerRef.current); }
+        }
+    }
+
+    # Context rivers are optional: any failure leaves the rest of the map as is.
+    async def load_rivers(map_obj: any) -> None {
+        try {
+            rivers: any = await get_nepal_rivers();
+            if mapRef.current == map_obj and not rivers["error"] { add_river_layers(map_obj, rivers); }
+        } except Exception {
+            return;
         }
     }
 
