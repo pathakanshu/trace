@@ -75,11 +75,11 @@ def:pub TraceDashboard() -> JsxElement {
         startDark = saved_theme_is_dark(USE_DARK_THEME);
         apply_theme(startDark);
         darkMode = startDark;
-        loadIncidents();
-        loadDashboard();
+        loadStartup();
     }
 
     async def loadDashboard -> None;
+    async def loadStartup -> None;
     async def loadIncidentSnapshot(targetId: str) -> None;
     async def loadIncidents -> None;
     async def handleSelectIncident(targetId: str) -> None;

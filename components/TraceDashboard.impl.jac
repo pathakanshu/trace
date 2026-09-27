@@ -22,6 +22,13 @@ impl TraceDashboard.loadIncidentSnapshot(targetId: str) -> None {
     loading = False;
 }
 
+# Sequential on purpose: both calls seed an empty store, and running them at
+# once created duplicate demo incidents on a fresh preview.
+impl TraceDashboard.loadStartup -> None {
+    await loadDashboard();
+    await loadIncidents();
+}
+
 impl TraceDashboard.loadIncidents -> None {
     try {
         incidents = await list_incidents();
