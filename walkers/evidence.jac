@@ -17,14 +17,15 @@ import from graph.edges { Contains, HasSignal }
 import from graph.activity { log_activity }
 
 walker EvidenceWalker {
-    has signals_created: int = 0;
+    has signals_created: int = 0, incident_id: str = "", current_incident_id: str = "";
 
     can start with Root entry {
-        visit [root -->[?:Incident]];
+        visit [i for i in [root -->[?:Incident]] if not self.incident_id or jid(i) == self.incident_id];
     }
 
     # From each incident, walk to every Media it contains.
     can to_media with Incident entry {
+        self.current_incident_id = jid(here);
         visit [here ->:Contains:->];
     }
 
@@ -60,7 +61,7 @@ walker EvidenceWalker {
         self.add_signal(here, "SYNTHETIC_MEDIA", "No signal available", "NONE",
             "No synthetic-media detector was run in the starter.");
 
-        log_activity("EvidenceWalker", f"Checked a photo or video for clues: {here.description}");
+        log_activity("EvidenceWalker", f"Simulated evidence checks: {here.description}", self.current_incident_id);
     }
 
     def add_signal(media: Media, signal_type: str, value: str, confidence: str, explanation: str) -> None {

@@ -1,0 +1,3531 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:trace:schema:record:1.0",
+  "title": "Trace synthetic exercise catalog record",
+  "description": "Specification only. Validate each JSONL object separately with format checking; cross-record, quota, geographic, byte and replay checks require the semantic validator. Unknown properties are rejected. No oracle or runtime output record kinds are accepted.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/incident_record"
+    },
+    {
+      "$ref": "#/$defs/person_record"
+    },
+    {
+      "$ref": "#/$defs/organization_record"
+    },
+    {
+      "$ref": "#/$defs/source_record"
+    },
+    {
+      "$ref": "#/$defs/claim_record"
+    },
+    {
+      "$ref": "#/$defs/media_record"
+    },
+    {
+      "$ref": "#/$defs/location_record"
+    },
+    {
+      "$ref": "#/$defs/facility_record"
+    },
+    {
+      "$ref": "#/$defs/infrastructure_record"
+    },
+    {
+      "$ref": "#/$defs/hazard_record"
+    },
+    {
+      "$ref": "#/$defs/aid_record"
+    },
+    {
+      "$ref": "#/$defs/contributor_record"
+    },
+    {
+      "$ref": "#/$defs/contribution_record"
+    },
+    {
+      "$ref": "#/$defs/vote_record"
+    },
+    {
+      "$ref": "#/$defs/task_record"
+    },
+    {
+      "$ref": "#/$defs/subscription_record"
+    },
+    {
+      "$ref": "#/$defs/investigation_record"
+    }
+  ],
+  "$defs": {
+    "utc": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "language": {
+      "type": "string",
+      "pattern": "^[a-z]{2,3}(-[A-Za-z0-9]{2,8})*$"
+    },
+    "subject_ref": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "incident"
+            },
+            "id": {
+              "type": "string",
+              "pattern": "^inc-[0-9]{6}$"
+            }
+          },
+          "required": [
+            "kind",
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "person"
+            },
+            "id": {
+              "type": "string",
+              "pattern": "^per-[0-9]{6}$"
+            }
+          },
+          "required": [
+            "kind",
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "organization"
+            },
+            "id": {
+              "type": "string",
+              "pattern": "^org-[0-9]{6}$"
+            }
+          },
+          "required": [
+            "kind",
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "media"
+            },
+            "id": {
+              "type": "string",
+              "pattern": "^med-[0-9]{6}$"
+            }
+          },
+          "required": [
+            "kind",
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "location"
+            },
+            "id": {
+              "type": "string",
+              "pattern": "^loc-[0-9]{6}$"
+            }
+          },
+          "required": [
+            "kind",
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "facility"
+            },
+            "id": {
+              "type": "string",
+              "pattern": "^fac-[0-9]{6}$"
+            }
+          },
+          "required": [
+            "kind",
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "infrastructure"
+            },
+            "id": {
+              "type": "string",
+              "pattern": "^inf-[0-9]{6}$"
+            }
+          },
+          "required": [
+            "kind",
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "hazard"
+            },
+            "id": {
+              "type": "string",
+              "pattern": "^haz-[0-9]{6}$"
+            }
+          },
+          "required": [
+            "kind",
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "aid"
+            },
+            "id": {
+              "type": "string",
+              "pattern": "^aid-[0-9]{6}$"
+            }
+          },
+          "required": [
+            "kind",
+            "id"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "evidence_ref": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "incident"
+            },
+            "id": {
+              "type": "string",
+              "pattern": "^inc-[0-9]{6}$"
+            }
+          },
+          "required": [
+            "kind",
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "person"
+            },
+            "id": {
+              "type": "string",
+              "pattern": "^per-[0-9]{6}$"
+            }
+          },
+          "required": [
+            "kind",
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "organization"
+            },
+            "id": {
+              "type": "string",
+              "pattern": "^org-[0-9]{6}$"
+            }
+          },
+          "required": [
+            "kind",
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "media"
+            },
+            "id": {
+              "type": "string",
+              "pattern": "^med-[0-9]{6}$"
+            }
+          },
+          "required": [
+            "kind",
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "location"
+            },
+            "id": {
+              "type": "string",
+              "pattern": "^loc-[0-9]{6}$"
+            }
+          },
+          "required": [
+            "kind",
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "facility"
+            },
+            "id": {
+              "type": "string",
+              "pattern": "^fac-[0-9]{6}$"
+            }
+          },
+          "required": [
+            "kind",
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "infrastructure"
+            },
+            "id": {
+              "type": "string",
+              "pattern": "^inf-[0-9]{6}$"
+            }
+          },
+          "required": [
+            "kind",
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "hazard"
+            },
+            "id": {
+              "type": "string",
+              "pattern": "^haz-[0-9]{6}$"
+            }
+          },
+          "required": [
+            "kind",
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "aid"
+            },
+            "id": {
+              "type": "string",
+              "pattern": "^aid-[0-9]{6}$"
+            }
+          },
+          "required": [
+            "kind",
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "source"
+            },
+            "id": {
+              "type": "string",
+              "pattern": "^src-[0-9]{6}$"
+            }
+          },
+          "required": [
+            "kind",
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "claim"
+            },
+            "id": {
+              "type": "string",
+              "pattern": "^clm-[0-9]{6}$"
+            }
+          },
+          "required": [
+            "kind",
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "contribution"
+            },
+            "id": {
+              "type": "string",
+              "pattern": "^con-[0-9]{6}$"
+            }
+          },
+          "required": [
+            "kind",
+            "id"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "publisher_ref": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "organization"
+            },
+            "id": {
+              "type": "string",
+              "pattern": "^org-[0-9]{6}$"
+            }
+          },
+          "required": [
+            "kind",
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "contributor"
+            },
+            "id": {
+              "type": "string",
+              "pattern": "^act-[0-9]{6}$"
+            }
+          },
+          "required": [
+            "kind",
+            "id"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "time": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/utc"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "date": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "precision": {
+          "enum": [
+            "second",
+            "minute",
+            "hour",
+            "date",
+            "night",
+            "range",
+            "unknown"
+          ]
+        },
+        "original_text": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 300
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "timezone": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 80
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "range_start": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/utc"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "range_end": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/utc"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "date",
+        "precision",
+        "original_text",
+        "timezone",
+        "range_start",
+        "range_end"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "precision": {
+                "enum": [
+                  "second",
+                  "minute",
+                  "hour"
+                ]
+              }
+            },
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "$ref": "#/$defs/utc"
+              },
+              "date": {
+                "type": "null"
+              },
+              "original_text": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 300
+              },
+              "range_start": {
+                "type": "null"
+              },
+              "range_end": {
+                "type": "null"
+              }
+            },
+            "type": "object"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "precision": {
+                "enum": [
+                  "date",
+                  "night"
+                ]
+              }
+            },
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "null"
+              },
+              "date": {
+                "type": "string",
+                "format": "date"
+              },
+              "original_text": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 300
+              },
+              "range_start": {
+                "type": "null"
+              },
+              "range_end": {
+                "type": "null"
+              }
+            },
+            "type": "object"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "precision": {
+                "const": "range"
+              }
+            },
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "null"
+              },
+              "date": {
+                "type": "null"
+              },
+              "original_text": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 300
+              },
+              "range_start": {
+                "$ref": "#/$defs/utc"
+              },
+              "range_end": {
+                "$ref": "#/$defs/utc"
+              }
+            },
+            "type": "object"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "precision": {
+                "const": "unknown"
+              }
+            },
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "null"
+              },
+              "date": {
+                "type": "null"
+              },
+              "range_start": {
+                "type": "null"
+              },
+              "range_end": {
+                "type": "null"
+              }
+            },
+            "type": "object"
+          }
+        }
+      ]
+    },
+    "position": {
+      "type": "array",
+      "prefixItems": [
+        {
+          "type": "number",
+          "minimum": -180,
+          "maximum": 180
+        },
+        {
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90
+        }
+      ],
+      "items": false,
+      "minItems": 2,
+      "maxItems": 2,
+      "not": {
+        "const": [
+          0,
+          0
+        ]
+      }
+    },
+    "point": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "Point"
+        },
+        "coordinates": {
+          "$ref": "#/$defs/position"
+        }
+      },
+      "required": [
+        "type",
+        "coordinates"
+      ],
+      "additionalProperties": false
+    },
+    "polygon": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "Polygon"
+        },
+        "coordinates": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/position"
+            },
+            "minItems": 4
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "type",
+        "coordinates"
+      ],
+      "additionalProperties": false
+    },
+    "multipolygon": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "MultiPolygon"
+        },
+        "coordinates": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/position"
+              },
+              "minItems": 4
+            },
+            "minItems": 1
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "type",
+        "coordinates"
+      ],
+      "additionalProperties": false
+    },
+    "geometry": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/point"
+        },
+        {
+          "$ref": "#/$defs/polygon"
+        },
+        {
+          "$ref": "#/$defs/multipolygon"
+        }
+      ]
+    },
+    "admin_ref": {
+      "type": "object",
+      "properties": {
+        "level": {
+          "enum": [
+            "province",
+            "district",
+            "municipality",
+            "ward",
+            "other"
+          ]
+        },
+        "code": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 80
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "boundary_reference": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "boundary_epoch": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "level",
+        "code",
+        "name",
+        "boundary_reference",
+        "boundary_epoch"
+      ],
+      "additionalProperties": false
+    },
+    "location_provenance": {
+      "type": "object",
+      "properties": {
+        "basis": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "historical_reference_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^hist-[0-9]{6}$"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "context_feature_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "terrain_validation": {
+          "enum": [
+            "validated",
+            "not_available",
+            "not_applicable"
+          ]
+        }
+      },
+      "required": [
+        "basis",
+        "historical_reference_ids",
+        "context_feature_ids",
+        "terrain_validation"
+      ],
+      "additionalProperties": false
+    },
+    "source_dependency": {
+      "type": "object",
+      "properties": {
+        "source_id": {
+          "type": "string",
+          "pattern": "^src-[0-9]{6}$"
+        },
+        "relationship": {
+          "enum": [
+            "relays",
+            "cites",
+            "corrects",
+            "translation_of"
+          ]
+        }
+      },
+      "required": [
+        "source_id",
+        "relationship"
+      ],
+      "additionalProperties": false
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "extraction_method": {
+          "const": "fixture_authored"
+        },
+        "original_excerpt": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 10000
+        },
+        "source_locator": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 300
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "extraction_method",
+        "original_excerpt",
+        "source_locator"
+      ],
+      "additionalProperties": false
+    },
+    "assertion": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "enum": [
+            "MISSING",
+            "FOUND_SAFE",
+            "INJURED",
+            "DECEASED",
+            "SEEN_AT_LOCATION",
+            "PERSON_DETAIL",
+            "ACCESS_BLOCKED",
+            "ACCESS_OPEN",
+            "ACCESS_RESTRICTED",
+            "INSPECTION_REQUIRED",
+            "INSPECTION_REPORTED",
+            "OUTAGE_REPORTED",
+            "SERVICE_RESTORED",
+            "HAZARD_REPORTED",
+            "HAZARD_RECEDING",
+            "HAZARD_LOCATION",
+            "CAUSE_UNCERTAIN",
+            "AID_NEEDED",
+            "AID_OFFERED",
+            "AID_DISPATCHED",
+            "AID_DELIVERED",
+            "FACILITY_OPEN",
+            "FACILITY_CLOSED",
+            "FACILITY_CAPACITY",
+            "FACILITY_OCCUPANCY",
+            "FACILITY_SERVICE",
+            "CAPTURE_TIME_CLAIM",
+            "CAPTURE_LOCATION_CLAIM",
+            "CAPTION_CONTEXT_CLAIM",
+            "COPY_ATTRIBUTION",
+            "ORG_SERVICE_AVAILABLE",
+            "ORG_CONTACT_POINT",
+            "ORG_BULLETIN_CORRECTION"
+          ]
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "quantity": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "enum": [
+                "people",
+                "beds",
+                "households",
+                "litres",
+                "kg",
+                "meals",
+                "kits",
+                "vehicles",
+                "metres",
+                "hours",
+                "items"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "related_subjects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/subject_ref"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "type",
+        "text",
+        "quantity",
+        "unit",
+        "related_subjects"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "quantity": {
+                "type": "null"
+              }
+            },
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "unit": {
+                "type": "null"
+              }
+            },
+            "type": "object"
+          },
+          "else": {
+            "properties": {
+              "unit": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        }
+      ]
+    },
+    "review": {
+      "type": "object",
+      "properties": {
+        "contributor_id": {
+          "type": "string",
+          "pattern": "^act-[0-9]{6}$"
+        },
+        "reviewed_at": {
+          "$ref": "#/$defs/utc"
+        },
+        "note": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "evidence_claim_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^clm-[0-9]{6}$"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "contributor_id",
+        "reviewed_at",
+        "note",
+        "evidence_claim_ids"
+      ],
+      "additionalProperties": false
+    },
+    "frame_origin": {
+      "type": "object",
+      "properties": {
+        "video_media_id": {
+          "type": "string",
+          "pattern": "^med-[0-9]{6}$"
+        },
+        "offset_seconds": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "video_media_id",
+        "offset_seconds"
+      ],
+      "additionalProperties": false
+    },
+    "incident_record": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0"
+        },
+        "dataset_id": {
+          "const": "bhotekoshi-2016-exercise-v1"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^inc-[0-9]{6}$"
+        },
+        "kind": {
+          "const": "incident"
+        },
+        "incident_id": {
+          "type": "string",
+          "pattern": "^inc-[0-9]{6}$"
+        },
+        "available_at": {
+          "$ref": "#/$defs/utc"
+        },
+        "is_synthetic": {
+          "const": true
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 3000
+        },
+        "event_time": {
+          "$ref": "#/$defs/time"
+        },
+        "exercise_clock_start": {
+          "$ref": "#/$defs/utc"
+        },
+        "display_timezone": {
+          "const": "Asia/Kathmandu"
+        },
+        "historical_reference_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^hist-[0-9]{6}$"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "schema_version",
+        "dataset_id",
+        "id",
+        "kind",
+        "incident_id",
+        "available_at",
+        "is_synthetic",
+        "name",
+        "description",
+        "event_time",
+        "exercise_clock_start",
+        "display_timezone",
+        "historical_reference_ids"
+      ],
+      "additionalProperties": false
+    },
+    "person_record": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0"
+        },
+        "dataset_id": {
+          "const": "bhotekoshi-2016-exercise-v1"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^per-[0-9]{6}$"
+        },
+        "kind": {
+          "const": "person"
+        },
+        "incident_id": {
+          "type": "string",
+          "pattern": "^inc-[0-9]{6}$"
+        },
+        "available_at": {
+          "$ref": "#/$defs/utc"
+        },
+        "is_synthetic": {
+          "const": true
+        },
+        "display_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "name_variants": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "reported_age": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 130
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "support_needs_claim_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^clm-[0-9]{6}$"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "schema_version",
+        "dataset_id",
+        "id",
+        "kind",
+        "incident_id",
+        "available_at",
+        "is_synthetic",
+        "display_name",
+        "name_variants",
+        "reported_age",
+        "description",
+        "support_needs_claim_ids"
+      ],
+      "additionalProperties": false
+    },
+    "organization_record": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0"
+        },
+        "dataset_id": {
+          "const": "bhotekoshi-2016-exercise-v1"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^org-[0-9]{6}$"
+        },
+        "kind": {
+          "const": "organization"
+        },
+        "incident_id": {
+          "type": "string",
+          "pattern": "^inc-[0-9]{6}$"
+        },
+        "available_at": {
+          "$ref": "#/$defs/utc"
+        },
+        "is_synthetic": {
+          "const": true
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "organization_type": {
+          "enum": [
+            "POLICE_RESCUE",
+            "HOSPITAL",
+            "NGO",
+            "GOVERNMENT",
+            "COMMUNITY_NEWS"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        }
+      },
+      "required": [
+        "schema_version",
+        "dataset_id",
+        "id",
+        "kind",
+        "incident_id",
+        "available_at",
+        "is_synthetic",
+        "name",
+        "organization_type",
+        "description"
+      ],
+      "additionalProperties": false
+    },
+    "source_record": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0"
+        },
+        "dataset_id": {
+          "const": "bhotekoshi-2016-exercise-v1"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^src-[0-9]{6}$"
+        },
+        "kind": {
+          "const": "source"
+        },
+        "incident_id": {
+          "type": "string",
+          "pattern": "^inc-[0-9]{6}$"
+        },
+        "available_at": {
+          "$ref": "#/$defs/utc"
+        },
+        "is_synthetic": {
+          "const": true
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "publisher": {
+          "$ref": "#/$defs/publisher_ref"
+        },
+        "source_type": {
+          "enum": [
+            "POLICE_RESCUE",
+            "HOSPITAL",
+            "NGO",
+            "GOVERNMENT",
+            "COMMUNITY_NEWS",
+            "INDIVIDUAL"
+          ]
+        },
+        "report_reference": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "published_at": {
+          "$ref": "#/$defs/time"
+        },
+        "original_language": {
+          "$ref": "#/$defs/language"
+        },
+        "raw_format": {
+          "enum": [
+            "structured_json",
+            "pasted_text"
+          ]
+        },
+        "raw_path": {
+          "type": "string",
+          "pattern": "^demo/datasets/bhotekoshi-2016-exercise-v1/raw/reports/src-[0-9]{6}\\.(json|txt)$"
+        },
+        "raw_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source_dependency"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "dependency_disclosure": {
+          "enum": [
+            "no_dependency_declared",
+            "declared",
+            "unknown"
+          ]
+        }
+      },
+      "required": [
+        "schema_version",
+        "dataset_id",
+        "id",
+        "kind",
+        "incident_id",
+        "available_at",
+        "is_synthetic",
+        "title",
+        "publisher",
+        "source_type",
+        "report_reference",
+        "published_at",
+        "original_language",
+        "raw_format",
+        "raw_path",
+        "raw_sha256",
+        "dependencies",
+        "dependency_disclosure"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "raw_format": {
+                "const": "structured_json"
+              }
+            },
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "raw_path": {
+                "pattern": "\\.json$",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "else": {
+            "properties": {
+              "raw_path": {
+                "pattern": "\\.txt$",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        }
+      ]
+    },
+    "claim_record": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0"
+        },
+        "dataset_id": {
+          "const": "bhotekoshi-2016-exercise-v1"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^clm-[0-9]{6}$"
+        },
+        "kind": {
+          "const": "claim"
+        },
+        "incident_id": {
+          "type": "string",
+          "pattern": "^inc-[0-9]{6}$"
+        },
+        "available_at": {
+          "$ref": "#/$defs/utc"
+        },
+        "is_synthetic": {
+          "const": true
+        },
+        "source_id": {
+          "type": "string",
+          "pattern": "^src-[0-9]{6}$"
+        },
+        "subject": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "person"
+                },
+                "id": {
+                  "type": "string",
+                  "pattern": "^per-[0-9]{6}$"
+                }
+              },
+              "required": [
+                "kind",
+                "id"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "infrastructure"
+                },
+                "id": {
+                  "type": "string",
+                  "pattern": "^inf-[0-9]{6}$"
+                }
+              },
+              "required": [
+                "kind",
+                "id"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "hazard"
+                },
+                "id": {
+                  "type": "string",
+                  "pattern": "^haz-[0-9]{6}$"
+                }
+              },
+              "required": [
+                "kind",
+                "id"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "aid"
+                },
+                "id": {
+                  "type": "string",
+                  "pattern": "^aid-[0-9]{6}$"
+                }
+              },
+              "required": [
+                "kind",
+                "id"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "facility"
+                },
+                "id": {
+                  "type": "string",
+                  "pattern": "^fac-[0-9]{6}$"
+                }
+              },
+              "required": [
+                "kind",
+                "id"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "media"
+                },
+                "id": {
+                  "type": "string",
+                  "pattern": "^med-[0-9]{6}$"
+                }
+              },
+              "required": [
+                "kind",
+                "id"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "organization"
+                },
+                "id": {
+                  "type": "string",
+                  "pattern": "^org-[0-9]{6}$"
+                }
+              },
+              "required": [
+                "kind",
+                "id"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "assertion": {
+          "$ref": "#/$defs/assertion"
+        },
+        "reported_at": {
+          "$ref": "#/$defs/time"
+        },
+        "provenance": {
+          "$ref": "#/$defs/provenance"
+        },
+        "location_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^loc-[0-9]{6}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "supporting_media_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^med-[0-9]{6}$"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "corrects_claim_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^clm-[0-9]{6}$"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "related_claim_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^clm-[0-9]{6}$"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "schema_version",
+        "dataset_id",
+        "id",
+        "kind",
+        "incident_id",
+        "available_at",
+        "is_synthetic",
+        "source_id",
+        "subject",
+        "assertion",
+        "reported_at",
+        "provenance",
+        "location_id",
+        "supporting_media_ids",
+        "corrects_claim_ids",
+        "related_claim_ids"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "subject": {
+                "properties": {
+                  "kind": {
+                    "const": "person"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "assertion": {
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "MISSING",
+                      "FOUND_SAFE",
+                      "INJURED",
+                      "DECEASED",
+                      "SEEN_AT_LOCATION",
+                      "PERSON_DETAIL"
+                    ]
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "subject": {
+                "properties": {
+                  "kind": {
+                    "const": "infrastructure"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "assertion": {
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "ACCESS_BLOCKED",
+                      "ACCESS_OPEN",
+                      "ACCESS_RESTRICTED",
+                      "INSPECTION_REQUIRED",
+                      "INSPECTION_REPORTED",
+                      "OUTAGE_REPORTED",
+                      "SERVICE_RESTORED"
+                    ]
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "subject": {
+                "properties": {
+                  "kind": {
+                    "const": "hazard"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "assertion": {
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "HAZARD_REPORTED",
+                      "HAZARD_RECEDING",
+                      "HAZARD_LOCATION",
+                      "CAUSE_UNCERTAIN"
+                    ]
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "subject": {
+                "properties": {
+                  "kind": {
+                    "const": "aid"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "assertion": {
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "AID_NEEDED",
+                      "AID_OFFERED",
+                      "AID_DISPATCHED",
+                      "AID_DELIVERED"
+                    ]
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "subject": {
+                "properties": {
+                  "kind": {
+                    "const": "facility"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "assertion": {
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "FACILITY_OPEN",
+                      "FACILITY_CLOSED",
+                      "FACILITY_CAPACITY",
+                      "FACILITY_OCCUPANCY",
+                      "FACILITY_SERVICE"
+                    ]
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "subject": {
+                "properties": {
+                  "kind": {
+                    "const": "media"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "assertion": {
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "CAPTURE_TIME_CLAIM",
+                      "CAPTURE_LOCATION_CLAIM",
+                      "CAPTION_CONTEXT_CLAIM",
+                      "COPY_ATTRIBUTION"
+                    ]
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "subject": {
+                "properties": {
+                  "kind": {
+                    "const": "organization"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "assertion": {
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "ORG_SERVICE_AVAILABLE",
+                      "ORG_CONTACT_POINT",
+                      "ORG_BULLETIN_CORRECTION"
+                    ]
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          }
+        }
+      ]
+    },
+    "media_record": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0"
+        },
+        "dataset_id": {
+          "const": "bhotekoshi-2016-exercise-v1"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^med-[0-9]{6}$"
+        },
+        "kind": {
+          "const": "media"
+        },
+        "incident_id": {
+          "type": "string",
+          "pattern": "^inc-[0-9]{6}$"
+        },
+        "available_at": {
+          "$ref": "#/$defs/utc"
+        },
+        "is_synthetic": {
+          "const": true
+        },
+        "media_type": {
+          "enum": [
+            "image",
+            "video",
+            "frame"
+          ]
+        },
+        "source_id": {
+          "type": "string",
+          "pattern": "^src-[0-9]{6}$"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "published_caption": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "reported_capture_time": {
+          "$ref": "#/$defs/time"
+        },
+        "claimed_location_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^loc-[0-9]{6}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "asset_path": {
+          "type": "string",
+          "pattern": "^demo/assets/bhotekoshi-2016-exercise-v1/(images|videos|frames)/med-[0-9]{6}\\.(jpg|jpeg|png|webp|mp4)$"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "byte_size": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "mime_type": {
+          "enum": [
+            "image/jpeg",
+            "image/png",
+            "image/webp",
+            "video/mp4"
+          ]
+        },
+        "width_px": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "height_px": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "duration_seconds": {
+          "anyOf": [
+            {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "actual_created_at": {
+          "$ref": "#/$defs/utc"
+        },
+        "license_id": {
+          "type": "string",
+          "pattern": "^lic-[0-9]{6}$"
+        },
+        "is_controlled_exercise_asset": {
+          "const": true
+        },
+        "embedded_metadata_is_synthetic": {
+          "const": true
+        },
+        "thumbnail_path": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-[0-9]{6}\\.webp$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "declared_predecessor_media_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^med-[0-9]{6}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "frame_origin": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/frame_origin"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "schema_version",
+        "dataset_id",
+        "id",
+        "kind",
+        "incident_id",
+        "available_at",
+        "is_synthetic",
+        "media_type",
+        "source_id",
+        "description",
+        "published_caption",
+        "reported_capture_time",
+        "claimed_location_id",
+        "asset_path",
+        "sha256",
+        "byte_size",
+        "mime_type",
+        "width_px",
+        "height_px",
+        "duration_seconds",
+        "actual_created_at",
+        "license_id",
+        "is_controlled_exercise_asset",
+        "embedded_metadata_is_synthetic",
+        "thumbnail_path",
+        "declared_predecessor_media_id",
+        "frame_origin"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "media_type": {
+                "const": "image"
+              }
+            },
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "asset_path": {
+                "pattern": "/images/med-[0-9]{6}\\.(jpg|jpeg|png|webp)$",
+                "type": "string"
+              },
+              "mime_type": {
+                "enum": [
+                  "image/jpeg",
+                  "image/png",
+                  "image/webp"
+                ]
+              },
+              "duration_seconds": {
+                "type": "null"
+              },
+              "frame_origin": {
+                "type": "null"
+              }
+            },
+            "type": "object"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "media_type": {
+                "const": "video"
+              }
+            },
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "asset_path": {
+                "pattern": "/videos/med-[0-9]{6}\\.mp4$",
+                "type": "string"
+              },
+              "mime_type": {
+                "const": "video/mp4"
+              },
+              "duration_seconds": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "frame_origin": {
+                "type": "null"
+              }
+            },
+            "type": "object"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "media_type": {
+                "const": "frame"
+              }
+            },
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "asset_path": {
+                "pattern": "/frames/med-[0-9]{6}\\.(jpg|jpeg|png|webp)$",
+                "type": "string"
+              },
+              "mime_type": {
+                "enum": [
+                  "image/jpeg",
+                  "image/png",
+                  "image/webp"
+                ]
+              },
+              "duration_seconds": {
+                "type": "null"
+              },
+              "frame_origin": {
+                "$ref": "#/$defs/frame_origin"
+              }
+            },
+            "type": "object"
+          }
+        }
+      ]
+    },
+    "location_record": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0"
+        },
+        "dataset_id": {
+          "const": "bhotekoshi-2016-exercise-v1"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^loc-[0-9]{6}$"
+        },
+        "kind": {
+          "const": "location"
+        },
+        "incident_id": {
+          "type": "string",
+          "pattern": "^inc-[0-9]{6}$"
+        },
+        "available_at": {
+          "$ref": "#/$defs/utc"
+        },
+        "is_synthetic": {
+          "const": true
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "country_code": {
+          "type": "string",
+          "pattern": "^[A-Z]{2}$"
+        },
+        "admin_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/admin_ref"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "geometry": {
+          "$ref": "#/$defs/geometry"
+        },
+        "precision": {
+          "enum": [
+            "approximate_point",
+            "site",
+            "area"
+          ]
+        },
+        "catalog_role": {
+          "enum": [
+            "initial_observation_point",
+            "shared_site",
+            "area"
+          ]
+        },
+        "coordinate_method": {
+          "enum": [
+            "settlement_anchor",
+            "sampled_in_approved_zone",
+            "contextual_site_reference",
+            "authored_exercise_area",
+            "controlled_asset_metadata",
+            "contributor_proposal"
+          ]
+        },
+        "uncertainty_radius_m": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "coordinate_provenance": {
+          "$ref": "#/$defs/location_provenance"
+        }
+      },
+      "required": [
+        "schema_version",
+        "dataset_id",
+        "id",
+        "kind",
+        "incident_id",
+        "available_at",
+        "is_synthetic",
+        "name",
+        "country_code",
+        "admin_refs",
+        "geometry",
+        "precision",
+        "catalog_role",
+        "coordinate_method",
+        "uncertainty_radius_m",
+        "coordinate_provenance"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "precision": {
+                "const": "area"
+              }
+            },
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "geometry": {
+                "oneOf": [
+                  {
+                    "$ref": "#/$defs/polygon"
+                  },
+                  {
+                    "$ref": "#/$defs/multipolygon"
+                  }
+                ]
+              },
+              "uncertainty_radius_m": {
+                "type": "null"
+              }
+            },
+            "type": "object"
+          },
+          "else": {
+            "properties": {
+              "geometry": {
+                "$ref": "#/$defs/point"
+              },
+              "uncertainty_radius_m": {
+                "type": "number",
+                "minimum": 1
+              }
+            },
+            "type": "object"
+          }
+        }
+      ]
+    },
+    "facility_record": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0"
+        },
+        "dataset_id": {
+          "const": "bhotekoshi-2016-exercise-v1"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^fac-[0-9]{6}$"
+        },
+        "kind": {
+          "const": "facility"
+        },
+        "incident_id": {
+          "type": "string",
+          "pattern": "^inc-[0-9]{6}$"
+        },
+        "available_at": {
+          "$ref": "#/$defs/utc"
+        },
+        "is_synthetic": {
+          "const": true
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "facility_type": {
+          "enum": [
+            "TREATMENT",
+            "SHELTER",
+            "AID_DISTRIBUTION",
+            "COORDINATION_COMMUNICATIONS"
+          ]
+        },
+        "location_id": {
+          "type": "string",
+          "pattern": "^loc-[0-9]{6}$"
+        },
+        "operator_organization_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^org-[0-9]{6}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "schema_version",
+        "dataset_id",
+        "id",
+        "kind",
+        "incident_id",
+        "available_at",
+        "is_synthetic",
+        "name",
+        "facility_type",
+        "location_id",
+        "operator_organization_id"
+      ],
+      "additionalProperties": false
+    },
+    "infrastructure_record": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0"
+        },
+        "dataset_id": {
+          "const": "bhotekoshi-2016-exercise-v1"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^inf-[0-9]{6}$"
+        },
+        "kind": {
+          "const": "infrastructure"
+        },
+        "incident_id": {
+          "type": "string",
+          "pattern": "^inc-[0-9]{6}$"
+        },
+        "available_at": {
+          "$ref": "#/$defs/utc"
+        },
+        "is_synthetic": {
+          "const": true
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "infrastructure_type": {
+          "enum": [
+            "ROAD_SEGMENT",
+            "BRIDGE",
+            "POWER",
+            "WATER_COMMUNICATIONS"
+          ]
+        },
+        "location_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^loc-[0-9]{6}$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "operator_organization_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^org-[0-9]{6}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "schema_version",
+        "dataset_id",
+        "id",
+        "kind",
+        "incident_id",
+        "available_at",
+        "is_synthetic",
+        "name",
+        "infrastructure_type",
+        "location_ids",
+        "operator_organization_id"
+      ],
+      "additionalProperties": false
+    },
+    "hazard_record": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0"
+        },
+        "dataset_id": {
+          "const": "bhotekoshi-2016-exercise-v1"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^haz-[0-9]{6}$"
+        },
+        "kind": {
+          "const": "hazard"
+        },
+        "incident_id": {
+          "type": "string",
+          "pattern": "^inc-[0-9]{6}$"
+        },
+        "available_at": {
+          "$ref": "#/$defs/utc"
+        },
+        "is_synthetic": {
+          "const": true
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "hazard_type": {
+          "enum": [
+            "FLOOD",
+            "SLOPE_DEBRIS",
+            "ACCESS_SECONDARY"
+          ]
+        },
+        "location_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^loc-[0-9]{6}$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "schema_version",
+        "dataset_id",
+        "id",
+        "kind",
+        "incident_id",
+        "available_at",
+        "is_synthetic",
+        "name",
+        "hazard_type",
+        "location_ids"
+      ],
+      "additionalProperties": false
+    },
+    "aid_record": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0"
+        },
+        "dataset_id": {
+          "const": "bhotekoshi-2016-exercise-v1"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^aid-[0-9]{6}$"
+        },
+        "kind": {
+          "const": "aid"
+        },
+        "incident_id": {
+          "type": "string",
+          "pattern": "^inc-[0-9]{6}$"
+        },
+        "available_at": {
+          "$ref": "#/$defs/utc"
+        },
+        "is_synthetic": {
+          "const": true
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "aid_type": {
+          "enum": [
+            "NEED",
+            "OFFER",
+            "DELIVERY"
+          ]
+        },
+        "location_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^loc-[0-9]{6}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "organization_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^org-[0-9]{6}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "schema_version",
+        "dataset_id",
+        "id",
+        "kind",
+        "incident_id",
+        "available_at",
+        "is_synthetic",
+        "name",
+        "aid_type",
+        "location_id",
+        "organization_id"
+      ],
+      "additionalProperties": false
+    },
+    "contributor_record": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0"
+        },
+        "dataset_id": {
+          "const": "bhotekoshi-2016-exercise-v1"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^act-[0-9]{6}$"
+        },
+        "kind": {
+          "const": "contributor"
+        },
+        "incident_id": {
+          "type": "string",
+          "pattern": "^inc-[0-9]{6}$"
+        },
+        "available_at": {
+          "$ref": "#/$defs/utc"
+        },
+        "is_synthetic": {
+          "const": true
+        },
+        "display_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "volunteer",
+              "researcher",
+              "reviewer",
+              "organization_operator"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "languages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/language"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "schema_version",
+        "dataset_id",
+        "id",
+        "kind",
+        "incident_id",
+        "available_at",
+        "is_synthetic",
+        "display_name",
+        "roles",
+        "languages"
+      ],
+      "additionalProperties": false
+    },
+    "contribution_record": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0"
+        },
+        "dataset_id": {
+          "const": "bhotekoshi-2016-exercise-v1"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^con-[0-9]{6}$"
+        },
+        "kind": {
+          "const": "contribution"
+        },
+        "incident_id": {
+          "type": "string",
+          "pattern": "^inc-[0-9]{6}$"
+        },
+        "available_at": {
+          "$ref": "#/$defs/utc"
+        },
+        "is_synthetic": {
+          "const": true
+        },
+        "contribution_type": {
+          "enum": [
+            "COMMENT",
+            "CORRECTION",
+            "TRANSLATION",
+            "GEOLOCATION",
+            "EARLIER_COPY",
+            "SOURCE_CITATION",
+            "CHALLENGE"
+          ]
+        },
+        "contributor_id": {
+          "type": "string",
+          "pattern": "^act-[0-9]{6}$"
+        },
+        "target": {
+          "$ref": "#/$defs/evidence_ref"
+        },
+        "body": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 5000
+        },
+        "language": {
+          "$ref": "#/$defs/language"
+        },
+        "english_rendering": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 5000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "public_display": {
+          "enum": [
+            "pseudonym",
+            "anonymous"
+          ]
+        },
+        "submitted_at": {
+          "$ref": "#/$defs/utc"
+        },
+        "evidence_source_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^src-[0-9]{6}$"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "evidence_claim_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^clm-[0-9]{6}$"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "evidence_media_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^med-[0-9]{6}$"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "proposed_location_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^loc-[0-9]{6}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "proposal_basis": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "translation_of": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/evidence_ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "translation_method": {
+          "anyOf": [
+            {
+              "enum": [
+                "human",
+                "machine"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "translation_review": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/review"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "schema_version",
+        "dataset_id",
+        "id",
+        "kind",
+        "incident_id",
+        "available_at",
+        "is_synthetic",
+        "contribution_type",
+        "contributor_id",
+        "target",
+        "body",
+        "language",
+        "english_rendering",
+        "public_display",
+        "submitted_at",
+        "evidence_source_ids",
+        "evidence_claim_ids",
+        "evidence_media_ids",
+        "proposed_location_id",
+        "proposal_basis",
+        "translation_of",
+        "translation_method",
+        "translation_review"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "contribution_type": {
+                "const": "GEOLOCATION"
+              }
+            },
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "proposed_location_id": {
+                "type": "string",
+                "pattern": "^loc-[0-9]{6}$"
+              },
+              "proposal_basis": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2000
+              }
+            },
+            "type": "object"
+          },
+          "else": {
+            "properties": {
+              "proposed_location_id": {
+                "type": "null"
+              },
+              "proposal_basis": {
+                "type": "null"
+              }
+            },
+            "type": "object"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "contribution_type": {
+                "const": "TRANSLATION"
+              }
+            },
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "translation_of": {
+                "$ref": "#/$defs/evidence_ref"
+              },
+              "translation_method": {
+                "enum": [
+                  "human",
+                  "machine"
+                ]
+              },
+              "english_rendering": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 5000
+              }
+            },
+            "type": "object"
+          },
+          "else": {
+            "properties": {
+              "translation_of": {
+                "type": "null"
+              },
+              "translation_method": {
+                "type": "null"
+              },
+              "translation_review": {
+                "type": "null"
+              }
+            },
+            "type": "object"
+          }
+        }
+      ]
+    },
+    "vote_record": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0"
+        },
+        "dataset_id": {
+          "const": "bhotekoshi-2016-exercise-v1"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^vot-[0-9]{6}$"
+        },
+        "kind": {
+          "const": "vote"
+        },
+        "incident_id": {
+          "type": "string",
+          "pattern": "^inc-[0-9]{6}$"
+        },
+        "available_at": {
+          "$ref": "#/$defs/utc"
+        },
+        "is_synthetic": {
+          "const": true
+        },
+        "contributor_id": {
+          "type": "string",
+          "pattern": "^act-[0-9]{6}$"
+        },
+        "contribution_id": {
+          "type": "string",
+          "pattern": "^con-[0-9]{6}$"
+        },
+        "value": {
+          "enum": [
+            "HELPFUL",
+            "NOT_HELPFUL"
+          ]
+        },
+        "voted_at": {
+          "$ref": "#/$defs/utc"
+        }
+      },
+      "required": [
+        "schema_version",
+        "dataset_id",
+        "id",
+        "kind",
+        "incident_id",
+        "available_at",
+        "is_synthetic",
+        "contributor_id",
+        "contribution_id",
+        "value",
+        "voted_at"
+      ],
+      "additionalProperties": false
+    },
+    "task_record": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0"
+        },
+        "dataset_id": {
+          "const": "bhotekoshi-2016-exercise-v1"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^tsk-[0-9]{6}$"
+        },
+        "kind": {
+          "const": "task"
+        },
+        "incident_id": {
+          "type": "string",
+          "pattern": "^inc-[0-9]{6}$"
+        },
+        "available_at": {
+          "$ref": "#/$defs/utc"
+        },
+        "is_synthetic": {
+          "const": true
+        },
+        "task_type": {
+          "enum": [
+            "GEOLOCATE",
+            "TRANSLATE",
+            "FIND_EARLIER_COPY",
+            "SOURCE_OR_CHALLENGE"
+          ]
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "target": {
+          "$ref": "#/$defs/evidence_ref"
+        },
+        "creator_id": {
+          "type": "string",
+          "pattern": "^act-[0-9]{6}$"
+        },
+        "assignee_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^act-[0-9]{6}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "state": {
+          "enum": [
+            "OPEN",
+            "IN_PROGRESS",
+            "SUBMITTED",
+            "REVIEWED"
+          ]
+        },
+        "created_at": {
+          "$ref": "#/$defs/utc"
+        },
+        "updated_at": {
+          "$ref": "#/$defs/utc"
+        },
+        "submission_contribution_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^con-[0-9]{6}$"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "review": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/review"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "schema_version",
+        "dataset_id",
+        "id",
+        "kind",
+        "incident_id",
+        "available_at",
+        "is_synthetic",
+        "task_type",
+        "title",
+        "target",
+        "creator_id",
+        "assignee_id",
+        "state",
+        "created_at",
+        "updated_at",
+        "submission_contribution_ids",
+        "review"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "OPEN"
+              }
+            },
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "assignee_id": {
+                "type": "null"
+              },
+              "submission_contribution_ids": {
+                "maxItems": 0,
+                "type": "array"
+              },
+              "review": {
+                "type": "null"
+              }
+            },
+            "type": "object"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "IN_PROGRESS"
+              }
+            },
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "assignee_id": {
+                "type": "string",
+                "pattern": "^act-[0-9]{6}$"
+              },
+              "submission_contribution_ids": {
+                "maxItems": 0,
+                "type": "array"
+              },
+              "review": {
+                "type": "null"
+              }
+            },
+            "type": "object"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "SUBMITTED"
+              }
+            },
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "assignee_id": {
+                "type": "string",
+                "pattern": "^act-[0-9]{6}$"
+              },
+              "submission_contribution_ids": {
+                "minItems": 1,
+                "type": "array"
+              },
+              "review": {
+                "type": "null"
+              }
+            },
+            "type": "object"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "REVIEWED"
+              }
+            },
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "assignee_id": {
+                "type": "string",
+                "pattern": "^act-[0-9]{6}$"
+              },
+              "submission_contribution_ids": {
+                "minItems": 1,
+                "type": "array"
+              },
+              "review": {
+                "$ref": "#/$defs/review"
+              }
+            },
+            "type": "object"
+          }
+        }
+      ]
+    },
+    "subscription_record": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0"
+        },
+        "dataset_id": {
+          "const": "bhotekoshi-2016-exercise-v1"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^sub-[0-9]{6}$"
+        },
+        "kind": {
+          "const": "subscription"
+        },
+        "incident_id": {
+          "type": "string",
+          "pattern": "^inc-[0-9]{6}$"
+        },
+        "available_at": {
+          "$ref": "#/$defs/utc"
+        },
+        "is_synthetic": {
+          "const": true
+        },
+        "contributor_id": {
+          "type": "string",
+          "pattern": "^act-[0-9]{6}$"
+        },
+        "subject": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "person"
+                },
+                "id": {
+                  "type": "string",
+                  "pattern": "^per-[0-9]{6}$"
+                }
+              },
+              "required": [
+                "kind",
+                "id"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "location"
+                },
+                "id": {
+                  "type": "string",
+                  "pattern": "^loc-[0-9]{6}$"
+                }
+              },
+              "required": [
+                "kind",
+                "id"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "media"
+                },
+                "id": {
+                  "type": "string",
+                  "pattern": "^med-[0-9]{6}$"
+                }
+              },
+              "required": [
+                "kind",
+                "id"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "incident"
+                },
+                "id": {
+                  "type": "string",
+                  "pattern": "^inc-[0-9]{6}$"
+                }
+              },
+              "required": [
+                "kind",
+                "id"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "organization"
+                },
+                "id": {
+                  "type": "string",
+                  "pattern": "^org-[0-9]{6}$"
+                }
+              },
+              "required": [
+                "kind",
+                "id"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "created_at": {
+          "$ref": "#/$defs/utc"
+        },
+        "delivery": {
+          "const": "in_app"
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "event_types": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "new_claim",
+              "status_change",
+              "location_change",
+              "source_correction",
+              "media_evidence",
+              "task_update"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "schema_version",
+        "dataset_id",
+        "id",
+        "kind",
+        "incident_id",
+        "available_at",
+        "is_synthetic",
+        "contributor_id",
+        "subject",
+        "created_at",
+        "delivery",
+        "active",
+        "event_types"
+      ],
+      "additionalProperties": false
+    },
+    "investigation_record": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "1.0"
+        },
+        "dataset_id": {
+          "const": "bhotekoshi-2016-exercise-v1"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^inv-[0-9]{6}$"
+        },
+        "kind": {
+          "const": "investigation"
+        },
+        "incident_id": {
+          "type": "string",
+          "pattern": "^inc-[0-9]{6}$"
+        },
+        "available_at": {
+          "$ref": "#/$defs/utc"
+        },
+        "is_synthetic": {
+          "const": true
+        },
+        "owner_id": {
+          "type": "string",
+          "pattern": "^act-[0-9]{6}$"
+        },
+        "investigation_type": {
+          "enum": [
+            "PERSON_TIMELINE",
+            "ACCESS_HAZARD",
+            "AID_FACILITY",
+            "MEDIA_LINEAGE"
+          ]
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "query": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "subject_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/subject_ref"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "selected_source_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^src-[0-9]{6}$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "selected_claim_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^clm-[0-9]{6}$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "gaps": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "time_cutoff": {
+          "$ref": "#/$defs/utc"
+        },
+        "saved_at": {
+          "$ref": "#/$defs/utc"
+        }
+      },
+      "required": [
+        "schema_version",
+        "dataset_id",
+        "id",
+        "kind",
+        "incident_id",
+        "available_at",
+        "is_synthetic",
+        "owner_id",
+        "investigation_type",
+        "title",
+        "query",
+        "subject_refs",
+        "selected_source_ids",
+        "selected_claim_ids",
+        "gaps",
+        "time_cutoff",
+        "saved_at"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

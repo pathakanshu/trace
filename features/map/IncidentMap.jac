@@ -73,9 +73,12 @@ def add_boundary_layers(map_obj: any, topo: any) -> None {
 }
 
 # A small HTML pin. Classes use theme tokens.
-def make_pin(label: str) -> any {
-    el: any = document.createElement("div");
-    el.className = "flex flex-col items-center gap-1 pointer-events-none";
+def make_pin(label: str, location_id: str, on_select: Callable[[str], None]) -> any {
+    el: any = document.createElement("button");
+    el.type = "button";
+    el.setAttribute("aria-label", "Inspect " + label);
+    el.addEventListener("click", lambda { on_select(location_id); });
+    el.className = "flex cursor-pointer flex-col items-center gap-1 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
     dot: any = document.createElement("span");
     dot.className = "block size-3.5 rounded-full border-2 border-background bg-primary shadow";
     tag: any = document.createElement("span");
@@ -86,12 +89,19 @@ def make_pin(label: str) -> any {
     return el;
 }
 
-def:pub IncidentMap(locations: list[LocationView], active: bool = True, className: str = "") -> JsxElement {
+def:pub IncidentMap(locations: list[LocationView], active: bool = True, className: str = "", onSelect: Callable[[str], None] | None = None) -> JsxElement {
     has containerRef: Ref[HTMLDivElement] = Ref(),
         mapRef: Ref[any] = Ref(None),
         markersRef: Ref[list] = Ref([]),
+        onSelectRef: Ref[any] = Ref(None),
         status: str = "loading",    # loading | ready | error
         errorText: str = "";
+
+    def select_location(location_id: str) -> None {
+        if onSelectRef.current { onSelectRef.current(location_id); }
+    }
+
+    can with [onSelect] entry { onSelectRef.current = onSelect; }
 
     # Create the map once, when the component first appears.
     async can with entry {
@@ -108,8 +118,28 @@ def:pub IncidentMap(locations: list[LocationView], active: bool = True, classNam
             });
             map_obj.addControl(new(NavigationControl, {"showCompass": False}), "top-left");
             map_obj.on("load", lambda {
-                add_boundary_layers(map_obj, topo);
-                status = "ready";
+                try {
+                    add_boundary_layers(map_obj, topo);
+                    # Fit once; switching tabs preserves the user's viewport.
+                    if len(locations) > 0 {
+                        west = locations[0].longitude;
+                        east = west;
+                        south = locations[0].latitude;
+                        north = south;
+                        for loc in locations {
+                            west = min(west, loc.longitude);
+                            east = max(east, loc.longitude);
+                            south = min(south, loc.latitude);
+                            north = max(north, loc.latitude);
+                        }
+                        map_obj.fitBounds([[west, south], [east, north]],
+                            {"padding": 70, "maxZoom": 13, "duration": 0});
+                    }
+                    status = "ready";
+                } except Exception as e {
+                    status = "error";
+                    errorText = str(e);
+                }
             });
             mapRef.current = map_obj;
         } except Exception as e {
@@ -125,7 +155,7 @@ def:pub IncidentMap(locations: list[LocationView], active: bool = True, classNam
         for m in markersRef.current { m.remove(); }
         fresh: list = [];
         for loc in locations {
-            marker: any = new(Marker, {"element": make_pin(loc.name), "anchor": "top"});
+            marker: any = new(Marker, {"element": make_pin(loc.name, loc.id, select_location), "anchor": "top"});
             marker.setLngLat([loc.longitude, loc.latitude]).addTo(map_obj);
             fresh.append(marker);
         }

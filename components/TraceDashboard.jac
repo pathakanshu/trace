@@ -12,6 +12,7 @@ import from "@hugeicons/core-free-icons" {
 import from .ui.button { Button }
 import from .ui.skeleton { Skeleton }
 import from .shared.ActivityPanel { AlertsPanel }
+import from .shared.InvestigationPanel { InvestigationPanel }
 import from ..features.map.MapTab { MapTab }
 import from ..features.people.PeopleTab { PeopleTab }
 import from ..features.media.MediaTab { MediaTab }
@@ -126,6 +127,7 @@ def:pub TraceDashboard() -> JsxElement {
                 </div>
                 <div id="panel-People" role="tabpanel" aria-labelledby="tab-People" tabIndex={0} hidden={activeTab != "People"}>
                     <PeopleTab snapshot={snap} onRefresh={loadDashboard} />
+                    <InvestigationPanel snapshot={snap} />
                 </div>
                 <div id="panel-Media" role="tabpanel" aria-labelledby="tab-Media" tabIndex={0} hidden={activeTab != "Media"}>
                     <MediaTab snapshot={snap} onRefresh={loadDashboard} />

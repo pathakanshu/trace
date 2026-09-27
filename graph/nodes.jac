@@ -35,7 +35,19 @@ node Claim {
         notes: str = "",
         # Set to True once WatchWalker has looked at this claim, so running
         # WatchWalker twice never sends the same alert twice.
-        seen_by_watch: bool = False;
+        seen_by_watch: bool = False,
+        incident_id: str = "",
+        ingested_at: str = "",
+        original_content: str = "",
+        source_reference: str = "",
+        extraction_method: str = "",
+        ingestion_key: str = "",
+        payload_hash: str = "";
+}
+
+# Demo institutions are selectable publishers, not authenticated identities.
+node Organization {
+    has name: str, organization_type: str = "", is_demo: bool = True;
 }
 
 # Who made a claim: police, hospital, NGO, community report, registry...
@@ -57,7 +69,11 @@ node Media {
         # EXIF parsing / perceptual hashing (Python libs via Jac interop).
         exif_gps_present: bool = False,
         content_hash: str = "",
-        community_location: str = "";
+        community_location: str = "",
+        # Aidana: "seed" or "upload". content_hash holds the real SHA-256 for uploads.
+        origin: str = "seed",
+        uploaded_by: str = "",
+        uploaded_at: str = "";
 }
 
 # A place on the map.
@@ -73,7 +89,9 @@ node VerificationSignal {
     has signal_type: str,
         value: str = "",
         confidence: str = "UNKNOWN",
-        explanation: str = "";
+        explanation: str = "",
+        # How the signal was produced. "simulated" until a real check runs.
+        method: str = "simulated";
 }
 
 # Someone following a person (fictional contact for the demo).
@@ -86,7 +104,8 @@ node Subscription {
 node Alert {
     has message: str,
         created_at: str = "",
-        severity: str = "info";
+        severity: str = "info",
+        claim_id: str = "";
 }
 
 # One complete earlier review of a pair (kept verbatim in the decision).
@@ -148,5 +167,15 @@ node IdentityProposal {
 node ActivityEntry {
     has walker_name: str,
         message: str,
+        created_at: str = "",
+        incident_id: str = "",
+        # jids of the records this step touched (Graph tab draws derived links).
+        target_ids: list[str] = [];
+}
+
+# A small cited report investigation. Structured step history lives in result_json.
+# Model observations never become source Claim nodes or change Person identity.
+node InvestigationRun {
+    has person_id: str, fingerprint: str, result_json: str,
         created_at: str = "";
 }

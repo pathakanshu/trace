@@ -6,16 +6,17 @@ seed_demo()  builds the starting graph:
     "Maya G." (a possible duplicate record from a community report)
     two media items + a location, checked by EvidenceWalker
 
-clear_demo() deletes every Trace node so you can start over.
+clear_demo() deletes only this demo incident’s unshared records.
 The hospital FOUND_SAFE claim is NOT seeded - the demo button adds it.
 """
 
 import from graph.nodes {
     Incident, Person, Claim, Source, Media, Location,
-    VerificationSignal, Subscription, Alert, ActivityEntry
+    VerificationSignal, Subscription, Alert, ActivityEntry, Organization
 }
 # NOTE: every edge type you traverse (e.g. f"<-:About:<-") MUST be imported.
-import from graph.edges { Involves, Contains, About, Depicts, LocatedAt, HasSubscription, SupportedBy }
+import from graph.edges { Involves, Contains, About, Depicts, LocatedAt, HasSubscription, SupportedBy, HasOrganization }
+import from demo.reset { clear_incident }
 import from walkers.ingest { IngestWalker }
 import from walkers.evidence { EvidenceWalker }
 import from walkers.watch { WatchWalker }
@@ -33,29 +34,9 @@ glob HOSPITAL_UPDATE: dict = {
     "notes": "Registered at Central Hospital Demo intake desk."
 };
 
-# Delete every node Trace owns. Deleting a node also removes its edges.
+# Scope reset to this demo; unrelated incidents and shared nodes survive.
 def clear_demo() -> None {
-    # Collect every node reachable from root (breadth-first), each only once...
-    found: dict = {};
-    frontier: list = [root];
-    while frontier {
-        next_frontier: list = [];
-        for n in frontier {
-            for child in [n -->] {
-                key = jid(child);
-                if key not in found {
-                    found[key] = child;
-                    next_frontier.append(child);
-                }
-            }
-        }
-        frontier = next_frontier;
-    }
-    # ...then delete them. Deleting a node also removes its edges.
-    for key in found {
-        target = found[key];
-        del target;
-    }
+    clear_incident(INCIDENT_NAME);
 }
 
 def seed_demo() -> None {
@@ -72,7 +53,8 @@ def seed_demo() -> None {
         claim_type="MISSING",
         claim_value="Last seen near the Bhote Koshi bridge",
         timestamp="2026-09-20T07:40:00",
-        notes="Reported missing by family at district police post."
+        notes="Reported missing by family at district police post.",
+        source_reference="POLICE-DEMO-001", extraction_method="seeded_fixture"
     );
 
     # 2. Community report about "Maya G." - maybe the same person, maybe not.
@@ -86,13 +68,17 @@ def seed_demo() -> None {
         claim_type="SEEN_AT_LOCATION",
         claim_value="Seen near Tatopani market",
         timestamp="2026-09-20T12:05:00",
-        notes="Volunteer relay message, unverified."
+        notes="Volunteer relay message, unverified.",
+        source_reference="COMMUNITY-DEMO-001", extraction_method="seeded_fixture"
     );
 
     incident = [root -->[?:Incident, name == INCIDENT_NAME]][0];
     incident.description = "Fictional flash flood along the Bhote Koshi river used for the Trace demo.";
     incident.start_time = "2026-09-20T05:30:00";
     incident.region = "Sindhupalchok, Nepal (demo)";
+
+    incident +>:HasOrganization():+> Organization(name="Central Hospital Demo", organization_type="HOSPITAL");
+    incident +>:HasOrganization():+> Organization(name="Flood Relief Demo", organization_type="NGO");
 
     maya = [p for p in [incident ->:Involves:->] if p.name == PERSON_NAME][0];
     maya.notes = "Fictional demo person.";
@@ -147,6 +133,6 @@ def seed_demo() -> None {
     }
 
     # 5. Let the agents do their first pass.
-    root spawn EvidenceWalker();
-    root spawn WatchWalker();   # marks the seeded claims as already seen
+    root spawn EvidenceWalker(incident_id=jid(incident));
+    root spawn WatchWalker(incident_id=jid(incident));   # marks the seeded claims as already seen
 }

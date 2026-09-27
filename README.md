@@ -2,98 +2,100 @@
 
 **One incident. Every trace.**
 
-Trace is a graph-native disaster intelligence platform that connects people, claims, sources, locations, and media into a single evolving incident graph. Sources make claims; Trace keeps every claim with its provenance instead of pretending there is one truth. Jac walkers traverse that graph as new information arrives.
+Trace is a Jac disaster-reporting demo with one persistent incident graph and five
+tabs: Map, People, Media, Organizations, and Graph. Sources make claims; new reports
+retain earlier claims and their provenance. All people and reports are fictional.
 
-All people, sources and media in this repo are fictional.
+## Start here
 
-## 1. Install
+- [AGENTS.md](AGENTS.md): engineering and evidence rules.
+- [Team contract](docs/TEAM.md): ownership, tab interfaces, and integration checks.
+- [Publishing contract](docs/PUBLISHING.md): report validation, provenance, alerts, and reset.
+- [Investigation setup](docs/INVESTIGATION_SETUP.md): optional Jev report-attribution checks, credentials, budget, and limitations.
 
-Use the Jac 0.34.x native binary to match this JacHammer scaffold (validation uses 0.34.1).
-Check `jac --version` first; the 0.37 CLI has incompatible configuration/commands.
-Jac 0.34 is distributed as a binary, not the `jaclang` package on PyPI. See the
-[official installation guide](https://docs.jaseci.org/quick-guide/install/) for
-versioned binary installation. Then, from the project folder:
+## Install and run
 
-```bash
+Use the **Jac 0.34.1 native binary**, the tested version for this JacHammer scaffold.
+Check `jac --version` first; do not substitute a different CLI version or the
+`jaclang` PyPI package. See the [official installation guide](https://docs.jaseci.org/quick-guide/install/).
+Commands below assume `jac` resolves to the working 0.34.1 binary.
+
+```sh
+jac --version
 jac install
-```
-
-## 2. Run
-
-```bash
 jac start --dev main.jac
 ```
 
-Open the URL it prints (usually http://localhost:8000). In JacHammer the live preview is already running.
+Open the URL printed by the server. Run only one server against this checkout's
+`.jac/data/` graph store. The core demo needs no model credentials. For the optional
+Jev integration, follow the separate setup guide linked above.
 
-## 3. The demo (about 30 seconds)
+## Current behavior and limits
 
-1. The dashboard auto-seeds **Bhote Koshi Flood Demo** and opens Map. Switch to **People**: Maya Gurung is **MISSING** (claim by *Nepal Police Demo*).
-2. See "Maya G." flagged as a **potential duplicate**. ResolveWalker never merges people.
-3. Open **Demo controls** and click **Simulate hospital report**. IngestWalker adds *Central Hospital Demo*: **FOUND_SAFE**, then WatchWalker runs.
-4. You should see:
-   - both claims kept on Maya's timeline (the police claim is not overwritten)
-   - a banner explaining that the reports say different things
-   - an alert for Maya's subscriber, Asha
-   - the same hospital report in **Organizations** and **Graph**, plus the shared activity feed
-5. Click **Reset demo** to start again. **Check for updates** reruns WatchWalker; claims it has already seen are skipped.
+- Organizations previews and publishes structured demo reports for an explicit person ID.
+  Identical retries return the existing claim; changed content requires a new reference.
+- WatchWalker creates in-app alerts from new source claims. Strictly newer dated
+  reports are updates; differing latest or undated reports require review.
+- People shows sourced timelines and deterministic name/age match candidates.
+  Human identity confirmation is not implemented; candidates do not merge records.
+- Map uses bundled Nepal boundaries and graph-backed evidence pins. Reported
+  locations are unverified. No street tiles or map API key are needed.
+- Media shows **simulated checks from fixture fields**. Uploads, real EXIF/hash
+  extraction, C2PA, and video analysis are not implemented.
+- Graph shows a relationship tree from the shared snapshot. It is not yet a full
+  visualization of every node/edge type, including investigation runs.
+- People also offers an optional budgeted Jev check of one source report's
+  attribution, with at most one follow-up source comparison. Results are advisory,
+  stored separately from claims, and unavailable without explicit configuration.
+  Offline tests do not establish provider access or semantic accuracy.
+- No authentication, public publishing, continuous monitoring, or external alert
+  delivery. CGX/PFIF import, free-text extraction, community contributions, and the
+  large planned corpus are not implemented. Retry guarantees are tested sequentially.
 
-## 4. Tests
+## Demo and checks
 
-```bash
-jac test tests/test_trace.jac
+1. Use **Demo controls → Reset demo** to load the starting fixtures.
+2. In **Organizations**, choose **Load hospital example → Review report → Publish demo report**.
+3. Inspect the retained police claim, hospital report, and new notification in
+   People, Organizations, and Graph. Inspect a map pin's linked source evidence.
+4. Publish the same form again: no additional claim or alert. Reload to check persistence.
+5. Reset to restore the scenario; unrelated incidents and shared nodes must survive.
+   **Simulate hospital report** remains the scripted fallback.
+
+```sh
+jac test tests/test_trace.jac tests/test_publishing.jac tests/test_investigation.jac
+jac build --check_only
+jac build --client web
 ```
 
-## 5. Five tabs and team ownership
+The investigation suite uses injected responses and does not require paid model
+calls. Browser acceptance steps are in the team contract; previously recorded
+publishing/browser verification and its limits are in the publishing contract.
+Local preview is the tested deployment fallback; public hosted access and a second
+physical device still need verification.
 
-The dashboard switches between **Map, People, Media, Organizations, Graph** in
-place. Tabs preserve their local search/selection state and share one graph
-snapshot. Notifications and activity remain visible beside every tab.
+## Code map
 
-Read [docs/TEAM.md](docs/TEAM.md) before starting parallel work. It defines the
-component contract, backend ownership, merge workflow, product guardrails, and
-manual acceptance checks.
+| Path | Responsibility |
+| --- | --- |
+| `main.jac` | Endpoint registration, CSS entry, and route |
+| `components/TraceDashboard*`, `components/shared/` | Shared shell and presentation |
+| `features/<tab>/` | Tab UI, feature services, and focused tests |
+| `graph/nodes.jac`, `graph/edges.jac`, `graph/activity.jac` | Persistent schema and activity helpers |
+| `walkers/` | Ingestion, candidate resolution, simulated evidence, and watching |
+| `services/trace.jac`, `services/geo.jac` | Shared snapshot/actions and boundary data |
+| `services/investigation.jac`, `investigation/`, `integrations/jev.jac` | Report checks, questions, and provider adapter |
+| `demo/seed.jac`, `demo/reset.jac`, `tests/` | Executable fixtures, isolated reset, and tests |
+| `styles/trace-tokens.css` | Trace theme tokens; imports generated `global.css` |
 
-| Owner | Folder | Main entry |
-| --- | --- | --- |
-| Aidana | `features/media/` | `MediaTab.jac` |
-| Gabriel | `features/people/` | `PeopleTab.jac` |
-| Miguel | `features/graph/` | `GraphTab.jac` |
-| Anshu | `features/organizations/` | `OrganizationsTab.jac` |
-| Anshu | `features/map/` | `MapTab.jac` |
+`.jac/` and `dist/` are generated/ignored. `.jac/data/` holds local graph data;
+`.trace-local/` holds persistent spending accounting. Neither is source code or a
+cleanup target. `geometry.topo.json` is required map data.
 
-Shared integration lives in `components/TraceDashboard*`, `components/shared/`,
-`services/trace.jac`, `main.jac`, and `jac.toml`. The graph schema stays in `graph/`
-and graph behavior stays in `walkers/`. Anshu coordinates shared integration;
-Miguel coordinates graph schema changes. Feature folders also hold their own
-helpers, adapters, and tests as those are added.
+## Future reference only
 
-The graph:
-
-```
-Incident -Involves-> Person <-About- Claim <-Asserts- Source
-Incident -Contains-> Media -LocatedAt-> Location
-                     Media -HasSignal-> VerificationSignal
-                     Media -Depicts-> Person      Claim -SupportedBy-> Media
-Person -HasSubscription-> Subscription -Receives-> Alert
-```
-
-## 6. Intentionally simplified
-
-- Demo data is hardcoded. There is no scraping and no external APIs.
-- The tab split provides workspaces, not implemented comments, voting, anonymous posting, uploads, or institutional publishing. Organizations currently groups existing institutional reports by source; it does not yet have Organization nodes.
-- The map uses MapLibre GL with only the district/province borders from `geometry.topo.json` (no street tiles, so no token and no internet needed). Constituencies are in the file but not drawn yet.
-- Verification signals come from demo fields on `Media` (`exif_gps_present`, `content_hash`, `community_location`).
-- Name matching in ResolveWalker is a simple rule, not AI.
-- No auth. Alerts are shown in the UI, not sent anywhere.
-
-## 7. Where to add things
-
-- **Live ingestion / AI normalization**: build `IngestWalker(...)` calls from scraped records (`walkers/ingest.jac`).
-- **Real EXIF / perceptual hashing / C2PA**: new `add_signal(...)` calls in `walkers/evidence.jac` (use Python libraries through Jac imports).
-- **AI identity resolution**: replace `score_pair` in `walkers/resolve.jac`. Keep the output a *candidate*.
-- **Notifications**: after the `Alert` is created in `walkers/watch.jac`.
-- **Interactive map / graph viz**: `features/map/` / `features/graph/`.
-- **New endpoint**: put the feature action in `features/<tab>/services.jac`; coordinate its registration in `main.jac` and any snapshot additions with Anshu.
-
-Ground rules: every claim keeps its source, every signal keeps its explanation, conflicting claims stay visible, and AI or community output is evidence, not truth.
+[Dataset rules](docs/plans/test-data/TEST_DATA_RULES.md) and their linked schemas,
+quotas, and generation prompt specify a future corpus, not current fixtures or APIs.
+The [broader investigation plan](docs/plans/JEV_INVESTIGATION_PLAN.md) describes
+unimplemented extensions. Read these only for work on those plans; current code,
+tests, and the feature contracts above describe the implemented app.
