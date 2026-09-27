@@ -10,7 +10,7 @@ everything into small f"obj" "view" types below.
 
 import math;
 import json;
-import from features.media.media_upload { UploadRecord, list_incident_media }
+import from features.media.media_upload { UploadRecord, list_incident_media, media_record_views }
 
 import from graph.nodes {
     Incident, Person, Claim, Source, Media, Location,
@@ -490,7 +490,7 @@ def _corpus_snapshot(incident: Incident) -> DashboardSnapshot {
         }
     }
     for m in scan.media { snap.media.append(_media_view(m)); }
-    snap.media_records = list_incident_media(incident.name);
+    snap.media_records = media_record_views(incident, scan.media);
     for entry in [root -->[?:ActivityEntry]] {
         if entry.incident_id == jid(incident) {
             snap.activity.append(ActivityView(walker_name=entry.walker_name,

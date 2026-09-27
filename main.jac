@@ -11,7 +11,7 @@ import from services.trace {
     IncidentOption, PlaceCount, list_incidents, search_people
 }
 import from demo.corpus { load_corpus }
-import from services.geo { get_boundaries, get_bhotekoshi_corridor }
+import from services.geo { get_boundaries, get_bhotekoshi_corridor, get_nepal_rivers }
 import from features.organizations.services { publish_report }
 import from services.investigation { investigate_report }
 # People (Gabriel): human identity review.

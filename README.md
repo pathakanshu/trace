@@ -98,6 +98,7 @@ visual guide, **not a measured 2016 flood extent**. © OpenStreetMap contributor
 (ODbL); attribution is available on the map. The bundled 18,016-byte GeoJSON is
 an exact copy from `codex/test-data`; its provenance/archive references resolve
 on that branch, not to a bundled corpus here. No other corpus inputs were copied.
+Other rivers are OpenStreetMap `waterway=river` ways inside Nepal (ODbL, Overpass extract of 2026-09-27), simplified to about 400 m in `features/map/nepal-rivers.geojson`.
 
 When the dashboard supplies `place_counts`, Map aggregates exact coordinates
 without jitter and draws a heat layer weighted by report count. High-zoom circles

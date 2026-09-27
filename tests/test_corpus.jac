@@ -71,6 +71,18 @@ test "corpus snapshot caps people and counts everything" {
     assert maya.claims[0].extraction_method == "exercise_corpus_import";
 }
 
+test "corpus media reach the Media tab records" {
+    snap = get_dashboard(corpus_id());
+    assert len(snap.media) == 200 and len(snap.media_records) == 200;
+    assert all([r.incident == snap.incident_name and r.description for r in snap.media_records]);
+}
+
+test "corpus media reach the Media tab records" {
+    snap = get_dashboard(corpus_id());
+    assert len(snap.media) == 200 and len(snap.media_records) == 200;
+    assert all([r.incident == snap.incident_name and r.description for r in snap.media_records]);
+}
+
 test "place counts cover every located report at four coordinates" {
     snap = get_dashboard(corpus_id());
     assert snap.located_reports == 1356;
