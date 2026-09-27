@@ -34,10 +34,11 @@ Next: pitch, backup video, Devpost.
 
 ## Anshu (map, integration)
 
-Working on: candidate task/submission/review chronology and media-subscription
-release times in `tools/test_data/generate_catalog.py`,
-`test_generator_community.py` and data docs. Candidate objects only; no published
-workflow/source replacement or runtime mutation.
+Working on: full generator rehearsal in a temporary directory via
+`tools/test_data/test_candidate_generation.py` and docs. Copy only fixture inputs
+and unchanged assets; run candidate generation, schema/closure/chronology,
+cohorts/raw envelopes/community checks and hero export together. Never publish
+or import the candidate; original snapshot bytes remain guarded.
 
 App handoff: all four overnight tasks complete; **draft PR #4** is ready:
 https://github.com/pathakanshu/trace/pull/4 (`codex/anshu-night`). Audit/smoke work
@@ -53,7 +54,7 @@ failed; no screenshot claimed. Hosted/physical-phone rehearsal remains human wor
 Own local server 8092 is stopped. Active developer checkout was never switched.
 Jac language audit: GitHub 94.501% at 04:30 EDT; no Linguist padding/overrides.
 
-Dataset branch: **codex/test-data**, latest candidate vote/follower fix **8efadde**.
+Dataset branch: **codex/test-data**, latest candidate workflow fix **800e11f**.
 Delivered: 8,027 records, 1,150 Person / 1,000 private identities, 1,800 reports,
 3,600 claims; geography **170/1,000**. Hero is **658 reference-closed records**.
 Published release has 200 dummy images + 200 thumbnails; restore/hash guide:
@@ -61,14 +62,15 @@ Published release has 200 dummy images + 200 thumbnails; restore/hash guide:
 Original sources/asset bytes are preserved. Only media creation metadata was
 corrected from its original run receipt; licenses now have 200 contract entries.
 
-**181 tooling tests pass** (166 core + 15 Pillow). Delivered strict audit:
+**184 tooling tests pass** (169 core + 15 Pillow). Delivered strict audit:
 **24 pass / 15 fail / 2 blocked**; media **11 / 0 / 1**. Clean remote clone at
 948c5e4 reproduced the then-current 174 tests and both audits exactly, restored
 400 files, left tracked files clean and created no .jac runtime store.
 
 Candidate generator fixes pass temporary-output tests for all seven checkpoint
 cohorts, ten rumor-opposition cases, exact raw envelopes/excerpts/locators,
-non-author unique votes and two hero followers. Main generation refuses nonempty
+non-author unique votes, two hero followers and coherent task evidence/times.
+Candidate workflow substitution removes all 153 forward references. Main generation refuses nonempty
 catalog/raw directories. These are **not fixes to the distributed source/workflow
 snapshots**. No importer/replay/reset, identity decision, alert or agent answer
 was fabricated or run for this corpus.
@@ -149,3 +151,5 @@ Working on: (fill in)
 - 07:11 codex/test-data 948c5e4: 174 tests and both audits reproduced from clean remote clone + restored release assets. Candidate raw envelopes pass; delivered originals remain legacy. Candidate voter/follower fixes next.
 
 - 07:17 codex/test-data 8efadde: 181 tests; candidate unique non-author votes and two hero followers pass. Published snapshots unchanged. Task/review and media-follow release coherence next; Anshu handoff section condensed with guide links.
+
+- 07:23 codex/test-data 800e11f: 184 tests. Candidate tasks now match submissions and cited reviews; source/media release timing coherent, zero remaining forward references in substitution check. Full temporary generator rehearsal next; delivered snapshot unchanged.
