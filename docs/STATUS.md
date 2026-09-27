@@ -34,8 +34,10 @@ Next: pitch, backup video, Devpost.
 
 ## Anshu (map, integration)
 
-Working on: final handoff for all four overnight tasks. Tasks 1/2 are already
-on main (edee489); tasks 3/4 are ready on codex/anshu-night. Gabriel: optional onShowOnMap callback in PeopleTab/Panels;
+Working on: all four tasks pushed; draft PR #4 is ready for integration.
+Additional regression in features/map/test_map.jac passes: a new report does
+not inherit another report's media location; invalid coordinates stay unmapped,
+and only its explicit valid media link makes it navigable. Tasks 1/2 are on main. Gabriel: optional onShowOnMap callback in PeopleTab/Panels;
 no matching, reviews, investigation or service changes.
 Browser checks on isolated localhost (live credentials disabled): keyboard and
 mouse link select/center bridge; repeated use recenters; search survives;
@@ -51,7 +53,9 @@ Files changed: `tests/test_demo_flow.jac`, `components/TraceDashboard*`,
 `features/map/MapTab.jac`, `features/map/IncidentMap.jac`, the PeopleTab/Panels
 callback, OrganizationsTab/PublishReport wrapping, README Map and this board.
 Feature commits: 600bafd (report-to-map), ed3cb0b (phone wrapping).
-Final gates on base main 70c03c2: 56 tests pass; 52-file compiler gate passes.
+Final gates on base main 70c03c2: 57 tests pass (six focused map tests);
+52-file compiler gate passes. Production web client build also passes.
+Integration: https://github.com/pathakanshu/trace/pull/4 (draft, branch published).
 Language audit (GitHub languages API, 27 Sep 04:30 EDT): Jac 303,368 bytes
 (94.501%), JavaScript 9,598 (2.990%), CSS 8,055 (2.509%); total 321,021.
 Source: `gh api repos/pathakanshu/trace/languages`. GitHub caches default-branch

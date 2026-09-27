@@ -120,8 +120,8 @@ overflow, status/citation edge cases, and failed/slow boundary recovery.
 This was an isolated local preview; hosted deployment and a physical phone were
 not exercised. The generated large corpus remains unimported.
 
-Overnight follow-up (27 September): 56 repository tests and the 52-file compiler
-gate passed. Browser interactions verified keyboard/mouse **Show on map**,
+Overnight follow-up (27 September): 57 repository tests (six focused map tests),
+the 52-file compiler gate, and the production web client build passed. Browser interactions verified keyboard/mouse **Show on map**,
 repeat centering, retained People search, absence of links on unmapped reports,
 and the hospital update/reset. At 375x812, Map and Organizations had no document
 overflow, including long references/URLs in preview, published records and
