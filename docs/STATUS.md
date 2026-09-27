@@ -53,14 +53,32 @@ import quadratic); corpus lookups use a field filter so they walk real edges.
 
 ## Anshu (map, integration)
 
-Working on: deterministic person timeline on `codex/person-timeline`.
-Reserved: new `services/timeline.jac`, new `components/shared/PersonTimeline.jac`,
-new `tests/test_timeline.jac`; small shared People detail mount in
-`features/people/Panels.jac`, with incident-id props in PeopleTab/CorpusPeople;
-one endpoint import line in main.jac; this STATUS section/log.
-Gabriel's section has no active feature work listed. Miguel's listed files are
-untouched. Timeline returns a capped list as requested; each row carries
-`total_entries` (empty list means zero). No models or database writes.
+Done: deterministic person timeline on `codex/person-timeline`, **37e25a8**,
+rebased on main **8489a32**. Ready for Miguel to cherry-pick/review; not merged.
+New read-only `person_timeline(incident_id, person_id)` endpoint and shared People
+panel work for both incidents, including the unindexed corpus. All sources stay
+separate. Status changes compare consecutive claim types, never identity or truth.
+Latest 50 entries, chronological; `total_entries` on each row is the uncapped
+count (empty list = zero). Alerts/runs carry their cited claim's reported/ingested
+clock plus their own recorded time; missing citations stay explicitly unknown.
+Reset recreates graph IDs/ingestion times; the source-history content is repeatable.
+
+Validation: **12 timeline tests; 80 total Jac tests passed**, whole-program gate
+**61 files passed**, production web build passed. Five local browser checks passed:
+initial police + replay, hospital retaining police/status change/one alert, 375px,
+corpus/back, Reset refresh; zero page errors. Initial six unrelated mock-model test
+failures were missing litellm in this clone. Jac native `install` reported success
+with an empty venv; installing the existing `litellm==1.102.1` pin via uv into the
+project site-packages made the full suite pass. No dependency files changed.
+No live calls or stored results fabricated. Miguel's reserved files untouched.
+
+Exact added `main.jac` line (the only main change):
+`import from services.timeline { TimelineEntry, person_timeline }`
+Exact mount in `features/people/Panels.jac`, already included (Gabriel lists no active work):
+`{incidentId and <PersonTimeline incidentId={incidentId} personId={person.id} refreshToken={person} />}`
+PeopleTab/CorpusPeople pass `incidentId={snapshot.incident_id}` to ClaimsPanel.
+Cold-restart after integration. Working next: fresh-clone regression on latest main,
+then Devpost screenshots outside the repo. No further feature reservations.
 
 Done: corridor map + corpus report heat layer on `codex/anshu-map-scale`.
 Reserved: `features/map/*`, `services/geo.jac`, new
@@ -223,3 +241,5 @@ Working on: (fill in)
 - 09:26 JacHammer go/no-go: GO on 5528766. Fresh preview: Load exercise corpus about 25 s; corpus Map heat at four settlements, People chips + 100 of 1,150, Organizations 32 ranked, Graph 7,053 records (401 shown). Maya story: Reset shows both REPLAYED runs, hospital report gives exactly one alert. Note: the corpus has its own generated "Maya Gurung"; in the pitch, show corpus scale from the totals, heat map and Organizations, not by opening Maya there.
 - 09:51 main 59a219a: fixes from Anshu judge rehearsal. P1 investigation panel revalidates stored person/report ids against the snapshot, so Reset no longer empties the selectors (browser: select Maya G., Reset, REPLAYED + Investigate still shown). P2 corpus Media tab lists the 200 generated media records, read-only, uploads/duplicate check/edits hidden with a note. P3 seeded Maya media show "Preview unavailable: file not bundled" instead of broken images. 68 tests, gate passed. Map rivers/zoom limits in progress on miguel/map-rivers.
 - 10:03 main 1942e34: map shows every OSM river in Nepal (waterway=river, simplified, 336 KB) with the Bhote Koshi in the warning colour; zoom capped 6 to 14, maxBounds around Nepal, no world copies; report heat stays above the corridor whatever loads first. JacHammer checked: Reset then hospital gives 1 alert; select Maya G., Reset, panel falls back with REPLAYED and Investigate enabled. Note: JacHammer restart empties the store, reload the corpus before presenting.
+
+- 10:08 EDT Anshu: timeline ready on `codex/person-timeline` (37e25a8); 12 focused / 80 total Jac tests, compiler, web build and five UI checks pass. Exact import/mount above. Starting latest-main fresh-clone regression; no main push.
