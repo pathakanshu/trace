@@ -34,14 +34,14 @@ Next: pitch, backup video, Devpost.
 
 ## Anshu (map, integration)
 
-Working on: fresh quota coverage in `tools/test_data/audit_quotas.py`, its tests,
-strict audit and data docs. Count publisher/subject/type/community/media-link
-coverage directly from current records, without relying on cached legacy passes.
-Public/private boundary ac7bdbe and media provenance 6b19611 are pushed.
-129 tooling tests pass (114 core + 15 Pillow). Media audit is now 10/1/1:
-200 claimed creation timestamps follow their saved measurement time. License
-migration is deferred pending provenance reconciliation; no timestamps invented.
-Fresh-clone download/restore succeeded. Local preview server 8092 is stopped.
+Working on: source/correction provenance invariants in
+`tools/test_data/audit_provenance.py`, its tests, strict audit and docs.
+Check publication-reference uniqueness, publisher types, dependency disclosures,
+and source/correction DAGs without assuming numeric ID order means chronology.
+Fresh quotas f81c997 are pushed: 24/25 coverage dimensions pass; locations remain
+170/1,000. 137 tooling tests pass (122 core + 15 Pillow), strict audit 21/16/2.
+Media audit 10/1/1 flags contradictory creation/measurement timestamps; license
+migration remains deferred. No source records, assets or runtime stores changed.
 
 App handoff: all four overnight tasks complete; draft PR #4 ready:
 https://github.com/pathakanshu/trace/pull/4 (branch `codex/anshu-night`).
@@ -67,9 +67,9 @@ ab3fc56. No Linguist overrides/exclusions added. Not organizer eligibility proof
 
 Corpus published on origin/codex/test-data: e710475 control pack (26 records),
 23f81dd 40 cited queries, a65364f checkpoint diagnostics, fb64b72 40 concrete
-negative cases. **129 distinct tooling tests pass across schema/Pillow environments**
-(114 + fifteen separately run media checks). Primary 8,027 records and binary
-bundle are unchanged. Strict audit: **21 pass / 15 fail / 2 blocked**.
+negative cases. **137 distinct tooling tests pass across schema/Pillow environments**
+(122 + fifteen separately run media checks). Primary 8,027 records and binary
+bundle are unchanged. Strict audit: **21 pass / 16 fail / 2 blocked**.
 New measured defects: T+72 fixture summary is 353 missing / 547 safe / 50 injured /
 50 unresolved, target 650 / 250 / 50 / 50. The generator assigns 297 safe follow-ups
 outside its intended cohort. Six death rumors lack required equal/unknown-time
@@ -146,3 +146,5 @@ Working on: (fill in)
 - 06:40 codex/test-data ac7bdbe: public/private input boundary passes; 125 tooling tests. License migration paused on conflicting actual media creation/measurement timestamps; checking provenance before writing support metadata.
 
 - 06:44 codex/test-data 6b19611: 129 tests pass; actual media audit exposes creation/measurement timestamp conflict in all 200 rows. Asset bytes untouched; license migration deferred. Fresh quota audit next.
+
+- 06:47 codex/test-data f81c997: 137 tests; 24/25 catalog coverage dimensions pass, known location deficit fails. Source/correction provenance audit next; no primary input edits.
