@@ -12,23 +12,29 @@ perceptual hashing, C2PA / Content Credentials - each producing more
 VerificationSignal nodes through f"add_signal".
 """
 
-import from graph.nodes { Incident, Media, VerificationSignal }
+import from graph.nodes { Incident, Media, VerificationSignal, MediaMetadata, MediaAssertion }
 import from graph.edges { Contains, HasSignal }
 import from graph.activity { log_activity }
 
 walker EvidenceWalker {
-    has signals_created: int = 0;
+    has signals_created: int = 0, incident_id: str = "", current_incident_id: str = "";
 
     can start with Root entry {
-        visit [root -->[?:Incident]];
+        visit [i for i in [root -->[?:Incident]] if not self.incident_id or jid(i) == self.incident_id];
     }
 
     # From each incident, walk to every Media it contains.
     can to_media with Incident entry {
+        self.current_incident_id = jid(here);
         visit [here ->:Contains:->];
     }
 
     can inspect with Media entry {
+        metadata = [here -->][?:MediaMetadata];
+        if metadata {
+            self.inspect_upload(here, metadata[0]);
+            return;
+        }
         # Re-running should not duplicate signals: clear old ones first.
         for old in [here ->:HasSignal:->] {
             del old;
@@ -60,7 +66,7 @@ walker EvidenceWalker {
         self.add_signal(here, "SYNTHETIC_MEDIA", "No signal available", "NONE",
             "No synthetic-media detector was run in the starter.");
 
-        log_activity("EvidenceWalker", f"Checked a photo or video for clues: {here.description}");
+        log_activity("EvidenceWalker", f"Simulated evidence checks: {here.description}", self.current_incident_id);
     }
 
     def add_signal(media: Media, signal_type: str, value: str, confidence: str, explanation: str) -> None {
@@ -71,10 +77,50 @@ walker EvidenceWalker {
         self.signals_created += 1;
     }
 
-    # Other media in any incident sharing the same content hash.
+    def inspect_upload(media: Media, metadata: MediaMetadata) -> None {
+        matches = 0;
+        incidents = [i for i in [root -->[?:Incident]] if jid(i) == self.current_incident_id];
+        if not incidents { return; }
+        for other in [incidents[0] ->:Contains:->] {
+            other_metadata = [other -->][?:MediaMetadata];
+            if jid(other) != jid(media) and other_metadata and other_metadata[0].sha256 == metadata.sha256 {
+                matches += 1;
+            }
+        }
+        self.set_signal(media, "DUPLICATE_MATCH", str(matches) + " exact matching media record(s).",
+            "HIGH", "SHA-256 of uploaded bytes within this incident. Copies are not independent corroboration.", "sha256");
+        assertions = [media -->][?:MediaAssertion];
+        unique: list[str] = [];
+        repeated = 0;
+        for assertion in assertions {
+            key = assertion.assertion_type + "|" + assertion.value.strip().lower();
+            if key in unique { repeated += 1; }
+            else { unique.append(key); }
+        }
+        if assertions {
+            self.set_signal(media, "LOCATION_SOURCE_CLAIMS", str(len(assertions)) + " sourced media claim(s); " + str(repeated) + " repeated assertion(s).",
+                "UNKNOWN", "Attributed reports retain their sources and timestamps; they are not verified location facts.", "reported");
+        }
+        log_activity("EvidenceWalker", "Inspected uploaded bytes and sourced claims.", self.current_incident_id);
+    }
+
+    def set_signal(media: Media, signal_type: str, value: str, confidence: str, explanation: str, method: str) -> None {
+        existing = [signal for signal in [media ->:HasSignal:->] if signal.signal_type == signal_type and signal.method == method];
+        if existing {
+            existing[0].value = value;
+            existing[0].confidence = confidence;
+            existing[0].explanation = explanation;
+        } else {
+            media +>:HasSignal():+> VerificationSignal(signal_type=signal_type, value=value,
+                confidence=confidence, explanation=explanation, method=method);
+            self.signals_created += 1;
+        }
+    }
+
+    # Other seeded media in the current incident sharing the fixture hash.
     def find_duplicates(media: Media) -> list[Media] {
         found: list[Media] = [];
-        for incident in [root -->[?:Incident]] {
+        for incident in [i for i in [root -->[?:Incident]] if jid(i) == self.current_incident_id] {
             for m in [incident ->:Contains:->] {
                 if jid(m) != jid(media) and m.content_hash == media.content_hash {
                     found.append(m);

@@ -20,11 +20,21 @@ The whole Trace model at a glance:
     Media    -HasSignal->       VerificationSignal
     Person   -HasSubscription-> Subscription
     Subscription -Receives->    Alert
+
+Agreed additions (see docs/TEAM.md and docs/PUBLISHING.md):
+
+    Incident         -HasOrganization-> Organization (Anshu: demo publishers)
+    Organization     -Publishes->       Source       (Anshu: institution behind a report)
+    Claim            -Triggered->       Alert        (WatchWalker: which claim caused the alert)
+    IdentityDecision -Reviews->         Person       (Gabriel: human review of a pair)
+    Media            -ExactCopyOf->     Media        (Aidana: identical SHA-256)
+    Claim            -ReportedAt->      Location     (corpus import: place named in a report)
 """
 
 import from graph.nodes {
     Incident, Person, Claim, Source, Media, Location,
-    VerificationSignal, Subscription, Alert, IdentityDecision
+    VerificationSignal, Subscription, Alert, Organization, IdentityDecision,
+    InvestigationRun
 }
 
 edge Involves: Incident --> Person {}
@@ -47,6 +57,32 @@ edge HasSubscription: Person --> Subscription {}
 
 edge Receives: Subscription --> Alert {}
 
+edge HasOrganization: Incident --> Organization {}
+edge Publishes: Organization --> Source {}
+
+edge HasInvestigation: Incident --> InvestigationRun {}
+
+# The claim whose arrival made WatchWalker create this alert.
+edge Triggered: Claim --> Alert {
+    has walker_name: str = "WatchWalker",
+        created_at: str = "";
+}
+
 # Human identity review -> each of the two Person records it concerns.
 # PROPOSED by Gabriel (People) - schema owner: Miguel.
 edge Reviews: IdentityDecision --> Person {}
+
+# The source media is a byte-identical copy of the target (same hash).
+# Says nothing about which copy came first.
+edge ExactCopyOf: Media --> Media {
+    has hash_algo: str = "sha256",
+        detected_by: str = "",
+        detected_at: str = "";
+}
+
+# The place a report names. Only imported corpus claims carry it today; demo
+# locations still come from media (Media -LocatedAt-> Location).
+edge ReportedAt: Claim --> Location {}
+
+# A source with no organization publisher (a community contributor's report).
+edge HasSource: Incident --> Source {}

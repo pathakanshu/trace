@@ -7,13 +7,49 @@ Pattern for every button: set busy -> await server call -> reload snapshot.
 """
 
 impl TraceDashboard.loadDashboard -> None {
+    await loadIncidentSnapshot(incidentId);
+}
+
+# "" is the Maya demo incident. The id is passed in because a state update made
+# in the same handler is not visible until the next render.
+impl TraceDashboard.loadIncidentSnapshot(targetId: str) -> None {
     try {
-        snapshot = await get_dashboard();
+        snapshot = await get_dashboard(targetId);
         error = "";
     } except Exception as e {
         error = "Could not load the Trace graph: " + str(e);
     }
     loading = False;
+}
+
+impl TraceDashboard.loadIncidents -> None {
+    try {
+        incidents = await list_incidents();
+    } except Exception as e {
+        # The switcher is optional; the demo incident still loads without it.
+        incidents = [];
+    }
+}
+
+impl TraceDashboard.handleSelectIncident(targetId: str) -> None {
+    if targetId == incidentId { return; }
+    busy = "switch";
+    notice = "";
+    incidentId = targetId;
+    await loadIncidentSnapshot(targetId);
+    busy = "";
+}
+
+impl TraceDashboard.handleLoadCorpus -> None {
+    busy = "corpus";
+    try {
+        await load_corpus();
+        await loadIncidents();
+        notice = "Exercise corpus loaded. Choose it in the incident selector.";
+    } except Exception as e {
+        error = "Loading the exercise corpus failed: " + str(e);
+    }
+    busy = "";
 }
 
 impl TraceDashboard.handleReset -> None {
@@ -82,5 +118,20 @@ impl TraceDashboard.handleTabKey(event: any, index: int) -> None {
     nextTab = DASHBOARD_TABS[nextIndex];
     activeTab = nextTab;
     target: any = document.getElementById("tab-" + nextTab);
+    if target { target.focus(); }
+}
+
+# Navigation resolves real claim/location links in the current shared snapshot.
+# A counter allows revisiting the same report after panning elsewhere.
+impl TraceDashboard.handleShowOnMap(claimId: str) -> None {
+    current = snapshot;
+    if current is None { return; }
+    locations = current.locations;
+    places = [p for p in locations if claimId in [e.claim_id for e in p.evidence]];
+    if not places { return; }
+    mapFocusId = places[0].id;
+    mapFocusRequest = mapFocusRequest + 1;
+    activeTab = "Map";
+    target: any = document.getElementById("tab-Map");
     if target { target.focus(); }
 }

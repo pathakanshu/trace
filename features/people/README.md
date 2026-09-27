@@ -49,7 +49,7 @@ review_identity(incident_name, person_a_id, person_b_id, decision, reviewer,
 
 Same validation, plus decision in {CONFIRMED, REJECTED} and non-empty reviewer.
 
-### Shared changes needing sign-off
+### Integrated shared changes
 - **Miguel (schema, graph/nodes.jac + graph/edges.jac):**
   - `IdentityDecision` (one per pair, `pair_key` = sorted jids) gained
     `incident_name`, `evidence_claim_ids`, `past_reviews: list[IdentityReviewEntry]`.
@@ -65,8 +65,8 @@ Same validation, plus decision in {CONFIRMED, REJECTED} and non-empty reviewer.
     cited_claim_ids, differences, unknowns. No renames.
   - ResolveWalker now also lists agent-proposed pairs that the name/age rules
     did not flag (label "NOT RULE-MATCHED").
-  - Still open: `IngestWalker.find_or_create_person` matches by exact name
-    only and does not consult review decisions.
+  - IngestWalker associates reports only through an explicit person ID; otherwise
+    it creates a separate record. Review decisions do not silently redirect ingestion.
 
 ### Behaviour notes
 - "Latest status" comparisons sort status claims by report timestamp and keep
@@ -78,7 +78,6 @@ Same validation, plus decision in {CONFIRMED, REJECTED} and non-empty reviewer.
 ### Limitations
 - Reviewer is a typed name (no auth).
 - A CONFIRMED decision does not merge timelines or change displayed status.
-- `reset_demo` still uses the broad graph wipe (clears decisions and proposals).
-- `PersonView.latest_status` in services/trace.jac (Anshu) sorts claims by
-  timestamp and does not de-duplicate, so it agrees with People's comparison,
-  but it treats undated claims as oldest instead of ignoring them. Not changed.
+- Incident-scoped reset clears its decisions/proposals while preserving shared and unrelated data.
+- PersonView flags differing latest/undated status reports for review; it does not
+  treat strictly earlier differing reports as a current conflict.

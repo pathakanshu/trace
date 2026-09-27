@@ -1,12 +1,58 @@
 """Gabriel's workspace. Search and selection belong to this tab, not the shell."""
 import from .Panels { PeoplePanel, ClaimsPanel }
 import from .IdentityReview { IdentityReview }
+import from .CorpusPeople { CorpusPeople }
 import from ...components.shared.Display { SectionHeading }
-sv import from ...services.trace { DashboardSnapshot, PersonView }
+import from ...components.shared.Scale { is_corpus_snapshot }
+sv import from ...services.trace { DashboardSnapshot, PersonView, search_people }
 sv import from ...walkers.resolve { DuplicateCandidate }
 
-def:pub PeopleTab(snapshot: DashboardSnapshot, onRefresh: Callable[[], any]) -> JsxElement {
-    has query: str = "", selectedId: str = "", reviewKey: str = "";
+def:pub PeopleTab(snapshot: DashboardSnapshot, onRefresh: Callable[[], any], onShowOnMap: Callable[[str], None] | None = None) -> JsxElement {
+    has query: str = "", selectedId: str = "", reviewKey: str = "",
+        results: list[PersonView] | None = None, searching: bool = False,
+        searchError: str = "", searchedFor: str = "";
+
+    # A different incident starts with its own default list and no stale search.
+    can with [snapshot.incident_id] entry {
+        results = None;
+        query = "";
+        searchedFor = "";
+        searchError = "";
+        selectedId = "";
+        reviewKey = "";
+    }
+
+    async def runSearch -> None {
+        term = query.strip();
+        if term == "" {
+            results = None;
+            searchedFor = "";
+            return;
+        }
+        searching = True;
+        searchError = "";
+        try {
+            results = await search_people(snapshot.incident_id, term, 100);
+            searchedFor = term;
+        } except Exception as e {
+            searchError = "Search failed: " + str(e);
+        }
+        searching = False;
+    }
+
+    raw: any = snapshot;
+    corpus = is_corpus_snapshot(raw);
+    if corpus {
+        return <CorpusPeople snapshot={snapshot} people={results if results != None else snapshot.people}
+            query={query} searching={searching} searchError={searchError} searchedFor={searchedFor}
+            selectedId={selectedId} onSelect={lambda (pid: str) { selectedId = pid; }}
+            onQuery={lambda (value: str) {
+                query = value;
+                if value.strip() == "" { results = None; searchedFor = ""; }
+            }}
+            onSearch={runSearch} onShowOnMap={onShowOnMap} />;
+    }
+
     q = query.strip().lower();
     people = [p for p in snapshot.people if q == "" or q in p.name.lower()];
     selected: PersonView | None = None;
@@ -47,7 +93,8 @@ def:pub PeopleTab(snapshot: DashboardSnapshot, onRefresh: Callable[[], any]) -> 
                 selectedId={selected.id if selected else ""}
                 onSelect={lambda (pid: str) { selectedId = pid; }}
                 onReview={lambda (key: str) { reviewKey = key; }} />
-            <ClaimsPanel person={selected} />
+            <ClaimsPanel person={selected} onShowOnMap={onShowOnMap}
+                mappedClaimIds={[e.claim_id for place in snapshot.locations for e in place.evidence]} />
         </div>
     </div>;
 }

@@ -24,7 +24,9 @@ node Incident {
 node Person {
     has name: str,
         age: int = 0,
-        notes: str = "";
+        notes: str = "",
+        # Stable record id from an imported dataset ("" for demo records).
+        external_id: str = "";
 }
 
 # A statement made by a source, e.g. MISSING, FOUND_SAFE, INJURED, SEEN_AT_LOCATION.
@@ -35,14 +37,29 @@ node Claim {
         notes: str = "",
         # Set to True once WatchWalker has looked at this claim, so running
         # WatchWalker twice never sends the same alert twice.
-        seen_by_watch: bool = False;
+        seen_by_watch: bool = False,
+        incident_id: str = "",
+        ingested_at: str = "",
+        original_content: str = "",
+        source_reference: str = "",
+        extraction_method: str = "",
+        ingestion_key: str = "",
+        payload_hash: str = "",
+        external_id: str = "";
+}
+
+# Demo institutions are selectable publishers, not authenticated identities.
+node Organization {
+    has name: str, organization_type: str = "", is_demo: bool = True,
+        external_id: str = "";
 }
 
 # Who made a claim: police, hospital, NGO, community report, registry...
 node Source {
     has name: str,
         source_type: str = "",
-        url: str = "";
+        url: str = "",
+        external_id: str = "";
 }
 
 # An image or video related to the incident.
@@ -57,14 +74,20 @@ node Media {
         # EXIF parsing / perceptual hashing (Python libs via Jac interop).
         exif_gps_present: bool = False,
         content_hash: str = "",
-        community_location: str = "";
+        community_location: str = "",
+        # Aidana: "seed" or "upload". content_hash holds the real SHA-256 for uploads.
+        origin: str = "seed",
+        uploaded_by: str = "",
+        uploaded_at: str = "",
+        external_id: str = "";
 }
 
 # A place on the map.
 node Location {
     has name: str,
         latitude: float = 0.0,
-        longitude: float = 0.0;
+        longitude: float = 0.0,
+        external_id: str = "";
 }
 
 # ONE piece of evidence about a media item. Never a single "truth score".
@@ -73,20 +96,24 @@ node VerificationSignal {
     has signal_type: str,
         value: str = "",
         confidence: str = "UNKNOWN",
-        explanation: str = "";
+        explanation: str = "",
+        # How the signal was produced. "simulated" until a real check runs.
+        method: str = "simulated";
 }
 
 # Someone following a person (fictional contact for the demo).
 node Subscription {
     has subscriber_name: str,
-        subscriber_contact: str = "";
+        subscriber_contact: str = "",
+        external_id: str = "";
 }
 
 # A generated update delivered to a subscription.
 node Alert {
     has message: str,
         created_at: str = "",
-        severity: str = "info";
+        severity: str = "info",
+        claim_id: str = "";
 }
 
 # One complete earlier review of a pair (kept verbatim in the decision).
@@ -148,5 +175,33 @@ node IdentityProposal {
 node ActivityEntry {
     has walker_name: str,
         message: str,
-        created_at: str = "";
+        created_at: str = "",
+        incident_id: str = "",
+        # jids of the records this step touched (Graph tab draws derived links).
+        target_ids: list[str] = [];
+}
+
+# A small cited report investigation. Structured step history lives in result_json.
+# Model observations never become source Claim nodes or change Person identity.
+# mode is LIVE for a run made on this server and REPLAYED for one loaded
+# from demo/recorded_investigations.json on reset.
+node InvestigationRun {
+    has person_id: str, fingerprint: str, result_json: str,
+        created_at: str = "", mode: str = "";
+}
+
+# Metadata and attributed contributions attached to a canonical Media record.
+node MediaMetadata {
+    has media_id: str = "", filename: str = "", display_name: str = "",
+        source_reference: str = "", sha256: str = "", data_url: str = "",
+        duplicate_ids: list[str] = [];
+}
+
+node MediaComment {
+    has body: str = "", author: str = "", created_at: str = "";
+}
+
+node MediaAssertion {
+    has assertion_type: str = "", value: str = "", source: str = "",
+        asserted_at: str = "", provenance: str = "", status: str = "reported";
 }

@@ -60,8 +60,22 @@ def load_boundaries() -> dict {
 
 # Public endpoint: TopoJSON (provinces + districts) for the map.
 def:pub get_boundaries() -> dict {
-    if not _cache {
+    if "topo" not in _cache {
         _cache["topo"] = load_boundaries();
     }
     return _cache["topo"];
+}
+
+# Current OSM linework and four settlement anchors; never a 2016 flood polygon.
+def:pub get_bhotekoshi_corridor() -> dict {
+    if "corridor" not in _cache {
+        try {
+            with open("features/map/bhotekoshi-corridor.geojson", encoding="utf-8") as fh {
+                _cache["corridor"] = json.load(fh);
+            }
+        } except Exception {
+            return {"error": "Bundled river corridor is unavailable"};
+        }
+    }
+    return _cache["corridor"];
 }

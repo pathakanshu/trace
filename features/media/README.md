@@ -1,11 +1,21 @@
-# Media — Aidana
+# Media integration
 
-Entry component: `MediaTab.jac`.
+`MediaTab.jac` reads `DashboardSnapshot.media_records`; all mutations await the
+shared refresh callback. Persistent media metadata, comments, and attributed
+assertions are defined in `graph/nodes.jac` and attached to canonical Media nodes.
 
-Own media search/upload, evidence display, and walkers/evidence.jac. Replace simulated results with actual bounded checks and explicit unavailable states.
+`media_upload.jac` provides upload/list, exact-duplicate checks, edits, deletion,
+comments, and attributed assertions. All UI actions are registered in `main.jac`.
+Uploads validate size and file signatures and hash decoded bytes with SHA-256;
+this is not complete image decoding, EXIF extraction, or authenticity analysis.
+Same filename/source/bytes retries reuse the existing upload; separate source
+references preserve distinct copies and their `ExactCopyOf` relationship.
+Upload time is separate from unknown capture time. Seed records stay labeled.
 
-Keep feature components, helpers, new server adapters, and focused tests in this folder.
-All tabs receive a read-only `DashboardSnapshot` and async `onRefresh` callback.
-After a successful server write, `await onRefresh()` to update all views.
+Only unreferenced uploads belonging to one incident can be deleted. Delete/reset
+clean known child records while preserving externally shared data. Source-linked
+seed records remain evidence. Comments and assertions are unauthenticated demo
+contributions; they do not change person status or establish truth.
 
-See [the team contract](../../docs/TEAM.md) before changing shared interfaces.
+Run `jac test features/media/test_media.jac features/media/test_media_integration.jac`.
+See [the team contract](../../docs/TEAM.md) for shared interfaces and ownership.

@@ -74,7 +74,7 @@ def:pub PeoplePanel(
 }
 
 # ---------------- Reports about one person ----------------
-def:pub ClaimsPanel(person: PersonView | None) -> JsxElement {
+def:pub ClaimsPanel(person: PersonView | None, mappedClaimIds: list[str] = [], onShowOnMap: Callable[[str], None] | None = None) -> JsxElement {
     if person == None {
         return <EmptyPanel icon={Activity01Icon} title="Choose a person" text="Select someone from the list to see who reported what, and when." />;
     }
@@ -105,6 +105,11 @@ def:pub ClaimsPanel(person: PersonView | None) -> JsxElement {
                         </span>
                         {c.notes and <span className="text-xs text-muted-foreground">{c.notes}</span>}
                         {len(c.supporting_media) > 0 and <span className="text-xs text-muted-foreground">{"Related photo: " + ", ".join(c.supporting_media)}</span>}
+                        {onShowOnMap and c.id in mappedClaimIds and <button type="button"
+                            onClick={lambda { onShowOnMap(c.id); }}
+                            className="self-start rounded px-1 py-2 text-xs text-primary underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-ring">
+                            {"Show on map"}
+                        </button>}
                     </div>
                 </li>
             }}

@@ -1,2 +1,9 @@
 .jac/
 node_modules/
+.DS_Store
+.trace-local/
+.env.local
+dist/
+__pycache__/
+*.pyc
+.pytest_cache/

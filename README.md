@@ -2,98 +2,245 @@
 
 **One incident. Every trace.**
 
-Trace is a graph-native disaster intelligence platform that connects people, claims, sources, locations, and media into a single evolving incident graph. Sources make claims; Trace keeps every claim with its provenance instead of pretending there is one truth. Jac walkers traverse that graph as new information arrives.
+Trace keeps a flood incident as one persistent graph of sources, claims, people and
+alerts. When a hospital reports a missing person safe, Trace alerts the family's
+subscription and keeps the police report beside it instead of overwriting it. When a
+relief group relays that news, a reviewer can ask Trace where the report got its
+information: NVIDIA Nemotron labels the attribution, and Jac decides what happens
+next (stop, retrieve the named source and compare, or hand it to a person). Labels
+come from the model; every action, traversal, timestamp and number comes from Jac.
 
-All people, sources and media in this repo are fictional.
+It is one Jac app with five tabs: Map, People, Media, Organizations, and Graph. All
+people and reports are fictional.
 
-## 1. Install
+## Start here
 
-Use the Jac 0.34.x native binary to match this JacHammer scaffold (validation uses 0.34.1).
-Check `jac --version` first; the 0.37 CLI has incompatible configuration/commands.
-Jac 0.34 is distributed as a binary, not the `jaclang` package on PyPI. See the
-[official installation guide](https://docs.jaseci.org/quick-guide/install/) for
-versioned binary installation. Then, from the project folder:
+- [AGENTS.md](AGENTS.md): engineering and evidence rules.
+- [Team contract](docs/TEAM.md): ownership, tab interfaces, and integration checks.
+- [Publishing contract](docs/PUBLISHING.md): report validation, provenance, alerts, and reset.
+- [Report investigation](docs/INVESTIGATION.md): the Nemotron report-attribution check, its setup, request cap, ledger, statuses, and tests.
 
-```bash
+## Install and run
+
+Use the **Jac 0.34.1 native binary**, the tested version for this JacHammer scaffold.
+Check `jac --version` first; do not substitute a different CLI version or the
+`jaclang` PyPI package. See the [official installation guide](https://docs.jaseci.org/quick-guide/install/).
+Commands below assume `jac` resolves to the working 0.34.1 binary.
+
+```sh
+jac --version
 jac install
-```
-
-## 2. Run
-
-```bash
 jac start --dev main.jac
 ```
 
-Open the URL it prints (usually http://localhost:8000). In JacHammer the live preview is already running.
+Open the URL printed by the server. Run only one server against this checkout's
+`.jac/data/` graph store. The core demo needs no model credentials. Live report checks need
+the server settings below.
 
-## 3. The demo (about 30 seconds)
+### Model configuration
 
-1. The dashboard auto-seeds **Bhote Koshi Flood Demo** and opens Map. Switch to **People**: Maya Gurung is **MISSING** (claim by *Nepal Police Demo*).
-2. See "Maya G." flagged as a **potential duplicate**. ResolveWalker never merges people.
-3. Open **Demo controls** and click **Simulate hospital report**. IngestWalker adds *Central Hospital Demo*: **FOUND_SAFE**, then WatchWalker runs.
-4. You should see:
-   - both claims kept on Maya's timeline (the police claim is not overwritten)
-   - a banner explaining that the reports say different things
-   - an alert for Maya's subscriber, Asha
-   - the same hospital report in **Organizations** and **Graph**, plus the shared activity feed
-5. Click **Reset demo** to start again. **Check for updates** reruns WatchWalker; claims it has already seen are skipped.
+| Setting | Value |
+| --- | --- |
+| Model | `nvidia_nim/nvidia/nemotron-3.5-lightning-30b-a3b` (NVIDIA hosted API) |
+| Client | Jac `by llm()` (byLLM) over litellm 1.102.1, typed enum outputs |
+| Call settings | temperature 0, 96 output tokens, no retries, reasoning off, 45 s limit |
+| Prompt version | `report-lineage-v4` |
+| Calls per check | at most 2 (attribution, then one source comparison for a relay) |
 
-## 4. Tests
+| Environment variable | Purpose |
+| --- | --- |
+| `NVIDIA_NIM_API_KEY` | NVIDIA API key, server-side only. |
+| `TRACE_LIVE_PASSPHRASE` | Required for live checks; typed into the People panel. Unset means live checks are off. |
+| `TRACE_MODEL_REQUEST_CAP` | Optional lifetime request cap for the server's ledger (default 200, 1-1000). |
+| `LITELLM_LOCAL_MODEL_COST_MAP=True` | Stops litellm downloading its price list at startup. |
 
-```bash
-jac test tests/test_trace.jac
+Every request is written to `.trace-local/model-usage.json` before it is sent and is
+never refunded; Reset does not touch it. Details, statuses and the evaluated cases are
+in [docs/INVESTIGATION.md](docs/INVESTIGATION.md).
+
+## Current behavior and limits
+
+- Organizations previews and publishes structured demo reports for an explicit person ID.
+  Identical retries return the existing claim; changed content requires a new reference.
+- WatchWalker creates in-app alerts from new source claims. Strictly newer dated
+  reports are updates; differing latest or undated reports require review.
+- People shows sourced timelines and deterministic name/age match candidates.
+  Human reviewers can confirm/reject associations with attribution and history.
+  Decisions preserve both records and do not merge timelines or change status.
+- Map uses bundled Nepal boundaries and graph-backed evidence pins. Reported
+  locations are unverified. No street tiles or map API key are needed.
+- Media supports image uploads, real SHA-256 copy matching, editable upload details,
+  comments, and attributed assertions through the shared snapshot. Seeded checks
+  remain simulated. Real EXIF extraction, C2PA, and video analysis are not implemented.
+- Graph inspects real node IDs, typed edges, identity reviews, and upload copy links
+  from the shared snapshot. Derived/candidate links are labeled. Investigation runs
+  appear as Investigation nodes with a stored edge from the incident and derived
+  edges to the claims they cite. Media contribution child nodes are not projected.
+- People also offers a capped NVIDIA Nemotron check of one source report's
+  attribution, with at most one follow-up source comparison. The model returns
+  labels only; Jac chooses the next step. Results are advisory, stored separately
+  from claims, and unavailable without the server passphrase and key. Each result
+  is labeled LIVE (answered now), CACHED (a saved run reused) or REPLAYED (a
+  recorded real run re-created on Reset for the two seeded reports), with the
+  model id, the original run time and token usage. Offline tests use a mock model;
+  label quality rests on the handful of live cases in the investigation guide, not
+  on a benchmark.
+- No authentication, public publishing, continuous monitoring, or external alert
+  delivery. CGX/PFIF import, free-text extraction, broader community workflows, and the
+  large planned corpus are not implemented. Retry guarantees are tested sequentially.
+
+### Map
+
+The initial view frames the Bhote Koshi river corridor. Current OpenStreetMap
+linework (four separate mapped ways) and Kodari, Tatopani, Bahrabise and Khadichaur
+labels sit above a faint district background. The translucent river band is a
+visual guide, **not a measured 2016 flood extent**. © OpenStreetMap contributors
+(ODbL); attribution is available on the map. The bundled 18,016-byte GeoJSON is
+an exact copy from `codex/test-data`; its provenance/archive references resolve
+on that branch, not to a bundled corpus here. No other corpus inputs were copied.
+
+When the dashboard supplies `place_counts`, Map aggregates exact coordinates
+without jitter and draws a heat layer weighted by report count. High-zoom circles
+and the keyboard-accessible list open settlement totals and missing/safe/other
+source assertions. The list shows at most the 20 busiest coordinates. The caption
+separates located and unlocated reports; neither the glow nor the river band is
+an uncertainty or flood boundary. Counts are reports, not unique people or media
+locations. An empty count list preserves the Maya pins and evidence panel.
+The additive count backend/importer is owned by Miguel. It is integrated from
+814a07d; the map consumes its fields without changing the importer or schema.
+
+The corridor loads independently of boundaries and evidence, with its own
+five-second unavailable message and late recovery. HTML settlement labels need
+no external glyph service. `get_bhotekoshi_corridor` is the server endpoint;
+registered alongside `get_boundaries` in `main.jac` by Miguel.
+
+People reports with mapped evidence offer **Show on map**. It opens Map,
+selects the first linked place in snapshot order, and centers its pin. Repeating
+the link centers it again; normal tab switches preserve the viewport and People
+search. Reports without valid mapped evidence have no link. This navigation
+follows the report's media location, not the person's current whereabouts.
+
+Pins show the most urgent current report among people linked by a claim at that
+media location: Missing, Needs review, Reported safe, then No current status.
+Needs review includes conflicting reports, injury, or death. The evidence panel
+cites current person reports separately from the retained media-linked reports.
+A pin remains a reported media location; a status update does not relocate anyone.
+The bridge changes from Missing to Reported safe after the hospital update while
+retaining the police report. The seeded market has no linked person report and
+therefore shows No current status. Identity candidates are not silently combined.
+
+Pins and the keyboard-accessible place list work while district boundaries load.
+A failed request or five-second delay displays a boundaries-unavailable message;
+a late success restores boundaries without changing selection or viewport.
+The map observes container resizing and keeps viewport/selection across tabs.
+
+Map checks (27 September, corridor/count consumer): 66 Jac tests and the
+whole-program compiler gate pass, as does the production web client build. Nine real
+Maya browser checks pass (hospital update/one alert, retained police evidence,
+reload/reset, keyboard selection, pan/zoom/tab preservation, and failed/slow
+boundaries). Eight additional browser component checks use explicitly mocked
+count responses: exact-coordinate aggregation, 170 rows to four points,
+high-zoom circle selection, source-status sums, top-20 cap, empty fallback and
+corridor failure. Both suites pass at 375px with no document overflow or page
+errors. These count fixtures are not an importer or a corpus execution result.
+Four further checks pass against the real persisted corpus: idempotent import,
+1,356 located / 2,244 unlocated reports at 170 records / four coordinates,
+correct settlement status totals, 375px rendering, and reset isolation. The test
+uses the shared incident-selector UI and unchanged backend responses. Counts were
+Tatopani 345, Kodari 339, Khadichaur 339 and Bahrabise 333. No corpus alerts were
+created. Local screenshots on Anshu's host:
+`/private/tmp/trace-corridor-mobile.png` and
+`/private/tmp/trace-real-corpus-mobile.png`.
+Hosted deployment and physical-phone rehearsal remain untested.
+
+If a development preview retains a compiler overlay after a source correction,
+stop it and rebuild before restarting. A stale generated
+`.jac/client/.jac-build-error.json` may retain the old error; remove that marker
+only after a successful build confirms the correction. Do not reset shared data.
+
+```sh
+jac test features/map/test_map.jac
+jac build --check_only
+jac build --client web
+# Separate terminal, in an isolated checkout with its own .jac/data:
+jac start --dev --port 8092 --api_port 8093 main.jac
+# With Playwright already available to Node (no application dependency added):
+TRACE_MAP_URL=http://localhost:8092 node features/map/verify_map.cjs
+TRACE_MAP_URL=http://localhost:8092 node features/map/verify_density.cjs
+# Imports/reuses the real corpus in this isolated preview:
+TRACE_MAP_URL=http://localhost:8092 node features/map/verify_corpus_map.cjs
 ```
 
-## 5. Five tabs and team ownership
+The browser check resets the preview's demo. It accepts localhost only.
+Set `TRACE_BROWSER_EXECUTABLE` to an existing Chromium executable if needed;
+`NODE_PATH` can point to existing Playwright packages. Set `TRACE_MAP_SCREENSHOT`
+to capture the 375px result. Shared integration change: a defaulted
+`LocationEvidenceView.person_id` filled from the claim's `About` edge in the
+location loop; no changes to the investigation snapshot fields or seed are needed.
 
-The dashboard switches between **Map, People, Media, Organizations, Graph** in
-place. Tabs preserve their local search/selection state and share one graph
-snapshot. Notifications and activity remain visible beside every tab.
+## Demo and checks
 
-Read [docs/TEAM.md](docs/TEAM.md) before starting parallel work. It defines the
-component contract, backend ownership, merge workflow, product guardrails, and
-manual acceptance checks.
+The story, in order:
 
-| Owner | Folder | Main entry |
-| --- | --- | --- |
-| Aidana | `features/media/` | `MediaTab.jac` |
-| Gabriel | `features/people/` | `PeopleTab.jac` |
-| Miguel | `features/graph/` | `GraphTab.jac` |
-| Anshu | `features/organizations/` | `OrganizationsTab.jac` |
-| Anshu | `features/map/` | `MapTab.jac` |
+1. **Reset demo** (Demo controls) loads the fixtures and re-creates two recorded runs.
+2. **People**: select the community report ("According to Nepal Police Demo...").
+   It shows REPLAYED, NEEDS_REVIEW, labeled RELAY; Jac retrieved the police report it
+   names and cites both excerpts. The police report itself is labeled RELAY with no
+   named source (the officer recorded what the family said), so it also goes to a
+   person rather than being accepted as first-hand. No model call.
+3. **Organizations**: **Load hospital example → Review report → Publish demo report**.
+   One new alert for Asha Gurung's subscription; the police MISSING claim stays.
+4. **Organizations**: publish a Flood Relief Demo report for Maya Gurung whose text
+   relays the hospital, for example: "According to Central Hospital Demo, Maya
+   Gurung, 24, was admitted in stable condition this morning. Our team has not seen
+   her." (a new reference, e.g. `NGO-RELAY-001`). No new alert: the status is unchanged.
+5. **People**: select that report, type the passphrase, **Investigate**. Result is
+   LIVE: attribution, Jac's retrieval of the hospital report, one comparison, both
+   excerpts cited, usage and the ledger-backed cap. Investigating again shows CACHED.
+6. **Graph**: the Investigation nodes link to the claims they cite.
 
-Shared integration lives in `components/TraceDashboard*`, `components/shared/`,
-`services/trace.jac`, `main.jac`, and `jac.toml`. The graph schema stays in `graph/`
-and graph behavior stays in `walkers/`. Anshu coordinates shared integration;
-Miguel coordinates graph schema changes. Feature folders also hold their own
-helpers, adapters, and tests as those are added.
+Publishing the same form again creates no additional claim or alert. Reset restores
+the scenario; unrelated incidents and shared nodes survive. **Simulate hospital
+report** remains the scripted fallback for step 3.
 
-The graph:
+**When live is unavailable** (no passphrase, key, network or budget): step 5 shows
+UNAVAILABLE or BUDGET_LIMIT with the server's message and sends nothing. The story
+still works from the two REPLAYED runs in step 2, which are real recorded Nemotron
+outputs, labeled as recorded with their original run time.
 
+```sh
+jac test tests features/people/test_identity_review.jac features/graph/test_graph.jac features/media/test_media.jac features/media/test_media_integration.jac
+jac build --check_only
+jac build --client web
 ```
-Incident -Involves-> Person <-About- Claim <-Asserts- Source
-Incident -Contains-> Media -LocatedAt-> Location
-                     Media -HasSignal-> VerificationSignal
-                     Media -Depicts-> Person      Claim -SupportedBy-> Media
-Person -HasSubscription-> Subscription -Receives-> Alert
-```
 
-## 6. Intentionally simplified
+The investigation suite uses a mock model (byLLM `MockLLM`) and a temporary ledger;
+it makes no network or paid model calls. Browser acceptance steps are in the team contract; previously recorded
+publishing/browser verification and its limits are in the publishing contract.
+Local preview is the tested deployment fallback; public hosted access and a second
+physical device still need verification.
 
-- Demo data is hardcoded. There is no scraping and no external APIs.
-- The tab split provides workspaces, not implemented comments, voting, anonymous posting, uploads, or institutional publishing. Organizations currently groups existing institutional reports by source; it does not yet have Organization nodes.
-- The map uses MapLibre GL with only the district/province borders from `geometry.topo.json` (no street tiles, so no token and no internet needed). Constituencies are in the file but not drawn yet.
-- Verification signals come from demo fields on `Media` (`exif_gps_present`, `content_hash`, `community_location`).
-- Name matching in ResolveWalker is a simple rule, not AI.
-- No auth. Alerts are shown in the UI, not sent anywhere.
+## Code map
 
-## 7. Where to add things
+| Path | Responsibility |
+| --- | --- |
+| `main.jac` | Endpoint registration, CSS entry, and route |
+| `components/TraceDashboard*`, `components/shared/` | Shared shell and presentation |
+| `features/<tab>/` | Tab UI, feature services, and focused tests |
+| `graph/nodes.jac`, `graph/edges.jac`, `graph/activity.jac` | Persistent schema and activity helpers |
+| `walkers/` | Ingestion, identity proposals/reviews, seeded and upload evidence, watching |
+| `services/trace.jac`, `services/geo.jac` | Shared snapshot/actions and boundary data |
+| `services/investigation.jac`, `integrations/nemotron.jac` | Report checks and the model boundary (typed labels, passphrase, ledger) |
+| `demo/seed.jac`, `demo/reset.jac`, `tests/` | Executable fixtures, isolated reset, and tests |
+| `styles/trace-tokens.css` | Trace theme tokens; imports generated `global.css` |
 
-- **Live ingestion / AI normalization**: build `IngestWalker(...)` calls from scraped records (`walkers/ingest.jac`).
-- **Real EXIF / perceptual hashing / C2PA**: new `add_signal(...)` calls in `walkers/evidence.jac` (use Python libraries through Jac imports).
-- **AI identity resolution**: replace `score_pair` in `walkers/resolve.jac`. Keep the output a *candidate*.
-- **Notifications**: after the `Alert` is created in `walkers/watch.jac`.
-- **Interactive map / graph viz**: `features/map/` / `features/graph/`.
-- **New endpoint**: put the feature action in `features/<tab>/services.jac`; coordinate its registration in `main.jac` and any snapshot additions with Anshu.
+`.jac/` and `dist/` are generated/ignored. `.jac/data/` holds local graph data;
+`.trace-local/` holds the persistent model request ledger. Neither is source code or a
+cleanup target. `geometry.topo.json` is required map data.
 
-Ground rules: every claim keeps its source, every signal keeps its explanation, conflicting claims stay visible, and AI or community output is evidence, not truth.
+## Future reference only
+
+[Dataset rules](docs/plans/test-data/TEST_DATA_RULES.md) and their linked schemas,
+quotas, and generation prompt specify a future corpus, not current fixtures or APIs.
+Read these only for work on that corpus; current code,
+tests, and the feature contracts above describe the implemented app.
