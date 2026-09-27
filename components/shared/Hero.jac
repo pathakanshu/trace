@@ -31,7 +31,7 @@ def:pub Hero(snapshot: DashboardSnapshot) -> JsxElement {
         <div className="mx-auto grid max-w-[1600px] gap-6 px-4 py-7 md:px-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
             <div className="flex max-w-3xl flex-col gap-3">
                 <span className="inline-flex w-fit items-center gap-2 rounded-full border border-border bg-card/80 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                    <span className="size-2 rounded-full bg-brand" aria-hidden="true" />
+                    <span className="size-2 rounded-full bg-primary" aria-hidden="true" />
                     {snapshot.incident_name + " · fictional people"}
                 </span>
                 <h2 className="font-display text-4xl leading-[1.05] tracking-tight text-balance md:text-5xl">
@@ -43,10 +43,10 @@ def:pub Hero(snapshot: DashboardSnapshot) -> JsxElement {
             </div>
             <div className="grid grid-cols-2 gap-3 sm:min-w-[26rem]">
                 <HeroStat label="People reported" value={len(snapshot.people)} icon={UserMultipleIcon} tone="bg-accent text-primary" />
-                <HeroStat label="Reports kept" value={reports} icon={File01Icon} tone="bg-brand-soft text-brand" />
-                <HeroStat label="Organizations" value={len(snapshot.organizations)} icon={Building03Icon} tone="bg-story-match-soft text-story-match" />
+                <HeroStat label="Reports kept" value={reports} icon={File01Icon} tone="bg-accent text-primary" />
+                <HeroStat label="Organizations" value={len(snapshot.organizations)} icon={Building03Icon} tone="bg-accent text-primary" />
                 <HeroStat label="Alerts sent" value={alerts} icon={Notification01Icon}
-                    tone="bg-status-safe-soft text-status-safe" pulse={alerts > 0} />
+                    tone="bg-accent text-primary" pulse={alerts > 0} />
             </div>
         </div>
     </section>;

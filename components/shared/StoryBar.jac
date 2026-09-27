@@ -35,11 +35,10 @@ glob STORY_STEPS: list[dict] = [
      "note": "The model only labels the attribution. Jac decides what to do next, and a person makes the final call. Saved checks are marked REPLAYED."}
 ];
 glob STORY_ICONS: list = [Location01Icon, UserSearch01Icon, Hospital01Icon, Search01Icon];
-# One colour per step so the audience can follow along: missing (red),
-# identity (violet), safe (green), provenance (brand orange).
-glob STORY_DOT: list[str] = ["bg-status-missing text-background", "bg-story-match text-background", "bg-status-safe text-background", "bg-brand text-background"];
-glob STORY_SOFT: list[str] = ["bg-status-missing-soft border-status-missing/40", "bg-story-match-soft border-story-match/40", "bg-status-safe-soft border-status-safe/40", "bg-brand-soft border-brand/40"];
-glob STORY_TEXT: list[str] = ["text-status-missing", "text-story-match", "text-status-safe", "text-brand"];
+# One accent for every step; red and green are kept for real report statuses.
+glob STORY_DOT: str = "bg-primary text-primary-foreground";
+glob STORY_SOFT: str = "bg-accent border-primary/40";
+glob STORY_TEXT: str = "text-primary";
 
 # Which dashboard tab a step shows. Explicit cl keeps this a browser helper
 # (not a server call) when the shell imports it, as in Display.jac.
@@ -58,7 +57,7 @@ def:pub StoryRail(step: int, hospitalAdded: bool, busy: str,
     return <section aria-label="Maya's story, step by step" className="flex flex-col gap-4 rounded-3xl border border-border bg-card p-4 shadow-sm md:p-5">
         <div className="flex items-start justify-between gap-3">
             <div className="flex flex-col">
-                <span className="text-xs font-semibold uppercase tracking-wide text-brand">{"Follow the story"}</span>
+                <span className="text-xs font-semibold uppercase tracking-wide text-primary">{"Follow the story"}</span>
                 <h2 className="font-display text-2xl leading-tight">{"What happened to Maya?"}</h2>
             </div>
             <Button variant="ghost" size="sm" disabled={busy != ""} onClick={lambda { onReset(); }}>
@@ -72,20 +71,20 @@ def:pub StoryRail(step: int, hospitalAdded: bool, busy: str,
                     {step != i + 1 and <button type="button" onClick={lambda { onStep(i + 1); }}
                         className="flex w-full items-center gap-3 rounded-2xl px-1.5 py-1.5 text-left transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                         <span className={cn("relative z-10 inline-flex size-9 shrink-0 items-center justify-center rounded-full text-sm font-bold shadow-sm ring-4 ring-card",
-                            STORY_DOT[i] if i + 1 < step else "bg-muted text-muted-foreground")}>
+                            STORY_DOT if i + 1 < step else "bg-muted text-muted-foreground")}>
                             {i + 1 < step and <HugeiconsIcon icon={CheckmarkCircle02Icon} strokeWidth={2.5} className="size-5" />}
                             {i + 1 >= step and str(i + 1)}
                         </span>
                         <span className={cn("text-base font-medium", "text-foreground" if i + 1 < step else "text-muted-foreground")}>{STORY_STEPS[i]["short"]}</span>
                     </button>}
                     {step == i + 1 and <div aria-current="step"
-                        className={cn("flex flex-col gap-3 rounded-2xl border-2 p-3 animate-in fade-in slide-in-from-left-2 duration-300 motion-reduce:animate-none", STORY_SOFT[i])}>
+                        className={cn("flex flex-col gap-3 rounded-2xl border-2 p-3 animate-in fade-in slide-in-from-left-2 duration-300 motion-reduce:animate-none", STORY_SOFT)}>
                         <div className="flex items-center gap-3">
-                            <span className={cn("relative z-10 inline-flex size-10 shrink-0 items-center justify-center rounded-full shadow-md ring-4 ring-card", STORY_DOT[i])}>
+                            <span className={cn("relative z-10 inline-flex size-10 shrink-0 items-center justify-center rounded-full shadow-md ring-4 ring-card", STORY_DOT)}>
                                 <HugeiconsIcon icon={STORY_ICONS[i]} strokeWidth={2} className="size-5" />
                             </span>
                             <div className="flex min-w-0 flex-col">
-                                <span className={cn("text-xs font-bold uppercase tracking-wide", STORY_TEXT[i])}>{"Step " + str(i + 1) + " of " + str(len(STORY_STEPS))}</span>
+                                <span className={cn("text-xs font-bold uppercase tracking-wide", STORY_TEXT)}>{"Step " + str(i + 1) + " of " + str(len(STORY_STEPS))}</span>
                                 <div className="flex items-center gap-1">
                                     <h3 className="font-display text-xl leading-tight md:text-2xl">{STORY_STEPS[i]["title"]}</h3>
                                     <InfoTip label="More about this step" lines={[STORY_STEPS[i]["note"]]} />

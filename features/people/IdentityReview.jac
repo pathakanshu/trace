@@ -175,9 +175,9 @@ def:pub IdentityReview(
         </div>
 
         <div className="grid gap-4 rounded-md border border-border bg-card pt-4 pb-4 pl-4 pr-4 md:grid-cols-3">
-            <FactList title="Similarities (rule-based)" items={candidate.reasons} tone="text-status-safe" />
-            <FactList title="Differences" items={candidate.differences} tone="text-status-warning" />
-            <FactList title="Unknown" items={candidate.unknowns} tone="text-status-neutral" />
+            <FactList title="Similarities (rule-based)" items={candidate.reasons} tone="text-primary" />
+            <FactList title="Differences" items={candidate.differences} tone="text-primary" />
+            <FactList title="Unknown" items={candidate.unknowns} tone="text-primary" />
         </div>
         <span className="text-xs text-muted-foreground">
             {"ResolveWalker label: " + candidate.confidence + " (count of matching name/age rules, not a probability). Names alone do not establish identity."}

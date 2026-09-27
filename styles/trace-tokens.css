@@ -86,8 +86,6 @@
 
   --brand: oklch(0.68 0.18 50);
   --brand-soft: oklch(0.68 0.18 50 / 0.14);
-  --story-match: oklch(0.55 0.2 300);
-  --story-match-soft: oklch(0.55 0.2 300 / 0.12);
   --hero-from: oklch(0.9 0.08 60);
   --hero-to: oklch(0.9 0.06 235);
 }
@@ -113,8 +111,6 @@
 
   --brand: oklch(0.76 0.16 55);
   --brand-soft: oklch(0.76 0.16 55 / 0.18);
-  --story-match: oklch(0.72 0.16 300);
-  --story-match-soft: oklch(0.72 0.16 300 / 0.18);
   --hero-from: oklch(0.33 0.09 40);
   --hero-to: oklch(0.3 0.08 250);
 }
@@ -130,8 +126,6 @@
 @theme inline {
   --color-brand: var(--brand);
   --color-brand-soft: var(--brand-soft);
-  --color-story-match: var(--story-match);
-  --color-story-match-soft: var(--story-match-soft);
   --color-status-missing: var(--status-missing);
   --color-status-missing-soft: var(--status-missing-soft);
   --color-status-safe: var(--status-safe);

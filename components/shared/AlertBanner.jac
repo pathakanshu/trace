@@ -23,16 +23,15 @@ def:pub AlertBanner(alert: AlertView, people: list[PersonView], onDismiss: Calla
         }
     }
     kept: list[ClaimView] = [c for c in person.claims if c.claim_type in BANNER_STATUS_CLAIMS and c.id != alert.claim_id] if person else [];
-    safe: bool = cited != None and cited.claim_type == "FOUND_SAFE";
     headline: str = (person.name + " " + status_sentence(cited.claim_type).lower() + " by " + cited.source_name) if person and cited else "New report received";
 
     return <section role="status" aria-live="polite" aria-label="New alert"
         className={cn("mx-4 mt-4 flex flex-col gap-3 rounded-xl border-2 p-4 shadow-lg animate-in fade-in slide-in-from-top-4 duration-500 motion-reduce:animate-none md:mx-6 md:flex-row md:items-center md:justify-between md:p-5",
-            "border-status-safe bg-status-safe-soft" if safe else "border-primary bg-primary/10")}>
+            "border-primary bg-accent")}>
         <div className="flex min-w-0 items-start gap-4">
             <span className="relative mt-1 inline-flex size-11 shrink-0 items-center justify-center" aria-hidden="true">
-                <span className={cn("absolute inset-0 animate-ping rounded-full opacity-40 motion-reduce:animate-none", "bg-status-safe" if safe else "bg-primary")} />
-                <span className={cn("relative inline-flex size-11 items-center justify-center rounded-full", "bg-status-safe text-background" if safe else "bg-primary text-primary-foreground")}>
+                <span className={cn("absolute inset-0 animate-ping rounded-full opacity-40 motion-reduce:animate-none", "bg-primary")} />
+                <span className={cn("relative inline-flex size-11 items-center justify-center rounded-full", "bg-primary text-primary-foreground")}>
                     <HugeiconsIcon icon={Notification01Icon} strokeWidth={2} className="size-5" />
                 </span>
             </span>

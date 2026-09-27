@@ -175,7 +175,7 @@ def:pub TraceDashboard() -> JsxElement {
         {snap and not corpus_view and <Hero snapshot={snap} />}
         {snap and corpus_view and <section aria-label="Exercise corpus" className="trace-hero border-b border-border">
             <div className="mx-auto flex max-w-[1600px] flex-col gap-3 px-4 py-8 md:px-8">
-                <span className="text-xs font-semibold uppercase tracking-wide text-brand">{"Scale view · generated exercise data"}</span>
+                <span className="text-xs font-semibold uppercase tracking-wide text-primary">{"Scale view · generated exercise data"}</span>
                 <h2 className="font-display text-4xl leading-tight tracking-tight md:text-5xl">{snap.incident_name}</h2>
                 <CorpusTotals snapshot={snap} />
             </div>

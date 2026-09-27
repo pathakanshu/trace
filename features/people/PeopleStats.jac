@@ -27,12 +27,12 @@ def:pub PeopleStats(people: list[PersonView], duplicates: list[DuplicateCandidat
     reviewed = len(duplicates) - pending;
     return <div className="grid grid-cols-2 gap-3 lg:grid-cols-4 animate-in fade-in slide-in-from-bottom-1 duration-500">
         <StatTile label="Latest report: missing" value={missing} hint="by report time"
-            icon={UserMultipleIcon} tone="bg-status-missing-soft text-status-missing" />
+            icon={UserMultipleIcon} tone="bg-accent text-primary" />
         <StatTile label="Reports disagree" value={differ} hint="all kept"
-            icon={Alert02Icon} tone="bg-status-warning-soft text-status-warning" />
+            icon={Alert02Icon} tone="bg-accent text-primary" />
         <StatTile label="Matches to review" value={pending} hint="human decision"
-            icon={UserSearch01Icon} tone="bg-primary/10 text-primary" />
+            icon={UserSearch01Icon} tone="bg-accent text-primary" />
         <StatTile label="Matches reviewed" value={reviewed} hint="with reviewer"
-            icon={CheckmarkCircle02Icon} tone="bg-status-safe-soft text-status-safe" />
+            icon={CheckmarkCircle02Icon} tone="bg-accent text-primary" />
     </div>;
 }
