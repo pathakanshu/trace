@@ -53,6 +53,15 @@ import quadratic); corpus lookups use a field filter so they walk real edges.
 
 ## Anshu (map, integration)
 
+Working on: deterministic person timeline on `codex/person-timeline`.
+Reserved: new `services/timeline.jac`, new `components/shared/PersonTimeline.jac`,
+new `tests/test_timeline.jac`; small shared People detail mount in
+`features/people/Panels.jac`, with incident-id props in PeopleTab/CorpusPeople;
+one endpoint import line in main.jac; this STATUS section/log.
+Gabriel's section has no active feature work listed. Miguel's listed files are
+untouched. Timeline returns a capped list as requested; each row carries
+`total_entries` (empty list means zero). No models or database writes.
+
 Done: corridor map + corpus report heat layer on `codex/anshu-map-scale`.
 Reserved: `features/map/*`, `services/geo.jac`, new
 `features/map/bhotekoshi-corridor.geojson`, README Map section, this section/log.

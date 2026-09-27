@@ -9,6 +9,7 @@ import from ...components.shared.Display {
     status_text, status_label, source_kind, friendly_time, plural
 }
 import from ...lib.utils { cn }
+import from ...components.shared.PersonTimeline { PersonTimeline }
 sv import from ...services.trace { PersonView }
 sv import from ...walkers.resolve { DuplicateCandidate }
 
@@ -74,7 +75,7 @@ def:pub PeoplePanel(
 }
 
 # ---------------- Reports about one person ----------------
-def:pub ClaimsPanel(person: PersonView | None, mappedClaimIds: list[str] = [], onShowOnMap: Callable[[str], None] | None = None) -> JsxElement {
+def:pub ClaimsPanel(person: PersonView | None, mappedClaimIds: list[str] = [], onShowOnMap: Callable[[str], None] | None = None, incidentId: str = "") -> JsxElement {
     if person == None {
         return <EmptyPanel icon={Activity01Icon} title="Choose a person" text="Select someone from the list to see who reported what, and when." />;
     }
@@ -114,5 +115,6 @@ def:pub ClaimsPanel(person: PersonView | None, mappedClaimIds: list[str] = [], o
                 </li>
             }}
         </ol>
+        {incidentId and <PersonTimeline incidentId={incidentId} personId={person.id} refreshToken={person} />}
     </section>;
 }
