@@ -12,6 +12,7 @@ import from ...components.shared.Display { SectionHeading, EmptyPanel }
 import from ...lib.utils { cn }
 import from .GraphTreePanel { RecordInspector, ProvenanceBadge }
 import from .graph_helpers { kind_title, kind_order, short_id }
+import from ...components.shared.Scale { count_of, fmt_count, is_corpus_snapshot }
 sv import from ...services.trace { DashboardSnapshot }
 sv import from .services { GraphSnapshot, GraphNodeView }
 
@@ -59,6 +60,14 @@ def:pub GraphTab(snapshot: DashboardSnapshot, onRefresh: Callable[[], any]) -> J
     stored_count = len([e for e in g.edges if not e.derived]);
     derived_count = len(g.edges) - stored_count;
 
+    # Large incidents send a capped node list plus totals for every record kind.
+    raw_graph: any = g;
+    total_nodes: int = raw_graph.total_nodes or len(g.nodes);
+    kind_counts: any = raw_graph.counts_by_kind;
+    count_keys: list[str] = kind_counts.keys() if kind_counts else [];
+    summary_kinds = [k for k in kind_order() if k in count_keys] + [k for k in count_keys if k not in kind_order()];
+    capped = total_nodes > len(g.nodes);
+
     return <div className="flex flex-col gap-5">
         <div className="flex flex-wrap items-end justify-between gap-3">
             <SectionHeading title="Graph" subtitle="Inspect the stored records behind every tab, their real IDs, and the typed edges between them." />
@@ -74,6 +83,24 @@ def:pub GraphTab(snapshot: DashboardSnapshot, onRefresh: Callable[[], any]) -> J
             <div className="rounded-md border border-dashed border-border bg-card p-3"><p className="text-xs text-muted-foreground">{"Derived / candidate"}</p><p className="font-display text-2xl">{str(derived_count)}</p></div>
             <div className="rounded-md border border-border bg-card p-3"><p className="text-xs text-muted-foreground">{"Incident jid"}</p><p className="truncate font-mono text-sm pt-2" title={g.incident_id}>{short_id(g.incident_id)}</p></div>
         </div>
+
+        {is_corpus_snapshot(raw) and len(summary_kinds) > 0 and <section aria-label="Records by kind" className="flex flex-col gap-2">
+            <p className="text-sm">
+                <span className="font-display text-2xl tabular-nums">{fmt_count(total_nodes)}</span>
+                <span className="text-muted-foreground">{" records in this incident"}</span>
+            </p>
+            <ul className="flex flex-wrap gap-2">
+                {for k in summary_kinds {
+                    <li key={k} className="rounded-md border border-border bg-card px-2.5 py-1 text-xs">
+                        <span className="text-muted-foreground">{kind_title(k) + " "}</span>
+                        <span className="font-medium tabular-nums">{fmt_count(count_of(kind_counts, k))}</span>
+                    </li>
+                }}
+            </ul>
+            {capped and <p className="border-l-2 border-status-warning pl-3 text-xs text-muted-foreground">
+                {"Showing the first " + fmt_count(len(g.nodes)) + " of " + fmt_count(total_nodes) + " records. Search People to find others."}
+            </p>}
+        </section>}
 
         <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
             <span>{"Legend:"}</span>

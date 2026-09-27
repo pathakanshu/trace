@@ -7,13 +7,49 @@ Pattern for every button: set busy -> await server call -> reload snapshot.
 """
 
 impl TraceDashboard.loadDashboard -> None {
+    await loadIncidentSnapshot(incidentId);
+}
+
+# "" is the Maya demo incident. The id is passed in because a state update made
+# in the same handler is not visible until the next render.
+impl TraceDashboard.loadIncidentSnapshot(targetId: str) -> None {
     try {
-        snapshot = await get_dashboard();
+        snapshot = await get_dashboard(targetId);
         error = "";
     } except Exception as e {
         error = "Could not load the Trace graph: " + str(e);
     }
     loading = False;
+}
+
+impl TraceDashboard.loadIncidents -> None {
+    try {
+        incidents = await list_incidents();
+    } except Exception as e {
+        # The switcher is optional; the demo incident still loads without it.
+        incidents = [];
+    }
+}
+
+impl TraceDashboard.handleSelectIncident(targetId: str) -> None {
+    if targetId == incidentId { return; }
+    busy = "switch";
+    notice = "";
+    incidentId = targetId;
+    await loadIncidentSnapshot(targetId);
+    busy = "";
+}
+
+impl TraceDashboard.handleLoadCorpus -> None {
+    busy = "corpus";
+    try {
+        await load_corpus();
+        await loadIncidents();
+        notice = "Exercise corpus loaded. Choose it in the incident selector.";
+    } except Exception as e {
+        error = "Loading the exercise corpus failed: " + str(e);
+    }
+    busy = "";
 }
 
 impl TraceDashboard.handleReset -> None {
