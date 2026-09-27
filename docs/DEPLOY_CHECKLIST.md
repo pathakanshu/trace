@@ -22,8 +22,9 @@ rewrites `[jachammer] project_id`.
 1. Build log shows the dependency install and `litellm` 1.102.1 (look for
    `deps_installed` and "litellm CustomLogger registered"). Write down what it shows.
 2. Open the app. Demo controls → **Reset demo**.
-3. People → Nepal Police report: REPLAYED, COMPLETED, DIRECT, model id and the
-   recorded run time. Community report: REPLAYED, NEEDS_REVIEW, RELAY, two citations.
+3. People → community report: REPLAYED, NEEDS_REVIEW, RELAY to Nepal Police Demo,
+   two citations, model id and the recorded run time. Nepal Police report: REPLAYED,
+   NEEDS_REVIEW, RELAY with no named source.
 4. Organizations → **Load hospital example → Review → Publish**: exactly one new alert,
    police MISSING claim still listed.
 5. Organizations → publish the Flood Relief Demo relay from the README demo steps
@@ -44,7 +45,7 @@ rewrites `[jachammer] project_id`.
 
 - litellm missing: the app still boots and live checks say UNAVAILABLE. Demo the
   REPLAYED runs and say live checks run locally.
-- Live call FAILED or times out: the request stays counted; do not retry more than
-  once. Fall back to the REPLAYED runs.
+- Live call FAILED or times out (45 s limit; NVIDIA's API took over 20 s on 2 of 15
+  calls during testing): the request stays counted; do not retry more than once. Fall back to the REPLAYED runs.
 - Blank page or 500: roll back to the previous deploy in JacHammer and use local
   preview (`jac start --dev main.jac`) as the demo fallback.

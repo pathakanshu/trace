@@ -43,8 +43,8 @@ the server settings below.
 | --- | --- |
 | Model | `nvidia_nim/nvidia/nemotron-3.5-lightning-30b-a3b` (NVIDIA hosted API) |
 | Client | Jac `by llm()` (byLLM) over litellm 1.102.1, typed enum outputs |
-| Call settings | temperature 0, 96 output tokens, no retries, reasoning off, 20 s limit |
-| Prompt version | `report-lineage-v2` |
+| Call settings | temperature 0, 96 output tokens, no retries, reasoning off, 45 s limit |
+| Prompt version | `report-lineage-v4` |
 | Calls per check | at most 2 (attribution, then one source comparison for a relay) |
 
 | Environment variable | Purpose |
@@ -136,9 +136,11 @@ location loop; no changes to the investigation snapshot fields or seed are neede
 The story, in order:
 
 1. **Reset demo** (Demo controls) loads the fixtures and re-creates two recorded runs.
-2. **People**: select the Nepal Police report. It shows REPLAYED, COMPLETED, labeled
-   DIRECT. Select the community report: REPLAYED, NEEDS_REVIEW, labeled RELAY; Jac
-   retrieved the police report it names and cites both excerpts. No model call.
+2. **People**: select the community report ("According to Nepal Police Demo...").
+   It shows REPLAYED, NEEDS_REVIEW, labeled RELAY; Jac retrieved the police report it
+   names and cites both excerpts. The police report itself is labeled RELAY with no
+   named source (the officer recorded what the family said), so it also goes to a
+   person rather than being accepted as first-hand. No model call.
 3. **Organizations**: **Load hospital example → Review report → Publish demo report**.
    One new alert for Asha Gurung's subscription; the police MISSING claim stays.
 4. **Organizations**: publish a Flood Relief Demo report for Maya Gurung whose text

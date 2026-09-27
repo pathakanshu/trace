@@ -132,6 +132,12 @@ def run_report_check(incident_id: str, person_id: str, claim_id: str = "", passp
     if attribution == "UNCLEAR" {
         status = "NEEDS_REVIEW";
         message = "Attribution remains uncertain. Review the cited report.";
+    } elif attribution == "DIRECT" and first["referenced_source"] != "NONE" {
+        # A first-hand label that also names an origin contradicts itself, which is
+        # what an instruction embedded in the report can produce; a person decides.
+        status = "NEEDS_REVIEW";
+        message = "The labels disagree: first-hand, yet a named source was given as the origin. Review the cited report.";
+        trace.append("Jac found the labels inconsistent and did not accept the report as first-hand.");
     } elif attribution == "RELAY" {
         # Multiple records from one named publisher cannot identify a particular publication.
         matching = [r for r in referenced if r["source_name"] == first["referenced_source"]];
