@@ -34,15 +34,12 @@ Next: pitch, backup video, Devpost.
 
 ## Anshu (map, integration)
 
-Working on: corpus tooling only on `codex/test-data`. Raw-source audit 3866853
-and asset restore 4039c8d are pushed. Next: `tools/test_data/generate_hero.py`,
-hero tests, `validate_dataset.py` hero-export hookup, strict audit and READMEs.
-Hero closure is missing its incident and two referenced locations; repair the
-private selection from unchanged public records, preserving all primary bytes.
-Next semantic checks: `tools/test_data/audit_community.py` and tests, strict
-audit/report, and private fixture `REPAIR_PLAN.md`. Scenario focal refs and
-community vote/task/subscription invariants need measured checks. Do not claim
-all twelve stories are executable merely because their IDs are listed.
+Working on: final data tooling robustness on `codex/test-data`:
+`generate_queries.py` shared catalog reader, `test_catalog_io.py`, strict audit
+and README/report updates. Reject duplicate IDs/malformed catalog input before
+query/negative/hero generation. Current fixes are pushed: 80b89c4 hero closure,
+17dfdc3 community checks and private `REPAIR_PLAN.md`. Hero is now 658 unchanged
+catalog records with all references, 62 Persons and 40 media. No primary rewrite.
 
 App handoff: all four overnight tasks complete; draft PR #4 ready:
 https://github.com/pathakanshu/trace/pull/4 (branch `codex/anshu-night`).
@@ -68,9 +65,9 @@ ab3fc56. No Linguist overrides/exclusions added. Not organizer eligibility proof
 
 Corpus published on origin/codex/test-data: e710475 control pack (26 records),
 23f81dd 40 cited queries, a65364f checkpoint diagnostics, fb64b72 40 concrete
-negative cases. **60 distinct tooling tests pass across schema/Pillow environments**
-(57 + three separately run decoder checks). Primary 8,027 records and binary
-bundle are unchanged. Strict audit: **14 pass / 11 fail / 2 blocked**.
+negative cases. **74 distinct tooling tests pass across schema/Pillow environments**
+(71 + three separately run decoder checks). Primary 8,027 records and binary
+bundle are unchanged. Strict audit: **15 pass / 14 fail / 2 blocked**.
 New measured defects: T+72 fixture summary is 353 missing / 547 safe / 50 injured /
 50 unresolved, target 650 / 250 / 50 / 50. The generator assigns 297 safe follow-ups
 outside its intended cohort. Six death rumors lack required equal/unknown-time
@@ -80,6 +77,11 @@ versioned repair. Also 153 future references, legacy support shapes and only
 All 1,800 raw hashes match, but 1,260 JSON reports fail the required envelope
 shape. Bundle restore twice verified 400 files and preserved bytes/mtimes;
 unpacker now rejects symlink escapes, corrupt inventory and overwrites.
+Community defects: 360 self-votes, 120 duplicate voting pairs, 36 task target
+mismatches, missing review citations and no hero Person with two followers.
+Private integration/repair guide on codex/test-data:
+`tests/fixtures/bhotekoshi-2016-exercise-v1/REPAIR_PLAN.md`. Coordinate immutable
+source/version/quota decisions before any corpus-wide regeneration.
 No corpus importer/replay/reset or model answers were fabricated or run.
 
 Coordination: branch only, ready for Miguel to integrate. Keeping original
@@ -130,3 +132,5 @@ Working on: (fill in)
 - 05:34 codex/test-data fb64b72: 40 concrete negatives, 40 cited queries, 26 controls; 45 distinct offline tooling tests pass. Audit 13/10/2 and final-cohort/rumor defects documented. Published corpus bytes preserved; raw-envelope/asset-unpacker audit next.
 
 - 05:41 codex/test-data 3866853/4039c8d: source envelope mismatch documented; real 400-file asset restore rehearsed twice. 60 tooling tests pass across two environments; hero reference-closure fix next.
+
+- 05:51 codex/test-data 80b89c4/17dfdc3: fixed hero closure (658 records), added community checks and private REPAIR_PLAN. 74 tooling tests pass; strict audit 15/14/2 exposes unresolved corpus defects. Primary records/media unchanged.
