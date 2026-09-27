@@ -90,7 +90,7 @@ def make_pin(label: str, location_id: str, status: str, on_select: Callable[[str
     return el;
 }
 
-def:pub IncidentMap(locations: list[LocationView], people: list[PersonView], active: bool = True, className: str = "", onSelect: Callable[[str], None] | None = None) -> JsxElement {
+def:pub IncidentMap(locations: list[LocationView], people: list[PersonView], active: bool = True, className: str = "", focusLocationId: str = "", focusRequest: int = 0, onSelect: Callable[[str], None] | None = None) -> JsxElement {
     has containerRef: Ref[HTMLDivElement] = Ref(),
         mapRef: Ref[any] = Ref(None),
         markersRef: Ref[list] = Ref([]),
@@ -99,7 +99,8 @@ def:pub IncidentMap(locations: list[LocationView], people: list[PersonView], act
         errorText: str = "",
         boundaryStatus: str = "loading",
         boundaryTimerRef: Ref[any] = Ref(None),
-        resizeRef: Ref[any] = Ref(None);
+        resizeRef: Ref[any] = Ref(None),
+        lastFocusRequest: Ref[int] = Ref(0);
 
     def select_location(location_id: str) -> None {
         if onSelectRef.current { onSelectRef.current(location_id); }
@@ -191,6 +192,19 @@ def:pub IncidentMap(locations: list[LocationView], people: list[PersonView], act
         if active and status == "ready" and mapRef.current {
             mapRef.current.resize();
         }
+    }
+
+    # Only explicit report navigation recenters; refresh and ordinary tab switches
+    # preserve the user's viewport. Wait for map readiness and visible dimensions.
+    can with [focusLocationId, focusRequest, active, status] entry {
+        if not active or status != "ready" or not mapRef.current { return; }
+        if focusRequest <= lastFocusRequest.current { return; }
+        places = [p for p in locations if p.id == focusLocationId];
+        if not places { return; }
+        mapRef.current.resize();
+        mapRef.current.jumpTo({"center": [places[0].longitude, places[0].latitude],
+            "zoom": max(mapRef.current.getZoom(), 13)});
+        lastFocusRequest.current = focusRequest;
     }
 
     # Remove the map when the component unmounts.

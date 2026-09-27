@@ -32,7 +32,8 @@ def:pub TraceDashboard() -> JsxElement {
         error: str = "",
         notice: str = "",
         activeTab: str = "Map",
-        showDemo: bool = False;
+        showDemo: bool = False,
+        mapFocusId: str = "", mapFocusRequest: int = 0;
 
     can with entry {
         if USE_DARK_THEME { document.documentElement.classList.add("dark"); }
@@ -46,6 +47,7 @@ def:pub TraceDashboard() -> JsxElement {
     async def handleRunWatch -> None;
     async def handleRunResolve -> None;
     def handleTabKey(event: any, index: int) -> None;
+    def handleShowOnMap(claimId: str) -> None;
 
     if loading and snapshot == None {
         return <div className="min-h-svh bg-background p-6" role="status" aria-label="Loading incident">
@@ -123,10 +125,11 @@ def:pub TraceDashboard() -> JsxElement {
         {snap and <div className="grid flex-1 xl:grid-cols-[minmax(0,1fr)_320px]">
             <main className="min-w-0 p-4 md:p-6">
                 <div id="panel-Map" role="tabpanel" aria-labelledby="tab-Map" tabIndex={0} hidden={activeTab != "Map"}>
-                    <MapTab snapshot={snap} onRefresh={loadDashboard} active={activeTab == "Map"} />
+                    <MapTab snapshot={snap} onRefresh={loadDashboard} active={activeTab == "Map"}
+                        focusLocationId={mapFocusId} focusRequest={mapFocusRequest} />
                 </div>
                 <div id="panel-People" role="tabpanel" aria-labelledby="tab-People" tabIndex={0} hidden={activeTab != "People"}>
-                    <PeopleTab snapshot={snap} onRefresh={loadDashboard} />
+                    <PeopleTab snapshot={snap} onRefresh={loadDashboard} onShowOnMap={handleShowOnMap} />
                     <InvestigationPanel snapshot={snap} onRefresh={loadDashboard} />
                 </div>
                 <div id="panel-Media" role="tabpanel" aria-labelledby="tab-Media" tabIndex={0} hidden={activeTab != "Media"}>

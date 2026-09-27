@@ -34,8 +34,19 @@ Next: pitch, backup video, Devpost.
 
 ## Anshu (map, integration)
 
-Working on: `codex/anshu-night`: publishing language audit and offline full-demo
-regression, then People-to-Map selection and 375px Map/Organizations.
+Working on: tasks 1/2 pushed (edee489). Tasks 3/4 implemented and undergoing
+final checks. Gabriel: optional onShowOnMap callback in PeopleTab/Panels;
+no matching, reviews, investigation or service changes.
+Browser checks on isolated localhost (live credentials disabled): keyboard and
+mouse link select/center bridge; repeated use recenters; search survives;
+unmapped community/hospital reports have no link; hospital updates pin/status.
+At 375x812 Map has 341px canvas and 375px document width. Organizations preview
+with 191-character reference and 220-character URL path exposed overflow; fixed
+wrapping in that feature. Preview, published report, expanded original text and
+Map evidence now remain 375px wide. Publishing/retrying produced 1 then 0 alerts.
+Reset removed the phone exercise report. No browser console errors observed.
+Screenshot capture timed out in the extension; DOM dimensions/interactions were
+verified, but no screenshot artifact is claimed. Normal viewport restored.
 Files: `docs/STATUS.md`, `tests/test_demo_flow.jac`; possible `.gitattributes`
 only for genuinely generated/vendor content after measurement. Later:
 `features/map/`, `features/organizations/`, a minimal People report link and

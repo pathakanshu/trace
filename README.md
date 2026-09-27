@@ -91,6 +91,13 @@ in [docs/INVESTIGATION.md](docs/INVESTIGATION.md).
 
 ### Map
 
+People reports with mapped evidence offer **Show on map**. It opens Map,
+selects the first linked place in snapshot order, and centers its pin. Repeating
+the link centers it again; normal tab switches preserve the viewport and People
+search. Reports without valid mapped evidence have no link. This navigation
+follows the report's media location, not the person's current whereabouts.
+
+
 Pins show the most urgent current report among people linked by a claim at that
 media location: Missing, Needs review, Reported safe, then No current status.
 Needs review includes conflicting reports, injury, or death. The evidence panel

@@ -5,7 +5,7 @@ import from ...components.shared.Display { SectionHeading }
 sv import from ...services.trace { DashboardSnapshot, PersonView }
 sv import from ...walkers.resolve { DuplicateCandidate }
 
-def:pub PeopleTab(snapshot: DashboardSnapshot, onRefresh: Callable[[], any]) -> JsxElement {
+def:pub PeopleTab(snapshot: DashboardSnapshot, onRefresh: Callable[[], any], onShowOnMap: Callable[[str], None] | None = None) -> JsxElement {
     has query: str = "", selectedId: str = "", reviewKey: str = "";
     q = query.strip().lower();
     people = [p for p in snapshot.people if q == "" or q in p.name.lower()];
@@ -47,7 +47,8 @@ def:pub PeopleTab(snapshot: DashboardSnapshot, onRefresh: Callable[[], any]) -> 
                 selectedId={selected.id if selected else ""}
                 onSelect={lambda (pid: str) { selectedId = pid; }}
                 onReview={lambda (key: str) { reviewKey = key; }} />
-            <ClaimsPanel person={selected} />
+            <ClaimsPanel person={selected} onShowOnMap={onShowOnMap}
+                mappedClaimIds={[e.claim_id for place in snapshot.locations for e in place.evidence]} />
         </div>
     </div>;
 }
