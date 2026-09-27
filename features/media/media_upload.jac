@@ -88,6 +88,12 @@ def:pub list_incident_media(incident: str) -> list[UploadRecord] {
     return result;
 }
 
+# The corpus incident is not reachable by name from root, so its snapshot
+# passes the incident and media nodes it already scanned.
+def media_record_views(incident: Incident, items: list[Media]) -> list[UploadRecord] {
+    return [_record_view(incident, item) for item in items];
+}
+
 # Recalculate exact SHA relationships, only within one incident and without result nodes.
 def:pub check_media_duplicates(incident: str) -> list[UploadRecord] {
     incident_node = _find_incident(incident);
