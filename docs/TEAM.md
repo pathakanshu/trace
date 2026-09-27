@@ -44,6 +44,14 @@ Use [the publishing contract](PUBLISHING.md) for source/report/alert behavior an
 Current feature limits live in [README](../README.md); evidence and product rules
 live in [AGENTS.md](../AGENTS.md).
 
+Graph tab: `get_dashboard()` sets `snap.graph = build_graph_snapshot(incident,
+snap.duplicates)`, a read-only projection of the incident. Edge status is
+`stored` (a typed edge), `confirmed`/`rejected` (a human identity review via
+`IdentityDecision -Reviews-> Person`), `candidate` (ResolveWalker results, never
+stored), or `derived` (`ActivityEntry.target_ids` or `Alert.claim_id`, never
+stored). WatchWalker should create `Claim -Triggered-> Alert` next to `Receives`;
+until it does, the Graph tab draws the derived `Alert.claim_id` link.
+
 ## Merge workflow
 
 1. Use one branch per owner: `codex/aidana`, `codex/gabriel`, `codex/miguel`,

@@ -8,7 +8,8 @@ typed node and edge views. It writes nothing and keeps no copy.
 Every node view carries its real jid. Every edge view names the typed Jac
 edge it came from (Asserts, About, Triggered, ...). Relationships that are
 NOT stored (ResolveWalker duplicate candidates, ActivityEntry.target_ids
-references) are marked derived=True with status "candidate"/"derived".
+references, Alert.claim_id when no Triggered edge exists) are marked
+derived=True with status "candidate"/"derived".
 
 Anshu wires this into DashboardSnapshot as f"graph: GraphSnapshot":
     snap.graph = build_graph_snapshot(incident, snap.duplicates);
@@ -16,12 +17,12 @@ Anshu wires this into DashboardSnapshot as f"graph: GraphSnapshot":
 
 import from graph.nodes {
     Incident, Person, Claim, Source, Media, Location, VerificationSignal,
-    Subscription, Alert, ActivityEntry, Organization
+    Subscription, Alert, ActivityEntry, Organization, IdentityDecision
 }
 import from graph.edges {
     Involves, Contains, Asserts, About, SupportedBy, Depicts, LocatedAt,
-    HasSignal, HasSubscription, Receives, Triggered, PublishesAs,
-    IdentityDecision, ExactCopyOf
+    HasSignal, HasSubscription, Receives, Triggered, HasOrganization,
+    Publishes, Reviews, ExactCopyOf
 }
 import from walkers.resolve { DuplicateCandidate }
 
@@ -65,7 +66,9 @@ obj _Collector {
     has nodes: dict[str, GraphNodeView] = {},
         order: list[str] = [],
         edges: list[GraphEdgeView] = [],
-        edge_keys: list[str] = [];
+        edge_keys: list[str] = [],
+        # alert jid -> Alert.claim_id, for alerts without a Triggered edge.
+        claim_refs: dict[str, str] = {};
 
     def add_node(view: GraphNodeView) -> bool {
         if view.id in self.nodes {
@@ -141,21 +144,16 @@ def build_graph_snapshot(
                 col.add_edge("Receives", sid, jid(alert));
             }
         }
-        # Human identity decisions (stored). Candidates are added below as derived.
-        for other in [person ->:IdentityDecision:->] {
-            for e in [edge person ->:IdentityDecision:-> other] {
-                col.add_edge(
-                    "IdentityDecision", pid, jid(other),
-                    "confirmed" if e.decision == "CONFIRMED" else "rejected",
-                    [
-                        _f("decision", e.decision), _f("reviewer", e.reviewer),
-                        _f("decided_at", e.decided_at), _f("rationale", e.rationale),
-                        _f("candidate_confidence", e.candidate_confidence),
-                        _f("candidate_reasons", ", ".join(e.candidate_reasons))
-                    ]
-                );
-            }
+        # Human identity reviews (stored). Candidates are added below as derived.
+        for decision in [person <-:Reviews:<-] {
+            _add_identity_decision(col, decision);
+            col.add_edge("Reviews", jid(decision), pid, _decision_status(decision));
         }
+    }
+
+    for org in [incident ->:HasOrganization:->] {
+        _add_organization(col, org);
+        col.add_edge("HasOrganization", inc_id, jid(org));
     }
 
     for m in [incident ->:Contains:->] {
@@ -177,7 +175,8 @@ def build_graph_snapshot(
         }
     }
 
-    _add_activity(col, incident.name);
+    _add_alert_claim_refs(col);
+    _add_activity(col, inc_id);
 
     snap = GraphSnapshot(incident_id=inc_id, incident_name=incident.name);
     snap.nodes = [col.nodes[k] for k in col.order];
@@ -204,12 +203,15 @@ def _add_claim(col: _Collector, claim: Claim) -> None {
         id=cid, kind="Claim", label=f"{claim.claim_type} ({source_name or 'unknown source'})",
         fields=[
             _f("claim_type", claim.claim_type), _f("value", claim.value),
-            _f("timestamp (reported)", claim.timestamp), _f("notes", claim.notes),
-            _f("seen_by_watch", claim.seen_by_watch)
+            _f("reported_at (by the source)", claim.timestamp or "unknown"),
+            _f("ingested_at (stored by Trace)", claim.ingested_at),
+            _f("notes", claim.notes), _f("seen_by_watch", claim.seen_by_watch)
         ],
         provenance=[
-            _f("source", source_name), _f("ingested_by", claim.ingested_by),
-            _f("ingested_at", claim.ingested_at), _f("report_ref", claim.report_ref)
+            _f("source", source_name), _f("source_reference", claim.source_reference),
+            _f("extraction_method", claim.extraction_method),
+            _f("original_content", claim.original_content),
+            _f("payload_hash", claim.payload_hash), _f("incident_id", claim.incident_id)
         ],
         badges=["stored"]
     )) {
@@ -217,7 +219,7 @@ def _add_claim(col: _Collector, claim: Claim) -> None {
     }
     for src in sources {
         srcid = jid(src);
-        orgs = [src <-:PublishesAs:<-];
+        orgs = [src <-:Publishes:<-];
         col.add_node(GraphNodeView(
             id=srcid, kind="Source", label=src.name,
             fields=[_f("name", src.name), _f("source_type", src.source_type), _f("url", src.url)],
@@ -226,12 +228,8 @@ def _add_claim(col: _Collector, claim: Claim) -> None {
         ));
         col.add_edge("Asserts", srcid, cid);
         for org in orgs {
-            col.add_node(GraphNodeView(
-                id=jid(org), kind="Organization", label=org.name,
-                fields=[_f("name", org.name), _f("org_type", org.org_type)],
-                badges=["stored"]
-            ));
-            col.add_edge("PublishesAs", jid(org), srcid);
+            _add_organization(col, org);
+            col.add_edge("Publishes", jid(org), srcid);
         }
     }
     for m in [claim ->:SupportedBy:->] {
@@ -247,17 +245,68 @@ def _add_claim(col: _Collector, claim: Claim) -> None {
     }
 }
 
+def _add_organization(col: _Collector, org: Organization) -> None {
+    badges = ["stored"];
+    if org.is_demo {
+        badges.append("demo");
+    }
+    col.add_node(GraphNodeView(
+        id=jid(org), kind="Organization", label=org.name,
+        fields=[_f("name", org.name), _f("organization_type", org.organization_type)],
+        provenance=[_f("is_demo", "yes (fictional publisher, not an authenticated identity)" if org.is_demo else "no")],
+        badges=badges
+    ));
+}
+
+def _decision_status(decision: IdentityDecision) -> str {
+    if decision.decision == "CONFIRMED" { return "confirmed"; }
+    if decision.decision == "REJECTED" { return "rejected"; }
+    return "stored";
+}
+
+def _add_identity_decision(col: _Collector, decision: IdentityDecision) -> None {
+    status = _decision_status(decision);
+    col.add_node(GraphNodeView(
+        id=jid(decision), kind="IdentityDecision",
+        label=f"{decision.decision}: {decision.person_a_name} / {decision.person_b_name}",
+        fields=[
+            _f("decision", decision.decision), _f("person_a", decision.person_a_name),
+            _f("person_b", decision.person_b_name), _f("note", decision.note),
+            _f("basis", ", ".join(decision.basis)), _f("history", "; ".join(decision.history))
+        ],
+        provenance=[_f("reviewer", decision.reviewer), _f("decided_at", decision.decided_at)],
+        badges=["stored", status] if status != "stored" else ["stored"]
+    ));
+}
+
 def _add_alert(col: _Collector, alert: Alert, subscriber: str) -> None {
     causes = [alert <-:Triggered:<-];
+    cause = jid(causes[0]) if causes else alert.claim_id;
     col.add_node(GraphNodeView(
         id=jid(alert), kind="Alert", label=f"Alert to {subscriber}",
         fields=[_f("message", alert.message), _f("severity", alert.severity), _f("created_at", alert.created_at)],
         provenance=[
-            _f("created_by", "WatchWalker" if causes else ""),
-            _f("caused_by_claim", jid(causes[0]) if causes else "not linked (created before Triggered edges existed)")
+            _f("created_by", "WatchWalker"),
+            _f("caused_by_claim", cause or "not recorded"),
+            _f("link", "stored Triggered edge" if causes else "Alert.claim_id field (no Triggered edge)" if cause else "not recorded")
         ],
         badges=["stored"]
     ));
+    if not causes and alert.claim_id {
+        col.claim_refs[jid(alert)] = alert.claim_id;
+    }
+}
+
+# Alerts with a claim_id but no Triggered edge still name their claim. Draw that
+# as a derived link so the UI never presents it as a stored edge.
+def _add_alert_claim_refs(col: _Collector) -> None {
+    for (aid, claim_id) in col.claim_refs.items() {
+        if claim_id in col.nodes {
+            col.add_edge("ClaimRef", claim_id, aid, "derived", [
+                _f("from", "Alert.claim_id (a recorded reference, not a graph edge)")
+            ]);
+        }
+    }
 }
 
 def _add_media(col: _Collector, m: Media) -> None {
@@ -318,24 +367,21 @@ def _add_media(col: _Collector, m: Media) -> None {
     }
 }
 
-# Only walker steps that actually ran (ActivityEntry nodes on root).
-# Entries without incident_name predate scoping; they are shown but badged "unscoped".
-def _add_activity(col: _Collector, incident_name: str) -> None {
+# Only walker steps that actually ran (ActivityEntry nodes on root), scoped the
+# same way as the dashboard's activity feed: incident_id == jid(incident).
+def _add_activity(col: _Collector, incident_id: str) -> None {
     for entry in [root -->[?:ActivityEntry]] {
-        if entry.incident_name != "" and entry.incident_name != incident_name {
+        if entry.incident_id != incident_id {
             continue;
         }
         aid = jid(entry);
         badges = ["stored", "walker ran"];
-        if entry.incident_name == "" {
-            badges.append("unscoped");
-        }
         col.add_node(GraphNodeView(
             id=aid, kind="Activity", label=f"{entry.walker_name}: {entry.message}",
             fields=[_f("walker_name", entry.walker_name), _f("message", entry.message)],
             provenance=[
                 _f("walker", entry.walker_name), _f("created_at", entry.created_at),
-                _f("incident_name", entry.incident_name),
+                _f("incident_id", entry.incident_id),
                 _f("target_ids", ", ".join(entry.target_ids))
             ],
             badges=badges

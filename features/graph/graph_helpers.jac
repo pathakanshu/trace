@@ -3,15 +3,12 @@
 Explicit cl keeps them in the client bundle (see components/shared/Display.jac).
 """
 
-# Order and plain-language titles for the record groups.
-glob GRAPH_KIND_ORDER: list[str] = [
-    "Incident", "Person", "Claim", "Source", "Organization", "Alert",
-    "Subscription", "Media", "Signal", "Location", "Activity"
-];
+# Plain-language titles for the record groups.
 
 cl def:pub kind_title(kind: str) -> str {
     titles = {
-        "Incident": "Incident", "Person": "People", "Claim": "Claims",
+        "Incident": "Incident", "Person": "People",
+        "IdentityDecision": "Identity reviews", "Claim": "Claims",
         "Source": "Sources", "Organization": "Organizations", "Alert": "Alerts",
         "Subscription": "Subscriptions", "Media": "Media", "Signal": "Verification signals",
         "Location": "Locations", "Activity": "Walker activity (ran)"
@@ -19,8 +16,12 @@ cl def:pub kind_title(kind: str) -> str {
     return titles.get(kind, kind);
 }
 
+# Group order. Kept inside the function: a server glob is not shipped to the client.
 cl def:pub kind_order() -> list[str] {
-    return GRAPH_KIND_ORDER;
+    return [
+        "Incident", "Person", "IdentityDecision", "Claim", "Source", "Organization", "Alert",
+        "Subscription", "Media", "Signal", "Location", "Activity"
+    ];
 }
 
 # Human wording for an edge, read in its stored direction.
@@ -30,8 +31,9 @@ cl def:pub edge_phrase(kind: str) -> str {
         "About": "is about", "SupportedBy": "is supported by", "Depicts": "depicts",
         "LocatedAt": "is located at", "HasSignal": "has signal",
         "HasSubscription": "has subscription", "Receives": "receives",
-        "Triggered": "triggered", "PublishesAs": "publishes as",
-        "IdentityDecision": "identity decision with", "ExactCopyOf": "is an exact copy of",
+        "Triggered": "triggered", "ClaimRef": "is named as the cause of",
+        "HasOrganization": "has publisher", "Publishes": "publishes",
+        "Reviews": "reviews", "ExactCopyOf": "is an exact copy of",
         "DuplicateCandidate": "may be the same person as", "Touched": "touched"
     };
     return phrases.get(kind, kind);
@@ -59,7 +61,7 @@ cl def:pub badge_hint(badge: str) -> str {
         "simulated": "Demo stand-in, not a real check",
         "walker ran": "Recorded when a walker actually ran",
         "seed": "Created by the demo seed",
-        "unscoped": "Logged before activity was tied to an incident"
+        "demo": "Fictional demo publisher, not an authenticated organization"
     };
     return hints.get(badge, "");
 }
