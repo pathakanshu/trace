@@ -11,7 +11,8 @@ cl def:pub kind_title(kind: str) -> str {
         "IdentityDecision": "Identity reviews", "Claim": "Claims",
         "Source": "Sources", "Organization": "Organizations", "Alert": "Alerts",
         "Subscription": "Subscriptions", "Media": "Media", "Signal": "Verification signals",
-        "Location": "Locations", "Activity": "Walker activity (ran)"
+        "Location": "Locations", "Activity": "Walker activity (ran)",
+        "Investigation": "Report investigations"
     };
     return titles.get(kind, kind);
 }
@@ -20,7 +21,7 @@ cl def:pub kind_title(kind: str) -> str {
 cl def:pub kind_order() -> list[str] {
     return [
         "Incident", "Person", "IdentityDecision", "Claim", "Source", "Organization", "Alert",
-        "Subscription", "Media", "Signal", "Location", "Activity"
+        "Subscription", "Media", "Signal", "Location", "Investigation", "Activity"
     ];
 }
 
@@ -34,7 +35,8 @@ cl def:pub edge_phrase(kind: str) -> str {
         "Triggered": "triggered", "ClaimRef": "is named as the cause of",
         "HasOrganization": "has publisher", "Publishes": "publishes",
         "Reviews": "reviews", "ExactCopyOf": "is an exact copy of",
-        "DuplicateCandidate": "may be the same person as", "Touched": "touched"
+        "DuplicateCandidate": "may be the same person as", "Touched": "touched",
+        "HasInvestigation": "has investigation", "InvestigationCitation": "cites"
     };
     return phrases.get(kind, kind);
 }

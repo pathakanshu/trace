@@ -127,7 +127,7 @@ def:pub TraceDashboard() -> JsxElement {
                 </div>
                 <div id="panel-People" role="tabpanel" aria-labelledby="tab-People" tabIndex={0} hidden={activeTab != "People"}>
                     <PeopleTab snapshot={snap} onRefresh={loadDashboard} />
-                    <InvestigationPanel snapshot={snap} />
+                    <InvestigationPanel snapshot={snap} onRefresh={loadDashboard} />
                 </div>
                 <div id="panel-Media" role="tabpanel" aria-labelledby="tab-Media" tabIndex={0} hidden={activeTab != "Media"}>
                     <MediaTab snapshot={snap} onRefresh={loadDashboard} />

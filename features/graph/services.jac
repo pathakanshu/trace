@@ -15,14 +15,16 @@ Anshu wires this into DashboardSnapshot as f"graph: GraphSnapshot":
     snap.graph = build_graph_snapshot(incident, snap.duplicates);
 """
 
+import json;
 import from graph.nodes {
     Incident, Person, Claim, Source, Media, Location, VerificationSignal,
-    Subscription, Alert, ActivityEntry, Organization, IdentityDecision
+    Subscription, Alert, ActivityEntry, Organization, IdentityDecision,
+    InvestigationRun
 }
 import from graph.edges {
     Involves, Contains, Asserts, About, SupportedBy, Depicts, LocatedAt,
     HasSignal, HasSubscription, Receives, Triggered, HasOrganization,
-    Publishes, Reviews, ExactCopyOf
+    Publishes, Reviews, ExactCopyOf, HasInvestigation
 }
 import from walkers.resolve { DuplicateCandidate }
 
@@ -161,6 +163,10 @@ def build_graph_snapshot(
         col.add_edge("Contains", inc_id, jid(m));
     }
 
+    for run in [incident ->:HasInvestigation:->] {
+        _add_investigation(col, run, inc_id);
+    }
+
     # Derived: ResolveWalker's candidates from the same dashboard read. Not stored.
     for cand in duplicates {
         if cand.person_a_id in col.nodes and cand.person_b_id in col.nodes {
@@ -294,6 +300,39 @@ def _add_alert(col: _Collector, alert: Alert, subscriber: str) -> None {
     ));
     if not causes and alert.claim_id {
         col.claim_refs[jid(alert)] = alert.claim_id;
+    }
+}
+
+# A run's citations are graph ids read back out of its saved result_json, not a
+# stored edge to each claim, so those links are drawn derived.
+def _add_investigation(col: _Collector, run: InvestigationRun, inc_id: str) -> None {
+    rid = jid(run);
+    try {
+        result = json.loads(run.result_json);
+    } except Exception {
+        result = {};
+    }
+    status = result.get("status", "");
+    mode = run.mode or result.get("mode", "");
+    col.add_node(GraphNodeView(
+        id=rid, kind="Investigation", label=f"{status or 'UNKNOWN'} · {mode or 'UNKNOWN'}",
+        fields=[
+            _f("status", status), _f("mode", mode), _f("model", result.get("model", "")),
+            _f("run_at", result.get("run_at", run.created_at)),
+            _f("prompt_version", result.get("prompt_version", ""))
+        ],
+        provenance=[_f("created_at", run.created_at), _f("fingerprint", run.fingerprint)],
+        badges=["stored"]
+    ));
+    col.add_edge("HasInvestigation", inc_id, rid);
+    for citation in result.get("citations", []) {
+        claim_id = citation.get("claim_id", "");
+        if claim_id and claim_id in col.nodes {
+            col.add_edge("InvestigationCitation", rid, claim_id, "derived", [
+                _f("source_name", citation.get("source_name", "")),
+                _f("from", "InvestigationRun.result_json citations (not a stored edge)")
+            ]);
+        }
     }
 }
 

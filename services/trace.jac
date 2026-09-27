@@ -9,15 +9,18 @@ everything into small f"obj" "view" types below.
 """
 
 import math;
+import json;
 import from features.media.media_upload { UploadRecord, list_incident_media }
 
 import from graph.nodes {
     Incident, Person, Claim, Source, Media, Location,
-    VerificationSignal, Subscription, Alert, ActivityEntry, Organization
+    VerificationSignal, Subscription, Alert, ActivityEntry, Organization,
+    InvestigationRun
 }
 import from graph.edges {
     Involves, Contains, Asserts, About, SupportedBy, Depicts,
-    LocatedAt, HasSignal, HasSubscription, Receives, HasOrganization, Publishes
+    LocatedAt, HasSignal, HasSubscription, Receives, HasOrganization, Publishes,
+    HasInvestigation
 }
 import from walkers.ingest { IngestWalker }
 import from walkers.resolve { ResolveWalker, DuplicateCandidate }
@@ -80,6 +83,19 @@ obj ActivityView {
     has walker_name: str, message: str, created_at: str;
 }
 
+obj InvestigationCitationView {
+    has claim_id: str, source_name: str;
+}
+
+# One row per persisted InvestigationRun. Index 0 of citations is always the
+# investigated report itself; later entries are sources Jac retrieved to compare.
+obj InvestigationView {
+    has id: str, claim_id: str, person_id: str, status: str, mode: str, model: str,
+        run_at: str, message: str, trace: list[str] = [],
+        citations: list[InvestigationCitationView] = [],
+        usage_source: str = "", total_tokens: int = 0;
+}
+
 obj DashboardSnapshot {
     has seeded: bool = False,
         incident_id: str = "", organizations: list[OrganizationView] = [],
@@ -95,7 +111,8 @@ obj DashboardSnapshot {
         duplicates: list[DuplicateCandidate] = [],
         hospital_update_added: bool = False,
         graph: GraphSnapshot = GraphSnapshot(),
-        media_records: list[UploadRecord] = [];
+        media_records: list[UploadRecord] = [],
+        investigations: list[InvestigationView] = [];
 }
 
 # ---------- Actions (the demo buttons) ----------
@@ -231,6 +248,12 @@ def:pub get_dashboard() -> DashboardSnapshot {
 
     snap.duplicates = (incident spawn ResolveWalker(quiet=True)).candidates;
     snap.graph = build_graph_snapshot(incident, snap.duplicates);
+    for run in [incident ->:HasInvestigation:->] {
+        inv_view = _investigation_view(run);
+        if inv_view is not None {
+            snap.investigations.append(inv_view);
+        }
+    }
     return snap;
 }
 
@@ -289,6 +312,26 @@ def _person_view(person: Person, incident_id: str = "") -> PersonView {
         claims=claims, subscriptions=subs,
         latest_status=current_status,
         has_conflict=bool(unresolved), status_summary=summary
+    );
+}
+
+# A stored run's result_json carries its own status, model and citations, so
+# the Graph and People views read the same saved answer instead of recomputing it.
+def _investigation_view(run: InvestigationRun) -> InvestigationView | None {
+    try {
+        result = json.loads(run.result_json);
+    } except Exception {
+        return None;
+    }
+    citations = [InvestigationCitationView(claim_id=c.get("claim_id", ""), source_name=c.get("source_name", ""))
+        for c in result.get("citations", [])];
+    return InvestigationView(
+        id=jid(run), claim_id=citations[0].claim_id if citations else "",
+        person_id=run.person_id, status=result.get("status", ""), mode=run.mode,
+        model=result.get("model", ""), run_at=result.get("run_at", run.created_at),
+        message=result.get("message", ""), trace=result.get("trace", []),
+        citations=citations, usage_source=result.get("usage_source", ""),
+        total_tokens=int(result.get("usage", {}).get("total_tokens", 0))
     );
 }
 

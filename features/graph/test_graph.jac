@@ -94,7 +94,7 @@ test "hospital FOUND_SAFE claim links source, subject and alert" {
     for e in snap.edges {
         if e.kind == "DuplicateCandidate" {
             assert e.derived and e.status == "candidate";
-        } elif e.kind in ["Touched", "ClaimRef"] {
+        } elif e.kind in ["Touched", "ClaimRef", "InvestigationCitation"] {
             assert e.derived and e.status == "derived";
         } else {
             assert not e.derived;
@@ -183,4 +183,23 @@ test "identity review is a stored node linked to both records and cleared on res
     assert len([root -->[?:IdentityDecision]]) == 0;
     assert len([root -->[?:IdentityProposal]]) == 0;
     assert len([root -->[?:Incident, name == INCIDENT_NAME]]) == 0;
+}
+
+test "reset seeds two REPLAYED investigations, each linked to its cited claims" {
+    reset_demo();
+    snap = _snapshot();
+
+    investigations = [n for n in snap.nodes if n.kind == "Investigation"];
+    assert len(investigations) == 2, "expected two REPLAYED runs from the recorded fixture";
+    for inv in investigations {
+        assert "REPLAYED" in inv.label;
+        assert _has_edge(snap, "HasInvestigation", snap.incident_id, inv.id);
+        cites = [e for e in snap.edges if e.kind == "InvestigationCitation" and e.from_id == inv.id];
+        assert len(cites) >= 1, "expected at least one cited claim per investigation";
+        for e in cites {
+            assert e.derived and e.status == "derived";
+            claims = [n for n in snap.nodes if n.id == e.to_id and n.kind == "Claim"];
+            assert len(claims) == 1, "cited claim id must resolve to a real Claim node";
+        }
+    }
 }
