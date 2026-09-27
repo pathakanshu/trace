@@ -157,7 +157,8 @@ impl TraceDashboard.handleShowOnMap(claimId: str) -> None {
 impl TraceDashboard.handleShowPersonOnMap(personId: str) -> None {
     current = snapshot;
     if current is None { return; }
-    places = [p for p in current.locations if personId in [e.person_id for e in p.evidence]];
+    locations = current.locations;
+    places = [p for p in locations if personId in [e.person_id for e in p.evidence]];
     if not places { return; }
     mapFocusId = places[0].id;
     mapFocusRequest = mapFocusRequest + 1;
