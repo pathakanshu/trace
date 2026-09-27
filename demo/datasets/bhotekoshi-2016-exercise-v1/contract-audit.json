@@ -1,10 +1,10 @@
 {
   "dataset_id": "bhotekoshi-2016-exercise-v1",
-  "generated_at": "2026-09-27T11:44:46Z",
+  "generated_at": "2026-09-27T11:49:51Z",
   "tools": [
     {
       "name": "tools/test_data/audit_contracts.py",
-      "version": "1.16"
+      "version": "1.17"
     },
     {
       "name": "jsonschema",
@@ -1173,6 +1173,28 @@
       ]
     },
     {
+      "rule_id": "person_support_request_citations",
+      "status": "fail",
+      "observed": {
+        "failure_count": 1,
+        "examples": [
+          "Only 0 Person records have valid declared support-request citations; need at least 30"
+        ],
+        "person_records_declaring_support_requests": 0,
+        "person_records_with_valid_support_citations": 0,
+        "minimum_person_records": 30
+      },
+      "expected": "At least 30 Person records declare support requests through attributed, available claims about themselves",
+      "evidence_paths": [
+        "demo/datasets/bhotekoshi-2016-exercise-v1/records/person",
+        "demo/datasets/bhotekoshi-2016-exercise-v1/records/claim",
+        "demo/datasets/bhotekoshi-2016-exercise-v1/records/source"
+      ],
+      "limitations": [
+        "Reference/coverage check only: does not infer needs from age, diagnose a condition, or automatically validate the meaning of free text."
+      ]
+    },
+    {
       "rule_id": "planned_identity_review_forest",
       "status": "fail",
       "observed": {
@@ -1470,7 +1492,7 @@
   ],
   "summary": {
     "pass": 25,
-    "fail": 15,
+    "fail": 16,
     "blocked": 2
   }
 }

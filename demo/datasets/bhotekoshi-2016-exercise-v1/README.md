@@ -58,8 +58,8 @@ kinds need an explicit application mapping; do not silently drop them.
 
 The older `schema-validation.json` and `validation-report.json` cover 19 limited
 checks; their zero failures do **not** mean complete contract conformance.
-The stricter supplementary `contract-audit.json` reports **24 checks passed,
-15 failed, 2 blocked**. All 8,027 primary records pass the catalog JSON Schema,
+The stricter supplementary `contract-audit.json` reports **25 checks passed,
+16 failed, 2 blocked**. All 8,027 primary records pass the catalog JSON Schema,
 but 153 references reveal records before their release time. Manifest,
 checkpoint oracle, replay and validation-report
 support shapes differ from the documented contract. The separate 26-record
@@ -78,7 +78,7 @@ application media verification; file checks do not prove caption truth.
 
 The metadata-only correction preserves stable IDs and the media bundle. Repair release dependencies and support contracts before building a
 complete importer/replay around this preview. Top-level shape checks do not
-exhaustively validate nested semantics. The data tools' 206 distinct tests pass across schema and Pillow environments;
+exhaustively validate nested semantics. The data tools' 216 distinct tests pass across schema and Pillow environments;
 its corpus audit intentionally exits 1 for the observed data failures.
 
 - All 1,800 original source hashes match. However, the 1,260 JSON sources use
@@ -166,3 +166,9 @@ minima pass independently of the still-failing semantic checks.
 `licenses.json` now contains one entry per Media (120 generated, 80 derived),
 with unchanged usage terms, measured hashes and the recorded asset-run start.
 The original encoder version remains explicitly unknown; no rights were added.
+
+The new support-request citation check finds **zero** delivered Person records
+with attributed support needs (at least 30 are required). Candidate-only tests
+now cover 30 explicit requests and cited contextual differences for the 20
+same-name/age negative pairs. This does not repair the distributed inputs or
+establish any identity decision; see the private repair guide before integration.

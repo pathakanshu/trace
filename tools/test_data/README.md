@@ -43,7 +43,7 @@ it does not fall back to a stale schema report when jsonschema is unavailable.
 
 Run its own offline checks with:
 `python3 -m unittest discover -s tools/test_data -p test_contract_audit.py`.
-The current corpus audit has 25 pass / 15 fail / 2 blocked; failures are intentional
+The current corpus audit has 25 pass / 16 fail / 2 blocked; failures are intentional
 findings in the partial dataset, not successful runtime behavior.
 
 ## Isolated control pack
@@ -118,8 +118,8 @@ cases use analysis without publishing: hostile text stays source data. None of
 these eight runtime cases has run; no agent response or success is prefilled.
 No nonexistent replay-action IDs are used as prerequisites.
 
-Actual tooling results: **206 distinct tests pass across two environments**.
-The schema environment runs 191 and explicitly skips fifteen Pillow tests. Run the
+Actual tooling results: **216 distinct tests pass across two environments**.
+The schema environment runs 201 and explicitly skips fifteen Pillow tests. Run the
 fifteen media checks with a Pillow-equipped tooling Python:
 `python3 -m unittest discover -s tools/test_data -p '*media*.py'`.
 That separate run passes all fifteen. Do not count skipped decoder checks as passes
@@ -468,3 +468,27 @@ found degenerate rings in unrelated districts 33, 34 and 48; those input bytes
 were not repaired and no nationwide polygon-validity claim is made. Transboundary
 context features are not forced into Nepal. New non-Nepal catalog locations need
 a separate check against their declared country's verified geometry.
+
+## Candidate household context and attributed support requests
+
+The candidate generator adds reported household and belongings context to initial
+claims using a small reused vocabulary. Same-name/age negative pairs now have
+actual cited contextual differences rather than distinct IDs alone. These details
+remain fallible fictional reports; differing text is not identity proof and no
+automatic match/rejection is created. Names, ages, IDs, status types, source
+allocation, locations and checkpoint outcomes remain unchanged.
+
+Thirty candidate Person records cite their own initial report for an explicitly
+attributed accessibility/language request (interpretation, written instructions,
+step-free access, large print or a seat). No condition is inferred from age or
+appearance. Source bytes and excerpts are generated together; support citations
+are available with the Person, with no forward release dependency. The full
+candidate test checks all 250 private pairs, 30 support citations, original raw
+text, exact schema/quotas/checkpoints and hero closure together.
+
+`audit_support_needs.py` separately checks declared citation coverage, attribution,
+subject/incident/time consistency and original excerpts. It does not automatically
+interpret arbitrary prose or diagnose needs. Delivered Person records still have
+zero support citations; the new audit reports this as a failure. Published sources
+remain unchanged pending the version/migration decision. The candidate additions
+are exercised only in disposable output.

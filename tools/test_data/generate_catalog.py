@@ -49,6 +49,30 @@ def load_plan(): return json.loads((FIX/"allocation-plan.json").read_text(encodi
 def source_release(n):
     return 6 if n<=150 else 12 if n<=1000 else 24 if n<=1200 else 36 if n<=1300 else 48 if n<=1400 else 72
 
+def reported_household_context(group_number):
+    # Small reused vocabulary supplies attributed context, not a unique identifier
+    # or a public encoding of private group membership. Even differing details
+    # remain fallible reports requiring human review.
+    contacts=["Bina Rai", "Dilip Thapa", "Mina Lama", "Rajan Karki",
+              "Soma Gurung", "Anita Shrestha", "Kamal Tamang"]
+    belongings=["a red checked shawl", "a plain grey cap", "a striped cloth bag",
+                "a blue canvas bag", "a green outer layer"]
+    contact=contacts[(group_number-1)%len(contacts)]
+    item=belongings[(group_number-1)%len(belongings)]
+    return (f" A fictional caller names {contact} as a sibling in the reported household "
+            f"and describes {item}; household and belongings are unverified source claims, "
+            "not unique identifiers or identity decisions.")
+
+
+def reported_support_request(person_number):
+    requests=["Nepali-language interpretation for follow-up contact",
+              "written instructions in addition to spoken directions",
+              "step-free access to the meeting point",
+              "large-print contact instructions",
+              "a seated waiting place during follow-up"]
+    return (" The fictional caller requests " + requests[(person_number-1)%len(requests)] +
+            "; this is an attributed accessibility or language-support request, not a diagnosis.")
+
 def build_people(plan):
     rng=random.Random(SEED); groups=plan["identity_groups"]; person_records=[]; claims=[]; name_by_group={}
     # Ensure the 20 hero hard negatives share a plausible name and adult age.
@@ -71,7 +95,7 @@ def build_people(plan):
             elif gi%4==0: variants.append(ne_name)
             rec=common("person",pn,available)
             rec.update({"display_name":name if member_no==0 else variants[1],"name_variants":list(dict.fromkeys(variants)),"reported_age":age,
-                "description":"Fictional record in a counterfactual response exercise; any personal details are attributed to a report and are not identity proof.","support_needs_claim_ids":[]})
+                "description":"Fictional record in a counterfactual response exercise; any personal details are attributed to a report and are not identity proof.","support_needs_claim_ids":[claim_id] if gi<=30 and member_no==0 else []})
             person_records.append(rec)
             loc=loc_id
             if loc is not None:
@@ -153,6 +177,7 @@ def build_claims_and_sources(plan, groups, facilities, infrastructure, hazards, 
     claim_source=plan["claim_to_source"]
     claim_defs={}
     person_names={p["id"]:p["display_name"] for p in people}
+    people_by_id={p["id"]:p for p in people}
     def add(cid,subject,typ,text,reported,location=None,media=None,related=None,q=None,u=None):
         claim_defs[cid]={"subject":subject,"type":typ,"text":text,"reported":reported,"location":location,"media":media or [],"related":related or [],"quantity":q,"unit":u}
     by_person={g["primary_person_id"]:g for g in groups}
@@ -162,7 +187,10 @@ def build_claims_and_sources(plan, groups, facilities, infrastructure, hazards, 
         for j,pid in enumerate(g["person_ids"]):
             cid=rid("claim",int(pid[-6:])); release=source_release(int(claim_source[cid][-6:]))
             name=person_names[pid]; wordings=[f"Fictional family-liaison intake lists {name} as not yet contacted; the time of last contact was not supplied.",f"An exercise volunteer relay says relatives have not checked in with {name}. No outcome is reported.",f"The synthetic intake ledger keeps an open contact request for {name}; this is not a historical case or identity finding.",f"Fictional caller note: the household has not re-established contact with {name}; last-known place remains unreported."]
-            add(cid,{"kind":"person","id":pid},"MISSING",wordings[(int(pid[-6:])-1)%len(wordings)],at(max(0,release-1)),rid("location",int(g["identity_id"][-6:])) if g["hero"] else None)
+            text=wordings[(int(pid[-6:])-1)%len(wordings)]+reported_household_context(int(g["identity_id"][-6:]))
+            if cid in people_by_id[pid]["support_needs_claim_ids"]:
+                text+=reported_support_request(int(pid[-6:]))
+            add(cid,{"kind":"person","id":pid},"MISSING",text,at(max(0,release-1)),rid("location",int(g["identity_id"][-6:])) if g["hero"] else None)
     # The final identity cohort is built as sourced, attributed report claims.
     # Report timing order yields the quota checkpoint counts; disputed cases
     # preserve both opposing claims and are never resolved here.

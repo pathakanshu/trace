@@ -45,6 +45,7 @@ of historical missing people.
 | Release dependencies | 153 references point to later records | Repair release batches or an explicitly agreed representation; importer ordering alone cannot expose future information |
 | Raw JSON reports | 1,260 old envelopes fail the specified publisher/reference/content/entries shape | Coordinate a provenance-preserving conversion/adapter; all 1,800 existing raw hashes match and originals must remain intact |
 | Identity benchmark | All 165 positive/85 negative labels and citations are correct, but 20 same-name/age negatives have indistinguishable supplied context | Supply attributed distinguishing evidence; do not score forced rejections from private labels alone |
+| Support needs | Zero Person records cite explicit support requests (minimum 30) | Preserve attributed accessibility/language claims; do not infer needs from age or supply diagnoses |
 | Votes | 360 self-votes; 120 duplicate contributor/contribution pairs | Use distinct attributable non-author voters, one vote per pair, while retaining 240 helpful/120 not-helpful coverage |
 | Tasks | 36 submissions target different records from their tasks; reviewed snapshots lack cited claim evidence | Link actual appropriate contributions, reviewer evidence and times; do not claim that fixture snapshots are executed reviews |
 | Subscriptions | Maximum one distinct active follower on a hero Person | Cover two followers on one hero Person, no-follower person and mixed subject follows; test alerts only through actual execution |
@@ -77,7 +78,11 @@ A full temporary generator rehearsal now checks the combined fixes, all 8,027
 records, copied asset hashes and a reference-closed 50-identity/62-Person hero.
 One neutral-detail allocation was adjusted to stop shared-report closure from
 pulling in non-hero identities. Original source/asset hashes remain unchanged.
-Other generator defects remain. These candidate
+Candidate initial claims now carry reused household/belongings descriptions; all
+20 same-name/age negatives have cited contextual differences. Thirty candidate
+Person records link explicit, non-diagnostic support requests available at their
+initial release. The distributed benchmark ambiguity and zero support coverage
+remain reported failures. Other generator defects remain. These candidate
 checks are not a new published release or a compatible importer rehearsal.
 
 Before a corpus-wide repair, agree with Anshu and Miguel how immutable originals,

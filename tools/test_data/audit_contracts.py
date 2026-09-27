@@ -292,6 +292,18 @@ def run_audit(root):
         [rel(pair_path), rel(data / "records")], ["Conservative exact-context diagnostic only. Different text/context does not prove distinguishability or authorize automatic rejection; source/record IDs alone are not distinguishing evidence."])
     checks[-1]["observed"].update(pair_counts)
 
+    support_errors, support_counts = [], {}
+    try:
+        from audit_support_needs import support_need_errors
+        support_errors, support_counts = support_need_errors(records)
+    except (ValueError, KeyError, TypeError, AttributeError) as error:
+        support_errors.append(str(error).replace(str(root), "<repo>"))
+    add("person_support_request_citations", support_errors,
+        "At least 30 Person records declare support requests through attributed, available claims about themselves",
+        [rel(data / "records/person"), rel(data / "records/claim"), rel(data / "records/source")],
+        ["Reference/coverage check only: does not infer needs from age, diagnose a condition, or automatically validate the meaning of free text."])
+    checks[-1]["observed"].update(support_counts)
+
     review_errors, review_counts = [], {}
     action_path = fixtures / "replay/actions.jsonl"
     try:
@@ -447,7 +459,7 @@ def run_audit(root):
     summary = dict(Counter(check["status"] for check in checks))
     summary = {status: summary.get(status, 0) for status in ("pass", "fail", "blocked")}
     return {"dataset_id": DATASET, "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "tools": [{"name": "tools/test_data/audit_contracts.py", "version": "1.16"}, {"name": "jsonschema", "version": version("jsonschema")}],
+            "tools": [{"name": "tools/test_data/audit_contracts.py", "version": "1.17"}, {"name": "jsonschema", "version": version("jsonschema")}],
             "checks": checks, "summary": summary}
 
 

@@ -51,13 +51,20 @@ class CandidateCohortTests(unittest.TestCase):
         self.assertEqual(len(rumors),10);self.assertEqual(rumor_conflicts(self.records,self.groups),[])
         self.assertTrue(all(c['reported_at']['value']=='2016-07-06T11:15:00Z' for c in rumors))
 
-    def test_allocated_claim_source_ids_and_initial_missing_claims_are_preserved(self):
+    def test_initial_claims_keep_ids_and_status_with_only_attributed_context_added(self):
         self.assertEqual({c['id']:c['source_id'] for c in self.claims},self.plan['claim_to_source'])
         for claim in self.claims:
             if int(claim['id'][-6:])<=1150:
-                # Entry locators change with the candidate envelope, not assertions.
+                group=next(g for g in self.groups if claim['subject']['id'] in g['person_ids'])
+                suffix=generator.reported_household_context(int(group['identity_id'][-6:]))
+                person=next(p for p in self.people if p['id']==claim['subject']['id'])
+                if claim['id'] in person['support_needs_claim_ids']:
+                    suffix+=generator.reported_support_request(int(person['id'][-6:]))
+                # No status, chronology, subject, location or source allocation changes.
                 original=json.loads(json.dumps(self.catalog[claim['id']]))
                 original['provenance']['source_locator']=claim['provenance']['source_locator']
+                original['assertion']['text']+=suffix
+                original['provenance']['original_excerpt']+=suffix
                 self.assertEqual(claim,original)
 
     def test_candidate_records_pass_schema_and_new_raw_hashes_match_temporary_files(self):
