@@ -35,6 +35,8 @@ Next: pitch, backup video, Devpost.
 ## Anshu (map, integration)
 
 Working on: all four tasks pushed; draft PR #4 is ready for integration.
+Cold-start rehearsal complete; next, read-only review of remaining corpus
+requirements in the separate codex/test-data worktree (no app import).
 Additional regression in features/map/test_map.jac passes: a new report does
 not inherit another report's media location; invalid coordinates stay unmapped,
 and only its explicit valid media link makes it navigable. Tasks 1/2 are on main. Gabriel: optional onShowOnMap callback in PeopleTab/Panels;
@@ -47,6 +49,10 @@ with 191-character reference and 220-character URL path exposed overflow; fixed
 wrapping in that feature. Preview, published report, expanded original text and
 Map evidence now remain 375px wide. Publishing/retrying produced 1 then 0 alerts.
 Reset removed the phone exercise report. No browser console errors observed.
+Cold-started the bundled client with `jac start --port 8092`: both REPLAYED
+views and the map link worked. After a hospital update and a second process
+restart, the same claim ID and single alert persisted; Watch added zero alerts.
+Reset restored Missing. This was the isolated worktree store only.
 Screenshot capture timed out in the extension; DOM dimensions/interactions were
 verified, but no screenshot artifact is claimed. Normal viewport restored.
 Files changed: `tests/test_demo_flow.jac`, `components/TraceDashboard*`,
@@ -111,3 +117,5 @@ Working on: (fill in)
 - 04:49 codex/anshu-night 600bafd/ed3cb0b: People report-to-Map selection and 375px Organizations wrapping; 56 tests, 52-file gate, local keyboard/mouse/mobile/publish/retry/reset checks pass. All four overnight tasks ready; branch only.
 
 - 04:53 codex/anshu-night 0e697ee: extra report-location provenance regression; 57 tests, 52-file gate and production web bundle pass. Draft PR #4 includes the full handoff.
+
+- 05:00 codex/anshu-night 4375ad3: cold-started bundled client; both replay views work, hospital claim ID and one alert survive process restart, repeat watch adds zero, reset restores Missing. PR #4 ready.
