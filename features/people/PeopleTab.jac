@@ -102,7 +102,7 @@ def:pub PeopleTab(snapshot: DashboardSnapshot, onRefresh: Callable[[], any], onS
                 selectedId={selected.id if selected else ""}
                 onSelect={lambda (pid: str) { selectedId = pid; }}
                 onReview={lambda (key: str) { reviewKey = key; }} />
-            <ClaimsPanel person={selected} onShowOnMap={onShowOnMap}
+            <ClaimsPanel person={selected} incidentId={snapshot.incident_id} onShowOnMap={onShowOnMap}
                 mappedClaimIds={[e.claim_id for place in snapshot.locations for e in place.evidence]} />
         </div>
     </div>;
