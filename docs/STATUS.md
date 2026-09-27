@@ -34,14 +34,16 @@ Next: pitch, backup video, Devpost.
 
 ## Anshu (map, integration)
 
-Working on: source/correction provenance invariants in
-`tools/test_data/audit_provenance.py`, its tests, strict audit and docs.
-Check publication-reference uniqueness, publisher types, dependency disclosures,
-and source/correction DAGs without assuming numeric ID order means chronology.
-Fresh quotas f81c997 are pushed: 24/25 coverage dimensions pass; locations remain
-170/1,000. 137 tooling tests pass (122 core + 15 Pillow), strict audit 21/16/2.
-Media audit 10/1/1 flags contradictory creation/measurement timestamps; license
-migration remains deferred. No source records, assets or runtime stores changed.
+Working on: narrowly scoped media timestamp repair in
+`tools/test_data/repair_media_time.py`, tests, `generate_catalog.py`, media catalog
+shards, exact hero media copies, manifest shard hashes and audit/docs. Root cause:
+`build_media` uses the later catalog NOW_ISO instead of the asset generator's saved
+run-start STAMP. Correct only actual_created_at from that original receipt after
+hash preflight. Keep every source/claim, stable ID, binary and ZIP checksum intact;
+record exact old/new values. This is metadata repair, not corpus regeneration.
+Source provenance 741c2d4 passes: 1,800 scoped references, 450 acyclic lineage edges;
+zero corrective-claim edges means no correction-story coverage. 145 tooling tests
+pass (130 + 15 Pillow); strict audit 22/16/2, media audit currently 10/1/1.
 
 App handoff: all four overnight tasks complete; draft PR #4 ready:
 https://github.com/pathakanshu/trace/pull/4 (branch `codex/anshu-night`).
@@ -67,9 +69,9 @@ ab3fc56. No Linguist overrides/exclusions added. Not organizer eligibility proof
 
 Corpus published on origin/codex/test-data: e710475 control pack (26 records),
 23f81dd 40 cited queries, a65364f checkpoint diagnostics, fb64b72 40 concrete
-negative cases. **137 distinct tooling tests pass across schema/Pillow environments**
-(122 + fifteen separately run media checks). Primary 8,027 records and binary
-bundle are unchanged. Strict audit: **21 pass / 16 fail / 2 blocked**.
+negative cases. **145 distinct tooling tests pass across schema/Pillow environments**
+(130 + fifteen separately run media checks). Primary 8,027 records and binary
+bundle are unchanged. Strict audit: **22 pass / 16 fail / 2 blocked**.
 New measured defects: T+72 fixture summary is 353 missing / 547 safe / 50 injured /
 50 unresolved, target 650 / 250 / 50 / 50. The generator assigns 297 safe follow-ups
 outside its intended cohort. Six death rumors lack required equal/unknown-time
@@ -148,3 +150,5 @@ Working on: (fill in)
 - 06:44 codex/test-data 6b19611: 129 tests pass; actual media audit exposes creation/measurement timestamp conflict in all 200 rows. Asset bytes untouched; license migration deferred. Fresh quota audit next.
 
 - 06:47 codex/test-data f81c997: 137 tests; 24/25 catalog coverage dimensions pass, known location deficit fails. Source/correction provenance audit next; no primary input edits.
+
+- 06:51 codex/test-data 741c2d4: source scope/DAG audit passes; 145 tests. Found media timestamp cause in build_media; reserve only metadata/hero/hash repair from original asset-run receipt, with source/asset bytes preserved.
