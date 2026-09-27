@@ -1,12 +1,14 @@
 """Run with a Pillow-equipped Python; skips are explicitly not media passes."""
 import copy
 import hashlib
+import io
 from pathlib import Path
 from tempfile import TemporaryDirectory
 import unittest
 from generate_invalid import png_pixel
 try:
-    from audit_media import inspect_image,property_errors,check_family_geometry
+    from audit_media import inspect_image,property_errors,check_family_geometry,reproduce_derivative
+    from PIL import Image
     PILLOW=True
 except ImportError:
     PILLOW=False
@@ -59,6 +61,26 @@ class MediaAuditTests(unittest.TestCase):
         self.assertTrue(any('operations differ' in e for e in check_family_geometry(family,measured)))
         family,measured=self.family('resize');family['members'].append(copy.deepcopy(family['members'][1]))
         self.assertTrue(any('operations differ' in e for e in check_family_geometry(family,measured)))
+
+    def test_recipe_reproduction_is_deterministic_and_preserves_base_bytes(self):
+        with TemporaryDirectory() as folder:
+            path=Path(folder)/'base.png';path.write_bytes(png_pixel());before=path.read_bytes()
+            for operation in ('resize','reencode','crop'):
+                member={'operation':operation,'parameters':{'width_px':8,'height_px':6,'jpeg_quality':72,'crop_box':[0,0,1,1]}}
+                payload=reproduce_derivative(path,member)
+                self.assertEqual(payload,reproduce_derivative(path,member))
+                with Image.open(io.BytesIO(payload)) as image:
+                    image.load();self.assertEqual(image.format,'JPEG')
+                    self.assertEqual(image.size,(8,6) if operation=='resize' else (1,1))
+            self.assertEqual(path.read_bytes(),before)
+            self.assertEqual([p.name for p in Path(folder).iterdir()],['base.png'])
+
+    def test_unsupported_recipe_and_invalid_quality_fail_without_output_files(self):
+        with TemporaryDirectory() as folder:
+            path=Path(folder)/'base.png';path.write_bytes(png_pixel())
+            for operation,quality in (('invented',72),('reencode',101),('reencode',True)):
+                with self.assertRaises(ValueError):reproduce_derivative(path,{'operation':operation,'parameters':{'jpeg_quality':quality}})
+            self.assertEqual(len(list(Path(folder).iterdir())),1)
 
     def test_missing_parent_or_decoded_member_fails(self):
         family,measured=self.family('resize');del measured['med-000002']

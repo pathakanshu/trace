@@ -1,10 +1,10 @@
 {
   "dataset_id": "bhotekoshi-2016-exercise-v1",
-  "generated_at": "2026-09-27T10:13:09Z",
+  "generated_at": "2026-09-27T10:17:18Z",
   "tools": [
     {
       "name": "tools/test_data/audit_media.py",
-      "version": "1.0"
+      "version": "1.1"
     },
     {
       "name": "Pillow",
@@ -92,6 +92,31 @@
       ],
       "limitations": [
         "Verifies exact-copy hashes, changed derivative bytes, dimensions/crop bounds and metadata policy. Does not prove crop/resize pixel content or evaluate an application near-copy matcher."
+      ]
+    },
+    {
+      "rule_id": "generator_derivative_byte_reproduction",
+      "status": "pass",
+      "observed": {
+        "failure_count": 0,
+        "examples": [],
+        "bit_exact_derivatives": 40,
+        "operations": {
+          "resize": 20,
+          "reencode": 10,
+          "crop": 10
+        },
+        "resize_jpeg_quality": 86,
+        "jpeg_optimize": true
+      },
+      "expected": "40 derived files reproduce byte-for-byte from their base with the committed generator recipe",
+      "evidence_paths": [
+        "demo/assets/bhotekoshi-2016-exercise-v1",
+        "tests/fixtures/bhotekoshi-2016-exercise-v1/oracle/media-families.jsonl",
+        "tools/test_data/generate_assets.py"
+      ],
+      "limitations": [
+        "In-memory generation-recipe check tied to recorded Pillow/encoder versions, not a general near-copy/crop detector or application evidence signal. No asset file is written."
       ]
     },
     {
@@ -195,7 +220,7 @@
     }
   ],
   "summary": {
-    "pass": 9,
+    "pass": 10,
     "fail": 0,
     "blocked": 1
   }

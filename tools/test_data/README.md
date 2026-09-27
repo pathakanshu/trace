@@ -117,11 +117,11 @@ cases use analysis without publishing: hostile text stays source data. None of
 these eight runtime cases has run; no agent response or success is prefilled.
 No nonexistent replay-action IDs are used as prerequisites.
 
-Actual tooling results: **110 distinct tests pass across two environments**.
-The schema environment runs 101 and explicitly skips nine Pillow tests. Run the
-nine media checks with a Pillow-equipped tooling Python:
+Actual tooling results: **112 distinct tests pass across two environments**.
+The schema environment runs 101 and explicitly skips eleven Pillow tests. Run the
+eleven media checks with a Pillow-equipped tooling Python:
 `python3 -m unittest discover -s tools/test_data -p '*media*.py'`.
-That separate run passes all nine. Do not count skipped decoder checks as passes
+That separate run passes all eleven. Do not count skipped decoder checks as passes
 when only one environment is available. No application dependency was added.
 
 ## Immutable raw-source audit
@@ -250,7 +250,7 @@ In a Pillow-equipped tooling environment, run:
 measured validation results. Exit 2 means the implemented file checks passed but
 application verification is blocked; it is not a successful EvidenceWalker run.
 
-Actual run: Pillow 12.3.0 / Python 3.12.14, **9 pass / 0 fail / 1 blocked**.
+Actual run: Pillow 12.3.0 / Python 3.12.14, **10 pass / 0 fail / 1 blocked**.
 Decoded all 200 images and 200 thumbnails; actual SHA-256/bytes/dimensions/MIME
 match the catalog and manifest. There are 160 distinct image hashes, 120 disjoint
 families (40 exact, 20 resize, 10 reencode, 10 crop, 40 singleton), 36 GPS/24
@@ -258,9 +258,12 @@ non-GPS EXIF/60 no-EXIF bases, ten reciprocal singleton negative pairs and five
 earlier-publication-arrives-later cases. Original plus thumbnail bytes total
 6,022,750, below 250 MiB. All base long edges and 320px thumbnails meet bounds.
 
-Checks establish exact-byte copies, changed derivative bytes, recipe geometry,
-EXIF presence and file integrity. They do not establish crop/resize pixel content,
+Checks establish exact-byte copies, recipe geometry, EXIF presence and file
+integrity. A further in-memory check reproduces all 40 derivative hashes exactly
+(20 resizes, 10 reencodings, 10 crops) using the committed generator recipe and
+Pillow/encoder version; resize JPEG quality 86 and optimize=True are explicit
+source-code defaults. No asset is written. This does not establish general
 near-copy detection performance, caption truth, geolocation, authenticity, human
-visual similarity or an application verification result. Six new media-auditor
+visual similarity or an application verification result. Eight media-auditor
 unit tests run alongside the three negative-decoder tests in the Pillow suite.
 No image or thumbnail was modified.

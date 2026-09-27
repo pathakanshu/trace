@@ -77,6 +77,27 @@ def check_family_geometry(family,measured):
     return errors
 
 
+def reproduce_derivative(base_path,member):
+    """Apply the committed dummy-asset recipe in memory; never save a media file.
+
+Resize JPEG quality 86 and optimize=True are explicit defaults from
+    generate_assets.py. Exact byte reproduction is Pillow/encoder-version specific.
+    """
+    operation=member['operation'];params=member['parameters']
+    if operation not in ('resize','reencode','crop'):raise ValueError('Unsupported derivative recipe')
+    with Image.open(base_path) as base:
+        image=base.convert('RGB')
+    if operation=='resize':
+        image=image.resize((params['width_px'],params['height_px']),Image.Resampling.LANCZOS)
+        quality=86
+    else:
+        quality=params['jpeg_quality']
+        if operation=='crop':image=image.crop(tuple(params['crop_box']))
+    if type(quality) is not int or not 1<=quality<=100:raise ValueError('Invalid JPEG recipe quality')
+    output=io.BytesIO();image.save(output,format='JPEG',quality=quality,optimize=True)
+    return output.getvalue()
+
+
 def run_media_audit(root):
     root=root.resolve();data=root/'demo/datasets'/DATASET;fixtures=root/'tests/fixtures'/DATASET
     catalog=read_catalog(root);media=sorted((r for r in catalog.values() if r['kind']=='media'),key=lambda r:r['id'])
@@ -118,6 +139,23 @@ def run_media_audit(root):
     for family in families:family_errors.extend(check_family_geometry(family,measured))
     add('family_structure_and_transform_geometry',family_errors,{'families':len(families),'classes':counts},quota['family_classes'],
         ['Verifies exact-copy hashes, changed derivative bytes, dimensions/crop bounds and metadata policy. Does not prove crop/resize pixel content or evaluate an application near-copy matcher.'])
+    reproduction_errors=[];reproduced=Counter()
+    for family in families:
+        base=catalog[family['base_media_id']]
+        for member in family['members']:
+            if member['operation'] not in ('resize','reencode','crop'):continue
+            try:
+                payload=reproduce_derivative(confined_target(root,base['asset_path']),member)
+                if hashlib.sha256(payload).hexdigest()!=measured[member['media_id']]['sha256']:
+                    reproduction_errors.append(member['media_id']+': current generator recipe/encoder does not reproduce stored bytes')
+                else:reproduced[member['operation']]+=1
+            except (OSError,ValueError,KeyError,TypeError,SyntaxError) as error:
+                reproduction_errors.append(member['media_id']+': '+str(error).replace(str(root),'<repo>'))
+    add('generator_derivative_byte_reproduction',reproduction_errors,
+        {'bit_exact_derivatives':sum(reproduced.values()),'operations':dict(reproduced),'resize_jpeg_quality':86,'jpeg_optimize':True},
+        '40 derived files reproduce byte-for-byte from their base with the committed generator recipe',
+        ['In-memory generation-recipe check tied to recorded Pillow/encoder versions, not a general near-copy/crop detector or application evidence signal. No asset file is written.'])
+    checks[-1]['evidence_paths'].append('tools/test_data/generate_assets.py')
     metadata=Counter();metadata_errors=[];base_size_errors=[]
     for family in families:
         actual=measured.get(family['base_media_id'])
@@ -159,7 +197,7 @@ def run_media_audit(root):
                    'evidence_paths':[],'limitations':['Caption/GPS conflict semantics, human visual review and scene authenticity are not established by these file checks.']})
     totals=Counter(c['status'] for c in checks)
     return {'dataset_id':DATASET,'generated_at':datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
-            'tools':[{'name':'tools/test_data/audit_media.py','version':'1.0'},{'name':'Pillow','version':PILLOW_VERSION},{'name':'Python','version':platform.python_version()}],
+            'tools':[{'name':'tools/test_data/audit_media.py','version':'1.1'},{'name':'Pillow','version':PILLOW_VERSION},{'name':'Python','version':platform.python_version()}],
             'checks':checks,'summary':{key:totals[key] for key in ('pass','fail','blocked')}}
 
 
