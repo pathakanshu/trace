@@ -146,6 +146,79 @@ integration sequence: `tests/fixtures/bhotekoshi-2016-exercise-v1/REPAIR_PLAN.md
 on codex/test-data. Keep all private expectations out of app/model inputs.
 Branch-only handoff; Miguel integrates. No main merge or JacHammer deployment.
 
+
+### Final fresh-clone regression — 10:16 EDT
+
+**PASS on main 8489a3259a08351a64e1e0b6014b6fc4f685815e** (includes
+59a219a reset/media fixes and 1942e34 Nepal rivers). New clone, initially absent
+`.jac/data`, cold `jac start` on localhost:8096; real UI/API, no response stubs.
+**17 rehearsal checks + 3 map checks + 3 restart checks passed; zero page errors.**
+**68 Jac tests and the 58-file compiler gate passed.** Bundled client cold-started.
+No live model calls, secrets, application edits, or developer-store access.
+
+Earlier bugs, exact retests:
+
+| Check / repro | Expected | Actual |
+| --- | --- | --- |
+| Reset → People → investigation Person record = Maya G. → Reset | Source selector remains usable; replay visible; Investigate enabled | PASS: one source option, REPLAYED visible, enabled without reload |
+| Load exercise corpus → select corpus → Media, empty search | All 200 records available, asset limitations explicit | PASS: snapshot and UI both 200; metadata-only notice; upload/duplicate controls absent |
+| Maya → Media after Reset | Honest missing-preview state, retained records | PASS: three explicit “Preview unavailable” panels; zero broken image elements |
+
+Remaining rehearsal:
+
+- PASS: Reset → both Maya selections show their two actual REPLAYED runs →
+  Simulate hospital report → exactly one alert, police and hospital retained →
+  Graph includes Alert and both Investigation records.
+- PASS: choose uncached hospital report → Investigate with empty passphrase →
+  UNAVAILABLE, no crash. Cached/replayed reports were not used for this check.
+- PASS: first Load disables repeated clicks (incident selector is absent until
+  the second incident exists). Second Load from a stale pre-import browser tab,
+  while switching corpus → Maya in the first tab, creates `{}` and only two incidents.
+- PASS: three Maya → corpus → Maya cycles preserve the one-alert state. Corpus
+  Reset control is hidden; invoking reset_demo while viewing corpus preserves its
+  counts. Switch back → Reset gives zero alerts, one police claim, two replays.
+- PASS: all five tabs for both incidents at 375 × 812; document width stays 375.
+- PASS: Nepal river layer renders (55 visible features at corridor zoom); Bhote
+  Koshi amber rgba(242,175,72,1), other rivers blue rgba(40,140,212,1). Repeated
+  zoom-out stops at 6.163 for the 1440px viewport (configured minimum 6 plus
+  geographic bounds); another click cannot move it. World copies disabled.
+  Corpus has four real heat groups above the river, visually checked; 1,356
+  located / 2,244 unlocated reports. This is report density, not flood extent.
+- PASS: stop server → cold restart with same store → both incident IDs persist.
+  Full Maya AND corpus snapshots match before restart after excluding transient
+  `_jac_*` serialization metadata. One hospital alert, source history, two
+  replays, and corpus map remain; actual UI reopened both incidents.
+
+Corpus tab switch milliseconds (click until visible plus two painted frames;
+tabs stay mounted, these are not incident-fetch timings):
+
+| Tab | Three runs | Median |
+| --- | --- | --- |
+| People | 63 / 67 / 67 | 67 |
+| Organizations | 67 / 67 / 67 | 67 |
+| Graph | 83 / 67 / 67 | 67 |
+| Map | 66 / 66 / 66 | 66 |
+
+First corpus selection during concurrent repeat import: **7.382 s**. Later
+corpus selections: **1.378–2.890 s**; Maya: **94–113 ms**. Local machine, with
+other validation running; not a production benchmark. Initial page: 286 ms
+once cold server was ready. GitHub Linguist API for this main: **Jac 92.308%**
+(372,857 bytes), JS 23,013, CSS 8,055. No vendored attributes needed/applied.
+No new demo blocker found. Corpus assets remain metadata-only; local persistence
+success does not change the separately documented JacHammer sandbox restart limit.
+
+Evidence on Anshu's machine: `/private/tmp/trace-final-results.json`,
+`trace-final-map.json`, `trace-final-restart.json`, `trace-final-tests.log`,
+`trace-final-build.log` (same directory prefix); screenshots there too.
+Report branch `codex/anshu-final-rehearsal` changes **only this STATUS file**.
+
+Timeline handoff: `codex/person-timeline`, implementation **37e25a8**, documentation
+**04594f3**, pushed; 12 focused / 80 total tests, 61-file gate, web build, five UI
+checks passed. These timeline commits are not on the main revision rehearsed above.
+Exact single new main import: `import from services.timeline { TimelineEntry, person_timeline }`.
+The People detail mount and complete integration notes are included on that branch.
+Next: the three requested Devpost screenshots outside the repo, then stop early.
+
 ## Gabriel (people)
 
 Working on: (fill in)
@@ -243,3 +316,4 @@ Working on: (fill in)
 - 10:03 main 1942e34: map shows every OSM river in Nepal (waterway=river, simplified, 336 KB) with the Bhote Koshi in the warning colour; zoom capped 6 to 14, maxBounds around Nepal, no world copies; report heat stays above the corridor whatever loads first. JacHammer checked: Reset then hospital gives 1 alert; select Maya G., Reset, panel falls back with REPLAYED and Investigate enabled. Note: JacHammer restart empties the store, reload the corpus before presenting.
 
 - 10:08 EDT Anshu: timeline ready on `codex/person-timeline` (37e25a8); 12 focused / 80 total Jac tests, compiler, web build and five UI checks pass. Exact import/mount above. Starting latest-main fresh-clone regression; no main push.
+- 10:16 EDT Anshu: final fresh-clone main 8489a32 rehearsal PASS: 17 scenario, three map and three restart checks; all three earlier bugs retested fixed; 68 Jac tests/gate pass. Timings, 92.308% Jac and repro steps in Anshu section. Report only on codex/anshu-final-rehearsal; no main push.
