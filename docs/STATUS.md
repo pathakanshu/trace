@@ -34,12 +34,13 @@ Next: pitch, backup video, Devpost.
 
 ## Anshu (map, integration)
 
-Working on: final data tooling robustness on `codex/test-data`:
-`generate_queries.py` shared catalog reader, `test_catalog_io.py`, strict audit
-and README/report updates. Reject duplicate IDs/malformed catalog input before
-query/negative/hero generation. Current fixes are pushed: 80b89c4 hero closure,
-17dfdc3 community checks and private `REPAIR_PLAN.md`. Hero is now 658 unchanged
-catalog records with all references, 62 Persons and 40 media. No primary rewrite.
+Working on: private identity-oracle normalization on `codex/test-data`:
+`tools/test_data/generate_identities.py` + tests, `generate_catalog.py` hookup,
+private `oracle/identities.jsonl`, strict audit and README/report updates.
+Follow the existing closed contract, preserving private IDs/membership/ages;
+derive primary/initial-place fields from allocation and existing initial claims.
+Unknown geography stays null. No public source/record/asset changes or new
+runtime identity decisions. Reader fix 948c09c is pushed; 81 tooling tests pass.
 
 App handoff: all four overnight tasks complete; draft PR #4 ready:
 https://github.com/pathakanshu/trace/pull/4 (branch `codex/anshu-night`).
@@ -65,8 +66,8 @@ ab3fc56. No Linguist overrides/exclusions added. Not organizer eligibility proof
 
 Corpus published on origin/codex/test-data: e710475 control pack (26 records),
 23f81dd 40 cited queries, a65364f checkpoint diagnostics, fb64b72 40 concrete
-negative cases. **74 distinct tooling tests pass across schema/Pillow environments**
-(71 + three separately run decoder checks). Primary 8,027 records and binary
+negative cases. **81 distinct tooling tests pass across schema/Pillow environments**
+(78 + three separately run decoder checks). Primary 8,027 records and binary
 bundle are unchanged. Strict audit: **15 pass / 14 fail / 2 blocked**.
 New measured defects: T+72 fixture summary is 353 missing / 547 safe / 50 injured /
 50 unresolved, target 650 / 250 / 50 / 50. The generator assigns 297 safe follow-ups
