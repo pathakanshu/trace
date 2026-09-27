@@ -53,6 +53,17 @@ import quadratic); corpus lookups use a field filter so they walk real edges.
 
 ## Anshu (map, integration)
 
+Working on: user-authorized media gallery/voting on `codex/media-voting`, based
+on main 60e8e00. Reserved: new media gallery/service/manifest and asset-preparation
+tooling, a small MediaTab mount, one main endpoint import, media docs/assets/ignore
+rules; additive new `graph/media_votes.jac` only (existing graph files untouched).
+Coordination for Miguel: 29 supplied files become a clearly labeled shared review
+library, outside incident fixtures. New MediaVote children attach to canonical
+Media nodes; no changes to snapshot types, incident projections, existing schemas,
+reset, model calls or investigation. Browser-scoped votes express usefulness only.
+Original files preserved under ignored `media-originals/user-supplied-20260927/`
+in Anshu's primary checkout. Primary branch remains untouched.
+
 Done: deterministic person timeline on `codex/person-timeline`, **37e25a8**,
 rebased on main **8489a32**. Ready for Miguel to cherry-pick/review; not merged.
 New read-only `person_timeline(incident_id, person_id)` endpoint and shared People
