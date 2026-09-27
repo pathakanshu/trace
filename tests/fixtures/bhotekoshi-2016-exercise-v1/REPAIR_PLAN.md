@@ -73,6 +73,10 @@ and two-follower coverage checks. Candidate task snapshots now have matching
 submissions/assignees, cited review evidence and ordered times; media subscriptions
 wait for target release. Read-only substitution of these objects removes all 153
 forward references. Published community snapshots are unchanged.
+A full temporary generator rehearsal now checks the combined fixes, all 8,027
+records, copied asset hashes and a reference-closed 50-identity/62-Person hero.
+One neutral-detail allocation was adjusted to stop shared-report closure from
+pulling in non-hero identities. Original source/asset hashes remain unchanged.
 Other generator defects remain. These candidate
 checks are not a new published release or a compatible importer rehearsal.
 

@@ -118,8 +118,8 @@ cases use analysis without publishing: hostile text stays source data. None of
 these eight runtime cases has run; no agent response or success is prefilled.
 No nonexistent replay-action IDs are used as prerequisites.
 
-Actual tooling results: **184 distinct tests pass across two environments**.
-The schema environment runs 169 and explicitly skips fifteen Pillow tests. Run the
+Actual tooling results: **191 distinct tests pass across two environments**.
+The schema environment runs 176 and explicitly skips fifteen Pillow tests. Run the
 fifteen media checks with a Pillow-equipped tooling Python:
 `python3 -m unittest discover -s tools/test_data -p '*media*.py'`.
 That separate run passes all fifteen. Do not count skipped decoder checks as passes
@@ -420,3 +420,21 @@ candidate workflow objects in a read-only structural check removes all 153 forwa
 references and passes lifecycle checks. Three additional regressions verify this,
 exact task quotas, schema and missing-reviewer rejection. No task was executed,
 no fixture review establishes truth, and the delivered snapshot is unchanged.
+
+## Full isolated candidate rehearsal
+
+Seven integration checks now run the full generator in a temporary directory,
+using copied allocation/context inputs and all 400 unchanged asset files. They
+validate all 8,027 generated records, exact non-geographic counts, zero missing/
+cross-incident/future references, lifecycle ordering, all checkpoint/rumor rules,
+1,800 raw envelopes/hashes, community invariants and a 50-identity / 62-Person hero
+export. Source and asset hashes prove the published dataset was not modified;
+no .jac or .trace-local runtime store is created. Temporary output is discarded.
+
+This rehearsal caught a shared-report boundary that expanded hero closure to
+391 Person records. Moving one neutral PERSON_DETAIL observation outside the
+hero fills complete four-claim sources (224 hero follow-ups at T+72), preserving
+all status/type/source-cardinality quotas and stable ID bindings. The full hero
+check now passes. This is not an importer, story execution or completed corpus:
+geography, ambiguous negatives, narrative plans and supporting shapes still need
+work and the new candidate is not published over immutable source records.

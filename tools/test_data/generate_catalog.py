@@ -203,7 +203,10 @@ def build_claims_and_sources(plan, groups, facilities, infrastructure, hazards, 
             typ="SEEN_AT_LOCATION" if filler_i%2==0 else "PERSON_DETAIL"; filler_i+=1
             person_claim(1+((release+i)%1000),typ,release-1,release)
     for i in range(550-115): person_claim(1+(i%1000),"SEEN_AT_LOCATION",60+(i%10),72)
-    for i in range(140-115): person_claim(1+(i%1000),"PERSON_DETAIL",60+(i%10),72)
+    # Keep the T+72 hero block at 224 rows, filling whole four-claim sources.
+    # One neutral detail outside the hero prevents a shared report from pulling
+    # hundreds of unrelated people into the required 50-identity closure.
+    for i in range(140-115): person_claim(251 if i==24 else 1+i,"PERSON_DETAIL",60+(i%10),72)
     future.sort(key=lambda x:(x[3],0 if groups[x[0]-1]["hero"] else 1,x[2] if x[2] is not None else 100))
     assert {h:sum(1 for x in future if x[3]==h) for h in (24,36,48,72)}=={24:200,36:200,48:200,72:1050}
     assert len(future)==1650
@@ -461,7 +464,7 @@ def main():
       "location":locations,"facility":facilities,"infrastructure":infrastructure,"hazard":hazards,"aid":aids,"contributor":contributors,
       "contribution":contributions,"vote":votes,"task":tasks,"subscription":subscriptions,"investigation":investigations}
     write_shards(all_records)
-    # Public replay/query plans contain only scenarios, prompts and actions.
+    # Private replay/query plans contain only scenarios, prompts and actions.
     # They never contain successful candidates, signals, alerts or traces.
     replay=FIX/"replay"; replay.mkdir(parents=True,exist_ok=True)
     jsonl(replay/"scenarios.jsonl",[{**s,"expected_runtime_outputs":[],"runtime_outputs_must_be_generated_by_application":True} for s in plan["story_plans"]])
