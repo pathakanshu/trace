@@ -1,5 +1,7 @@
 # Team status board
 
+**Code freeze: 11:45 EDT.** After that only fixes for a broken demo; Devpost closes at noon.
+
 Shared state for everyone pushing to this repo tonight. Read it after every
 `git pull`, update it in the same commit as your work. Keep entries short.
 
@@ -333,3 +335,5 @@ Working on: (fill in)
 
 - 10:08 EDT Anshu: timeline ready on `codex/person-timeline` (37e25a8); 12 focused / 80 total Jac tests, compiler, web build and five UI checks pass. Exact import/mount above. Starting latest-main fresh-clone regression; no main push.
 - 10:16 EDT Anshu: final fresh-clone main 8489a32 rehearsal PASS: 17 scenario, three map and three restart checks; all three earlier bugs retested fixed; 68 Jac tests/gate pass. Timings, 92.308% Jac and repro steps in Anshu section. Report only on codex/anshu-final-rehearsal; no main push.
+- 10:58 main fd27d5f: PFIF 1.2-1.4 import in Organizations (features/organizations/pfif.jac + PfifImport.jac; endpoint import_pfif registered in main.jac). Notes become cited claims via IngestWalker, note_record_id is the reference (idempotent), unknown statuses skipped and listed, DOCTYPE/ENTITY refused. 4 new tests, 84 total; gate passed after removing a stale local agent worktree.
+- 11:14 main 2d78f7e: Gabriel graph viewer (PR #7) merged; 84 tests + gate pass on main. Freeze moved to 11:45. codex/gabriel UI branch (story bar, theme toggle, alert banner, duplicate-incident fix) not merged yet: open a PR before 11:35 so it can be checked on JacHammer.
