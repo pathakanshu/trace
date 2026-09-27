@@ -61,11 +61,12 @@ def reject_nonfinite(value):
 
 
 def read_jsonl(path):
+    from generate_queries import strict_json_loads
     rows = []
     for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
         if not line.strip():
             raise ValueError(f"blank line {number}")
-        rows.append(json.loads(line, parse_constant=reject_nonfinite))
+        rows.append(strict_json_loads(line))
     return rows
 
 
@@ -342,7 +343,7 @@ def run_audit(root):
     summary = dict(Counter(check["status"] for check in checks))
     summary = {status: summary.get(status, 0) for status in ("pass", "fail", "blocked")}
     return {"dataset_id": DATASET, "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "tools": [{"name": "tools/test_data/audit_contracts.py", "version": "1.6"}, {"name": "jsonschema", "version": version("jsonschema")}],
+            "tools": [{"name": "tools/test_data/audit_contracts.py", "version": "1.7"}, {"name": "jsonschema", "version": version("jsonschema")}],
             "checks": checks, "summary": summary}
 
 

@@ -68,7 +68,7 @@ control pack now passes its file checks. See each rule's measured examples; no a
 This audit leaves the catalog, stable IDs, media bundle and previous reports
 unchanged. Repair release dependencies and support contracts before building a
 complete importer/replay around this preview. Top-level shape checks do not
-exhaustively validate nested semantics. The data tools' 74 distinct tests pass across schema and Pillow environments;
+exhaustively validate nested semantics. The data tools' 81 distinct tests pass across schema and Pillow environments;
 its corpus audit intentionally exits 1 for the observed data failures.
 
 - All 1,800 original source hashes match. However, the 1,260 JSON sources use

@@ -116,8 +116,8 @@ cases use analysis without publishing: hostile text stays source data. None of
 these eight runtime cases has run; no agent response or success is prefilled.
 No nonexistent replay-action IDs are used as prerequisites.
 
-Actual tooling results: **74 distinct tests pass across two environments**.
-The schema environment runs 71 and explicitly skips three Pillow tests. Run the
+Actual tooling results: **81 distinct tests pass across two environments**.
+The schema environment runs 78 and explicitly skips three Pillow tests. Run the
 three decoder checks with a Pillow-equipped tooling Python:
 `python3 -m unittest discover -s tools/test_data -p test_negative_media.py`.
 That separate run passes all three. Do not count skipped decoder checks as passes
@@ -186,3 +186,11 @@ No community records, votes, reviews or subscriptions are mutated by this audit.
 `tests/fixtures/bhotekoshi-2016-exercise-v1/REPAIR_PLAN.md` gives measured defects,
 reusable artifacts, immutable-source/versioning decisions and the integration
 sequence for the app owner. It is private developer guidance, never app input.
+
+The shared catalog reader used by query/negative/hero generators now rejects
+repeated IDs (including across shards), duplicate JSON object keys, NaN/Infinity,
+blank/nonobject rows, invalid UTF-8, missing final newlines and symlink escapes.
+Seven input-boundary tests verify rejection before any fixture generation;
+valid Unicode and null unknown values are preserved. Strict JSONL audit parsing
+also rejects repeated object keys, so malformed input cannot hide behind a
+last-key-wins decoder. Existing public rows remain unchanged.

@@ -23,10 +23,42 @@ def at(hour):
     return (START + timedelta(hours=hour)).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
+def strict_json_loads(text):
+    def object_pairs(pairs):
+        result = {}
+        for key, value in pairs:
+            if key in result:
+                raise ValueError("Duplicate JSON object key: " + key)
+            result[key] = value
+        return result
+    def nonfinite(value):
+        raise ValueError("Non-JSON numeric constant: " + value)
+    return json.loads(text, object_pairs_hook=object_pairs, parse_constant=nonfinite)
+
+
 def read_catalog(root):
-    rows = [json.loads(line) for path in sorted((root / "demo/datasets" / DATASET / "records").rglob("*.jsonl"))
-            for line in path.read_text(encoding="utf-8").splitlines()]
-    return {row["id"]: row for row in rows}
+    root = root.resolve()
+    directory = root / "demo/datasets" / DATASET / "records"
+    paths = sorted(directory.rglob("*.jsonl"))
+    if not paths:
+        raise ValueError("No primary catalog shards found")
+    catalog = {}
+    for path in paths:
+        if not path.resolve().is_relative_to(directory):
+            raise ValueError("Catalog shard escapes the record directory: " + path.name)
+        text = path.read_text(encoding="utf-8")
+        if not text or not text.endswith("\n"):
+            raise ValueError("Catalog shard is empty or lacks its final newline: " + path.name)
+        for number, line in enumerate(text.splitlines(), 1):
+            if not line.strip():
+                raise ValueError(f"{path.name}:{number}: blank catalog line")
+            row = strict_json_loads(line)
+            if not isinstance(row, dict) or not isinstance(row.get("id"), str) or not row["id"]:
+                raise ValueError(f"{path.name}:{number}: catalog record needs a nonempty ID")
+            if row["id"] in catalog:
+                raise ValueError("Duplicate primary catalog ID: " + row["id"])
+            catalog[row["id"]] = row
+    return catalog
 
 
 def build_queries(catalog):
