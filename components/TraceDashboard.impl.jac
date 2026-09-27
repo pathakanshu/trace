@@ -155,10 +155,10 @@ impl TraceDashboard.handleShowOnMap(claimId: str) -> None {
 # Same as handleShowOnMap, but by person: a new claim (the hospital report)
 # may have no place of its own, while earlier reports about the person do.
 impl TraceDashboard.handleShowPersonOnMap(personId: str) -> None {
-    current = snapshot;
+    # any: the checker does not narrow the optional snapshot after the None check.
+    current: any = snapshot;
     if current is None { return; }
-    locations = current.locations;
-    places = [p for p in locations if personId in [e.person_id for e in p.evidence]];
+    places = [p for p in current.locations if personId in [e.person_id for e in p.evidence]];
     if not places { return; }
     mapFocusId = places[0].id;
     mapFocusRequest = mapFocusRequest + 1;
