@@ -1,3 +1,7 @@
 .jac/
 node_modules/
 .DS_Store
+
+# Binary controlled media is packaged separately from text/catalog commits.
+demo/assets/bhotekoshi-2016-exercise-v1/
+demo/datasets/bhotekoshi-2016-exercise-v1/contact-sheet.png
