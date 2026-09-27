@@ -55,6 +55,48 @@ Jev integration, follow the separate setup guide linked above.
   delivery. CGX/PFIF import, free-text extraction, broader community workflows, and the
   large planned corpus are not implemented. Retry guarantees are tested sequentially.
 
+### Map
+
+Pins show the most urgent current report among people linked by a claim at that
+media location: Missing, Needs review, Reported safe, then No current status.
+Needs review includes conflicting reports, injury, or death. The evidence panel
+cites current person reports separately from the retained media-linked reports.
+A pin remains a reported media location; a status update does not relocate anyone.
+The bridge changes from Missing to Reported safe after the hospital update while
+retaining the police report. The seeded market has no linked person report and
+therefore shows No current status. Identity candidates are not silently combined.
+
+Pins and the keyboard-accessible place list work while district boundaries load.
+A failed request or five-second delay displays a boundaries-unavailable message;
+a late success restores boundaries without changing selection or viewport.
+The map observes container resizing and keeps viewport/selection across tabs.
+
+Map checks on Jac 0.34.1: all 48 repository tests passed (five focused map tests),
+the whole-program type-check and web client build passed, and nine automated
+Chromium browser checks passed without page errors. Browser checks covered the
+hospital update/one alert, retained source evidence, reload/reset, pan/zoom and
+selection across tabs, keyboard selection, 375px width without horizontal
+overflow, status/citation edge cases, and failed/slow boundary recovery.
+This was an isolated local preview; hosted deployment and a physical phone were
+not exercised. The generated large corpus remains unimported.
+
+```sh
+jac test features/map/test_map.jac
+jac build --check_only
+jac build --client web
+# Separate terminal, in an isolated checkout with its own .jac/data:
+jac start --dev --port 8092 --api_port 8093 main.jac
+# With Playwright already available to Node (no application dependency added):
+TRACE_MAP_URL=http://localhost:8092 node features/map/verify_map.cjs
+```
+
+The browser check resets the preview's demo. It accepts localhost only.
+Set `TRACE_BROWSER_EXECUTABLE` to an existing Chromium executable if needed;
+`NODE_PATH` can point to existing Playwright packages. Set `TRACE_MAP_SCREENSHOT`
+to capture the 375px result. Shared integration change: a defaulted
+`LocationEvidenceView.person_id` filled from the claim's `About` edge in the
+location loop; no changes to the investigation snapshot fields or seed are needed.
+
 ## Demo and checks
 
 1. Use **Demo controls → Reset demo** to load the starting fixtures.
