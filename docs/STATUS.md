@@ -30,14 +30,24 @@ Rules:
 Done: stages 0 to 4 on main (Nemotron boundary, replayed runs, panel and Graph
 nodes, five-case live eval, docs). JacHammer LATEST TRACE runs main; after a
 pull use Stop then Run Preview.
-Working on: stage 5 with the team: pitch, demo video, Devpost pass.
+Working on: stage 5 with the team: pitch, demo video, Devpost pass. Corpus
+backend: `demo/corpus.jac`, `services/trace.jac` (list_incidents,
+get_dashboard(incident_id), search_people, place counts), graph/ schema
+(external_id, ReportedAt, HasSource), `features/graph/services.jac` (cap),
+`tests/test_corpus.jac`, `demo/datasets/bhotekoshi-2016-exercise-v1/`.
 Pending humans: one LIVE Investigate on JacHammer (passphrase typed in the
 panel), demo video link, subtrack check, organizer answer on 11:00 vs noon.
-Corpus (`codex/test-data`): not imported before the deadline. Reasons: no
-importer, 25/16/2 contract audit, 170/1,000 locations, and the demo incident
-must stay identical after reset. Proposed after judging: import only the hero
-slice (748 records, 50 people) into a separate incident behind its own reset,
-never the demo incident, with private fixtures kept out of app inputs.
+Corpus (`codex/test-data` 814efd9): full 8,027-record corpus now imports into a
+SEPARATE incident "Bhote Koshi exercise corpus (generated)" via `load_corpus()`;
+the demo incident and its reset are unchanged. Imported: 1,150 people, 3,600
+claims, 1,800 sources, 32 orgs, 170 locations, 200 media, 100 subscriptions.
+Counted, not imported: 50 non-person subscriptions and the kinds without a
+node type (vote, task, contribution, contributor, facility, infrastructure,
+hazard, aid, investigation). 800 claims about non-person subjects are kept as
+source history without an About edge. No duplicate candidates for the corpus
+(pairwise over 1,150 people). Import 0.4 s, corpus dashboard 0.2 s (jac test,
+in memory). The corpus is written with Jac's topology index off (it made the
+import quadratic); corpus lookups use a field filter so they walk real edges.
 
 ## Anshu (map, integration)
 
@@ -185,3 +195,4 @@ Working on: (fill in)
 - 05:25 main 7e694be: PR #4 squash-merged (People to Map, phone wrapping, demo regression; 57 tests, gate passed). Corpus import deferred until after judging (see Miguel section).
 
 - 08:28 codex/anshu-map-scale: corridor linework, four labels, attribution, faint district and corridor fit ready; 59 Jac tests pass; final compiler gate required before push. Miguel: add `get_bhotekoshi_corridor` to existing services.geo import in main.jac. Task 2 follows place_counts backend.
+- 08:50 main: corpus import as its own incident (load_corpus, list_incidents, get_dashboard(incident_id), search_people, place counts, capped graph). 66 tests pass; Maya demo unchanged. Also registers get_bhotekoshi_corridor in main.jac.

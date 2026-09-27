@@ -58,7 +58,10 @@ obj GraphSnapshot {
     has incident_id: str = "",
         incident_name: str = "",
         nodes: list[GraphNodeView] = [],
-        edges: list[GraphEdgeView] = [];
+        edges: list[GraphEdgeView] = [],
+        # Every node in the incident, even when `nodes` is capped (corpus).
+        total_nodes: int = 0,
+        counts_by_kind: dict[str, int] = {};
 }
 
 # ---------- Builder ----------
@@ -103,8 +106,11 @@ def _f(name: str, value: any) -> GraphField {
 
 # duplicates: the People tab's ResolveWalker results (DashboardSnapshot.duplicates),
 # reused as-is so the Graph tab shows exactly the same candidates.
+# max_nodes > 0 caps the projection (the corpus would be thousands of nodes);
+# full_counts then supplies the real per-kind counts measured by the caller.
 def build_graph_snapshot(
-    incident: Incident | None, duplicates: list[DuplicateCandidate] = []
+    incident: Incident | None, duplicates: list[DuplicateCandidate] = [],
+    max_nodes: int = 0, full_counts: dict[str, int] = {}
 ) -> GraphSnapshot {
     if incident is None {
         return GraphSnapshot();
@@ -122,6 +128,7 @@ def build_graph_snapshot(
 
     people = [incident ->:Involves:->];
     for person in people {
+        if max_nodes and len(col.order) >= max_nodes { break; }
         pid = jid(person);
         col.add_node(_person_view(person));
         col.add_edge("Involves", inc_id, pid);
@@ -154,11 +161,13 @@ def build_graph_snapshot(
     }
 
     for org in [incident ->:HasOrganization:->] {
+        if max_nodes and len(col.order) >= max_nodes { break; }
         _add_organization(col, org);
         col.add_edge("HasOrganization", inc_id, jid(org));
     }
 
     for m in [incident ->:Contains:->] {
+        if max_nodes and len(col.order) >= max_nodes { break; }
         _add_media(col, m);
         col.add_edge("Contains", inc_id, jid(m));
     }
@@ -187,6 +196,14 @@ def build_graph_snapshot(
     snap = GraphSnapshot(incident_id=inc_id, incident_name=incident.name);
     snap.nodes = [col.nodes[k] for k in col.order];
     snap.edges = col.edges;
+    if full_counts {
+        snap.counts_by_kind = dict(full_counts);
+    } else {
+        for view in snap.nodes {
+            snap.counts_by_kind[view.kind] = snap.counts_by_kind.get(view.kind, 0) + 1;
+        }
+    }
+    snap.total_nodes = sum(snap.counts_by_kind.values());
     return snap;
 }
 

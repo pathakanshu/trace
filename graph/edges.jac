@@ -28,6 +28,7 @@ Agreed additions (see docs/TEAM.md and docs/PUBLISHING.md):
     Claim            -Triggered->       Alert        (WatchWalker: which claim caused the alert)
     IdentityDecision -Reviews->         Person       (Gabriel: human review of a pair)
     Media            -ExactCopyOf->     Media        (Aidana: identical SHA-256)
+    Claim            -ReportedAt->      Location     (corpus import: place named in a report)
 """
 
 import from graph.nodes {
@@ -78,3 +79,10 @@ edge ExactCopyOf: Media --> Media {
         detected_by: str = "",
         detected_at: str = "";
 }
+
+# The place a report names. Only imported corpus claims carry it today; demo
+# locations still come from media (Media -LocatedAt-> Location).
+edge ReportedAt: Claim --> Location {}
+
+# A source with no organization publisher (a community contributor's report).
+edge HasSource: Incident --> Source {}

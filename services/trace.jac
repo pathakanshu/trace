@@ -20,13 +20,20 @@ import from graph.nodes {
 import from graph.edges {
     Involves, Contains, Asserts, About, SupportedBy, Depicts,
     LocatedAt, HasSignal, HasSubscription, Receives, HasOrganization, Publishes,
-    HasInvestigation
+    HasInvestigation, ReportedAt, HasSource
 }
 import from walkers.ingest { IngestWalker }
 import from walkers.resolve { ResolveWalker, DuplicateCandidate }
 import from walkers.watch { WatchWalker, STATUS_CLAIMS }
 import from demo.seed { seed_demo, INCIDENT_NAME, PERSON_NAME, HOSPITAL_UPDATE }
 import from features.graph.services { GraphSnapshot, build_graph_snapshot }
+import from demo.corpus {
+    CORPUS_INCIDENT_NAME, unmapped_counts, read_kind
+}
+
+# The corpus has 1,150 people; the browser gets a page of them plus counts.
+glob CORPUS_PEOPLE_LIMIT: int = 100;
+glob CORPUS_GRAPH_NODES: int = 400;
 
 # ---------- View objects sent to the UI ----------
 
@@ -71,7 +78,20 @@ obj LocationView {
 }
 
 obj OrganizationView {
-    has id: str, name: str, organization_type: str, is_demo: bool = True;
+    has id: str, name: str, organization_type: str, is_demo: bool = True,
+        # Sources this organization published in the selected incident.
+        report_count: int = 0;
+}
+
+# kind is "demo" (the Maya walkthrough) or "corpus" (the generated exercise).
+obj IncidentOption {
+    has id: str, name: str, kind: str, record_count: int = 0;
+}
+
+# Reports per place, split by the status they assert.
+obj PlaceCount {
+    has location_id: str, name: str, latitude: float, longitude: float,
+        report_count: int, missing: int = 0, safe: int = 0, other: int = 0;
 }
 
 obj AlertView {
@@ -112,7 +132,16 @@ obj DashboardSnapshot {
         hospital_update_added: bool = False,
         graph: GraphSnapshot = GraphSnapshot(),
         media_records: list[UploadRecord] = [],
-        investigations: list[InvestigationView] = [];
+        investigations: list[InvestigationView] = [],
+        is_corpus: bool = False,
+        totals: dict[str, int] = {},
+        not_imported: dict[str, int] = {},
+        status_counts: dict[str, int] = {},
+        # `people` holds at most CORPUS_PEOPLE_LIMIT records for the corpus.
+        people_total: int = 0,
+        place_counts: list[PlaceCount] = [],
+        located_reports: int = 0,
+        unlocated_reports: int = 0;
 }
 
 # ---------- Actions (the demo buttons) ----------
@@ -163,7 +192,14 @@ def:pub run_resolve() -> list[DuplicateCandidate] {
 
 # ---------- Reading the graph for the UI ----------
 
-def:pub get_dashboard() -> DashboardSnapshot {
+# incident_id "" (or the demo's id) returns the Maya demo exactly as before.
+def:pub get_dashboard(incident_id: str = "") -> DashboardSnapshot {
+    if incident_id {
+        chosen = _incident_by_id(incident_id);
+        if chosen is not None and chosen.name == CORPUS_INCIDENT_NAME {
+            return _corpus_snapshot(chosen);
+        }
+    }
     incident = _incident();
     if not incident {
         seed_demo();   # first run: build the demo automatically
@@ -176,7 +212,8 @@ def:pub get_dashboard() -> DashboardSnapshot {
     snap.incident_id = jid(incident);
     for org in [incident ->:HasOrganization:->] {
         snap.organizations.append(OrganizationView(id=jid(org), name=org.name,
-            organization_type=org.organization_type, is_demo=org.is_demo));
+            organization_type=org.organization_type, is_demo=org.is_demo,
+            report_count=len([org ->:Publishes:->])));
     }
     snap.media_records = list_incident_media(incident.name);
     snap.incident_name = incident.name;
@@ -248,6 +285,7 @@ def:pub get_dashboard() -> DashboardSnapshot {
 
     snap.duplicates = (incident spawn ResolveWalker(quiet=True)).candidates;
     snap.graph = build_graph_snapshot(incident, snap.duplicates);
+    _fill_counts(snap, incident);
     for run in [incident ->:HasInvestigation:->] {
         inv_view = _investigation_view(run);
         if inv_view is not None {
@@ -257,7 +295,205 @@ def:pub get_dashboard() -> DashboardSnapshot {
     return snap;
 }
 
+# The incidents a viewer can switch between. Seeds the demo on first use.
+def:pub list_incidents() -> list[IncidentOption] {
+    if not _incident() { seed_demo(); }
+    options: list[IncidentOption] = [];
+    # The field filter makes Jac walk real edges; the corpus is not indexed.
+    for incident in [root -->[?:Incident, name != ""]] {
+        kind = "demo" if incident.name == INCIDENT_NAME else (
+            "corpus" if incident.name == CORPUS_INCIDENT_NAME else "");
+        if not kind { continue; }
+        options.append(IncidentOption(id=jid(incident), name=incident.name, kind=kind,
+            record_count=sum(_scan(incident).totals.values())));
+    }
+    options.sort(key=lambda (o: IncidentOption) -> int { return 0 if o.kind == "demo" else 1; });
+    return options;
+}
+
+# Name search inside one incident, so the corpus People list can reach any of
+# its 1,150 records without sending them all. Empty query = first `limit`.
+def:pub search_people(incident_id: str, query: str, limit: int = 100) -> list[PersonView] {
+    incident = _incident_by_id(incident_id) if incident_id else _incident();
+    if incident is None { return []; }
+    needle = query.strip().lower();
+    limit = max(1, min(limit, 500));
+    found: list[PersonView] = [];
+    for person in [incident ->:Involves:->] {
+        marker = "Also reported as:";
+        variants = person.notes.split(marker)[1] if marker in person.notes else "";
+        if needle and needle not in person.name.lower() and needle not in variants.lower()
+            and needle != person.external_id.lower() {
+            continue;
+        }
+        found.append(_person_view(person, jid(incident)));
+        if len(found) >= limit { break; }
+    }
+    return found;
+}
+
 # ---------- Private helpers (underscore = not an endpoint) ----------
+
+def _incident_by_id(incident_id: str) -> Incident | None {
+    # Field filter: see demo/corpus.jac on why the corpus is not in the index.
+    found = [i for i in [root -->[?:Incident, name != ""]] if jid(i) == incident_id];
+    return found[0] if found else None;
+}
+
+# Same display rule as _person_view, on raw Claim nodes, so counting 1,150
+# people does not build a ClaimView for every report.
+def _status_of(claims: list[Claim]) -> str {
+    ordered = sorted([c for c in claims if c.claim_type in STATUS_CLAIMS],
+        key=lambda (c: Claim) -> str { return c.timestamp; });
+    if not ordered { return "UNKNOWN"; }
+    latest = ordered[-1];
+    for c in ordered {
+        if c.claim_type != latest.claim_type
+            and (not c.timestamp or not latest.timestamp or c.timestamp == latest.timestamp) {
+            return "UNKNOWN";
+        }
+    }
+    return str(latest.claim_type);
+}
+
+obj IncidentScan {
+    has people: list[Person] = [], organizations: list[Organization] = [],
+        media: list[Media] = [], status_counts: dict[str, int] = {},
+        places: list[PlaceCount] = [], located: int = 0, claim_count: int = 0,
+        totals: dict[str, int] = {};
+}
+
+# One linear pass over an incident: totals, status per person, and reports per
+# place. Place comes from a claim's ReportedAt location, else from the location
+# of its supporting media (how the demo records place).
+def _scan(incident: Incident) -> IncidentScan {
+    inc_id = jid(incident);
+    claims: dict = {};
+    sources: dict = {};
+    status_counts: dict[str, int] = {};
+    subscriptions = 0;
+    people = [incident ->:Involves:->];
+    for person in people {
+        mine = [c for c in [person <-:About:<-] if not c.incident_id or c.incident_id == inc_id];
+        status = _status_of(mine);
+        status_counts[status] = status_counts.get(status, 0) + 1;
+        for c in mine { claims[jid(c)] = c; }
+        subscriptions += len([person ->:HasSubscription:->]);
+    }
+    organizations = [incident ->:HasOrganization:->];
+    listed: list = [incident ->:HasSource:->];
+    for org in organizations { listed += [org ->:Publishes:->]; }
+    for source in listed {
+        sources[jid(source)] = source;
+        for c in [source ->:Asserts:->] {
+            if not c.incident_id or c.incident_id == inc_id { claims[jid(c)] = c; }
+        }
+    }
+    places: dict = {};
+    located = 0;
+    for key in claims {
+        claim = claims[key];
+        if key not in sources {
+            for source in [claim <-:Asserts:<-] { sources[jid(source)] = source; }
+        }
+        spots = [claim ->:ReportedAt:->];
+        if not spots {
+            for m in [claim ->:SupportedBy:->] { spots += [m ->:LocatedAt:->]; }
+        }
+        counted = False;
+        for loc in spots {
+            if loc.latitude == 0 and loc.longitude == 0 { continue; }
+            place = places.get(jid(loc));
+            if place is None {
+                place = PlaceCount(location_id=jid(loc), name=loc.name,
+                    latitude=loc.latitude, longitude=loc.longitude, report_count=0);
+                places[jid(loc)] = place;
+            }
+            place.report_count += 1;
+            if claim.claim_type == "MISSING" { place.missing += 1; }
+            elif claim.claim_type == "FOUND_SAFE" { place.safe += 1; }
+            else { place.other += 1; }
+            counted = True;
+        }
+        if counted { located += 1; }
+    }
+    location_ids: dict = {};
+    for key in places { location_ids[key] = True; }
+    media = [incident ->:Contains:->];
+    for m in media {
+        for loc in [m ->:LocatedAt:->] { location_ids[jid(loc)] = True; }
+    }
+    return IncidentScan(
+        people=people, organizations=organizations, media=media,
+        status_counts=status_counts, places=list(places.values()),
+        located=located, claim_count=len(claims),
+        totals={
+            "people": len(people), "claims": len(claims), "sources": len(sources),
+            "organizations": len(organizations), "media": len(media),
+            "locations": len(location_ids), "subscriptions": subscriptions
+        }
+    );
+}
+
+def _fill_counts(snap: DashboardSnapshot, incident: Incident) -> IncidentScan {
+    scan = _scan(incident);
+    snap.totals = scan.totals;
+    snap.status_counts = scan.status_counts;
+    snap.people_total = len(scan.people);
+    snap.place_counts = scan.places;
+    snap.located_reports = scan.located;
+    snap.unlocated_reports = scan.claim_count - scan.located;
+    return scan;
+}
+
+# The generated corpus: counts over everything, detail for one page of people.
+# Identity duplicate candidates are skipped here (pairwise over 1,150 people),
+# so `duplicates` is empty on purpose.
+def _corpus_snapshot(incident: Incident) -> DashboardSnapshot {
+    snap = DashboardSnapshot(seeded=True, is_corpus=True);
+    snap.incident_id = jid(incident);
+    snap.incident_name = incident.name;
+    snap.incident_description = incident.description;
+    snap.incident_region = incident.region;
+    snap.incident_start = incident.start_time;
+    scan = _fill_counts(snap, incident);
+    for org in scan.organizations {
+        snap.organizations.append(OrganizationView(id=jid(org), name=org.name,
+            organization_type=org.organization_type, is_demo=org.is_demo,
+            report_count=len([org ->:Publishes:->])));
+    }
+    for person in scan.people[:CORPUS_PEOPLE_LIMIT] {
+        view = _person_view(person, jid(incident));
+        snap.people.append(view);
+        for sub in [person ->:HasSubscription:->] {
+            for a in [sub ->:Receives:->] {
+                snap.alerts.append(AlertView(message=a.message, created_at=a.created_at,
+                    severity=a.severity, subscriber_name=sub.subscriber_name,
+                    id=jid(a), claim_id=a.claim_id));
+            }
+        }
+    }
+    for m in scan.media { snap.media.append(_media_view(m)); }
+    snap.media_records = list_incident_media(incident.name);
+    for entry in [root -->[?:ActivityEntry]] {
+        if entry.incident_id == jid(incident) {
+            snap.activity.append(ActivityView(walker_name=entry.walker_name,
+                message=entry.message, created_at=entry.created_at));
+        }
+    }
+    snap.activity.reverse();
+    snap.not_imported = unmapped_counts();
+    missing_subs = len(read_kind("subscription")) - snap.totals["subscriptions"];
+    if missing_subs > 0 { snap.not_imported["subscription (subject is not a person)"] = missing_subs; }
+    kinds = {
+        "Incident": 1, "Person": snap.totals["people"], "Claim": snap.totals["claims"],
+        "Source": snap.totals["sources"], "Organization": snap.totals["organizations"],
+        "Media": snap.totals["media"], "Location": snap.totals["locations"],
+        "Subscription": snap.totals["subscriptions"]
+    };
+    snap.graph = build_graph_snapshot(incident, [], CORPUS_GRAPH_NODES, kinds);
+    return snap;
+}
 
 def _incident() -> Incident | None {
     found = [root -->[?:Incident, name == INCIDENT_NAME]];

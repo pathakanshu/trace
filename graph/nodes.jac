@@ -24,7 +24,9 @@ node Incident {
 node Person {
     has name: str,
         age: int = 0,
-        notes: str = "";
+        notes: str = "",
+        # Stable record id from an imported dataset ("" for demo records).
+        external_id: str = "";
 }
 
 # A statement made by a source, e.g. MISSING, FOUND_SAFE, INJURED, SEEN_AT_LOCATION.
@@ -42,19 +44,22 @@ node Claim {
         source_reference: str = "",
         extraction_method: str = "",
         ingestion_key: str = "",
-        payload_hash: str = "";
+        payload_hash: str = "",
+        external_id: str = "";
 }
 
 # Demo institutions are selectable publishers, not authenticated identities.
 node Organization {
-    has name: str, organization_type: str = "", is_demo: bool = True;
+    has name: str, organization_type: str = "", is_demo: bool = True,
+        external_id: str = "";
 }
 
 # Who made a claim: police, hospital, NGO, community report, registry...
 node Source {
     has name: str,
         source_type: str = "",
-        url: str = "";
+        url: str = "",
+        external_id: str = "";
 }
 
 # An image or video related to the incident.
@@ -73,14 +78,16 @@ node Media {
         # Aidana: "seed" or "upload". content_hash holds the real SHA-256 for uploads.
         origin: str = "seed",
         uploaded_by: str = "",
-        uploaded_at: str = "";
+        uploaded_at: str = "",
+        external_id: str = "";
 }
 
 # A place on the map.
 node Location {
     has name: str,
         latitude: float = 0.0,
-        longitude: float = 0.0;
+        longitude: float = 0.0,
+        external_id: str = "";
 }
 
 # ONE piece of evidence about a media item. Never a single "truth score".
@@ -97,7 +104,8 @@ node VerificationSignal {
 # Someone following a person (fictional contact for the demo).
 node Subscription {
     has subscriber_name: str,
-        subscriber_contact: str = "";
+        subscriber_contact: str = "",
+        external_id: str = "";
 }
 
 # A generated update delivered to a subscription.
