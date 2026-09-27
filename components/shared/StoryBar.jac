@@ -6,8 +6,7 @@ action (the same handlers as Demo controls), so nothing is faked or automatic.
 import from "@hugeicons/react" { HugeiconsIcon }
 import from "@hugeicons/core-free-icons" {
     Location01Icon, UserSearch01Icon, Hospital01Icon, Search01Icon,
-    CheckmarkCircle02Icon, ArrowRight01Icon, ArrowDown01Icon, ArrowUp01Icon,
-    RotateLeft01Icon, Share08Icon
+    CheckmarkCircle02Icon, ArrowRight01Icon, RotateLeft01Icon, Share08Icon
 }
 import from ..ui.button { Button }
 import from .InfoTip { InfoTip }
@@ -36,6 +35,11 @@ glob STORY_STEPS: list[dict] = [
      "note": "The model only labels the attribution. Jac decides what to do next, and a person makes the final call. Saved checks are marked REPLAYED."}
 ];
 glob STORY_ICONS: list = [Location01Icon, UserSearch01Icon, Hospital01Icon, Search01Icon];
+# One colour per step so the audience can follow along: missing (red),
+# identity (violet), safe (green), provenance (brand orange).
+glob STORY_DOT: list[str] = ["bg-status-missing text-background", "bg-story-match text-background", "bg-status-safe text-background", "bg-brand text-background"];
+glob STORY_SOFT: list[str] = ["bg-status-missing-soft border-status-missing/40", "bg-story-match-soft border-story-match/40", "bg-status-safe-soft border-status-safe/40", "bg-brand-soft border-brand/40"];
+glob STORY_TEXT: list[str] = ["text-status-missing", "text-story-match", "text-status-safe", "text-brand"];
 
 # Which dashboard tab a step shows. Explicit cl keeps this a browser helper
 # (not a server call) when the shell imports it, as in Display.jac.
@@ -44,81 +48,67 @@ cl def:pub story_tab(step: int) -> str {
     return "Map";
 }
 
-def:pub StoryBar(step: int, hospitalAdded: bool, busy: str,
+# Vertical story rail: the active step opens into a card with one big button;
+# the others stay one line so the whole story is visible at a glance.
+def:pub StoryRail(step: int, hospitalAdded: bool, busy: str,
     onStep: Callable[[int], None], onAction: Callable[[int], None],
     onShowGraph: Callable[[], None], onReset: Callable[[], None]) -> JsxElement {
-    has collapsed: bool = False;
-    current: dict = STORY_STEPS[step - 1];
     action_done: bool = step == 3 and hospitalAdded;
-    action_label: str = current["action"];
-    if action_done { action_label = "Hospital report published"; }
-    if step == 3 and busy == "hospital" { action_label = "Publishing..."; }
-    if step == 2 and busy == "resolve" { action_label = "Looking for matches..."; }
 
-    return <section aria-label="Maya's story, step by step" className="border-b border-border bg-card/60">
-        <div className="flex flex-col gap-3 px-4 py-3 md:px-6">
-            <div className="flex flex-wrap items-center gap-2">
-                <span className="order-1 mr-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">{"Maya's story"}</span>
-                {#* Phones: one scrolling row under the label. Wider: inline and wrapping. *#}
-                <ol className="order-3 -mx-1 flex w-full min-w-0 flex-nowrap items-center gap-1.5 overflow-x-auto px-1 pb-1 md:order-2 md:mx-0 md:w-auto md:flex-1 md:flex-wrap md:overflow-visible md:px-0 md:pb-0">
-                    {for i in range(len(STORY_STEPS)) {
-                        <li key={STORY_STEPS[i]["short"]} className="flex shrink-0 items-center gap-1.5">
-                            <button type="button" aria-current={"step" if step == i + 1 else None}
-                                onClick={lambda { onStep(i + 1); }}
-                                className={cn("inline-flex min-h-10 items-center gap-2 whitespace-nowrap rounded-full border px-3 py-1.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                                    "border-primary bg-primary text-primary-foreground shadow-sm" if step == i + 1
-                                    else ("border-primary/40 bg-primary/10 text-foreground hover:bg-primary/20" if i + 1 < step
-                                    else "border-border bg-background text-muted-foreground hover:bg-accent hover:text-foreground"))}>
-                                <span className={cn("inline-flex size-6 items-center justify-center rounded-full text-xs font-bold",
-                                    "bg-primary-foreground text-primary" if step == i + 1 else "bg-muted text-foreground")}>
-                                    {i + 1 < step and <HugeiconsIcon icon={CheckmarkCircle02Icon} strokeWidth={2} className="size-4" />}
-                                    {i + 1 >= step and str(i + 1)}
-                                </span>
-                                {STORY_STEPS[i]["short"]}
-                            </button>
-                            {i < len(STORY_STEPS) - 1 and <span className="hidden h-px w-4 bg-border md:block" aria-hidden="true" />}
-                        </li>
-                    }}
-                </ol>
-                <div className="order-2 ml-auto flex items-center gap-1 md:order-3">
-                <Button variant="ghost" size="sm" disabled={busy != ""} onClick={lambda { onReset(); }}>
-                    <HugeiconsIcon icon={RotateLeft01Icon} strokeWidth={2} />{"Start over"}
-                </Button>
-                <Button variant="ghost" size="icon-sm" aria-label={"Show story guide" if collapsed else "Hide story guide"}
-                    aria-expanded={not collapsed} onClick={lambda { collapsed = not collapsed; }}>
-                    <HugeiconsIcon icon={ArrowDown01Icon if collapsed else ArrowUp01Icon} strokeWidth={2} />
-                </Button>
-                </div>
+    return <section aria-label="Maya's story, step by step" className="flex flex-col gap-4 rounded-3xl border border-border bg-card p-4 shadow-sm md:p-5">
+        <div className="flex items-start justify-between gap-3">
+            <div className="flex flex-col">
+                <span className="text-xs font-semibold uppercase tracking-wide text-brand">{"Follow the story"}</span>
+                <h2 className="font-display text-2xl leading-tight">{"What happened to Maya?"}</h2>
             </div>
-            {not collapsed and <div key={step}
-                className="flex flex-col gap-4 rounded-xl border border-border bg-background p-4 shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-300 motion-reduce:animate-none lg:flex-row lg:items-center lg:justify-between">
-                <div className="flex min-w-0 items-start gap-4">
-                    <span className="hidden size-12 shrink-0 items-center justify-center rounded-full bg-primary/15 text-primary sm:inline-flex" aria-hidden="true">
-                        <HugeiconsIcon icon={STORY_ICONS[step - 1]} strokeWidth={2} className="size-6" />
-                    </span>
-                    <div className="flex min-w-0 flex-col gap-1">
-                        <span className="text-xs font-semibold uppercase tracking-wide text-primary">{"Step " + str(step) + " of " + str(len(STORY_STEPS))}</span>
-                        <div className="flex items-center gap-1">
-                            <h2 className="font-display text-2xl leading-tight tracking-tight md:text-3xl">{current["title"]}</h2>
-                            <InfoTip label="More about this step" lines={[current["note"]]} />
-                        </div>
-                        <p className="max-w-3xl text-base text-muted-foreground md:text-lg">{current["caption"]}</p>
-                    </div>
-                </div>
-                <div className="flex shrink-0 flex-wrap items-center gap-2">
-                    <Button size="lg" className="h-11 px-5 text-base" disabled={busy != "" or action_done}
-                        onClick={lambda { onAction(step); }}>
-                        {action_done and <HugeiconsIcon icon={CheckmarkCircle02Icon} strokeWidth={2} />}
-                        {action_label}
-                    </Button>
-                    {step == 4 and <Button variant="outline" size="lg" className="h-11 px-4 text-base" onClick={lambda { onShowGraph(); }}>
-                        <HugeiconsIcon icon={Share08Icon} strokeWidth={2} />{"Show the graph"}
-                    </Button>}
-                    {step < len(STORY_STEPS) and <Button variant="ghost" size="lg" className="h-11 px-4 text-base" onClick={lambda { onStep(step + 1); }}>
-                        {"Next"}<HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} />
-                    </Button>}
-                </div>
-            </div>}
+            <Button variant="ghost" size="sm" disabled={busy != ""} onClick={lambda { onReset(); }}>
+                <HugeiconsIcon icon={RotateLeft01Icon} strokeWidth={2} />{"Start over"}
+            </Button>
         </div>
+        <ol className="relative flex flex-col gap-2">
+            <span className="absolute top-5 bottom-5 left-[1.3rem] w-0.5 bg-border" aria-hidden="true" />
+            {for i in range(len(STORY_STEPS)) {
+                <li key={STORY_STEPS[i]["short"]} className="relative">
+                    {step != i + 1 and <button type="button" onClick={lambda { onStep(i + 1); }}
+                        className="flex w-full items-center gap-3 rounded-2xl px-1.5 py-1.5 text-left transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                        <span className={cn("relative z-10 inline-flex size-9 shrink-0 items-center justify-center rounded-full text-sm font-bold shadow-sm ring-4 ring-card",
+                            STORY_DOT[i] if i + 1 < step else "bg-muted text-muted-foreground")}>
+                            {i + 1 < step and <HugeiconsIcon icon={CheckmarkCircle02Icon} strokeWidth={2.5} className="size-5" />}
+                            {i + 1 >= step and str(i + 1)}
+                        </span>
+                        <span className={cn("text-base font-medium", "text-foreground" if i + 1 < step else "text-muted-foreground")}>{STORY_STEPS[i]["short"]}</span>
+                    </button>}
+                    {step == i + 1 and <div aria-current="step"
+                        className={cn("flex flex-col gap-3 rounded-2xl border-2 p-3 animate-in fade-in slide-in-from-left-2 duration-300 motion-reduce:animate-none", STORY_SOFT[i])}>
+                        <div className="flex items-center gap-3">
+                            <span className={cn("relative z-10 inline-flex size-10 shrink-0 items-center justify-center rounded-full shadow-md ring-4 ring-card", STORY_DOT[i])}>
+                                <HugeiconsIcon icon={STORY_ICONS[i]} strokeWidth={2} className="size-5" />
+                            </span>
+                            <div className="flex min-w-0 flex-col">
+                                <span className={cn("text-xs font-bold uppercase tracking-wide", STORY_TEXT[i])}>{"Step " + str(i + 1) + " of " + str(len(STORY_STEPS))}</span>
+                                <div className="flex items-center gap-1">
+                                    <h3 className="font-display text-xl leading-tight md:text-2xl">{STORY_STEPS[i]["title"]}</h3>
+                                    <InfoTip label="More about this step" lines={[STORY_STEPS[i]["note"]]} />
+                                </div>
+                            </div>
+                        </div>
+                        <p className="text-base leading-relaxed text-foreground/85 md:text-lg">{STORY_STEPS[i]["caption"]}</p>
+                        <Button size="lg" className="h-12 w-full rounded-xl text-base shadow-md" disabled={busy != "" or action_done}
+                            onClick={lambda { onAction(step); }}>
+                            {action_done and <HugeiconsIcon icon={CheckmarkCircle02Icon} strokeWidth={2} />}
+                            {"Hospital report published" if action_done else ("Publishing..." if step == 3 and busy == "hospital" else STORY_STEPS[i]["action"])}
+                        </Button>
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                            {step == 4 and <Button variant="outline" size="lg" className="h-10 rounded-xl" onClick={lambda { onShowGraph(); }}>
+                                <HugeiconsIcon icon={Share08Icon} strokeWidth={2} />{"Show the graph"}
+                            </Button>}
+                            {step < len(STORY_STEPS) and <Button variant="ghost" size="lg" className="ml-auto h-10 rounded-xl" onClick={lambda { onStep(step + 1); }}>
+                                {"Next step"}<HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} />
+                            </Button>}
+                        </div>
+                    </div>}
+                </li>
+            }}
+        </ol>
     </section>;
 }

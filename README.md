@@ -181,15 +181,18 @@ location loop; no changes to the investigation snapshot fields or seed are neede
 
 ## Demo and checks
 
-**Guided story bar.** In the Maya story, a bar under the header walks through four
-steps: reported missing, same person?, hospital says safe, where did it come from?
-Each step switches to the right tab and shows a large caption; its button runs the
-real action (open the reports, open the match review, publish the prepared hospital
-report, scroll to the source check). The hospital step shows a large banner built
-from the stored alert, with the police report still listed beside it. **Start over**
-is the same Reset. The sun/moon button switches light and dark themes (remembered in
-this browser; projectors usually read better in light). The map legend sits inside
-the map; caveats are behind the (i) buttons and "How to read this map".
+**Presentation layout.** Light, warm theme by default (sun/moon toggle for dark
+navy; remembered in this browser). A hero states what Trace does with live counts
+from the snapshot (people, reports, organizations, alerts). Below, a sticky left rail
+holds the Maya story and family notifications; the right "stage" holds the five tabs.
+The story has four colour-coded steps: reported missing, same person?, hospital says
+safe, where did it come from? Each step switches the stage to the right tab; its big
+button runs the real action (open the reports, open the match review, publish the
+prepared hospital report, open the stored relay check). The hospital step shows a
+large banner built from the stored alert, with the police report still listed beside
+it. **Start over** is the same Reset. The map legend sits inside the map; caveats are
+behind the (i) buttons and "How to read this map". Brand tokens (`--brand`,
+`--story-match`, `--hero-*`) and the warm palette live in `styles/trace-tokens.css`.
 
 The detailed story, in order:
 

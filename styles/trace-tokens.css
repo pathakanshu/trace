@@ -31,11 +31,11 @@
   --status-neutral: oklch(0.55 0.01 260);
   --status-neutral-soft: oklch(0.55 0.01 260 / 0.12);
 
-  /* Map canvas */
-  --map-surface: oklch(0.97 0.003 260);
-  --map-grid: oklch(0.88 0.005 260);
-  --map-water: oklch(0.62 0.13 245 / 0.25);
-  --map-land: oklch(0.93 0.006 260);
+  /* Map canvas: soft blue around Nepal, warm sand land, clear blue rivers */
+  --map-surface: oklch(0.93 0.03 225);
+  --map-grid: oklch(0.83 0.03 75);
+  --map-water: oklch(0.6 0.14 240 / 0.45);
+  --map-land: oklch(0.97 0.025 85);
 
   /* Headline font (editorial serif, system stack: no extra package) */
   --font-display-stack: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
@@ -51,15 +51,87 @@
   --status-neutral: oklch(0.7 0.01 260);
   --status-neutral-soft: oklch(0.7 0.01 260 / 0.14);
 
-  --map-surface: oklch(0.17 0.004 260);
-  --map-grid: oklch(0.26 0.006 260);
-  --map-water: oklch(0.62 0.14 245 / 0.35);
-  --map-land: oklch(0.22 0.005 260);
+  --map-surface: oklch(0.2 0.035 255);
+  --map-grid: oklch(0.36 0.04 255);
+  --map-water: oklch(0.68 0.13 235 / 0.5);
+  --map-land: oklch(0.27 0.035 255);
 }
 
 /* Register tokens with Tailwind so classes like text-status-safe,
    bg-status-missing-soft, bg-map-surface and font-display exist. */
+/*
+  Trace brand layer. These override the generated base tokens from
+  global.css (which stays untouched and regenerable) with a warm, hopeful
+  palette: cream paper, deep navy ink, vivid indigo actions, and an orange
+  brand accent (jac.toml theme_color). Dark mode is deep navy, never black.
+*/
+:root {
+  --background: oklch(0.985 0.012 85);
+  --foreground: oklch(0.24 0.045 262);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.24 0.045 262);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.24 0.045 262);
+  --primary: oklch(0.52 0.2 265);
+  --primary-foreground: oklch(0.99 0.005 265);
+  --secondary: oklch(0.95 0.02 85);
+  --secondary-foreground: oklch(0.28 0.045 262);
+  --muted: oklch(0.955 0.015 85);
+  --muted-foreground: oklch(0.5 0.035 262);
+  --accent: oklch(0.94 0.035 265);
+  --accent-foreground: oklch(0.28 0.08 265);
+  --border: oklch(0.9 0.02 80);
+  --input: oklch(0.88 0.02 80);
+  --ring: oklch(0.6 0.17 265);
+
+  --brand: oklch(0.68 0.18 50);
+  --brand-soft: oklch(0.68 0.18 50 / 0.14);
+  --story-match: oklch(0.55 0.2 300);
+  --story-match-soft: oklch(0.55 0.2 300 / 0.12);
+  --hero-from: oklch(0.9 0.08 60);
+  --hero-to: oklch(0.9 0.06 235);
+}
+
+.dark {
+  --background: oklch(0.2 0.035 262);
+  --foreground: oklch(0.96 0.012 85);
+  --card: oklch(0.245 0.04 262);
+  --card-foreground: oklch(0.96 0.012 85);
+  --popover: oklch(0.26 0.04 262);
+  --popover-foreground: oklch(0.96 0.012 85);
+  --primary: oklch(0.7 0.16 265);
+  --primary-foreground: oklch(0.18 0.04 262);
+  --secondary: oklch(0.29 0.04 262);
+  --secondary-foreground: oklch(0.96 0.012 85);
+  --muted: oklch(0.28 0.035 262);
+  --muted-foreground: oklch(0.76 0.025 262);
+  --accent: oklch(0.32 0.06 265);
+  --accent-foreground: oklch(0.96 0.012 85);
+  --border: oklch(0.34 0.035 262);
+  --input: oklch(0.36 0.035 262);
+  --ring: oklch(0.7 0.16 265);
+
+  --brand: oklch(0.76 0.16 55);
+  --brand-soft: oklch(0.76 0.16 55 / 0.18);
+  --story-match: oklch(0.72 0.16 300);
+  --story-match-soft: oklch(0.72 0.16 300 / 0.18);
+  --hero-from: oklch(0.33 0.09 40);
+  --hero-to: oklch(0.3 0.08 250);
+}
+
+/* Hero band: two soft colour glows over the page background. */
+.trace-hero {
+  background:
+    radial-gradient(60rem 22rem at 0% 0%, var(--hero-from), transparent 70%),
+    radial-gradient(50rem 24rem at 100% 100%, var(--hero-to), transparent 70%),
+    var(--background);
+}
+
 @theme inline {
+  --color-brand: var(--brand);
+  --color-brand-soft: var(--brand-soft);
+  --color-story-match: var(--story-match);
+  --color-story-match-soft: var(--story-match-soft);
   --color-status-missing: var(--status-missing);
   --color-status-missing-soft: var(--status-missing-soft);
   --color-status-safe: var(--status-safe);

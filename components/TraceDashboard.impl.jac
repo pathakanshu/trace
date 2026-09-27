@@ -181,6 +181,8 @@ impl TraceDashboard.handleStoryStep(step: int) -> None {
     tab = story_tab(step);
     storyStep = step;
     activeTab = tab;
+    # Phones stack the rail above the stage; bring the changed view into sight.
+    if window.innerWidth < 1024 { scroll_to_later("stage"); }
     current = snapshot;
     if tab == "Map" and current {
         places = [p for p in current.locations if len(p.evidence) > 0];
