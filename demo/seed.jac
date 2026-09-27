@@ -5,6 +5,7 @@ seed_demo()  builds the starting graph:
     Maya Gurung -> Subscription (a fictional family member)
     "Maya G." (a possible duplicate record from a community report)
     two media items + a location, checked by EvidenceWalker
+    recorded investigations of both reports (REPLAYED, demo/recorded.jac)
 
 clear_demo() deletes only this demo incident’s unshared records.
 The hospital FOUND_SAFE claim is NOT seeded - the demo button adds it.
@@ -17,6 +18,7 @@ import from graph.nodes {
 # NOTE: every edge type you traverse (e.g. f"<-:About:<-") MUST be imported.
 import from graph.edges { Involves, Contains, About, Depicts, LocatedAt, HasSubscription, SupportedBy, HasOrganization }
 import from demo.reset { clear_incident }
+import from demo.recorded { load_recorded_investigations }
 import from walkers.ingest { IngestWalker }
 import from walkers.evidence { EvidenceWalker }
 import from walkers.watch { WatchWalker }
@@ -54,6 +56,7 @@ def seed_demo() -> None {
         claim_value="Last seen near the Bhote Koshi bridge",
         timestamp="2026-09-20T07:40:00",
         notes="Reported missing by family at district police post.",
+        original_content="Duty officer entry, Barhabise district police post, 20 September 07:40. I took this missing person report in person from Maya Gurung's family at the post. Maya Gurung, 24, was last seen near the Bhote Koshi bridge before the flood reached it. Case open; officers are checking the shelters.",
         source_reference="POLICE-DEMO-001", extraction_method="seeded_fixture"
     );
 
@@ -69,6 +72,7 @@ def seed_demo() -> None {
         claim_value="Seen near Tatopani market",
         timestamp="2026-09-20T12:05:00",
         notes="Volunteer relay message, unverified.",
+        original_content="Forwarded by the Tatopani volunteer desk: According to Nepal Police Demo, Maya G., 24, is missing after the flood and was last seen near the Bhote Koshi bridge. We have not seen her ourselves. Please look out for her around Tatopani market.",
         source_reference="COMMUNITY-DEMO-001", extraction_method="seeded_fixture"
     );
 
@@ -135,4 +139,7 @@ def seed_demo() -> None {
     # 5. Let the agents do their first pass.
     root spawn EvidenceWalker(incident_id=jid(incident));
     root spawn WatchWalker(incident_id=jid(incident));   # marks the seeded claims as already seen
+
+    # 6. Recorded Nemotron runs for the two seeded reports. No model call.
+    load_recorded_investigations(incident);
 }

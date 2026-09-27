@@ -175,9 +175,11 @@ node ActivityEntry {
 
 # A small cited report investigation. Structured step history lives in result_json.
 # Model observations never become source Claim nodes or change Person identity.
+# mode is LIVE for a run made on this server and REPLAYED for one loaded
+# from demo/recorded_investigations.json on reset.
 node InvestigationRun {
     has person_id: str, fingerprint: str, result_json: str,
-        created_at: str = "";
+        created_at: str = "", mode: str = "";
 }
 
 # Metadata and attributed contributions attached to a canonical Media record.

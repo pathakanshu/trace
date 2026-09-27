@@ -1,0 +1,160 @@
+{
+  "about": "Results of real Nemotron runs on the seeded reports. demo/recorded.jac replays them on reset. Re-record from live runs; never edit by hand.",
+  "runs": [
+    {
+      "label": "police report",
+      "mode": "LIVE",
+      "model": "nvidia_nim/nvidia/nemotron-3.5-lightning-30b-a3b",
+      "prompt_version": "report-lineage-v2",
+      "run_at": "2026-09-27T07:41:11+00:00",
+      "usage": {
+        "prompt_tokens": 284,
+        "completion_tokens": 17,
+        "total_tokens": 301
+      },
+      "usage_source": "provider",
+      "fingerprint": "e8f30126ed575f7da84a4edc57490603257ae5ccd7f343db763b2f997c2707c2",
+      "result": {
+        "status": "COMPLETED",
+        "message": "Attribution checked. This does not establish whether the report is true or independently corroborated.",
+        "mode": "LIVE",
+        "cached": false,
+        "person_id": "2197ade597424f04a5a2a62de929bd5d",
+        "model": "nvidia_nim/nvidia/nemotron-3.5-lightning-30b-a3b",
+        "prompt_version": "report-lineage-v2",
+        "run_at": "2026-09-27T07:41:11+00:00",
+        "usage": {
+          "prompt_tokens": 284,
+          "completion_tokens": 17,
+          "total_tokens": 301
+        },
+        "usage_source": "provider",
+        "fingerprint": "e8f30126ed575f7da84a4edc57490603257ae5ccd7f343db763b2f997c2707c2",
+        "trace": [
+          "Read the selected report from Nepal Police Demo.",
+          "Nemotron labeled the report's attribution DIRECT (advisory)."
+        ],
+        "citations": [
+          {
+            "claim_id": "3ae6d1f6aa504ed3a81c80f235a22a25",
+            "person_id": "2197ade597424f04a5a2a62de929bd5d",
+            "person_name": "Maya Gurung",
+            "source_id": "7c1bb9a83caf4c318e1980ae829faea7",
+            "source_name": "Nepal Police Demo",
+            "reported_at": "2026-09-20T07:40:00+00:00",
+            "ingested_at": "2026-09-27T07:41:11+00:00",
+            "assertion": "MISSING",
+            "excerpt": "Duty officer entry, Barhabise district police post, 20 September 07:40. I took this missing person report in person from Maya Gurung's family at the post. Maya Gurung, 24, was last seen near the Bhote Koshi bridge before the flood reached it. Case open; officers are checking the shelters.",
+            "reference": "POLICE-DEMO-001"
+          }
+        ],
+        "observations": [
+          {
+            "kind": "ATTRIBUTION",
+            "claim_id": "3ae6d1f6aa504ed3a81c80f235a22a25",
+            "attribution": "DIRECT",
+            "referenced_source": "NONE",
+            "usage": {
+              "prompt_tokens": 284,
+              "completion_tokens": 17,
+              "total_tokens": 301
+            },
+            "usage_source": "provider"
+          }
+        ],
+        "scope": "Selected report only; no media verification or identity decision.",
+        "run_id": "a863734da0254208abfc0511f6439c30"
+      }
+    },
+    {
+      "label": "community relay",
+      "mode": "LIVE",
+      "model": "nvidia_nim/nvidia/nemotron-3.5-lightning-30b-a3b",
+      "prompt_version": "report-lineage-v2",
+      "run_at": "2026-09-27T07:41:19+00:00",
+      "usage": {
+        "prompt_tokens": 558,
+        "completion_tokens": 31,
+        "total_tokens": 589
+      },
+      "usage_source": "provider",
+      "fingerprint": "f0bddd5bd8d74068362efbf0a48299b3db6d96999d1272ecdb5f238fbbbe46c4",
+      "result": {
+        "status": "NEEDS_REVIEW",
+        "message": "Review the proposed source relationship. Repeated reporting does not establish independent confirmation or matching identity.",
+        "mode": "LIVE",
+        "cached": false,
+        "person_id": "93c783f6673c4bbea8afe70f61db5d6b",
+        "model": "nvidia_nim/nvidia/nemotron-3.5-lightning-30b-a3b",
+        "prompt_version": "report-lineage-v2",
+        "run_at": "2026-09-27T07:41:19+00:00",
+        "usage": {
+          "prompt_tokens": 558,
+          "completion_tokens": 31,
+          "total_tokens": 589
+        },
+        "usage_source": "provider",
+        "fingerprint": "f0bddd5bd8d74068362efbf0a48299b3db6d96999d1272ecdb5f238fbbbe46c4",
+        "trace": [
+          "Read the selected report from Community Report Demo.",
+          "Nemotron labeled the report's attribution RELAY (advisory).",
+          "Jac retrieved the named source report: Nepal Police Demo. Person identities remain separate.",
+          "Nemotron's cited-source comparison: SUPPORTS (advisory)."
+        ],
+        "citations": [
+          {
+            "claim_id": "6f30875bc20c40008c69fe6338ab14f5",
+            "person_id": "93c783f6673c4bbea8afe70f61db5d6b",
+            "person_name": "Maya G.",
+            "source_id": "d3422f240bba4e1fb933ff90817e70e8",
+            "source_name": "Community Report Demo",
+            "reported_at": "2026-09-20T12:05:00+00:00",
+            "ingested_at": "2026-09-27T07:41:18+00:00",
+            "assertion": "SEEN_AT_LOCATION",
+            "excerpt": "Forwarded by the Tatopani volunteer desk: According to Nepal Police Demo, Maya G., 24, is missing after the flood and was last seen near the Bhote Koshi bridge. We have not seen her ourselves. Please look out for her around Tatopani market.",
+            "reference": "COMMUNITY-DEMO-001"
+          },
+          {
+            "claim_id": "f8b668c400b948229276227af3f8b922",
+            "person_id": "1d9d9342e7be474599409faa233579ca",
+            "person_name": "Maya Gurung",
+            "source_id": "e19545ce819f4a7e9f089c4b243d7761",
+            "source_name": "Nepal Police Demo",
+            "reported_at": "2026-09-20T07:40:00+00:00",
+            "ingested_at": "2026-09-27T07:41:18+00:00",
+            "assertion": "MISSING",
+            "excerpt": "Duty officer entry, Barhabise district police post, 20 September 07:40. I took this missing person report in person from Maya Gurung's family at the post. Maya Gurung, 24, was last seen near the Bhote Koshi bridge before the flood reached it. Case open; officers are checking the shelters.",
+            "reference": "POLICE-DEMO-001"
+          }
+        ],
+        "observations": [
+          {
+            "kind": "ATTRIBUTION",
+            "claim_id": "6f30875bc20c40008c69fe6338ab14f5",
+            "attribution": "RELAY",
+            "referenced_source": "Nepal Police Demo",
+            "usage": {
+              "prompt_tokens": 274,
+              "completion_tokens": 20,
+              "total_tokens": 294
+            },
+            "usage_source": "provider"
+          },
+          {
+            "kind": "SOURCE_COMPARISON",
+            "claim_id": "f8b668c400b948229276227af3f8b922",
+            "support": "SUPPORTS",
+            "usage": {
+              "prompt_tokens": 284,
+              "completion_tokens": 11,
+              "total_tokens": 295
+            },
+            "usage_source": "provider"
+          }
+        ],
+        "scope": "Selected report only; no media verification or identity decision.",
+        "run_id": "d4d0f2d56f774c5aba514c8a5b202a18"
+      }
+    }
+  ]
+}

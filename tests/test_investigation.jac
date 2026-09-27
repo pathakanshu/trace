@@ -9,7 +9,7 @@ import from unittest.mock { patch }
 import from jaclang.byllm.lib { MockLLM, MockRawResponse }
 import from services.trace { reset_demo, get_dashboard }
 import from walkers.ingest { IngestWalker }
-import from graph.nodes { Incident }
+import from graph.nodes { Incident, ActivityEntry }
 import from graph.edges { HasInvestigation }
 import from demo.seed { INCIDENT_NAME }
 
@@ -50,6 +50,23 @@ def read_ledger(path: str) -> dict {
         return json.load(handle);
     }
 }
+
+# Recorded runs would answer the seeded reports from cache, so tests of the
+# live path point the loader at a missing file. reset_demo reaches the loader
+# through module globals; patching that exact copy survives module eviction.
+def reset_with_recordings(path: str) -> None {
+    seed_globals: dict = getattr(reset_demo, "__globals__")["seed_demo"].__globals__;
+    loader_globals: dict = getattr(seed_globals["load_recorded_investigations"], "__globals__");
+    swap = patch.dict(loader_globals, {"RECORDED_PATH": path});
+    swap.start();
+    try {
+        reset_demo();
+    } finally {
+        swap.stop();
+    }
+}
+
+glob NO_RECORDINGS: str = "/nonexistent/recorded_investigations.json";
 
 def incident_runs -> int {
     incident = [root -->[?:Incident, name == INCIDENT_NAME]][0];
@@ -132,7 +149,7 @@ test "out-of-menu or wrong-type output fails and nothing is saved" {
     for reply in ['{"attribution": "DIRECT", "referenced_source": "Somebody Else"}',
         '{"attribution": "MERGE_PEOPLE", "referenced_source": "NONE"}',
         '{"label": "YES"}'] {
-        reset_demo();
+        reset_with_recordings(NO_RECORDINGS);
         snap = get_dashboard();
         with TemporaryDirectory() as folder {
             path: str = str(folder) + "/ledger.json";
@@ -154,7 +171,7 @@ test "out-of-menu or wrong-type output fails and nothing is saved" {
 test "a direct report completes, is cached on repeat and cleared by reset" {
     import from services.investigation { run_report_check }
     import from integrations.nemotron { evaluate_attribution, NEMOTRON_MODEL }
-    reset_demo();
+    reset_with_recordings(NO_RECORDINGS);
     snap = get_dashboard();
     with TemporaryDirectory() as folder {
         path: str = str(folder) + "/ledger.json";
@@ -176,7 +193,7 @@ test "a direct report completes, is cached on repeat and cleared by reset" {
         assert calls_made(mock, 1) == 1 and read_ledger(path)["requests"] == 1;
     }
     assert incident_runs() == 1;
-    reset_demo();
+    reset_with_recordings(NO_RECORDINGS);
     assert incident_runs() == 0;
 }
 
@@ -226,9 +243,10 @@ test "the content fingerprint is identical across two resets of the same seed" {
     prints: list[str] = [];
     ids: list[str] = [];
     for _ in range(2) {
-        reset_demo();
+        reset_with_recordings(NO_RECORDINGS);
         snap = get_dashboard();
         result = run_report_check(snap.incident_id, snap.people[0].id, attribute=direct);
+        assert result["mode"] == "LIVE";
         prints.append(result["fingerprint"]);
         ids.append(snap.people[0].id);
         assert result["usage_source"] == "provider";
@@ -290,4 +308,77 @@ test "a call that overruns the wall-clock limit fails and stays counted" {
         assert result["status"] == "FAILED" and "20 seconds" in result["message"];
         assert read_ledger(path)["requests"] == 1;
     }
+}
+
+def seeded_fixture -> dict {
+    with open("demo/recorded_investigations.json") as handle {
+        return json.load(handle);
+    }
+}
+
+def replayed_runs -> list {
+    incident = [root -->[?:Incident, name == INCIDENT_NAME]][0];
+    return [incident ->:HasInvestigation:->];
+}
+
+test "reset replays both recorded runs with the same fingerprints every time" {
+    import from integrations.nemotron { NEMOTRON_MODEL }
+    expected = sorted([r["fingerprint"] for r in seeded_fixture()["runs"]]);
+    for _ in range(2) {
+        reset_demo();
+        runs = replayed_runs();
+        assert len(runs) == 2;
+        assert sorted([r.fingerprint for r in runs]) == expected;
+        results = [json.loads(str(r.result_json)) for r in runs];
+        assert all([r.mode == "REPLAYED" for r in runs]);
+        assert all([res["mode"] == "REPLAYED" and res["model"] == NEMOTRON_MODEL for res in results]);
+        assert sorted([res["status"] for res in results]) == ["COMPLETED", "NEEDS_REVIEW"];
+    }
+}
+
+test "a recording whose fingerprint no longer matches is skipped with an activity entry" {
+    fixture = seeded_fixture();
+    fixture["runs"][0]["fingerprint"] = "0" * 64;
+    with TemporaryDirectory() as folder {
+        path: str = str(folder) + "/recorded.json";
+        with open(path, "w") as handle { json.dump(fixture, handle); }
+        reset_with_recordings(path);
+    }
+    runs = replayed_runs();
+    assert len(runs) == 1 and runs[0].fingerprint == fixture["runs"][1]["fingerprint"];
+    incident = [root -->[?:Incident, name == INCIDENT_NAME]][0];
+    skipped = [a for a in [root -->[?:ActivityEntry]]
+        if a.incident_id == jid(incident) and a.message.startswith("Skipped recorded investigation")];
+    assert len(skipped) == 1;
+}
+
+test "investigating a replayed report returns the saved run without a call" {
+    import from services.investigation { run_report_check, collect_reports }
+    import from integrations.nemotron { evaluate_attribution, evaluate_support }
+    reset_demo();
+    incident = [root -->[?:Incident, name == INCIDENT_NAME]][0];
+    replayed_ids = sorted([jid(r) for r in replayed_runs()]);
+    with TemporaryDirectory() as folder {
+        path: str = str(folder) + "/ledger.json";
+        def attribute(excerpt: str, names: list[str], passphrase: str) -> dict {
+            return evaluate_attribution(excerpt, names, passphrase, path);
+        }
+        def compare(excerpt: str, referenced: str, passphrase: str) -> dict {
+            return evaluate_support(excerpt, referenced, passphrase, path);
+        }
+        mock = mock_replies(['{"attribution": "DIRECT", "referenced_source": "NONE"}']);
+        seen_runs: list[str] = [];
+        for report in collect_reports(incident) {
+            result = with_model(mock, LIVE_ENV, lambda -> dict {
+                return run_report_check(jid(incident), report["person_id"], claim_id=report["claim_id"],
+                    passphrase="test-pass", attribute=attribute, compare=compare);
+            });
+            assert result["mode"] == "CACHED" and result["cached"];
+            assert result["citations"][0]["claim_id"] == report["claim_id"];
+            seen_runs.append(result["run_id"]);
+        }
+        assert sorted(seen_runs) == replayed_ids;
+        assert calls_made(mock, 1) == 0 and not os.path.exists(path);
+    }
+    assert len(replayed_runs()) == 2;
 }

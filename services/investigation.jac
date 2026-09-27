@@ -42,17 +42,13 @@ def total_usage(observations: list[dict]) -> dict {
     return usage;
 }
 
-# attribute and compare are private test seams with the signatures of
-# evaluate_attribution and evaluate_support. RPC accepts IDs and the passphrase only.
-def run_report_check(incident_id: str, person_id: str, claim_id: str = "", passphrase: str = "",
-    attribute: any = None, compare: any = None) -> dict {
-    attribute = attribute or evaluate_attribution;
-    compare = compare or evaluate_support;
-    incidents = [i for i in [root -->[?:Incident]] if jid(i) == incident_id];
-    if not incidents { return {"status": "FAILED", "message": "Incident changed; refresh before investigating."}; }
-    incident = incidents[0];
-    people = [p for p in [incident ->:Involves:->] if jid(p) == person_id];
-    if not people { return {"status": "FAILED", "message": "Select a person in this incident."}; }
+"""Every claim in the incident with exactly one source, as a report record.
+
+Recorded runs are matched against the same records, so replay and live
+investigation agree on what a report and its fingerprint are.
+"""
+def collect_reports(incident: Incident) -> list[dict] {
+    incident_id = jid(incident);
     records: list[dict] = [];
     for person in [incident ->:Involves:->] {
         for claim in [person <-:About:<-] {
@@ -66,6 +62,34 @@ def run_report_check(incident_id: str, person_id: str, claim_id: str = "", passp
                 "reference": claim.source_reference});
         }
     }
+    return records;
+}
+
+"""Other sources named in the selected report's text, keyed by source id."""
+def named_sources(selected_report: dict, records: list[dict]) -> dict {
+    # Only explicitly named source names enter the menu. Never guess a source URL.
+    by_source: dict = {};
+    for record in records {
+        name = record["source_name"];
+        if record["source_id"] != selected_report["source_id"] and len(name) >= 4 and name.lower() in selected_report["excerpt"].lower() {
+            by_source[record["source_id"]] = {"id": record["source_id"], "name": name};
+        }
+    }
+    return by_source;
+}
+
+# attribute and compare are private test seams with the signatures of
+# evaluate_attribution and evaluate_support. RPC accepts IDs and the passphrase only.
+def run_report_check(incident_id: str, person_id: str, claim_id: str = "", passphrase: str = "",
+    attribute: any = None, compare: any = None) -> dict {
+    attribute = attribute or evaluate_attribution;
+    compare = compare or evaluate_support;
+    incidents = [i for i in [root -->[?:Incident]] if jid(i) == incident_id];
+    if not incidents { return {"status": "FAILED", "message": "Incident changed; refresh before investigating."}; }
+    incident = incidents[0];
+    people = [p for p in [incident ->:Involves:->] if jid(p) == person_id];
+    if not people { return {"status": "FAILED", "message": "Select a person in this incident."}; }
+    records = collect_reports(incident);
     person_reports = [r for r in records if r["person_id"] == person_id and (not claim_id or r["claim_id"] == claim_id)];
     person_reports.sort(key=lambda (r: dict) -> tuple { return (r["ingested_at"], r["claim_id"]); });
     if not person_reports { return {"status": "PARTIAL", "message": "No attributed report available for this person."}; }
@@ -76,14 +100,7 @@ def run_report_check(incident_id: str, person_id: str, claim_id: str = "", passp
     if not selected_report["excerpt"] or len(selected_report["excerpt"]) > 3000 {
         return {"status": "PARTIAL", "message": "Original report text is missing or too long for this check; inspect the complete source."};
     }
-    # Only explicitly named source names enter the menu. Never guess a source URL.
-    by_source: dict = {};
-    for record in records {
-        name = record["source_name"];
-        if record["source_id"] != selected_report["source_id"] and len(name) >= 4 and name.lower() in selected_report["excerpt"].lower() {
-            by_source[record["source_id"]] = {"id": record["source_id"], "name": name};
-        }
-    }
+    by_source = named_sources(selected_report, records);
     source_ids = sorted(by_source.keys());
     if len(source_ids) > 8 {
         return {"status": "PARTIAL", "message": "Too many possible source references; choose a report for manual review."};
@@ -155,7 +172,7 @@ def run_report_check(incident_id: str, person_id: str, claim_id: str = "", passp
     # Retryable outcomes are not saved; completed and review results are.
     if status != "PARTIAL" {
         run = InvestigationRun(person_id=person_id, fingerprint=fingerprint,
-            result_json=json.dumps(result), created_at=result["run_at"]);
+            result_json=json.dumps(result), created_at=result["run_at"], mode="LIVE");
         incident +>:HasInvestigation():+> run;
         result["run_id"] = jid(run);
     }
