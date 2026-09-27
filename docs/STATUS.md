@@ -34,13 +34,13 @@ Next: pitch, backup video, Devpost.
 
 ## Anshu (map, integration)
 
-Working on: held-out pair benchmark audit on `codex/test-data`:
-`tools/test_data/audit_identity_pairs.py` + tests, strict audit/report and private
-repair/README notes. Check all positive combinations, negative labels, cited
-references and same-name/age cases with indistinguishable supplied context.
-Private oracle normalization ec602dc is pushed: all 1,000 groups retain IDs,
-membership and age; 50 initial points / 950 unknowns are explicit. 91 tooling
-tests pass across schema/Pillow environments. No public record/media changes.
+Working on: last legacy validator/replay-plan checks on `codex/test-data`:
+`tools/test_data/audit_review_plan.py` + tests, `validate_dataset.py` dependency
+guard, strict audit/report and README/repair notes. Reject stale schema-result
+fallback when jsonschema is absent; diagnose two cyclic planned confirmations
+(80 reviews currently imply 78 forest joins). No replay execution or public edits.
+Pair audit 32eebe9 pushed: labels/coverage pass, but 20 same-name/age negatives
+have indistinguishable supplied context. 98 tooling tests pass (95 + 3 decoder).
 
 App handoff: all four overnight tasks complete; draft PR #4 ready:
 https://github.com/pathakanshu/trace/pull/4 (branch `codex/anshu-night`).
@@ -66,9 +66,9 @@ ab3fc56. No Linguist overrides/exclusions added. Not organizer eligibility proof
 
 Corpus published on origin/codex/test-data: e710475 control pack (26 records),
 23f81dd 40 cited queries, a65364f checkpoint diagnostics, fb64b72 40 concrete
-negative cases. **91 distinct tooling tests pass across schema/Pillow environments**
-(88 + three separately run decoder checks). Primary 8,027 records and binary
-bundle are unchanged. Strict audit: **17 pass / 13 fail / 2 blocked**.
+negative cases. **98 distinct tooling tests pass across schema/Pillow environments**
+(95 + three separately run decoder checks). Primary 8,027 records and binary
+bundle are unchanged. Strict audit: **18 pass / 14 fail / 2 blocked**.
 New measured defects: T+72 fixture summary is 353 missing / 547 safe / 50 injured /
 50 unresolved, target 650 / 250 / 50 / 50. The generator assigns 297 safe follow-ups
 outside its intended cohort. Six death rumors lack required equal/unknown-time
