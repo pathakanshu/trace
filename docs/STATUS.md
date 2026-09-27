@@ -34,15 +34,15 @@ Next: pitch, backup video, Devpost.
 
 ## Anshu (map, integration)
 
-Working on: candidate raw-envelope generation in
-`tools/test_data/generate_catalog.py`, `test_generator_cohorts.py` and data docs.
-Use the specified publisher/reference/original_content/entries fields and precise
-entry locators; test only temporary raw output. Published source bytes stay intact.
-Cohort fix 971066e is pushed: temporary 1,800-source/3,600-claim generation passes
-all seven targets and ten rumor-opposition cases, exact quotas/schema/hashes,
-allocated IDs and a deterministic second run. Main generator refuses nonempty
-catalog/raw output. Delivered corpus still fails its old cohort/rumor checks.
-171 tests pass (156 + 15 Pillow); delivered audit 24/15/2, media 11/0/1.
+Working on: candidate vote/follower generation in
+`tools/test_data/generate_catalog.py`, `test_generator_community.py` and docs.
+Select distinct non-author voters, keep vote times after submissions, and give
+one hero Person two active followers without changing subscription quotas.
+Test candidate objects only; published votes/subscriptions remain untouched.
+948c5e4 is remotely rehearsed: clean clone, all 400 restored assets, 174 passing
+tooling tests, exact published audit reproduction (24/15/2; media 11/0/1).
+No tracked clone changes or .jac store. Candidate raw generation now passes all
+1,800 envelope/hash and 3,600 claim-entry checks; no delivered reports rewritten.
 
 App handoff: all four overnight tasks complete; draft PR #4 ready:
 https://github.com/pathakanshu/trace/pull/4 (branch `codex/anshu-night`).
@@ -68,8 +68,8 @@ ab3fc56. No Linguist overrides/exclusions added. Not organizer eligibility proof
 
 Corpus published on origin/codex/test-data: e710475 control pack (26 records),
 23f81dd 40 cited queries, a65364f checkpoint diagnostics, fb64b72 40 concrete
-negative cases. **171 distinct tooling tests pass across schema/Pillow environments**
-(156 + fifteen separately run media checks). Primary count stays 8,027; only 200 media creation-time fields were corrected
+negative cases. **174 distinct tooling tests pass across schema/Pillow environments**
+(159 + fifteen separately run media checks). Primary count stays 8,027; only 200 media creation-time fields were corrected
 from the original asset-run receipt. Source records and binary bundle are unchanged. Strict audit: **24 pass / 15 fail / 2 blocked**.
 New measured defects: T+72 fixture summary is 353 missing / 547 safe / 50 injured /
 50 unresolved, target 650 / 250 / 50 / 50. The generator assigns 297 safe follow-ups
@@ -157,3 +157,5 @@ Working on: (fill in)
 - 07:02 codex/test-data 918d5b6: 200 per-Media usage records, original terms and unknown encoder version preserved; 162 tests. Preparing generator cohort fix only in temporary output; published source repair still needs version coordination.
 
 - 07:06 codex/test-data 971066e: temporary candidate now meets every checkpoint and rumor constraint; 171 tests. Published reports untouched and regeneration guarded. Candidate exact raw-envelope generation next.
+
+- 07:11 codex/test-data 948c5e4: 174 tests and both audits reproduced from clean remote clone + restored release assets. Candidate raw envelopes pass; delivered originals remain legacy. Candidate voter/follower fixes next.
