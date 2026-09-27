@@ -31,7 +31,7 @@ def:pub MapLegend(showPins: bool, showHeat: bool) -> JsxElement {
             {"Legend"}
             <HugeiconsIcon icon={ArrowDown01Icon if open else ArrowUp01Icon} strokeWidth={2} className="size-4" />
         </button>
-        <div hidden={not open} className="flex flex-col gap-2.5 border-t border-border px-3 pt-2.5 pb-3 text-sm">
+        <div hidden={not open} className="flex flex-col gap-2 border-t border-border px-3 pt-2 pb-2.5 text-xs">
             {showPins and <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
                 {for status in ["MISSING", "REVIEW", "FOUND_SAFE", "UNKNOWN"] {
                     <span key={status} className="inline-flex items-center gap-2">
@@ -47,8 +47,10 @@ def:pub MapLegend(showPins: bool, showHeat: bool) -> JsxElement {
                 <span className="text-xs text-muted-foreground">{"More"}</span>
             </div>}
             <span className="inline-flex items-center gap-2"><span className="h-1 w-6 shrink-0 rounded-full bg-status-warning" aria-hidden="true" />{"Flooded river: Bhote Koshi"}</span>
-            <span className="inline-flex items-center gap-2"><span className="h-0.5 w-6 shrink-0 bg-map-water" aria-hidden="true" />{"Other rivers"}</span>
-            <span className="inline-flex items-center gap-2"><span className="h-0.5 w-6 shrink-0 bg-primary/60" aria-hidden="true" />{"Sindhupalchok district"}</span>
+            <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
+                <span className="inline-flex items-center gap-2"><span className="h-0.5 w-5 shrink-0 bg-map-water" aria-hidden="true" />{"Other rivers"}</span>
+                <span className="inline-flex items-center gap-2"><span className="h-0.5 w-5 shrink-0 bg-primary/60" aria-hidden="true" />{"District line"}</span>
+            </div>
             <div className="flex flex-col gap-1.5 border-t border-border pt-2 text-xs text-muted-foreground">
                 <p className="break-words" aria-label="River corridor context">{"River line from today's OpenStreetMap, not the measured 2016 flood."}</p>
                 {len(caveats) > 0 and <details>

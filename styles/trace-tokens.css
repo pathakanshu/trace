@@ -31,8 +31,8 @@
   --status-neutral: oklch(0.55 0.01 260);
   --status-neutral-soft: oklch(0.55 0.01 260 / 0.12);
 
-  /* Map canvas: soft blue around Nepal, warm sand land, clear blue rivers */
-  --map-surface: oklch(0.93 0.03 225);
+  /* Map canvas: muted stone outside Nepal, warm sand land, clear blue rivers */
+  --map-surface: oklch(0.9 0.012 80);
   --map-grid: oklch(0.83 0.03 75);
   --map-water: oklch(0.6 0.14 240 / 0.45);
   --map-land: oklch(0.97 0.025 85);
@@ -51,7 +51,7 @@
   --status-neutral: oklch(0.7 0.01 260);
   --status-neutral-soft: oklch(0.7 0.01 260 / 0.14);
 
-  --map-surface: oklch(0.2 0.035 255);
+  --map-surface: oklch(0.18 0.02 262);
   --map-grid: oklch(0.36 0.04 255);
   --map-water: oklch(0.68 0.13 235 / 0.5);
   --map-land: oklch(0.27 0.035 255);

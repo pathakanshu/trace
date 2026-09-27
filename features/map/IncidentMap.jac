@@ -168,9 +168,9 @@ def make_pin(label: str, location_id: str, status: str, on_select: Callable[[str
     el.addEventListener("click", lambda { on_select(location_id); });
     el.className = "flex cursor-pointer flex-row items-center gap-1 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
     dot: any = document.createElement("span");
-    dot.className = "block size-3.5 rounded-full border-2 border-background shadow " + pin_dot(status);
+    dot.className = "block size-4 rounded-full border-2 border-background shadow-md " + pin_dot(status);
     tag: any = document.createElement("span");
-    tag.className = "whitespace-nowrap rounded border border-border bg-card/95 px-1.5 py-0.5 text-[10px] font-medium text-foreground shadow-sm";
+    tag.className = "whitespace-nowrap rounded-md border border-border bg-card/95 px-2 py-0.5 text-xs font-semibold text-foreground shadow-sm";
     tag.textContent = label;
     if label_left { el.appendChild(tag); el.appendChild(dot); }
     else { el.appendChild(dot); el.appendChild(tag); }
@@ -309,9 +309,9 @@ def:pub IncidentMap(locations: list[LocationView], people: list[PersonView], act
             loc = pin_places[index];
             label_left = index % 2 == 1;
             # Alternate labels around nearby demo pins; the dot stays at its true
-            # projected coordinate (half the 14px dot is compensated by offset).
+            # projected coordinate (half the 16px dot is compensated by offset).
             marker: any = new(Marker, {"element": make_pin(loc.name, loc.id, pin_status(linked_people(loc, people)), select_location, label_left),
-                "anchor": "right" if label_left else "left", "offset": [7 if label_left else -7, 0]});
+                "anchor": "right" if label_left else "left", "offset": [8 if label_left else -8, 0]});
             marker.setLngLat([loc.longitude, loc.latitude]).addTo(map_obj);
             fresh.append(marker);
         }

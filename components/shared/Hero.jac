@@ -28,13 +28,13 @@ def:pub Hero(snapshot: DashboardSnapshot) -> JsxElement {
     for p in snapshot.people { reports = reports + len(p.claims); }
     alerts = len(snapshot.alerts);
     return <section aria-label="About this demo" className="trace-hero border-b border-border">
-        <div className="mx-auto grid max-w-[1600px] gap-6 px-4 py-8 md:px-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:py-10">
+        <div className="mx-auto grid max-w-[1600px] gap-6 px-4 py-7 md:px-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
             <div className="flex max-w-3xl flex-col gap-3">
                 <span className="inline-flex w-fit items-center gap-2 rounded-full border border-border bg-card/80 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                     <span className="size-2 rounded-full bg-brand" aria-hidden="true" />
                     {snapshot.incident_name + " · fictional people"}
                 </span>
-                <h2 className="font-display text-4xl leading-[1.05] tracking-tight text-balance md:text-5xl xl:text-6xl">
+                <h2 className="font-display text-4xl leading-[1.05] tracking-tight text-balance md:text-5xl">
                     {"After a flood, reports pour in. "}<span className="text-brand">{"Trace shows what's known, and who said it."}</span>
                 </h2>
                 <p className="max-w-2xl text-lg text-muted-foreground">

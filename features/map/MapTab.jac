@@ -29,7 +29,7 @@ def:pub MapTab(snapshot: DashboardSnapshot, onRefresh: Callable[[], any], active
     selected = [place for place in snapshot.locations if place.id == selectedId];
     return <div className="flex flex-col gap-5">
         <SectionHeading title="Map" subtitle="Tap a pin or a place name to see who reported what, and when." />
-        <div className="relative h-[55svh] min-h-80">
+        <div className="relative h-[64svh] min-h-96">
             <IncidentMap locations={snapshot.locations} people={snapshot.people} active={active} focusLocationId={focusLocationId} focusRequest={focusRequest} onSelect={choose_place} reportGroups={groups} onSelectSettlement={choose_settlement} onCorridorReady={lambda (features: list) { settlementAnchors = features; }} />
             <MapLegend showPins={show_places} showHeat={len(groups) > 0} />
         </div>
