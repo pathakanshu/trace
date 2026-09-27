@@ -58,3 +58,4 @@ Working on: (fill in)
 - 03:40 main 2cf7cbe: Nemotron report check replaces the old provider.
 - 03:55 main b71547e: map shows sourced current status (Anshu).
 - 04:05 main 0233fca: seeded reports replay recorded Nemotron runs on Reset.
+- 04:10 main 0b23355: README demo story and model config, eval table (live cases pending), deploy checklist.
