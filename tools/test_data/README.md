@@ -42,7 +42,7 @@ it does not fall back to a stale schema report when jsonschema is unavailable.
 
 Run its own offline checks with:
 `python3 -m unittest discover -s tools/test_data -p test_contract_audit.py`.
-The current corpus audit has 17 pass / 13 fail / 2 blocked; failures are intentional
+The current corpus audit has 18 pass / 14 fail / 2 blocked; failures are intentional
 findings in the partial dataset, not successful runtime behavior.
 
 ## Isolated control pack
@@ -116,8 +116,8 @@ cases use analysis without publishing: hostile text stays source data. None of
 these eight runtime cases has run; no agent response or success is prefilled.
 No nonexistent replay-action IDs are used as prerequisites.
 
-Actual tooling results: **91 distinct tests pass across two environments**.
-The schema environment runs 88 and explicitly skips three Pillow tests. Run the
+Actual tooling results: **98 distinct tests pass across two environments**.
+The schema environment runs 95 and explicitly skips three Pillow tests. Run the
 three decoder checks with a Pillow-equipped tooling Python:
 `python3 -m unittest discover -s tools/test_data -p test_negative_media.py`.
 That separate run passes all three. Do not count skipped decoder checks as passes
@@ -211,3 +211,16 @@ rejected fabricated/extra decision fields. Three additional writer tests cover
 repeat byte/mtime preservation, rejected escaping paths and non-finite output.
 Query/negative/identity writers share this confined idempotent output routine.
 The generator hookup now preserves these contract-shaped private identities.
+
+## Held-out identity benchmark evidence
+
+The 250 pair IDs are unique and enumerate all 165 positive combinations plus
+85 negatives; labels match private membership, citations resolve, and 20 negatives
+share a known name and age. However, all 20 have identical supplied descriptions,
+assertions, observation times and geographic geometry. Different Source/Person/
+Location IDs alone do not distinguish identities. They cannot support the intended
+context-based rejection scenario as authored. The audit reports this defect.
+Seven tests cover correct coverage, flipped labels, reversed duplicates, missing
+positive pairs/citations and identical versus changed contextual input. This is
+an exact-context diagnostic; different wording is not proof of distinguishability.
+No actual identity review or resolver result was generated.

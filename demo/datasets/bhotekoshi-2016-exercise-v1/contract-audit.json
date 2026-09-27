@@ -1,10 +1,10 @@
 {
   "dataset_id": "bhotekoshi-2016-exercise-v1",
-  "generated_at": "2026-09-27T09:57:34Z",
+  "generated_at": "2026-09-27T10:01:41Z",
   "tools": [
     {
       "name": "tools/test_data/audit_contracts.py",
-      "version": "1.8"
+      "version": "1.9"
     },
     {
       "name": "jsonschema",
@@ -661,6 +661,61 @@
       ]
     },
     {
+      "rule_id": "identity_pair_labels_and_coverage",
+      "status": "pass",
+      "observed": {
+        "failure_count": 0,
+        "examples": [],
+        "pairs": 250,
+        "positive": 165,
+        "negative": 85,
+        "same_name_and_age_negatives": 20,
+        "indistinguishable_cited_context": 20
+      },
+      "expected": "All 165 positive combinations, 85 unique negatives, correct private labels, real citations and 20 known name/age hard negatives",
+      "evidence_paths": [
+        "tests/fixtures/bhotekoshi-2016-exercise-v1/oracle/identity-pairs.jsonl",
+        "tests/fixtures/bhotekoshi-2016-exercise-v1/oracle/identities.jsonl"
+      ],
+      "limitations": [
+        "Held-out labels are evaluator-only; no runtime identity decisions were made."
+      ]
+    },
+    {
+      "rule_id": "hard_negative_distinguishing_context",
+      "status": "fail",
+      "observed": {
+        "failure_count": 20,
+        "examples": [
+          "pair-000166: same name/age and indistinguishable supplied description, assertions, observation times and geometry",
+          "pair-000167: same name/age and indistinguishable supplied description, assertions, observation times and geometry",
+          "pair-000168: same name/age and indistinguishable supplied description, assertions, observation times and geometry",
+          "pair-000169: same name/age and indistinguishable supplied description, assertions, observation times and geometry",
+          "pair-000170: same name/age and indistinguishable supplied description, assertions, observation times and geometry",
+          "pair-000171: same name/age and indistinguishable supplied description, assertions, observation times and geometry",
+          "pair-000172: same name/age and indistinguishable supplied description, assertions, observation times and geometry",
+          "pair-000173: same name/age and indistinguishable supplied description, assertions, observation times and geometry",
+          "pair-000174: same name/age and indistinguishable supplied description, assertions, observation times and geometry",
+          "pair-000175: same name/age and indistinguishable supplied description, assertions, observation times and geometry",
+          "pair-000176: same name/age and indistinguishable supplied description, assertions, observation times and geometry",
+          "pair-000177: same name/age and indistinguishable supplied description, assertions, observation times and geometry"
+        ],
+        "pairs": 250,
+        "positive": 165,
+        "negative": 85,
+        "same_name_and_age_negatives": 20,
+        "indistinguishable_cited_context": 20
+      },
+      "expected": "Same-name/age hard negatives must not have identical supplied contextual evidence",
+      "evidence_paths": [
+        "tests/fixtures/bhotekoshi-2016-exercise-v1/oracle/identity-pairs.jsonl",
+        "demo/datasets/bhotekoshi-2016-exercise-v1/records"
+      ],
+      "limitations": [
+        "Conservative exact-context diagnostic only. Different text/context does not prove distinguishability or authorize automatic rejection; source/record IDs alone are not distinguishing evidence."
+      ]
+    },
+    {
       "rule_id": "query_evidence_and_cutoffs",
       "status": "pass",
       "observed": {
@@ -861,8 +916,8 @@
     }
   ],
   "summary": {
-    "pass": 17,
-    "fail": 13,
+    "pass": 18,
+    "fail": 14,
     "blocked": 2
   }
 }

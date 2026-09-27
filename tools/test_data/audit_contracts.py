@@ -243,6 +243,22 @@ def run_audit(root):
         [rel(identity_path), rel(data / "records/person"), rel(data / "records/claim")],
         ["50 existing initial point locations and 950 unknown initial locations; the geographic quota remains blocked. Private labels are not runtime identity decisions."])
 
+    pair_path = fixtures / "oracle/identity-pairs.jsonl"
+    try:
+        from audit_identity_pairs import audit_pairs
+        label_errors, evidence_errors, pair_counts = audit_pairs(read_jsonl(pair_path), read_jsonl(identity_path),
+            {row["id"]: row for row in records}, json.loads((root / "demo/spec/quotas.json").read_text())["identity_oracle"])
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        label_errors = [str(error).replace(str(root), "<repo>")]
+        evidence_errors = ["Pair evidence could not be evaluated"]
+        pair_counts = {}
+    add("identity_pair_labels_and_coverage", label_errors, "All 165 positive combinations, 85 unique negatives, correct private labels, real citations and 20 known name/age hard negatives",
+        [rel(pair_path), rel(identity_path)], ["Held-out labels are evaluator-only; no runtime identity decisions were made."])
+    checks[-1]["observed"].update(pair_counts)
+    add("hard_negative_distinguishing_context", evidence_errors, "Same-name/age hard negatives must not have identical supplied contextual evidence",
+        [rel(pair_path), rel(data / "records")], ["Conservative exact-context diagnostic only. Different text/context does not prove distinguishability or authorize automatic rejection; source/record IDs alone are not distinguishing evidence."])
+    checks[-1]["observed"].update(pair_counts)
+
     query_path = fixtures / "queries.jsonl"
     query_errors = []
     try:
@@ -356,7 +372,7 @@ def run_audit(root):
     summary = dict(Counter(check["status"] for check in checks))
     summary = {status: summary.get(status, 0) for status in ("pass", "fail", "blocked")}
     return {"dataset_id": DATASET, "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "tools": [{"name": "tools/test_data/audit_contracts.py", "version": "1.8"}, {"name": "jsonschema", "version": version("jsonschema")}],
+            "tools": [{"name": "tools/test_data/audit_contracts.py", "version": "1.9"}, {"name": "jsonschema", "version": version("jsonschema")}],
             "checks": checks, "summary": summary}
 
 

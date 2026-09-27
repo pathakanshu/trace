@@ -37,6 +37,7 @@ of historical missing people.
 | Rumor uncertainty | Six of ten death-rumor claims lack available equal-time or unknown-time opposing status | Supply actual attributed opposing evidence/challenges; keep every rumor unconfirmed |
 | Release dependencies | 153 references point to later records | Repair release batches or an explicitly agreed representation; importer ordering alone cannot expose future information |
 | Raw JSON reports | 1,260 old envelopes fail the specified publisher/reference/content/entries shape | Coordinate a provenance-preserving conversion/adapter; all 1,800 existing raw hashes match and originals must remain intact |
+| Identity benchmark | All 165 positive/85 negative labels and citations are correct, but 20 same-name/age negatives have indistinguishable supplied context | Supply attributed distinguishing evidence; do not score forced rejections from private labels alone |
 | Votes | 360 self-votes; 120 duplicate contributor/contribution pairs | Use distinct attributable non-author voters, one vote per pair, while retaining 240 helpful/120 not-helpful coverage |
 | Tasks | 36 submissions target different records from their tasks; reviewed snapshots lack cited claim evidence | Link actual appropriate contributions, reviewer evidence and times; do not claim that fixture snapshots are executed reviews |
 | Subscriptions | Maximum one distinct active follower on a hero Person | Cover two followers on one hero Person, no-follower person and mixed subject follows; test alerts only through actual execution |

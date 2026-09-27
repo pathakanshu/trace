@@ -58,8 +58,8 @@ kinds need an explicit application mapping; do not silently drop them.
 
 The older `schema-validation.json` and `validation-report.json` cover 19 limited
 checks; their zero failures do **not** mean complete contract conformance.
-The stricter supplementary `contract-audit.json` reports **17 checks passed,
-13 failed, 2 blocked**. All 8,027 primary records pass the catalog JSON Schema,
+The stricter supplementary `contract-audit.json` reports **18 checks passed,
+14 failed, 2 blocked**. All 8,027 primary records pass the catalog JSON Schema,
 but 153 references reveal records before their release time. Manifest, license,
 checkpoint oracle, replay and validation-report
 support shapes differ from the documented contract. The separate 26-record
@@ -68,7 +68,7 @@ control pack now passes its file checks. See each rule's measured examples; no a
 This audit leaves the catalog, stable IDs, media bundle and previous reports
 unchanged. Repair release dependencies and support contracts before building a
 complete importer/replay around this preview. Top-level shape checks do not
-exhaustively validate nested semantics. The data tools' 91 distinct tests pass across schema and Pillow environments;
+exhaustively validate nested semantics. The data tools' 98 distinct tests pass across schema and Pillow environments;
 its corpus audit intentionally exits 1 for the observed data failures.
 
 - All 1,800 original source hashes match. However, the 1,260 JSON sources use
@@ -95,6 +95,9 @@ its corpus audit intentionally exits 1 for the observed data failures.
   ran; retry/injection/unsupported application cases remain unexecuted. See
   `tools/test_data/README.md` for runner semantics and separate Pillow checks.
   The full evaluation suite is unfinished.
+- Identity benchmark labels/coverage pass, but all 20 same-name/age negatives
+  have indistinguishable cited context. They need distinguishing sourced evidence
+  before being used to score a context-based rejection. No review was executed.
 - The hero selection is reference-closed, but its twelve story plans are not
   executable. Some focal IDs do not match the narrative (treatment vs shelter,
   comments vs correction/translation); scenario semantics still need repair.
