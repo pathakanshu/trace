@@ -34,10 +34,10 @@ Next: pitch, backup video, Devpost.
 
 ## Anshu (map, integration)
 
-Working on: actual point-in-boundary geography checks using the existing
-`geometry.topo.json`; data-only `tools/test_data/audit_boundaries.py`, tests,
-strict audit and data handoff docs. No new locations, boundary edits or app input
-rewrites; current display boundaries do not establish historical terrain safety.
+Working on: candidate-only attributed household context and support-need claims
+in `tools/test_data/generate_catalog.py`, focused tests, private support-coverage
+audit and data docs. Delivered sources remain immutable; no diagnoses or identity
+decisions. Preserve IDs, quotas, checkpoint outcomes and hero closure.
 
 App handoff: all four overnight tasks complete; **draft PR #4** is ready:
 https://github.com/pathakanshu/trace/pull/4 (`codex/anshu-night`). Audit/smoke work
@@ -53,7 +53,7 @@ failed; no screenshot claimed. Hosted/physical-phone rehearsal remains human wor
 Own local server 8092 is stopped. Active developer checkout was never switched.
 Jac language audit: GitHub 94.501% at 04:30 EDT; no Linguist padding/overrides.
 
-Dataset branch: **codex/test-data**, latest hero export **aaf03ac**.
+Dataset branch: **codex/test-data**, latest geographic audit **e43e471**.
 Delivered: 8,027 records, 1,150 Person / 1,000 private identities, 1,800 reports,
 3,600 claims; geography **170/1,000**. Hero is **748 reference-closed records**.
 Published release has 200 dummy images + 200 thumbnails; restore/hash guide:
@@ -61,8 +61,8 @@ Published release has 200 dummy images + 200 thumbnails; restore/hash guide:
 Original sources/asset bytes are preserved. Only media creation metadata was
 corrected from its original run receipt; licenses now have 200 contract entries.
 
-**193 tooling tests pass** (178 core + 15 Pillow). Delivered strict audit:
-**24 pass / 15 fail / 2 blocked**; media **11 / 0 / 1**. Clean remote clone at
+**206 tooling tests pass** (191 core + 15 Pillow). Delivered strict audit:
+**25 pass / 15 fail / 2 blocked**; media **11 / 0 / 1**. Clean remote clone at
 948c5e4 reproduced the then-current 174 tests and both audits exactly, restored
 400 files, left tracked files clean and created no .jac runtime store.
 
@@ -158,3 +158,5 @@ Working on: (fill in)
 - 07:32 codex/test-data c87eac2: 191 tests; full disposable generation + copied assets passes combined gates and a 50-identity/62-Person hero (802 candidate records). Fixed source-batch closure spill; no published source rewrite. Retaining Person subscriptions in hero export next.
 
 - 07:41 codex/test-data aaf03ac: hero now retains all 62 subscriptions and their actors (748 total records); 193 tests. Candidate hero retains two distinct followers. Actual boundary membership audit next; geography remains incomplete.
+
+- 07:46 codex/test-data e43e471: 170 existing points pass full district-30 polygon membership; 206 tests, strict audit 25/15/2. Boundary epoch/terrain/approved zones remain unverified. Candidate contextual evidence/support-needs coverage next.
