@@ -55,8 +55,8 @@ import quadratic); corpus lookups use a field filter so they walk real edges.
 
 ## Anshu (map, integration)
 
-Ready for review: **`codex/media-voting`**, integrated with main **d4b3c92**.
-Assets **f5cb70d**; gallery/voting/tooling **492f396**; main integration **09ea1d5**.
+Ready for review: **`codex/media-voting`**, integrated with main **8c021c8**.
+Assets **f5cb70d**; gallery/voting/tooling **492f396**; main integrations **09ea1d5/c7f3fd7**; Jac 0.34.1 compatibility **fa48bf9**.
 No push to main. Original primary checkout is still on its existing branch.
 
 - 20 supplied photos + nine clips, all with small JPEG thumbnails; search,
@@ -78,13 +78,18 @@ No push to main. Original primary checkout is still on its existing branch.
   29 thumbnails (1,375,359 bytes). PNGs unchanged; MOVs have labeled H.264 copies.
   Manifest SHA-256: `a029ee6ece040a5cad4d5f8458be0af4da228054162e9e93bd5f7f9bc5fb7b4d`.
 - Actual checks: **89 Jac tests passed** (five new offline voting tests),
-  **72-file compiler gate passed**, production web build passed. **Nine real
+  **77-file compiler gate passed**, production web build passed. **Nine real
   browser checks passed**, zero page errors: decoded thumbnails, no eager video
   requests, playback, pagination, correct numeric 10-vs-2 ranking, saved vote/undo,
   independent browsers, search and 375px. Asset audit recomputed all hashes,
   dimensions, codec/duration and fast-start properties against preserved originals.
   Server restart retained the vote, canonical graph IDs, both incidents and Maya
   source/alert state; all temporary test votes were removed.
+- Latest-main compatibility: three inherited native 0.34.1 type errors in
+  TraceDashboard/AlertBanner were fixed with four lines (materialize locations
+  after the null guard, guard banner people, stringify banner text). Existing
+  behavior retained; no changes to Miguel's investigation, map, graph or services.
+  Integrated story reset/hospital/banner/map action also checked in the local browser.
 - Limits: one removable vote per browser, no authenticated voter uniqueness.
   Jac 0.34.1 static serving ignores Range (200/full file): the **clicked** clip may
   buffer fully; the gallery does not download any video before Play. No EXIF,
