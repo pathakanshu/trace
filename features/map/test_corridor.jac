@@ -15,7 +15,8 @@ test "corridor retains the exact attributed five-feature input" {
     assert [f["properties"]["label"] for f in points] == ["Kodari", "Tatopani", "Bahrabise", "Khadichaur"];
     river: dict = features[0];
     assert river["geometry"]["type"] == "MultiLineString";
-    lines: list = river["geometry"]["coordinates"];
+    geometry: dict = river["geometry"];
+    lines: list = geometry["coordinates"];
     assert len(lines) == 4;
     for f in features {
         assert "ODbL-1.0" in f["properties"]["source_license"];
