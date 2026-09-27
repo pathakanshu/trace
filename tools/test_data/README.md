@@ -118,8 +118,8 @@ cases use analysis without publishing: hostile text stays source data. None of
 these eight runtime cases has run; no agent response or success is prefilled.
 No nonexistent replay-action IDs are used as prerequisites.
 
-Actual tooling results: **171 distinct tests pass across two environments**.
-The schema environment runs 156 and explicitly skips fifteen Pillow tests. Run the
+Actual tooling results: **174 distinct tests pass across two environments**.
+The schema environment runs 159 and explicitly skips fifteen Pillow tests. Run the
 fifteen media checks with a Pillow-equipped tooling Python:
 `python3 -m unittest discover -s tools/test_data -p '*media*.py'`.
 That separate run passes all fifteen. Do not count skipped decoder checks as passes
@@ -388,3 +388,13 @@ before loading or writing. This prevents silently replacing the distributed
 preview. Coordinate the namespace/version/source migration before adopting any
 new corpus; these two fixes do not resolve the other documented generation bugs.
 The delivered audit still correctly fails the old final cohorts and six rumors.
+
+The candidate source generator now emits the exact raw-report envelope with
+publisher/reference/language/publication text, original_content and entries.
+Claims use entries[n] locators for JSON or actual line numbers for pasted text.
+Unknown observation times and locations remain null; every original excerpt
+resolves. Three additional temporary-output tests pass all 1,800 source integrity
+and envelope checks (1,260 JSON / 540 text, 3,600 claims), verify entry labels and
+unknowns, and resolve every text locator. Checkpoint/type/cardinality/schema and
+determinism regressions still pass. Published raw inputs remain the legacy
+format until the coordinated versioned migration; no importer was implemented.

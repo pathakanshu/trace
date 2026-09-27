@@ -54,14 +54,50 @@ class CandidateCohortTests(unittest.TestCase):
     def test_allocated_claim_source_ids_and_initial_missing_claims_are_preserved(self):
         self.assertEqual({c['id']:c['source_id'] for c in self.claims},self.plan['claim_to_source'])
         for claim in self.claims:
-            if int(claim['id'][-6:])<=1150:self.assertEqual(claim,self.catalog[claim['id']])
+            if int(claim['id'][-6:])<=1150:
+                # Entry locators change with the candidate envelope, not assertions.
+                original=json.loads(json.dumps(self.catalog[claim['id']]))
+                original['provenance']['source_locator']=claim['provenance']['source_locator']
+                self.assertEqual(claim,original)
 
     def test_candidate_records_pass_schema_and_new_raw_hashes_match_temporary_files(self):
         schema=json.loads((ROOT/'demo/spec/trace-record.schema.json').read_text());validator=jsonschema.Draft202012Validator(schema,format_checker=jsonschema.FormatChecker())
         for row in self.records:
             error=next(validator.iter_errors(row),None);self.assertIsNone(error,(row['id'],str(error)))
         for source in self.sources:self.assertEqual(hashlib.sha256((self.root/source['raw_path']).read_bytes()).hexdigest(),source['raw_sha256'])
-        # The raw envelope remains legacy; this is not complete importer acceptance.
+        # Schema/file checks are not application importer acceptance.
+
+    def test_candidate_raw_envelopes_and_excerpts_pass_the_actual_source_auditor(self):
+        from audit_sources import audit_sources
+        integrity,envelopes,counts=audit_sources(self.root,self.records,DATASET)
+        self.assertEqual(integrity,[]);self.assertEqual(envelopes,[])
+        self.assertEqual(counts,{'sources_checked':1800,'structured_sources':1260,'text_sources':540,'claims_checked':3600})
+
+    def test_candidate_entries_preserve_subject_labels_times_and_unknown_locations(self):
+        unknown_times=0;unknown_locations=0
+        for source in self.sources:
+            if source['raw_format']!='structured_json':continue
+            raw=json.loads((self.root/source['raw_path']).read_text())
+            self.assertTrue(raw['original_content'].startswith('FICTIONAL EXERCISE REPORT'))
+            claims=[row for row in self.claims if row['source_id']==source['id']]
+            for claim in claims:
+                index=int(claim['provenance']['source_locator'].removeprefix('entries[').removesuffix(']'))
+                entry=raw['entries'][index]
+                self.assertTrue(entry['subject_label']);self.assertEqual(entry['reported_time_text'],claim['reported_at']['original_text'])
+                if claim['reported_at']['value'] is None:
+                    self.assertIsNone(entry['reported_time_text']);unknown_times+=1
+                if claim['location_id'] is None:
+                    self.assertIsNone(entry['location_text']);unknown_locations+=1
+                else:self.assertTrue(entry['location_text'])
+        self.assertGreater(unknown_times,0);self.assertGreater(unknown_locations,0)
+
+    def test_plain_text_entry_locators_resolve_to_original_claim_excerpts(self):
+        sources={row['id']:row for row in self.sources if row['raw_format']=='pasted_text'}
+        for claim in self.claims:
+            if claim['source_id'] not in sources:continue
+            source=sources[claim['source_id']];lines=(self.root/source['raw_path']).read_text().splitlines()
+            line=int(claim['provenance']['source_locator'].split(':')[1])
+            self.assertEqual(lines[line-1],claim['provenance']['original_excerpt'])
 
     def test_published_reports_are_unchanged_and_their_old_defects_still_reported(self):
         self.assertEqual(raw_hashes(ROOT),self.published_before)

@@ -262,6 +262,11 @@ def build_claims_and_sources(plan, groups, facilities, infrastructure, hazards, 
     # Source artifacts carry only asserted report content; metadata remains
     # synthetic and no agent outcome is prefilled.
     source_records=[]; sources_by_id={}
+    claims_by_id={claim["id"]:claim for claim in claims}
+    subject_labels={row["id"]:row.get("display_name",row.get("name")) for row in
+        people+facilities+infrastructure+hazards+aids+build_org_contributors()[0]}
+    subject_labels.update({row["id"]:f"Fictional exercise image {row['id']}" for row in media_rows})
+    location_labels={row["id"]:row["name"] for row in build_locations(plan)}
     # Declare exactly 450 relays only when an earlier immutable Source has a
     # claim about the same subject. Point them to independent predecessors so
     # the dependency graph remains shallow and does not widen profile closure.
@@ -286,13 +291,24 @@ def build_claims_and_sources(plan, groups, facilities, infrastructure, hazards, 
         fmt="structured_json" if sn<=1260 else "pasted_text"
         relpath=f"demo/datasets/{DATASET}/raw/reports/{sid}."+("json" if fmt=="structured_json" else "txt")
         body=source_claim_bodies[sid]
-        raw={"fictional_exercise_record":True,"source_id":sid,"title":f"Exercise report {sn:04d}","claims":body}
-        rawbytes=(json.dumps(raw,ensure_ascii=False,indent=2)+"\n").encode() if fmt=="structured_json" else (f"FICTIONAL EXERCISE REPORT {sid}\n"+"\n".join(x["excerpt"] for x in body)+"\n").encode()
-        rawpath=ROOT/relpath; rawpath.parent.mkdir(parents=True,exist_ok=True); rawpath.write_bytes(rawbytes)
         old_claims=set(plan.get("late_ingest_media_claim_ids",[])); old_sources={claim_source[c] for c in old_claims}
         pub_hour=20 if sid in old_sources else max(0,release-1)
-        rec={**common("source",sn,at(release)),"title":raw["title"],"publisher":publisher,"source_type":typ,
-          "report_reference":f"EXERCISE-{sn:04d}","published_at":tim(at(pub_hour)),"original_language":"en",
+        published=tim(at(pub_hour)); reference=f"EXERCISE-{sn:04d}"
+        original_content=f"FICTIONAL EXERCISE REPORT {sid}\n"+"\n".join(item["excerpt"] for item in body)+"\n"
+        entries=[]
+        for index,item in enumerate(body):
+            claim=claims_by_id[item["claim_id"]]
+            claim["provenance"]["source_locator"]=f"entries[{index}]" if fmt=="structured_json" else f"line:{index+2}"
+            entries.append({"subject_label":subject_labels[claim["subject"]["id"]],
+                "assertion_text":item["excerpt"],"reported_time_text":claim["reported_at"]["original_text"],
+                "location_text":location_labels[claim["location_id"]] if claim["location_id"] else None})
+        raw={"schema_version":"1.0","source_id":sid,"report_reference":reference,"publisher":publisher,
+            "original_language":"en","published_time_text":published["original_text"],
+            "original_content":original_content,"entries":entries}
+        rawbytes=(json.dumps(raw,ensure_ascii=False,indent=2)+"\n").encode("utf-8") if fmt=="structured_json" else original_content.encode("utf-8")
+        rawpath=ROOT/relpath; rawpath.parent.mkdir(parents=True,exist_ok=True); rawpath.write_bytes(rawbytes)
+        rec={**common("source",sn,at(release)),"title":f"Exercise report {sn:04d}","publisher":publisher,"source_type":typ,
+          "report_reference":reference,"published_at":published,"original_language":"en",
           "raw_format":fmt,"raw_path":relpath,"raw_sha256":hashlib.sha256(rawbytes).hexdigest(),"dependencies":dep,
           "dependency_disclosure":"declared" if dep else "no_dependency_declared"}
         source_records.append(rec); sources_by_id[sid]=rec

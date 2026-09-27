@@ -78,7 +78,7 @@ application media verification; file checks do not prove caption truth.
 
 The metadata-only correction preserves stable IDs and the media bundle. Repair release dependencies and support contracts before building a
 complete importer/replay around this preview. Top-level shape checks do not
-exhaustively validate nested semantics. The data tools' 171 distinct tests pass across schema and Pillow environments;
+exhaustively validate nested semantics. The data tools' 174 distinct tests pass across schema and Pillow environments;
 its corpus audit intentionally exits 1 for the observed data failures.
 
 - All 1,800 original source hashes match. However, the 1,260 JSON sources use
