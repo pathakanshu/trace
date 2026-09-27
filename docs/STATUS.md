@@ -58,16 +58,16 @@ Reserved: `features/map/*`, `services/geo.jac`, new
 `features/map/bhotekoshi-corridor.geojson`, README Map section, this section/log.
 Task 1 landed on main: **34f3d9a / 48b597f**. Current OSM river/settlements,
 faint district, corridor fit and ODbL attribution; not a measured flood extent.
-Task 2 consumer **3088d5d** + integration follow-up: exact-coordinate aggregation, weighted heat, clickable
+Task 2 consumer **e6adde2** + integration **f2932f8** (rebased on ca017d7): exact-coordinate aggregation, weighted heat, clickable
 high-zoom circles, keyboard status breakdown, top-20 list, empty-count fallback.
 Miguel's backend/import registration landed in 814a07d during rebase.
 Real persisted corpus integration passes: 1,356 located / 2,244 unlocated
 reports, 170 records grouped at four coordinates; Tatopani 345, Kodari 339,
 Khadichaur 339, Bahrabise 333. Import retry creates nothing; no corpus alerts.
-The browser test sets the requested incident ID and forwards the real backend
-response unchanged. Shared incident-selector UI remains Miguel's integration.
+The browser test now uses Miguel's real incident-selector UI (ca017d7) and
+unchanged server responses. Switching back to Maya restores its cited pins.
 
-Validation: **66 Jac tests**, **56-file compiler gate**, production web bundle;
+Validation: **66 Jac tests**, **whole-program compiler gate**, production web bundle;
 **9 Maya + 8 density fixture + 4 real corpus browser checks**, zero page errors.
 Hospital update creates one alert; source history/reload/reset remain correct.
 375px caption/legend/list have no document overflow. Actual local Maya screenshot:
@@ -207,3 +207,5 @@ Working on: (fill in)
 - 08:55 codex/anshu-map-scale: 34f3d9a/48b597f corridor on main; density consumer and map label fix ready. 9 real Maya + 8 mocked-count browser checks pass, 375px screenshot `/private/tmp/trace-corridor-mobile.png`. Backend fields/import registration remain Miguel-owned; final rebase/test/compiler gates precede push.
 
 - 09:00 codex/anshu-map-scale 3088d5d + integration follow-up: rebased on Miguel 814a07d. Real persisted corpus → map pass (1356 located, 2244 unlocated, 170 records, four settlement points); 9 Maya + 8 fixture + 4 real corpus browser checks, no page errors, 375px screenshots above. main.jac registration already wired by Miguel. Shared incident-selector UI/hosted deployment remain his side; final rebase + 66-test / compiler gates before main push.
+
+- 09:03 codex/anshu-map-scale e6adde2/f2932f8: integrated ca017d7; real incident-selector → corpus map → Maya checks pass with no response interception. All changes confined to map, geo and allowed docs. Existing endpoint registration is complete. Pull main and Stop / Run Preview on JacHammer; hosted rehearsal remains untested here. Final rebase and both required gates precede this push.

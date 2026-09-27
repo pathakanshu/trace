@@ -135,7 +135,7 @@ a late success restores boundaries without changing selection or viewport.
 The map observes container resizing and keeps viewport/selection across tabs.
 
 Map checks (27 September, corridor/count consumer): 66 Jac tests and the
-56-file compiler gate pass, as does the production web client build. Nine real
+whole-program compiler gate pass, as does the production web client build. Nine real
 Maya browser checks pass (hospital update/one alert, retained police evidence,
 reload/reset, keyboard selection, pan/zoom/tab preservation, and failed/slow
 boundaries). Eight additional browser component checks use explicitly mocked
@@ -146,8 +146,7 @@ errors. These count fixtures are not an importer or a corpus execution result.
 Four further checks pass against the real persisted corpus: idempotent import,
 1,356 located / 2,244 unlocated reports at 170 records / four coordinates,
 correct settlement status totals, 375px rendering, and reset isolation. The test
-sets only the dashboard request's incident ID and forwards the server response
-unchanged; it does not test the shared incident-selector UI. Counts were
+uses the shared incident-selector UI and unchanged backend responses. Counts were
 Tatopani 345, Kodari 339, Khadichaur 339 and Bahrabise 333. No corpus alerts were
 created. Local screenshots on Anshu's host:
 `/private/tmp/trace-corridor-mobile.png` and
