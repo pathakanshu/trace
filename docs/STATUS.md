@@ -34,8 +34,8 @@ Next: pitch, backup video, Devpost.
 
 ## Anshu (map, integration)
 
-Working on: tasks 1/2 pushed (edee489). Tasks 3/4 implemented and undergoing
-final checks. Gabriel: optional onShowOnMap callback in PeopleTab/Panels;
+Working on: final handoff for all four overnight tasks. Tasks 1/2 are already
+on main (edee489); tasks 3/4 are ready on codex/anshu-night. Gabriel: optional onShowOnMap callback in PeopleTab/Panels;
 no matching, reviews, investigation or service changes.
 Browser checks on isolated localhost (live credentials disabled): keyboard and
 mouse link select/center bridge; repeated use recenters; search survives;
@@ -47,11 +47,11 @@ Map evidence now remain 375px wide. Publishing/retrying produced 1 then 0 alerts
 Reset removed the phone exercise report. No browser console errors observed.
 Screenshot capture timed out in the extension; DOM dimensions/interactions were
 verified, but no screenshot artifact is claimed. Normal viewport restored.
-Files: `docs/STATUS.md`, `tests/test_demo_flow.jac`; possible `.gitattributes`
-only for genuinely generated/vendor content after measurement. Later:
-`features/map/`, `features/organizations/`, a minimal People report link and
-`components/TraceDashboard*` for selection; README Map subsection only.
-Done: map status colours, map tests, boundary fallback (on main, b71547e).
+Files changed: `tests/test_demo_flow.jac`, `components/TraceDashboard*`,
+`features/map/MapTab.jac`, `features/map/IncidentMap.jac`, the PeopleTab/Panels
+callback, OrganizationsTab/PublishReport wrapping, README Map and this board.
+Feature commits: 600bafd (report-to-map), ed3cb0b (phone wrapping).
+Final gates on base main 70c03c2: 56 tests pass; 52-file compiler gate passes.
 Language audit (GitHub languages API, 27 Sep 04:30 EDT): Jac 303,368 bytes
 (94.501%), JavaScript 9,598 (2.990%), CSS 8,055 (2.509%); total 321,021.
 Source: `gh api repos/pathakanshu/trace/languages`. GitHub caches default-branch
@@ -64,12 +64,14 @@ source preservation, one alert, repeat safety, map/graph references and two
 resets with socket connections blocked. On main e444edd: 56 tests passed;
 compiler gate passed (52 files). Recording verdicts are compared to their
 actual fixture values, including Miguel's v4 police NEEDS_REVIEW result.
-Coordination: base main is `e444edd`; I will push this branch only for Miguel to
-integrate. No edits to investigation files, seed, graph schema, endpoints or
+Coordination: branch only, ready for Miguel to integrate. The board offers
+self-integration while Miguel is away; I am keeping the original handoff
+branch-only boundary and leaving a reviewable branch. No edits to investigation files, seed, graph schema, endpoints or
 dependency declarations; no live model calls or large-corpus import.
-Human follow-up: `anshu-next.md` says 11:00 final/10:00 freeze; this board says
-12:00 final/09:00 draft. Keep the earlier required draft deadline and confirm
-organizer timing before submission; no deadline assumption is treated as verified.
+Human follow-up: hosted/physical-phone checks still need a human. Follow the
+board's updated 09:00 draft/11:00 final planning; organizer timing and replay
+eligibility remain questions for the team. No live model or hosted deployment
+was performed here.
 
 ## Gabriel (people)
 
@@ -101,3 +103,5 @@ Working on: (fill in)
 - 05:05 main edee489: Anshu's offline demo regression test and language audit (Jac 94.5%) landed.
 - 05:05 JacHammer re-pulled and restarted after stage 4: REPLAYED runs show the v4 recordings. Stage 5 drafts (pitch, video script, morning checklist) are with Miguel; Devpost story updated.
 - 05:10 For Anshu's agent: Miguel's side is idle until about 8:00. You may land your own branch on main yourself: rebase onto origin/main, both gates pass, plain push (no force). Keep the file boundaries in your prompt.
+
+- 04:49 codex/anshu-night 600bafd/ed3cb0b: People report-to-Map selection and 375px Organizations wrapping; 56 tests, 52-file gate, local keyboard/mouse/mobile/publish/retry/reset checks pass. All four overnight tasks ready; branch only.
