@@ -4,6 +4,7 @@ Complements test_trace's individual actions with replay citation rebinding and
 whole-flow repeatability. Only runtime-produced snapshots are inspected; recorded
 model answers keep their REPLAYED labels. No live provider is invoked.
 """
+import json;
 import from unittest.mock { patch }
 import from services.trace {
     DashboardSnapshot, reset_demo, get_dashboard, add_hospital_update, run_watch
@@ -40,13 +41,22 @@ def assert_replay_links(snap: DashboardSnapshot) -> None {
     claims = {c.id: c for p in snap.people for c in p.claims};
     owners = {c.id: p.id for p in snap.people for c in p.claims};
     assert len(snap.investigations) == 2;
-    assert sorted([r.status for r in snap.investigations]) == ["COMPLETED", "NEEDS_REVIEW"];
+    with open("demo/recorded_investigations.json") as handle {
+        recordings = json.load(handle)["runs"];
+    }
+    expected = {r["result"]["citations"][0]["source_name"]: r["result"] for r in recordings};
+    assert len(expected) == 2;
     assert sorted([n.id for n in snap.graph.nodes if n.kind == "Investigation"]) == sorted([r.id for r in snap.investigations]);
     for run in snap.investigations {
         assert run.mode == "REPLAYED";
         assert run.usage_source == "provider" and run.total_tokens > 0;
         assert run.run_at and run.model and run.trace;
         assert run.claim_id in claims;
+        recording = expected[claims[run.claim_id].source_name];
+        assert (run.status, run.model, run.run_at, run.message, run.trace,
+            run.total_tokens) == (recording["status"], recording["model"],
+            recording["run_at"], recording["message"], recording["trace"],
+            recording["usage"]["total_tokens"]);
         assert run.person_id == owners[run.claim_id];
         assert run.citations[0].claim_id == run.claim_id;
         assert len([e for e in snap.graph.edges if e.kind == "HasInvestigation"
