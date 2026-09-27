@@ -112,7 +112,7 @@ def:pub TraceDashboard() -> JsxElement {
     banner_alerts = [a for a in snap.alerts if bannerId != "" and (a.id or a.created_at) == bannerId] if snap and not corpus_view else [];
 
     return <div className="flex min-h-svh flex-col bg-background text-foreground">
-        <header className="sticky top-0 z-30 border-b border-border bg-background/85 backdrop-blur-md">
+        <header className="z-30 border-b border-border bg-background/85 backdrop-blur-md lg:sticky lg:top-0">
             <div className="mx-auto flex max-w-[1600px] flex-wrap items-center justify-between gap-3 px-4 py-3 md:px-8">
                 <div className="flex items-center gap-3">
                     <span className="inline-flex size-10 items-center justify-center rounded-xl bg-brand text-background shadow-md" aria-hidden="true">
