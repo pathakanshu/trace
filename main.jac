@@ -14,6 +14,7 @@ import from demo.corpus { load_corpus }
 import from services.timeline { TimelineEntry, person_timeline }
 import from services.geo { get_boundaries, get_bhotekoshi_corridor, get_nepal_rivers }
 import from features.organizations.services { publish_report }
+import from features.organizations.pfif { PfifResult, import_pfif }
 import from services.investigation { investigate_report }
 # People (Gabriel): human identity review.
 import from features.people.services { review_identity, propose_identity, IdentityDecisionResult }
