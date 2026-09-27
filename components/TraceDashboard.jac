@@ -178,7 +178,7 @@ def:pub TraceDashboard() -> JsxElement {
             onShowGraph={lambda { activeTab = "Graph"; }} onReset={handleReset} />}
 
         {for a in banner_alerts {
-            <AlertBanner key={a.id or a.created_at} alert={a} people={snap.people}
+            <AlertBanner key={a.id or a.created_at} alert={a} people={snap.people if snap else []}
                 onDismiss={lambda { bannerId = ""; }} onShowOnMap={handleShowPersonOnMap} />
         }}
 

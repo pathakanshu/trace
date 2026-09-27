@@ -24,7 +24,7 @@ def:pub AlertBanner(alert: AlertView, people: list[PersonView], onDismiss: Calla
     }
     kept: list[ClaimView] = [c for c in person.claims if c.claim_type in BANNER_STATUS_CLAIMS and c.id != alert.claim_id] if person else [];
     safe: bool = cited != None and cited.claim_type == "FOUND_SAFE";
-    headline: str = (person.name + " " + status_sentence(cited.claim_type).lower() + " by " + cited.source_name) if person and cited else "New report received";
+    headline: str = f"{person.name} {status_sentence(cited.claim_type).lower()} by {cited.source_name}" if person and cited else "New report received";
 
     return <section role="status" aria-live="polite" aria-label="New alert"
         className={cn("mx-4 mt-4 flex flex-col gap-3 rounded-xl border-2 p-4 shadow-lg animate-in fade-in slide-in-from-top-4 duration-500 motion-reduce:animate-none md:mx-6 md:flex-row md:items-center md:justify-between md:p-5",
