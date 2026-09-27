@@ -37,6 +37,21 @@
   --map-water: oklch(0.62 0.13 245 / 0.25);
   --map-land: oklch(0.93 0.006 260);
 
+  /* Graph diagram: one distinct hue per record kind (Graph tab). */
+  --graph-incident: oklch(0.51 0.22 300);
+  --graph-person: oklch(0.63 0.11 235);
+  --graph-claim: oklch(0.61 0.12 65);
+  --graph-source: oklch(0.65 0.16 145);
+  --graph-organization: oklch(0.71 0.17 125);
+  --graph-alert: oklch(0.55 0.2 0);
+  --graph-subscription: oklch(0.51 0.18 25);
+  --graph-media: oklch(0.77 0.14 100);
+  --graph-signal: oklch(0.71 0.12 90);
+  --graph-location: oklch(0.55 0.2 345);
+  --graph-investigation: oklch(0.51 0.2 320);
+  --graph-activity: oklch(0.61 0.13 165);
+  --graph-review: oklch(0.61 0.11 195);
+
   /* Headline font (editorial serif, system stack: no extra package) */
   --font-display-stack: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
 }
@@ -55,10 +70,24 @@
   --map-grid: oklch(0.26 0.006 260);
   --map-water: oklch(0.62 0.14 245 / 0.35);
   --map-land: oklch(0.22 0.005 260);
+
+  --graph-incident: oklch(0.58 0.22 300);
+  --graph-person: oklch(0.70 0.11 235);
+  --graph-claim: oklch(0.68 0.12 65);
+  --graph-source: oklch(0.72 0.16 145);
+  --graph-organization: oklch(0.78 0.17 125);
+  --graph-alert: oklch(0.62 0.2 0);
+  --graph-subscription: oklch(0.58 0.18 25);
+  --graph-media: oklch(0.84 0.14 100);
+  --graph-signal: oklch(0.78 0.12 90);
+  --graph-location: oklch(0.62 0.2 345);
+  --graph-investigation: oklch(0.58 0.2 320);
+  --graph-activity: oklch(0.68 0.13 165);
+  --graph-review: oklch(0.68 0.11 195);
 }
 
 /* Register tokens with Tailwind so classes like text-status-safe,
-   bg-status-missing-soft, bg-map-surface and font-display exist. */
+   bg-status-missing-soft, bg-map-surface, fill-graph-person and font-display exist. */
 @theme inline {
   --color-status-missing: var(--status-missing);
   --color-status-missing-soft: var(--status-missing-soft);
@@ -72,5 +101,18 @@
   --color-map-grid: var(--map-grid);
   --color-map-water: var(--map-water);
   --color-map-land: var(--map-land);
+  --color-graph-incident: var(--graph-incident);
+  --color-graph-person: var(--graph-person);
+  --color-graph-claim: var(--graph-claim);
+  --color-graph-source: var(--graph-source);
+  --color-graph-organization: var(--graph-organization);
+  --color-graph-alert: var(--graph-alert);
+  --color-graph-subscription: var(--graph-subscription);
+  --color-graph-media: var(--graph-media);
+  --color-graph-signal: var(--graph-signal);
+  --color-graph-location: var(--graph-location);
+  --color-graph-investigation: var(--graph-investigation);
+  --color-graph-activity: var(--graph-activity);
+  --color-graph-review: var(--graph-review);
   --font-display: var(--font-display-stack);
 }

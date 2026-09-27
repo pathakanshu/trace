@@ -11,6 +11,7 @@ import from ...components.ui.button { Button }
 import from ...components.shared.Display { SectionHeading, EmptyPanel }
 import from ...lib.utils { cn }
 import from .GraphTreePanel { RecordInspector, ProvenanceBadge }
+import from .GraphCanvas { GraphCanvas }
 import from .graph_helpers { kind_title, kind_order, short_id }
 import from ...components.shared.Scale { count_of, fmt_count, is_corpus_snapshot }
 sv import from ...services.trace { DashboardSnapshot }
@@ -111,6 +112,9 @@ def:pub GraphTab(snapshot: DashboardSnapshot, onRefresh: Callable[[], any]) -> J
             <EmptyPanel icon={Share08Icon} title="No records in this incident" text="Seed or reset the demo to add reports, people and media." />
             skip;
         }}
+
+        <GraphCanvas graph={g} selectedId={selected.id if selected else ""}
+            onSelect={lambda (rid: str) { selectedId = rid; }} />
 
         <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)]">
             <nav aria-label="Graph records" className="flex flex-col gap-3 rounded-lg border border-border bg-card p-3">

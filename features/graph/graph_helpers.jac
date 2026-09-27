@@ -53,6 +53,30 @@ cl def:pub badge_tone(badge: str) -> str {
     return "border-border bg-muted/60 text-muted-foreground";
 }
 
+# Diagram node colour per record kind: one --graph-* token each
+# (styles/trace-tokens.css), in the spirit of Jac's own /graph visualizer.
+cl def:pub kind_fill(kind: str) -> str {
+    fills = {
+        "Incident": "fill-graph-incident", "Person": "fill-graph-person",
+        "IdentityDecision": "fill-graph-review", "Claim": "fill-graph-claim",
+        "Source": "fill-graph-source", "Organization": "fill-graph-organization",
+        "Alert": "fill-graph-alert", "Subscription": "fill-graph-subscription",
+        "Media": "fill-graph-media", "Signal": "fill-graph-signal",
+        "Location": "fill-graph-location", "Investigation": "fill-graph-investigation",
+        "Activity": "fill-graph-activity"
+    };
+    return fills.get(kind, "fill-muted-foreground");
+}
+
+# Diagram edge colour per provenance status, matching badge_tone's meanings.
+cl def:pub edge_stroke(status: str) -> str {
+    if status == "confirmed" { return "stroke-status-safe"; }
+    if status == "rejected" { return "stroke-status-missing"; }
+    if status == "candidate" { return "stroke-status-warning"; }
+    if status == "derived" { return "stroke-primary"; }
+    return "stroke-muted-foreground";
+}
+
 cl def:pub badge_hint(badge: str) -> str {
     hints = {
         "stored": "Persisted in the graph",
