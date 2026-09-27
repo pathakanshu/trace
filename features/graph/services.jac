@@ -10,7 +10,8 @@ edge it came from (Asserts, About, Triggered, ...). Relationships that are
 NOT stored (ResolveWalker duplicate candidates, ActivityEntry.target_ids
 references) are marked derived=True with status "candidate"/"derived".
 
-Anshu wires this into DashboardSnapshot as f"graph: GraphSnapshot".
+Anshu wires this into DashboardSnapshot as f"graph: GraphSnapshot":
+    snap.graph = build_graph_snapshot(incident, snap.duplicates);
 """
 
 import from graph.nodes {
@@ -22,7 +23,7 @@ import from graph.edges {
     HasSignal, HasSubscription, Receives, Triggered, PublishesAs,
     IdentityDecision, ExactCopyOf
 }
-import from walkers.resolve { score_pair }
+import from walkers.resolve { DuplicateCandidate }
 
 # ---------- View objects (sent to the browser) ----------
 
@@ -95,7 +96,11 @@ def _f(name: str, value: any) -> GraphField {
     return GraphField(name=name, value=str(value) if value != "" else "not recorded");
 }
 
-def build_graph_snapshot(incident: Incident | None) -> GraphSnapshot {
+# duplicates: the People tab's ResolveWalker results (DashboardSnapshot.duplicates),
+# reused as-is so the Graph tab shows exactly the same candidates.
+def build_graph_snapshot(
+    incident: Incident | None, duplicates: list[DuplicateCandidate] = []
+) -> GraphSnapshot {
     if incident is None {
         return GraphSnapshot();
     }
@@ -158,20 +163,17 @@ def build_graph_snapshot(incident: Incident | None) -> GraphSnapshot {
         col.add_edge("Contains", inc_id, jid(m));
     }
 
-    # Derived: ResolveWalker's scoring rule, recomputed. Not stored in the graph.
-    for i in range(len(people)) {
-        for j in range(i + 1, len(people)) {
-            cand = score_pair(people[i], people[j], incident.name);
-            if cand {
-                col.add_edge(
-                    "DuplicateCandidate", cand.person_a_id, cand.person_b_id, "candidate",
-                    [
-                        _f("computed_by", "ResolveWalker.score_pair (recomputed on read)"),
-                        _f("confidence", cand.confidence),
-                        _f("reasons", ", ".join(cand.reasons))
-                    ]
-                );
-            }
+    # Derived: ResolveWalker's candidates from the same dashboard read. Not stored.
+    for cand in duplicates {
+        if cand.person_a_id in col.nodes and cand.person_b_id in col.nodes {
+            col.add_edge(
+                "DuplicateCandidate", cand.person_a_id, cand.person_b_id, "candidate",
+                [
+                    _f("computed_by", "ResolveWalker (same results as the People tab)"),
+                    _f("confidence", cand.confidence),
+                    _f("reasons", ", ".join(cand.reasons))
+                ]
+            );
         }
     }
 

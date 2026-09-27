@@ -8,11 +8,14 @@ Source -Asserts-> Claim -About-> Person -HasSubscription-> Subscription
 import from services.trace { reset_demo, add_hospital_update }
 import from demo.seed { INCIDENT_NAME }
 import from graph.nodes { Incident }
+import from walkers.resolve { ResolveWalker }
 import from features.graph.services { build_graph_snapshot, GraphSnapshot, GraphNodeView }
 
+# Same inputs get_dashboard() will pass: the incident plus ResolveWalker's candidates.
 def _snapshot() -> GraphSnapshot {
     found = [root -->[?:Incident, name == INCIDENT_NAME]];
-    return build_graph_snapshot(found[0] if found else None);
+    dups = (root spawn ResolveWalker(quiet=True)).candidates;
+    return build_graph_snapshot(found[0] if found else None, dups);
 }
 
 def _has_edge(snap: GraphSnapshot, kind: str, from_id: str, to_id: str) -> bool {
@@ -54,6 +57,9 @@ test "hospital FOUND_SAFE claim links source, subject and alert" {
     assert len(alerts) == 1;
     assert _has_edge(snap, "Triggered", claim.id, alerts[0].to_id);
 
+    # Candidates come from the People tab's results, not a second matching pass.
+    cands = [e for e in snap.edges if e.kind == "DuplicateCandidate"];
+    assert len(cands) == len((root spawn ResolveWalker(quiet=True)).candidates);
     # Every stored relationship is marked stored; candidates are marked derived.
     for e in snap.edges {
         if e.kind == "DuplicateCandidate" {
