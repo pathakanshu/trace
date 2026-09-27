@@ -5,7 +5,7 @@ access token, so the demo keeps working offline.
 
 What it draws:
   - district + province borders from geometry.topo.json (via get_boundaries)
-  - the incident's district highlighted (Sindhupalchok, district_id 30)
+  - current OSM river corridor and settlement labels, with district outline
   - one pin per Location node from the Trace graph
 
 JS interop notes (see f"jac guide jac-cl-js-interop"):
@@ -14,12 +14,12 @@ JS interop notes (see f"jac guide jac-cl-js-interop"):
   - Colours are read from CSS variables, so the map follows the theme.
 """
 
-import from "maplibre-gl" { Map as MapLibreMap, Marker, NavigationControl }
+import from "maplibre-gl" { Map as MapLibreMap, Marker, NavigationControl, AttributionControl }
 import "maplibre-gl/dist/maplibre-gl.css";
 import from "topojson-client" { feature }
 import from ...lib.utils { cn }
 import from .Status { linked_people, pin_status, pin_label, pin_dot }
-sv import from ...services.geo { get_boundaries }
+sv import from ...services.geo { get_boundaries, get_bhotekoshi_corridor }
 sv import from ...services.trace { LocationView, PersonView }
 
 # The incident's district in geometry.topo.json (सिन्धुपाल्चोक / Sindhupalchok).
@@ -59,18 +59,54 @@ def add_boundary_layers(map_obj: any, topo: any) -> None {
     map_obj.addLayer({
         "id": "district-fill", "type": "fill", "source": "districts",
         "paint": {
-            "fill-color": ["case", ["==", ["get", "district_id"], INCIDENT_DISTRICT_ID], css_var("--primary"), css_var("--map-land")],
-            "fill-opacity": ["case", ["==", ["get", "district_id"], INCIDENT_DISTRICT_ID], 0.45, 1]
+            "fill-color": ["case", ["==", ["get", "district_id"], INCIDENT_DISTRICT_ID], css_var("--map-land"), css_var("--map-land")],
+            "fill-opacity": ["case", ["==", ["get", "district_id"], INCIDENT_DISTRICT_ID], 0.6, 1]
         }
     });
     map_obj.addLayer({
         "id": "district-line", "type": "line", "source": "districts",
-        "paint": {"line-color": css_var("--map-grid"), "line-width": 0.6}
+        "paint": {"line-color": ["case", ["==", ["get", "district_id"], INCIDENT_DISTRICT_ID], css_var("--primary"), css_var("--map-grid")], "line-width": 0.8, "line-opacity": 0.6}
     });
     map_obj.addLayer({
         "id": "province-line", "type": "line", "source": "provinces",
         "paint": {"line-color": css_var("--muted-foreground"), "line-width": 1.2, "line-opacity": 0.6}
     });
+    # Requests may finish in either order; late boundaries stay under the river.
+    if map_obj.getLayer("corridor-band") {
+        for layer in ["district-fill", "district-line", "province-line"] {
+            map_obj.moveLayer(layer, "corridor-band");
+        }
+    }
+}
+
+
+def add_corridor_layers(map_obj: any, corridor: any) -> list {
+    map_obj.addSource("bhotekoshi-corridor", {"type": "geojson", "data": corridor,
+        "attribution": "© <a href='https://www.openstreetmap.org/copyright' target='_blank' rel='noopener noreferrer'>OpenStreetMap contributors</a> (ODbL)"});
+    map_obj.addLayer({"id": "corridor-band", "type": "line", "source": "bhotekoshi-corridor",
+        "filter": ["==", ["geometry-type"], "LineString"],
+        "layout": {"line-cap": "round", "line-join": "round"},
+        "paint": {"line-color": css_var("--primary"), "line-opacity": 0.13,
+            "line-width": ["interpolate", ["linear"], ["zoom"], 8, 10, 12, 28, 16, 52]}});
+    map_obj.addLayer({"id": "corridor-river", "type": "line", "source": "bhotekoshi-corridor",
+        "filter": ["==", ["geometry-type"], "LineString"],
+        "layout": {"line-cap": "round", "line-join": "round"},
+        "paint": {"line-color": css_var("--primary"), "line-opacity": 0.9,
+            "line-width": ["interpolate", ["linear"], ["zoom"], 8, 1.5, 12, 3.5, 16, 6]}});
+    labels: list = [];
+    # HTML labels keep offline text rendering independent of a remote glyph server.
+    for item in corridor.features {
+        if item.geometry.type == "Point" {
+            label: any = document.createElement("span");
+            label.className = "pointer-events-none rounded bg-card/90 px-1.5 py-0.5 text-xs font-medium text-primary shadow-sm";
+            label.textContent = item.properties.label;
+            label.setAttribute("data-corridor-settlement", item.properties.label);
+            marker: any = new(Marker, {"element": label, "anchor": "bottom-left", "offset": [8, -8]});
+            marker.setLngLat(item.geometry.coordinates).addTo(map_obj);
+            labels.append(marker);
+        }
+    }
+    return labels;
 }
 
 # A small HTML pin. Classes use theme tokens.
@@ -94,6 +130,9 @@ def:pub IncidentMap(locations: list[LocationView], people: list[PersonView], act
     has containerRef: Ref[HTMLDivElement] = Ref(),
         mapRef: Ref[any] = Ref(None),
         markersRef: Ref[list] = Ref([]),
+        settlementMarkersRef: Ref[list] = Ref([]),
+        corridorStatus: str = "loading",
+        corridorTimerRef: Ref[any] = Ref(None),
         onSelectRef: Ref[any] = Ref(None),
         status: str = "loading",    # loading | ready | error
         errorText: str = "",
@@ -115,31 +154,21 @@ def:pub IncidentMap(locations: list[LocationView], people: list[PersonView], act
             map_obj: any = new(MapLibreMap, {
                 "container": containerRef.current,
                 "style": blank_style(),
-                "bounds": [[80.05, 26.34], [88.21, 30.48]],
-                "fitBoundsOptions": {"padding": 16},
+                "bounds": [[85.82, 27.74], [86.00, 28.06]],
+                "fitBoundsOptions": {"padding": 42},
                 "attributionControl": False
             });
             mapRef.current = map_obj;
             map_obj.addControl(new(NavigationControl, {"showCompass": False}), "top-left");
+            map_obj.addControl(new(AttributionControl, {"compact": True,
+                "customAttribution": "© <a href='https://www.openstreetmap.org/copyright' target='_blank' rel='noopener noreferrer'>OpenStreetMap contributors</a> (ODbL)"}), "bottom-right");
             map_obj.on("load", lambda {
                 if mapRef.current != map_obj { return; }
-                # Fit once; later refreshes and tab switches retain the viewport.
-                if len(locations) > 0 {
-                    west = locations[0].longitude;
-                    east = west;
-                    south = locations[0].latitude;
-                    north = south;
-                    for loc in locations {
-                        west = min(west, loc.longitude);
-                        east = max(east, loc.longitude);
-                        south = min(south, loc.latitude);
-                        north = max(north, loc.latitude);
-                    }
-                    map_obj.fitBounds([[west, south], [east, north]],
-                        {"padding": 70, "maxZoom": 13, "duration": 0});
-                }
+                # Initial corridor fit is independent of sparse demo pins.
+                # Later refreshes and tab switches preserve the viewport.
                 status = "ready";
                 load_boundaries(map_obj);
+                load_corridor(map_obj);
             });
             # Browser constructor lacks a Jac stub; see jac-cl-js-interop.
             observer: any = new(ResizeObserver, lambda { # jac:ignore[E1053]
@@ -170,6 +199,25 @@ def:pub IncidentMap(locations: list[LocationView], people: list[PersonView], act
             if mapRef.current == map_obj { boundaryStatus = "unavailable"; }
         } finally {
             if boundaryTimerRef.current { clearTimeout(boundaryTimerRef.current); }
+        }
+    }
+
+    async def load_corridor(map_obj: any) -> None {
+        corridorTimerRef.current = setTimeout(lambda {
+            if mapRef.current == map_obj { corridorStatus = "unavailable"; }
+        }, 5000);
+        try {
+            corridor: any = await get_bhotekoshi_corridor();
+            if mapRef.current != map_obj { return; }
+            if corridor["error"] { corridorStatus = "unavailable"; }
+            else {
+                settlementMarkersRef.current = add_corridor_layers(map_obj, corridor);
+                corridorStatus = "ready";
+            }
+        } except Exception {
+            if mapRef.current == map_obj { corridorStatus = "unavailable"; }
+        } finally {
+            if corridorTimerRef.current { clearTimeout(corridorTimerRef.current); }
         }
     }
 
@@ -210,6 +258,8 @@ def:pub IncidentMap(locations: list[LocationView], people: list[PersonView], act
     # Remove the map when the component unmounts.
     can with exit {
         if boundaryTimerRef.current { clearTimeout(boundaryTimerRef.current); }
+        if corridorTimerRef.current { clearTimeout(corridorTimerRef.current); }
+        for marker in settlementMarkersRef.current { marker.remove(); }
         if resizeRef.current { resizeRef.current.disconnect(); }
         if mapRef.current { mapRef.current.remove(); mapRef.current = None; }
     }
@@ -217,9 +267,12 @@ def:pub IncidentMap(locations: list[LocationView], people: list[PersonView], act
     return <div className={cn("relative h-full w-full overflow-hidden rounded-md border border-border bg-map-surface", className)}>
         {#* Explicit size: MapLibre's CSS forces position:relative on this div, so f"absolute inset-0" would collapse it to 0px tall. *#}
         <div ref={containerRef} className="h-full min-h-80 w-full" />
-        {status == "loading" and <div className="absolute inset-0 flex items-center justify-center text-sm text-muted-foreground">{"Loading map of Nepal..."}</div>}
+        {status == "loading" and <div className="absolute inset-0 flex items-center justify-center text-sm text-muted-foreground">{"Loading river corridor map..."}</div>}
         {status == "ready" and boundaryStatus != "ready" and <p role="status" className="pointer-events-none absolute bottom-2 left-2 right-2 rounded border border-border bg-card/95 p-2 text-center text-xs text-muted-foreground">
             {"Boundaries unavailable. Pins, place list, and linked evidence remain available." if boundaryStatus == "unavailable" else "Loading district boundaries; pins and evidence are ready."}
+        </p>}
+        {status == "ready" and corridorStatus != "ready" and <p role="status" className="pointer-events-none absolute top-2 left-12 right-2 rounded border border-border bg-card/95 p-2 text-center text-xs text-muted-foreground">
+            {"River corridor unavailable; reported places and evidence remain usable." if corridorStatus == "unavailable" else "Loading current river linework..."}
         </p>}
         {status == "error" and <div className="absolute inset-0 flex items-center justify-center pl-6 pr-6 text-center text-sm text-destructive">{"Map unavailable: " + errorText}</div>}
     </div>;

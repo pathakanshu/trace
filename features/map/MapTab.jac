@@ -23,8 +23,10 @@ def:pub MapTab(snapshot: DashboardSnapshot, onRefresh: Callable[[], any], active
                     <span className={"size-2.5 rounded-full " + pin_dot(status)} aria-hidden="true" />{pin_label(status)}
                 </span>
             }}
+            <span className="inline-flex items-center gap-2"><span className="h-0.5 w-5 bg-primary" aria-hidden="true" />{"Current river linework"}</span>
         </div>
-        <p className="text-xs text-muted-foreground">{"Pin colour follows linked people's current reports; needs review includes conflicting reports, injury, or death. Shaded area: Sindhupalchok district. Pins are reported media locations, not live person tracking. Unknown or invalid coordinates are omitted."}</p>
+        <p className="text-xs text-muted-foreground">{"Pin colour follows linked people's current reports; needs review includes conflicting reports, injury, or death. District outline: Sindhupalchok. Pins are reported media locations, not live person tracking. Unknown or invalid coordinates are omitted."}</p>
+        <p className="min-w-0 break-words text-xs text-muted-foreground" aria-label="River corridor context">{"Bhote Koshi river corridor (current OpenStreetMap linework). Not a measured 2016 flood extent. The translucent band is a visual guide along the river."}</p>
         <div className="flex flex-wrap gap-2" aria-label="Reported places">
             {for place in snapshot.locations {
                 <button key={place.id} type="button" aria-pressed={selectedId == place.id}

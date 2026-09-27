@@ -41,9 +41,18 @@ never the demo incident, with private fixtures kept out of app inputs.
 
 ## Anshu (map, integration)
 
-Working on: none. Finishing handoff and stopping at Anshu's request now that
-he is awake. All changes are on the two named branches; no main merge, hosted
-deployment or corpus import. No background server or follow-up work scheduled.
+Working on: corridor map + corpus report heat layer on `codex/anshu-map-scale`.
+Reserved: `features/map/*`, `services/geo.jac`, new
+`features/map/bhotekoshi-corridor.geojson`, README Map section, this section/log.
+Task 1 implemented: current OSM river/settlements, faint district, corridor view
+and attribution. Local browser endpoint/labels/pins work; 375px document has no
+overflow (canvas 341px, caption 343px). No screenshot file saved. Task 2 consumes
+Miguel's `place_counts` contract when it lands.
+Miguel: planned endpoint `get_bhotekoshi_corridor`; after its commit lands,
+replace the geo import in `main.jac` with exactly:
+`import from services.geo { get_boundaries, get_bhotekoshi_corridor }`.
+I will not edit main.jac or services/trace.jac. Latest user prompt authorizes
+plain main push after rebase + both gates, deadline 09:40 EDT.
 
 App handoff: all four overnight tasks complete; **draft PR #4** is ready:
 https://github.com/pathakanshu/trace/pull/4 (`codex/anshu-night`). Audit/smoke work
@@ -174,3 +183,5 @@ Working on: (fill in)
 
 - 07:52 codex/test-data 814efd9: 216 tests (201 core + 15 Pillow) pass. Candidate context/support requests pass full disposable corpus checks; delivered audit honestly 25/16/2, with zero support coverage newly exposed. Stopping at Anshu’s request; PR #4, asset release and private repair guide are the handoff. No merge/deploy/import.
 - 05:25 main 7e694be: PR #4 squash-merged (People to Map, phone wrapping, demo regression; 57 tests, gate passed). Corpus import deferred until after judging (see Miguel section).
+
+- 08:28 codex/anshu-map-scale: corridor linework, four labels, attribution, faint district and corridor fit ready; 59 Jac tests expected after final gate. Miguel: add `get_bhotekoshi_corridor` to existing services.geo import in main.jac. Task 2 follows place_counts backend.

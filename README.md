@@ -91,6 +91,19 @@ in [docs/INVESTIGATION.md](docs/INVESTIGATION.md).
 
 ### Map
 
+The initial view frames the Bhote Koshi river corridor. Current OpenStreetMap
+linework (four separate mapped ways) and Kodari, Tatopani, Bahrabise and Khadichaur
+labels sit above a faint district background. The translucent river band is a
+visual guide, **not a measured 2016 flood extent**. © OpenStreetMap contributors
+(ODbL); attribution is available on the map. The bundled 18,016-byte GeoJSON is
+an exact copy from `codex/test-data`; its provenance/archive references resolve
+on that branch, not to a bundled corpus here. No other corpus inputs were copied.
+
+The corridor loads independently of boundaries and evidence, with its own
+five-second unavailable message and late recovery. HTML settlement labels need
+no external glyph service. `get_bhotekoshi_corridor` is the server endpoint;
+register alongside `get_boundaries` in `main.jac` when integrating.
+
 People reports with mapped evidence offer **Show on map**. It opens Map,
 selects the first linked place in snapshot order, and centers its pin. Repeating
 the link centers it again; normal tab switches preserve the viewport and People
