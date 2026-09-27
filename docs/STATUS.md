@@ -59,3 +59,8 @@ Working on: (fill in)
 - 03:55 main b71547e: map shows sourced current status (Anshu).
 - 04:05 main 0233fca: seeded reports replay recorded Nemotron runs on Reset.
 - 04:10 main 0b23355: README demo story and model config, eval table (live cases pending), deploy checklist.
+- 04:25 JacHammer LATEST TRACE pulled main and restarted: Reset shows two
+  REPLAYED runs in People (provider-reported tokens) and two Investigation
+  records in Graph. After a pull, use Stop then Run Preview; hot reload alone
+  left stale imports. Live eval waits on the key and passphrase in the
+  coordinator's shell.
