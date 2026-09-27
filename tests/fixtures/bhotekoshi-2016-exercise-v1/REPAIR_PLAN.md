@@ -43,6 +43,7 @@ of historical missing people.
 | Subscriptions | Maximum one distinct active follower on a hero Person | Cover two followers on one hero Person, no-follower person and mixed subject follows; test alerts only through actual execution |
 | Support files | Legacy manifest/license/checkpoint/scenario/action/report shapes | Migrate consumers together, populate real nested references and generated checksums; exact shape alone is insufficient |
 | Story focus | Shelter story points to TREATMENT fac-000001; correction/translation stories select COMMENT con-000031/con-000061; historical scenario points to media-caption clm-001151 | Reconcile narratives, typed focal records and cited actions while preserving the 50-identity hero quota |
+| Review plan | 80 confirmation actions contain two redundant triangle edges; only 78 distinct planned joins, projecting 1,072 groups | Select an 80-edge acyclic forest and author 20 evidence-supported rejection actions; validate before any real review |
 | Runtime | No compatible full-corpus importer/replay runner has been invoked | Explicit supported/deferred/rejected mappings, real persistence/retry/reset/alert traces, twice-reset rehearsal, then another laptop |
 
 The diagnostic summary algorithm uses private identity grouping, latest known

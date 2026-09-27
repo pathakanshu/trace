@@ -59,7 +59,7 @@ kinds need an explicit application mapping; do not silently drop them.
 The older `schema-validation.json` and `validation-report.json` cover 19 limited
 checks; their zero failures do **not** mean complete contract conformance.
 The stricter supplementary `contract-audit.json` reports **18 checks passed,
-14 failed, 2 blocked**. All 8,027 primary records pass the catalog JSON Schema,
+15 failed, 2 blocked**. All 8,027 primary records pass the catalog JSON Schema,
 but 153 references reveal records before their release time. Manifest, license,
 checkpoint oracle, replay and validation-report
 support shapes differ from the documented contract. The separate 26-record
@@ -68,7 +68,7 @@ control pack now passes its file checks. See each rule's measured examples; no a
 This audit leaves the catalog, stable IDs, media bundle and previous reports
 unchanged. Repair release dependencies and support contracts before building a
 complete importer/replay around this preview. Top-level shape checks do not
-exhaustively validate nested semantics. The data tools' 98 distinct tests pass across schema and Pillow environments;
+exhaustively validate nested semantics. The data tools' 104 distinct tests pass across schema and Pillow environments;
 its corpus audit intentionally exits 1 for the observed data failures.
 
 - All 1,800 original source hashes match. However, the 1,260 JSON sources use
@@ -101,6 +101,8 @@ its corpus audit intentionally exits 1 for the observed data failures.
 - The hero selection is reference-closed, but its twelve story plans are not
   executable. Some focal IDs do not match the narrative (treatment vs shelter,
   comments vs correction/translation); scenario semantics still need repair.
+- The 80 planned confirmations contain two cyclic/redundant edges, giving 78
+  distinct planned joins and 1,072 groups instead of 1,070. No review ran.
 - Checkpoint oracle rows are specified targets, not executed observations.
   Fixture-only recomputation finds T+72 counts 353 missing / 547 safe / 50 injured
   / 50 unresolved, versus required 650 / 250 / 50 / 50. Another check finds six
@@ -118,16 +120,16 @@ separate tooling environment (no application dependency changes are required):
 
 ```sh
 python3 tools/test_data/schema_check.py
-python3 tools/test_data/validate_dataset.py
 # Strict supplementary audit (currently exits 1 for genuine corpus failures):
 python3 tools/test_data/audit_contracts.py
 python3 -m unittest discover -s tools/test_data -p 'test_*.py'
 ```
 
-Run these after restoring media. The validator writes measured reports and hero
-fixtures; exit zero means implemented checks passed, even if geography remains
-blocked. Read the `blocked` array. Do not present a zero exit code as full corpus
-completion. Generation commands are documented in `tools/test_data/README.md`.
+Run these after restoring media. The strict audit does not regenerate fixtures;
+its failed/blocked checks describe real limits. The historical legacy validator
+rewrites derived outputs and is not the recommended conformance gate; it now
+refuses cached schema results when jsonschema is missing. Generation/repair
+constraints are documented in `tools/test_data/README.md`.
 
 For a concrete repair/integration handoff, read the private
 `tests/fixtures/bhotekoshi-2016-exercise-v1/REPAIR_PLAN.md` from repository root.

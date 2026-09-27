@@ -259,6 +259,18 @@ def run_audit(root):
         [rel(pair_path), rel(data / "records")], ["Conservative exact-context diagnostic only. Different text/context does not prove distinguishability or authorize automatic rejection; source/record IDs alone are not distinguishing evidence."])
     checks[-1]["observed"].update(pair_counts)
 
+    review_errors, review_counts = [], {}
+    action_path = fixtures / "replay/actions.jsonl"
+    try:
+        from audit_review_plan import review_plan_errors
+        review_errors, review_counts = review_plan_errors(read_jsonl(action_path), read_jsonl(identity_path),
+            json.loads((root / "demo/spec/quotas.json").read_text()))
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        review_errors.append(str(error).replace(str(root), "<repo>"))
+    add("planned_identity_review_forest", review_errors, "80 correct acyclic joins and 20 negative rejections would leave 1,070 groups",
+        [rel(action_path), rel(identity_path)], ["Pure plan arithmetic, not executed reviews or measured runtime groups. Legacy action shapes are independently rejected by the support-contract check."])
+    checks[-1]["observed"].update(review_counts)
+
     query_path = fixtures / "queries.jsonl"
     query_errors = []
     try:
@@ -372,7 +384,7 @@ def run_audit(root):
     summary = dict(Counter(check["status"] for check in checks))
     summary = {status: summary.get(status, 0) for status in ("pass", "fail", "blocked")}
     return {"dataset_id": DATASET, "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "tools": [{"name": "tools/test_data/audit_contracts.py", "version": "1.9"}, {"name": "jsonschema", "version": version("jsonschema")}],
+            "tools": [{"name": "tools/test_data/audit_contracts.py", "version": "1.10"}, {"name": "jsonschema", "version": version("jsonschema")}],
             "checks": checks, "summary": summary}
 
 

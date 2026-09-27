@@ -3,6 +3,7 @@
 from __future__ import annotations
 import collections, hashlib, json, mimetypes, re, sys, zipfile, tempfile
 from datetime import datetime
+from importlib.metadata import version
 from pathlib import Path
 try:
     import jsonschema
@@ -49,6 +50,9 @@ def ref_pairs(x):
     walk(x); return out
 
 def main():
+    if jsonschema is None:
+        print("BLOCKED: jsonschema is unavailable. Install Pillow and jsonschema in a separate tooling environment, then rerun. Cached schema-validation.json is not accepted as proof of current inputs. No files were written.", file=sys.stderr)
+        return 2
     results=[]; errors=[]; blocked=[]
     def check(name,ok,detail=""):
         results.append({"check":name,"status":"pass" if ok else "fail","detail":detail})
@@ -68,12 +72,8 @@ def main():
                     if e: schema_bad.append(f"{r.get('id')} {e.message[:240]}")
         except Exception as e: decode_bad.append(f"{p}: {e}")
     check("JSONL UTF-8, parse, newline and shard limit",not shard_bad and not decode_bad,"; ".join(shard_bad[:5]+decode_bad[:5]) or f"{len(paths)} shards; maximum 100 records")
-    external_schema=None
-    if not schema_validator:
-        try: external_schema=json.loads((DATA/"schema-validation.json").read_text(encoding="utf-8"))
-        except Exception: external_schema={"status":"not_run","errors":["jsonschema unavailable; run python3 tools/test_data/schema_check.py"]}
-    schema_ok=not schema_bad if schema_validator else external_schema.get("status")=="pass"
-    schema_detail="; ".join(schema_bad[:10]) if schema_bad else (f"{sum(map(len,records.values()))} records; Draft 2020-12 + format checking" if schema_validator else f"external system-Python check: {external_schema.get('status')}")
+    schema_ok=not schema_bad
+    schema_detail="; ".join(schema_bad[:10]) if schema_bad else f"{sum(map(len,records.values()))} records; Draft 2020-12 + format checking"
     check("JSON Schema Draft 2020-12 + format checking",schema_ok,schema_detail)
     catalog={k:{r["id"]:r for r in v} for k,v in records.items()}; duplicates=[f"{k}:{rid}" for k,rs in catalog.items() for rid in rs if sum(x["id"]==rid for x in records[k])>1]
     check("unique record IDs",not duplicates,"; ".join(duplicates[:5]) or "all primary IDs are unique")
@@ -208,7 +208,7 @@ def main():
     write_json(DATA/"licenses.json",[{"license_id":"lic-000001","title":"Trace controlled synthetic placeholder media","creator":"Trace exercise dataset generation tooling","acquisition":"locally generated procedural vector illustrations; no external image sources","terms":"Internal exercise assets; redistribution requires project owner review.","attribution_required":False,"is_documentary":False}])
     manifest={"dataset_id":DATASET,"schema_version":"1.0","created_at":datetime.now().astimezone().isoformat(timespec="seconds"),"seed":QUOTAS["seed"],"fictional_content_notice":"People, organizations, reports, media captions, and response activity are fictional. The 1,000-person workload is an exercise scale, not a historical missing-person count.","record_counts":counts,"record_shards":[{"path":p.relative_to(ROOT).as_posix(),"sha256":digest(p),"byte_size":p.stat().st_size,"records":len(jsonl(p))} for p in sorted(paths)],"asset_bundle":archive_meta,"assets":asset_hashes,"geography":{"status":"blocked","verified_location_records":location_actual,"required_location_records":location_goal},"runtime_outputs_prefilled":False}
     write_json(DATA/"manifest.json",manifest)
-    report={"dataset_id":DATASET,"generated_at":datetime.now().astimezone().isoformat(timespec="seconds"),"validator":"tools/test_data/validate_dataset.py","jsonschema_version":getattr(jsonschema,"__version__",external_schema.get("jsonschema_version") if external_schema else "external") if jsonschema else (external_schema.get("jsonschema_version") if external_schema else "external not run"),"summary":{"records":sum(counts.values()),"counts":counts,"checks_passed":sum(x["status"]=="pass" for x in results),"checks_failed":len(errors),"blocked_requirements":blocked},"checks":results,"errors":errors,"blocked":blocked,"limitations":["No compatible application importer/runtime replay was executed; no agent output is seeded.","Geographic zone readiness blocks the remaining 830 locations and full geographic acceptance.","OS/UI offline asset loading is not verified by this data-only validator."]}
+    report={"dataset_id":DATASET,"generated_at":datetime.now().astimezone().isoformat(timespec="seconds"),"validator":"tools/test_data/validate_dataset.py","jsonschema_version":version("jsonschema"),"summary":{"records":sum(counts.values()),"counts":counts,"checks_passed":sum(x["status"]=="pass" for x in results),"checks_failed":len(errors),"blocked_requirements":blocked},"checks":results,"errors":errors,"blocked":blocked,"limitations":["No compatible application importer/runtime replay was executed; no agent output is seeded.","Geographic zone readiness blocks the remaining 830 locations and full geographic acceptance.","OS/UI offline asset loading is not verified by this data-only validator."]}
     write_json(DATA/"validation-report.json",report)
     print(json.dumps(report["summary"],indent=2,ensure_ascii=False))
     for e in errors: print("FAIL",e["check"],e["detail"][:240])

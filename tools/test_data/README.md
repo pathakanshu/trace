@@ -8,7 +8,8 @@ The current generated snapshot is checked in. To consume it, follow
 `demo/datasets/bhotekoshi-2016-exercise-v1/README.md`; do not regenerate assets
 because the distributed manifest pins their exact bytes.
 
-Generation order (scripts write within this checkout):
+Historical generation sequence (not a complete/correct repair path; see the
+private REPAIR_PLAN before regenerating distributed inputs):
 
 1. `python3 tools/test_data/allocate_ids.py`
 2. `python3 tools/test_data/prepare_context.py` (uses archived verified OSM input)
@@ -42,7 +43,7 @@ it does not fall back to a stale schema report when jsonschema is unavailable.
 
 Run its own offline checks with:
 `python3 -m unittest discover -s tools/test_data -p test_contract_audit.py`.
-The current corpus audit has 18 pass / 14 fail / 2 blocked; failures are intentional
+The current corpus audit has 18 pass / 15 fail / 2 blocked; failures are intentional
 findings in the partial dataset, not successful runtime behavior.
 
 ## Isolated control pack
@@ -116,8 +117,8 @@ cases use analysis without publishing: hostile text stays source data. None of
 these eight runtime cases has run; no agent response or success is prefilled.
 No nonexistent replay-action IDs are used as prerequisites.
 
-Actual tooling results: **98 distinct tests pass across two environments**.
-The schema environment runs 95 and explicitly skips three Pillow tests. Run the
+Actual tooling results: **104 distinct tests pass across two environments**.
+The schema environment runs 101 and explicitly skips three Pillow tests. Run the
 three decoder checks with a Pillow-equipped tooling Python:
 `python3 -m unittest discover -s tools/test_data -p test_negative_media.py`.
 That separate run passes all three. Do not count skipped decoder checks as passes
@@ -224,3 +225,19 @@ Seven tests cover correct coverage, flipped labels, reversed duplicates, missing
 positive pairs/citations and identical versus changed contextual input. This is
 an exact-context diagnostic; different wording is not proof of distinguishability.
 No actual identity review or resolver result was generated.
+
+## Replay-plan arithmetic and legacy validator guard
+
+The 80 planned confirmations contain two redundant triangle edges (`act-000011`
+and `act-000014`), so they imply 78 distinct joins and 1,072 groups rather than
+80 joins / 1,070 groups. The strict audit now fails this fixture-plan constraint.
+Five tests cover acyclic joins, rejected-pair non-merging, triangles, label errors,
+invalid pairs and the legacy plan. These are planned counts, not runtime results.
+
+The legacy validator no longer falls back to cached `schema-validation.json`
+when jsonschema is unavailable. It exits 2 before checking or writing outputs.
+A unit regression covers that early guard. An actual run in the separate Pillow
+runtime (which lacks jsonschema) returned the expected blocked result; hashes and
+mtimes of all 1,903 dataset files remained identical. That run is **not** a passed
+schema/media validation. Prefer the read-only strict audit for current conformance;
+legacy generation/export routines still use incomplete support formats.

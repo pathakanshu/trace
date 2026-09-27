@@ -1,10 +1,10 @@
 {
   "dataset_id": "bhotekoshi-2016-exercise-v1",
-  "generated_at": "2026-09-27T10:01:41Z",
+  "generated_at": "2026-09-27T10:05:54Z",
   "tools": [
     {
       "name": "tools/test_data/audit_contracts.py",
-      "version": "1.9"
+      "version": "1.10"
     },
     {
       "name": "jsonschema",
@@ -716,6 +716,36 @@
       ]
     },
     {
+      "rule_id": "planned_identity_review_forest",
+      "status": "fail",
+      "observed": {
+        "failure_count": 4,
+        "examples": [
+          "act-000011: redundant confirmation creates a cycle",
+          "act-000014: redundant confirmation creates a cycle",
+          "Only 78 distinct forest joins are planned",
+          "Plan would leave 1072 groups, not 1070"
+        ],
+        "planned_confirmations": 80,
+        "planned_rejections": 20,
+        "planned_distinct_forest_joins": 78,
+        "redundant_confirmation_ids": [
+          "act-000011",
+          "act-000014"
+        ],
+        "projected_groups_if_valid_plan_executed": 1072,
+        "legacy_unexecutable_action_shapes": 100
+      },
+      "expected": "80 correct acyclic joins and 20 negative rejections would leave 1,070 groups",
+      "evidence_paths": [
+        "tests/fixtures/bhotekoshi-2016-exercise-v1/replay/actions.jsonl",
+        "tests/fixtures/bhotekoshi-2016-exercise-v1/oracle/identities.jsonl"
+      ],
+      "limitations": [
+        "Pure plan arithmetic, not executed reviews or measured runtime groups. Legacy action shapes are independently rejected by the support-contract check."
+      ]
+    },
+    {
       "rule_id": "query_evidence_and_cutoffs",
       "status": "pass",
       "observed": {
@@ -917,7 +947,7 @@
   ],
   "summary": {
     "pass": 18,
-    "fail": 14,
+    "fail": 15,
     "blocked": 2
   }
 }
