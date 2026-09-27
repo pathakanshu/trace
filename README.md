@@ -76,9 +76,12 @@ in [docs/INVESTIGATION.md](docs/INVESTIGATION.md).
   from the shared snapshot. Derived/candidate links are labeled. Investigation runs
   appear as Investigation nodes with a stored edge from the incident and derived
   edges to the claims they cite. Media contribution child nodes are not projected.
-  A node-link diagram above the list draws the same projection with a deterministic
-  force layout written in Jac (no graph library). Clicking a record opens it in the
-  inspector. There is no pan/zoom yet, and the corpus draws only its capped 401 records.
+  A node-link diagram above the list draws the same projection, styled after Jac's
+  `/graph` viewer, with live physics written in Jac (no graph library). Records animate
+  into a deterministic layout, dragging one pulls its neighbours along, and pressing one
+  opens it in the inspector. There is no pan/zoom yet, and the corpus draws only its
+  capped 401 records. "Jac's viewer" embeds the runtime's own `/graph` page, which shows
+  every node on the server (all incidents). It loads only when chosen.
 - People also offers a capped NVIDIA Nemotron check of one source report's
   attribution, with at most one follow-up source comparison. The model returns
   labels only; Jac chooses the next step. Results are advisory, stored separately

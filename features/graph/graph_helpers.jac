@@ -53,15 +53,17 @@ cl def:pub badge_tone(badge: str) -> str {
     return "border-border bg-muted/60 text-muted-foreground";
 }
 
-# Diagram node colour per record kind. SVG fill token classes only.
+# Diagram node colour per record kind: one --graph-* token each
+# (styles/trace-tokens.css), in the spirit of Jac's own /graph visualizer.
 cl def:pub kind_fill(kind: str) -> str {
     fills = {
-        "Incident": "fill-foreground", "Person": "fill-primary",
-        "IdentityDecision": "fill-status-safe", "Claim": "fill-status-warning",
-        "Source": "fill-status-neutral", "Organization": "fill-status-neutral",
-        "Alert": "fill-status-missing", "Subscription": "fill-chart-1",
-        "Media": "fill-chart-3", "Signal": "fill-chart-4", "Location": "fill-chart-2",
-        "Investigation": "fill-chart-5", "Activity": "fill-muted-foreground"
+        "Incident": "fill-graph-incident", "Person": "fill-graph-person",
+        "IdentityDecision": "fill-graph-review", "Claim": "fill-graph-claim",
+        "Source": "fill-graph-source", "Organization": "fill-graph-organization",
+        "Alert": "fill-graph-alert", "Subscription": "fill-graph-subscription",
+        "Media": "fill-graph-media", "Signal": "fill-graph-signal",
+        "Location": "fill-graph-location", "Investigation": "fill-graph-investigation",
+        "Activity": "fill-graph-activity"
     };
     return fills.get(kind, "fill-muted-foreground");
 }
