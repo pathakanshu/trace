@@ -16,60 +16,17 @@ import from ...components.shared.Display {
 import from ...lib.utils { cn }
 sv import from ...services.trace { PersonView }
 sv import from ...walkers.resolve { DuplicateCandidate, IdentityDecisionResult }
+sv import from ...graph.nodes { IdentityReviewEntry }
 sv import from .services { review_identity }
 
-# Status codes each record's sources have reported, in order, de-duplicated.
-def reported_statuses(p: PersonView) -> list[str] {
-    out: list[str] = [];
-    for c in p.claims {
-        if c.claim_type not in out { out.append(c.claim_type); }
-    }
-    return out;
+# Differences/unknowns come from the server (walkers/resolve.jac compare_*),
+# which orders status reports by report timestamp and is covered by tests.
+
+def all_claim_ids(a: PersonView, b: PersonView) -> list[str] {
+    return [c.id for c in a.claims] + [c.id for c in b.claims];
 }
 
-def source_names(p: PersonView) -> list[str] {
-    out: list[str] = [];
-    for c in p.claims {
-        if c.source_name not in out { out.append(c.source_name); }
-    }
-    return out;
-}
-
-# Only differences that can be read directly from the two records.
-def differences(a: PersonView, b: PersonView) -> list[str] {
-    out: list[str] = [];
-    if a.name != b.name {
-        out.append("Recorded names differ: '" + a.name + "' vs '" + b.name + "'");
-    }
-    if a.age > 0 and b.age > 0 and a.age != b.age {
-        out.append("Ages differ: " + str(a.age) + " vs " + str(b.age));
-    }
-    sa = source_names(a);
-    sb = source_names(b);
-    shared = [s for s in sa if s in sb];
-    if len(shared) == 0 and len(sa) > 0 and len(sb) > 0 {
-        out.append("Reported by different sources: " + ", ".join(sa) + " vs " + ", ".join(sb));
-    }
-    ra = reported_statuses(a);
-    rb = reported_statuses(b);
-    if len(ra) > 0 and len(rb) > 0 and ra[-1] != rb[-1] {
-        out.append("Latest reports say different things: " + status_label(ra[-1]) + " vs " + status_label(rb[-1]));
-    }
-    return out;
-}
-
-def unknowns(a: PersonView, b: PersonView) -> list[str] {
-    out: list[str] = [];
-    for p in [a, b] {
-        if p.age <= 0 { out.append("Age not recorded for '" + p.name + "'"); }
-        if len(p.claims) == 0 { out.append("No reports attached to '" + p.name + "'"); }
-    }
-    out.append("No photo, document, or contact comparison has been performed");
-    out.append("Whether '" + b.name + "' is short for '" + a.name + "' is not stated by any source");
-    return out;
-}
-
-def:pub RecordColumn(person: PersonView, label: str) -> JsxElement {
+def:pub RecordColumn(person: PersonView, label: str, cited: list[str]) -> JsxElement {
     return <div className="flex min-w-0 flex-col gap-3 rounded-md border border-border bg-card pt-4 pb-4 pl-4 pr-4">
         <div className="flex flex-col gap-0.5">
             <span className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">{label}</span>
@@ -85,9 +42,11 @@ def:pub RecordColumn(person: PersonView, label: str) -> JsxElement {
                 <span className="text-xs italic text-muted-foreground">{"No reports on this record."}</span>
             }}
             {for c in person.claims {
-                <div key={c.id} className="flex flex-col gap-1 rounded-md border border-border bg-background pt-2.5 pb-2.5 pl-3 pr-3">
+                <div key={c.id} className={cn("flex flex-col gap-1 rounded-md border bg-background pt-2.5 pb-2.5 pl-3 pr-3",
+                    "border-primary" if c.id in cited else "border-border")}>
                     <div className="flex flex-wrap items-center justify-between gap-2">
                         <span className={cn("text-sm font-semibold", status_text(c.claim_type))}>{status_sentence(c.claim_type)}</span>
+                        {c.id in cited and <Badge variant="outline">{"Cited by agent"}</Badge>}
                         <span className="flex items-center gap-1 text-xs text-muted-foreground">
                             <HugeiconsIcon icon={Clock01Icon} strokeWidth={2} className="size-3.5" />{friendly_time(c.timestamp)}
                         </span>
@@ -97,6 +56,7 @@ def:pub RecordColumn(person: PersonView, label: str) -> JsxElement {
                         {"Source: "}<span className="font-medium text-foreground">{c.source_name}</span>{" (" + source_kind(c.source_type) + ")"}
                     </span>
                     {c.notes and <span className="text-xs text-muted-foreground">{c.notes}</span>}
+                    <span className="text-[11px] text-muted-foreground">{"Claim " + c.id[-8:]}</span>
                 </div>
             }}
         </div>
@@ -147,8 +107,10 @@ def:pub IdentityReview(
         error = "";
         message = "";
         try {
+            evidence: list[str] = all_claim_ids(personA, personB) if personA and personB else [];
             res: IdentityDecisionResult = await review_identity(
-                candidate.person_a_id, candidate.person_b_id, decision, reviewer, note, candidate.reasons
+                candidate.incident_name, candidate.person_a_id, candidate.person_b_id,
+                decision, reviewer, note, candidate.reasons, evidence
             );
             if res.ok {
                 message = res.message;
@@ -167,8 +129,8 @@ def:pub IdentityReview(
             {"One of these records is no longer in the graph. Refresh the dashboard."}
         </section>;
     }
-    diffs = differences(personA, personB);
-    unk = unknowns(personA, personB);
+    cited = candidate.cited_claim_ids;
+    past: list[IdentityReviewEntry] = candidate.past_reviews;
 
     return <section aria-label="Identity review" className="flex flex-col gap-4 rounded-lg border border-border bg-muted/40 pt-5 pb-5 pl-4 pr-4 sm:pl-5 sm:pr-5">
         <div className="flex flex-wrap items-start justify-between gap-3">
@@ -185,20 +147,37 @@ def:pub IdentityReview(
                 <span className="font-medium">{candidate.reviewer}</span>
                 {" on " + friendly_time(candidate.decided_at)}
             </span>
-            {candidate.note and <span className="text-xs text-muted-foreground">{"Note: " + candidate.note}</span>}
-            {len(candidate.history) > 0 and <span className="text-xs text-muted-foreground">{"Earlier decisions: " + "; ".join(candidate.history)}</span>}
-            <span className="text-xs text-muted-foreground">{"Applies to records " + candidate.person_a_id[-8:] + " and " + candidate.person_b_id[-8:] + ". Neither record was merged or edited."}</span>
+            {candidate.note and <span className="text-xs text-muted-foreground">{"Reason: " + candidate.note}</span>}
+            <span className="text-xs text-muted-foreground">{"Evidence in view: " + str(len(candidate.evidence_claim_ids)) + " report(s). Applies to records " + candidate.person_a_id[-8:] + " and " + candidate.person_b_id[-8:] + ". Neither record was merged or edited."}</span>
+            {len(past) > 0 and <details className="text-xs text-muted-foreground">
+                <summary className="cursor-pointer">{"Earlier reviews (" + str(len(past)) + ")"}</summary>
+                <ol className="mt-2 flex flex-col gap-2 pl-4">
+                    {for (i, r) in enumerate(past) {
+                        <li key={str(i)} className="list-decimal">
+                            {decision_label(r.decision) + " by " + r.reviewer + " on " + friendly_time(r.decided_at)}
+                            {r.note and <span>{" - reason: " + r.note}</span>}
+                            {len(r.basis) > 0 and <span>{" - basis: " + ", ".join(r.basis)}</span>}
+                            <span>{" - evidence: " + str(len(r.evidence_claim_ids)) + " report(s)"}</span>
+                        </li>
+                    }}
+                </ol>
+            </details>}
+        </div>}
+
+        {candidate.proposed_by and <div className="flex flex-col gap-1 rounded-md border border-primary/40 bg-card pt-3 pb-3 pl-3 pr-3 text-sm">
+            <span>{"Proposed by "}<span className="font-medium">{candidate.proposed_by}</span>{" - " + str(len(cited)) + " cited report(s), highlighted below"}</span>
+            {candidate.proposal_rationale and <span className="text-xs text-muted-foreground">{"Agent rationale (unverified): " + candidate.proposal_rationale}</span>}
         </div>}
 
         <div className="grid gap-3 md:grid-cols-2">
-            <RecordColumn person={personA} label="Record A" />
-            <RecordColumn person={personB} label="Record B" />
+            <RecordColumn person={personA} label="Record A" cited={cited} />
+            <RecordColumn person={personB} label="Record B" cited={cited} />
         </div>
 
         <div className="grid gap-4 rounded-md border border-border bg-card pt-4 pb-4 pl-4 pr-4 md:grid-cols-3">
             <FactList title="Similarities (rule-based)" items={candidate.reasons} tone="text-status-safe" />
-            <FactList title="Differences" items={diffs} tone="text-status-warning" />
-            <FactList title="Unknown" items={unk} tone="text-status-neutral" />
+            <FactList title="Differences" items={candidate.differences} tone="text-status-warning" />
+            <FactList title="Unknown" items={candidate.unknowns} tone="text-status-neutral" />
         </div>
         <span className="text-xs text-muted-foreground">
             {"ResolveWalker label: " + candidate.confidence + " (count of matching name/age rules, not a probability). Names alone do not establish identity."}
