@@ -34,10 +34,9 @@ Next: pitch, backup video, Devpost.
 
 ## Anshu (map, integration)
 
-Working on: candidate-only attributed household context and support-need claims
-in `tools/test_data/generate_catalog.py`, focused tests, private support-coverage
-audit and data docs. Delivered sources remain immutable; no diagnoses or identity
-decisions. Preserve IDs, quotas, checkpoint outcomes and hero closure.
+Working on: none. Finishing handoff and stopping at Anshu's request now that
+he is awake. All changes are on the two named branches; no main merge, hosted
+deployment or corpus import. No background server or follow-up work scheduled.
 
 App handoff: all four overnight tasks complete; **draft PR #4** is ready:
 https://github.com/pathakanshu/trace/pull/4 (`codex/anshu-night`). Audit/smoke work
@@ -53,7 +52,7 @@ failed; no screenshot claimed. Hosted/physical-phone rehearsal remains human wor
 Own local server 8092 is stopped. Active developer checkout was never switched.
 Jac language audit: GitHub 94.501% at 04:30 EDT; no Linguist padding/overrides.
 
-Dataset branch: **codex/test-data**, latest geographic audit **e43e471**.
+Dataset branch: **codex/test-data**, latest candidate evidence fix **814efd9**.
 Delivered: 8,027 records, 1,150 Person / 1,000 private identities, 1,800 reports,
 3,600 claims; geography **170/1,000**. Hero is **748 reference-closed records**.
 Published release has 200 dummy images + 200 thumbnails; restore/hash guide:
@@ -61,14 +60,17 @@ Published release has 200 dummy images + 200 thumbnails; restore/hash guide:
 Original sources/asset bytes are preserved. Only media creation metadata was
 corrected from its original run receipt; licenses now have 200 contract entries.
 
-**206 tooling tests pass** (191 core + 15 Pillow). Delivered strict audit:
-**25 pass / 15 fail / 2 blocked**; media **11 / 0 / 1**. Clean remote clone at
+**216 tooling tests pass** (201 core + 15 Pillow). Delivered strict audit:
+**25 pass / 16 fail / 2 blocked**; media **11 / 0 / 1**. Clean remote clone at
 948c5e4 reproduced the then-current 174 tests and both audits exactly, restored
 400 files, left tracked files clean and created no .jac runtime store.
 
 Candidate generator fixes pass temporary-output tests for all seven checkpoint
 cohorts, ten rumor-opposition cases, exact raw envelopes/excerpts/locators,
 non-author unique votes, two hero followers and coherent task evidence/times.
+Candidate initial reports now supply contextual differences for all 20 same-name/age
+negative pairs and 30 attributed accessibility/language support requests. No
+diagnoses, resolver outcomes or unique identity keys are supplied.
 Full temporary generation passes the combined checks and exports a
 50-identity/62-Person candidate hero including both followers after repairing a shared-source boundary.
 Candidate workflow substitution removes all 153 forward references. Main generation refuses nonempty
@@ -79,7 +81,9 @@ was fabricated or run for this corpus.
 Needs team decision before replacing published inputs: namespace/version and
 immutable-source migration. Current release still has final-cohort drift, six
 unopposed rumors, 153 forward references, invalid community snapshots, ambiguous
-hard negatives, legacy support/replay shapes and missing geography. Details and
+hard negatives, zero support-needs citations, legacy support/replay shapes and
+missing geography. All 170 current points pass full district-30 boundary membership;
+this does not approve terrain, uncertainty envelopes or historical borders. Details and
 integration sequence: `tests/fixtures/bhotekoshi-2016-exercise-v1/REPAIR_PLAN.md`
 on codex/test-data. Keep all private expectations out of app/model inputs.
 Branch-only handoff; Miguel integrates. No main merge or JacHammer deployment.
@@ -160,3 +164,5 @@ Working on: (fill in)
 - 07:41 codex/test-data aaf03ac: hero now retains all 62 subscriptions and their actors (748 total records); 193 tests. Candidate hero retains two distinct followers. Actual boundary membership audit next; geography remains incomplete.
 
 - 07:46 codex/test-data e43e471: 170 existing points pass full district-30 polygon membership; 206 tests, strict audit 25/15/2. Boundary epoch/terrain/approved zones remain unverified. Candidate contextual evidence/support-needs coverage next.
+
+- 07:52 codex/test-data 814efd9: 216 tests (201 core + 15 Pillow) pass. Candidate context/support requests pass full disposable corpus checks; delivered audit honestly 25/16/2, with zero support coverage newly exposed. Stopping at Anshu’s request; PR #4, asset release and private repair guide are the handoff. No merge/deploy/import.
