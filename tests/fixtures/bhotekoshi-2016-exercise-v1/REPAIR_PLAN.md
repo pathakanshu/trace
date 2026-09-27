@@ -36,7 +36,7 @@ of historical missing people.
 
 | Area | Actual finding | Required repair/check |
 | --- | --- | --- |
-| Geography | 170 locations; four verified current settlement anchors, no approved sampling zones/area polygons | Obtain cited geographic inputs, preserve downloaded bytes/checksums, implement the specified sampler; never invent the remaining 830 paths/points |
+| Geography | 170 locations reuse four coordinate pairs; five context features match eight archived OSM nodes/ways; no approved sampling zones/area polygons | Obtain cited geographic inputs, preserve downloaded bytes/checksums, implement the specified sampler; never invent the remaining 830 paths/points |
 | Final status cohorts | T+72 is 353 missing / 547 safe / 50 injured / 50 unresolved under private fixture recomputation | The 300 depth reports assign 297 new safe outcomes outside the intended cohort; reconcile source history with the 650/250/50/50 targets |
 | Rumor uncertainty | Six of ten death-rumor claims lack available equal-time or unknown-time opposing status | Supply actual attributed opposing evidence/challenges; keep every rumor unconfirmed |
 | Release dependencies | 153 references point to later records | Repair release batches or an explicitly agreed representation; importer ordering alone cannot expose future information |

@@ -371,6 +371,23 @@ def run_audit(root):
         control_errors.append(str(error).replace(str(root), "<repo>"))
     add("control_pack", control_errors, expected_controls, [rel(control_path)])
 
+    geographic_errors, anchor_errors, geographic_counts, anchor_counts = [], [], {}, {}
+    try:
+        from audit_geography import audit_context, audit_location_anchors
+        geography = json.loads((data / "context/geography.geojson").read_text())
+        history_ids = {row["id"] for row in read_jsonl(data / "context/historical-references.jsonl")}
+        geographic_errors, geographic_counts = audit_context(root, geography, history_ids, DATASET)
+        anchor_errors, anchor_counts = audit_location_anchors(records, geography)
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        geographic_errors.append(str(error).replace(str(root), "<repo>"))
+        anchor_errors.append("Unable to reconcile locations with geographic context")
+    add("archived_geographic_input_consistency", geographic_errors, "Stored context geometry, artifact SHA-256, source IDs and versions match preserved OSM input",
+        [rel(data / "context")], ["Read-only comparison with archived input, not a fresh geographic survey or a 2016 flood-boundary validation."])
+    checks[-1]["observed"].update(geographic_counts)
+    add("existing_location_anchor_consistency", anchor_errors, "Existing settlement-anchor coordinates match their cited context points",
+        [rel(data / "records/location"), rel(data / "context/geography.geojson")], ["Declared country metadata is compared; actual boundary/terrain/inhabited-zone placement is not established. Four reused anchors do not satisfy the 1,000-location specification."])
+    checks[-1]["observed"].update(anchor_counts)
+
     quotas = json.loads((root / "demo/spec/quotas.json").read_text())
     locations = sum(row["kind"] == "location" for row in records)
     expected_locations = quotas["primary_catalog_counts"]["location"]
@@ -384,7 +401,7 @@ def run_audit(root):
     summary = dict(Counter(check["status"] for check in checks))
     summary = {status: summary.get(status, 0) for status in ("pass", "fail", "blocked")}
     return {"dataset_id": DATASET, "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "tools": [{"name": "tools/test_data/audit_contracts.py", "version": "1.10"}, {"name": "jsonschema", "version": version("jsonschema")}],
+            "tools": [{"name": "tools/test_data/audit_contracts.py", "version": "1.11"}, {"name": "jsonschema", "version": version("jsonschema")}],
             "checks": checks, "summary": summary}
 
 

@@ -1,10 +1,10 @@
 {
   "dataset_id": "bhotekoshi-2016-exercise-v1",
-  "generated_at": "2026-09-27T10:05:54Z",
+  "generated_at": "2026-09-27T10:24:26Z",
   "tools": [
     {
       "name": "tools/test_data/audit_contracts.py",
-      "version": "1.10"
+      "version": "1.11"
     },
     {
       "name": "jsonschema",
@@ -921,6 +921,46 @@
       "limitations": []
     },
     {
+      "rule_id": "archived_geographic_input_consistency",
+      "status": "pass",
+      "observed": {
+        "failure_count": 0,
+        "examples": [],
+        "context_features": 5,
+        "features_matching_archive": 5,
+        "preserved_archives": 1,
+        "referenced_osm_nodes_or_ways": 8
+      },
+      "expected": "Stored context geometry, artifact SHA-256, source IDs and versions match preserved OSM input",
+      "evidence_paths": [
+        "demo/datasets/bhotekoshi-2016-exercise-v1/context"
+      ],
+      "limitations": [
+        "Read-only comparison with archived input, not a fresh geographic survey or a 2016 flood-boundary validation."
+      ]
+    },
+    {
+      "rule_id": "existing_location_anchor_consistency",
+      "status": "pass",
+      "observed": {
+        "failure_count": 0,
+        "examples": [],
+        "location_records": 170,
+        "distinct_point_coordinates": 4,
+        "coordinate_methods": {
+          "settlement_anchor": 170
+        }
+      },
+      "expected": "Existing settlement-anchor coordinates match their cited context points",
+      "evidence_paths": [
+        "demo/datasets/bhotekoshi-2016-exercise-v1/records/location",
+        "demo/datasets/bhotekoshi-2016-exercise-v1/context/geography.geojson"
+      ],
+      "limitations": [
+        "Declared country metadata is compared; actual boundary/terrain/inhabited-zone placement is not established. Four reused anchors do not satisfy the 1,000-location specification."
+      ]
+    },
+    {
       "rule_id": "complete_geographic_placement",
       "status": "blocked",
       "observed": "170/1000 location records present; this audit cannot approve geographic sampling or area inputs.",
@@ -946,7 +986,7 @@
     }
   ],
   "summary": {
-    "pass": 18,
+    "pass": 20,
     "fail": 15,
     "blocked": 2
   }

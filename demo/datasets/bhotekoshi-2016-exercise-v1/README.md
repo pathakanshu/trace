@@ -58,7 +58,7 @@ kinds need an explicit application mapping; do not silently drop them.
 
 The older `schema-validation.json` and `validation-report.json` cover 19 limited
 checks; their zero failures do **not** mean complete contract conformance.
-The stricter supplementary `contract-audit.json` reports **18 checks passed,
+The stricter supplementary `contract-audit.json` reports **20 checks passed,
 15 failed, 2 blocked**. All 8,027 primary records pass the catalog JSON Schema,
 but 153 references reveal records before their release time. Manifest, license,
 checkpoint oracle, replay and validation-report
@@ -75,7 +75,7 @@ verification; these file checks do not prove crop matching or caption truth.
 This audit leaves the catalog, stable IDs, media bundle and previous reports
 unchanged. Repair release dependencies and support contracts before building a
 complete importer/replay around this preview. Top-level shape checks do not
-exhaustively validate nested semantics. The data tools' 112 distinct tests pass across schema and Pillow environments;
+exhaustively validate nested semantics. The data tools' 119 distinct tests pass across schema and Pillow environments;
 its corpus audit intentionally exits 1 for the observed data failures.
 
 - All 1,800 original source hashes match. However, the 1,260 JSON sources use
@@ -87,7 +87,10 @@ its corpus audit intentionally exits 1 for the observed data failures.
   with two distinct active followers. Existing snapshots are unchanged.
 - Geography is 170/1,000: the remaining 830 records require verified geographic
   inputs. The current points reuse four settlement anchors; no approved area
-  polygons or historical flood boundary are supplied.
+  polygons or historical flood boundary are supplied. Five context features now
+  pass hash/version/coordinate comparison with eight archived OSM elements; all
+  170 points match their cited anchors but reuse only four coordinate pairs.
+  This does not establish terrain suitability or district/country geofencing.
 - Private identity rows now match the specified contract, preserving all IDs,
   membership and ages. Initial locations are 50 existing points and 950 unknowns;
   the geography deficit is explicit and no runtime identity decisions are seeded.

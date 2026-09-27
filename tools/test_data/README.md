@@ -43,7 +43,7 @@ it does not fall back to a stale schema report when jsonschema is unavailable.
 
 Run its own offline checks with:
 `python3 -m unittest discover -s tools/test_data -p test_contract_audit.py`.
-The current corpus audit has 18 pass / 15 fail / 2 blocked; failures are intentional
+The current corpus audit has 20 pass / 15 fail / 2 blocked; failures are intentional
 findings in the partial dataset, not successful runtime behavior.
 
 ## Isolated control pack
@@ -117,8 +117,8 @@ cases use analysis without publishing: hostile text stays source data. None of
 these eight runtime cases has run; no agent response or success is prefilled.
 No nonexistent replay-action IDs are used as prerequisites.
 
-Actual tooling results: **112 distinct tests pass across two environments**.
-The schema environment runs 101 and explicitly skips eleven Pillow tests. Run the
+Actual tooling results: **119 distinct tests pass across two environments**.
+The schema environment runs 108 and explicitly skips eleven Pillow tests. Run the
 eleven media checks with a Pillow-equipped tooling Python:
 `python3 -m unittest discover -s tools/test_data -p '*media*.py'`.
 That separate run passes all eleven. Do not count skipped decoder checks as passes
@@ -267,3 +267,18 @@ near-copy detection performance, caption truth, geolocation, authenticity, human
 visual similarity or an application verification result. Eight media-auditor
 unit tests run alongside the three negative-decoder tests in the Pillow suite.
 No image or thumbnail was modified.
+
+## Archived geography consistency
+
+The strict audit now checks the actual preserved OSM gzip hash, source element
+IDs/version/epoch, closed context properties and point/line coordinates. All five
+context features match eight archived node/way elements. All 170 existing
+locations match their cited settlement anchors, but reuse only **four distinct
+coordinates**. No new locations or coordinates were generated.
+
+Seven tests cover real archived input, altered coordinates/hashes/versions,
+unknown references, escaping symlinks, invalid positions and preserving separate
+river segments. These are archive-consistency checks. They do not establish
+2016 geography, a historical flood boundary, country/district geofencing, terrain
+suitability or approved inhabited sampling zones; geographic completion stays
+blocked at 170/1,000. Declared country metadata agreement is not a boundary test.
