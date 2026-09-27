@@ -355,8 +355,19 @@ def build_community(contributors,claim_source,media_source):
           "translation_method":"machine" if typ=="TRANSLATION" else None,"translation_review":None})
         contributions.append(c)
     values=["HELPFUL"]*240+["NOT_HELPFUL"]*120; votes=[]
+    contributor_ids=sorted(row["id"] for row in contributors)
+    if len(contributor_ids)<3 or len(contributor_ids)!=len(set(contributor_ids)):
+        raise ValueError("Votes need at least three distinct contributor IDs")
     for i,val in enumerate(values,1):
-        r=common("vote",i,at(30+i%42)); r.update({"contributor_id":rid("contributor",1+(i-1)%80),"contribution_id":rid("contribution",1+(i-1)%240),"value":val,"voted_at":utc(at(30+i%42))}); votes.append(r)
+        contribution=contributions[(i-1)%len(contributions)]
+        if contribution["contributor_id"] not in contributor_ids:
+            raise ValueError("Contribution author is absent from the contributor catalog")
+        author_index=contributor_ids.index(contribution["contributor_id"])
+        round_number=(i-1)//len(contributions)
+        voter=contributor_ids[(author_index+1+round_number)%len(contributor_ids)]
+        submitted=datetime.fromisoformat(contribution["submitted_at"].replace("Z","+00:00"))
+        voted=max(at(30+i%42),submitted)
+        r=common("vote",i,voted); r.update({"contributor_id":voter,"contribution_id":contribution["id"],"value":val,"voted_at":utc(voted)}); votes.append(r)
     types4=["GEOLOCATE","TRANSLATE","FIND_EARLIER_COPY","SOURCE_OR_CHALLENGE"]
     states=["OPEN"]*40+["IN_PROGRESS"]*20+["SUBMITTED"]*24+["REVIEWED"]*12; tasks=[]
     for i,state in enumerate(states,1):
@@ -371,7 +382,10 @@ def build_followups():
     for kind,count in subjects:
         limit={"person":1150,"location":1000,"media":200,"incident":1,"organization":32}[kind]
         for i in range(count):
-            r=common("subscription",no,at(12)); r.update({"contributor_id":rid("contributor",1+(no-1)%80),"subject":{"kind":kind,"id":rid(kind,1+i%limit)},"created_at":utc(at(12)),"delivery":"in_app","active":True,"event_types":["new_claim","status_change"]}); subs.append(r); no+=1
+            # Reuse one hero subject with a different actor while retaining the
+            # exact 100 Person-subscription quota and people without followers.
+            subject_number=1 if kind=="person" and i==count-1 else 1+i%limit
+            r=common("subscription",no,at(12)); r.update({"contributor_id":rid("contributor",1+(no-1)%80),"subject":{"kind":kind,"id":rid(kind,subject_number)},"created_at":utc(at(12)),"delivery":"in_app","active":True,"event_types":["new_claim","status_change"]}); subs.append(r); no+=1
     types=["PERSON_TIMELINE","ACCESS_HAZARD","AID_FACILITY","MEDIA_LINEAGE"]; investigations=[]
     for i in range(24):
         n=i+1; typ=types[i%4]; selected_claims=[rid("claim",1+i),rid("claim",1151+i)]

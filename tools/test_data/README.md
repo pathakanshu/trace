@@ -118,8 +118,8 @@ cases use analysis without publishing: hostile text stays source data. None of
 these eight runtime cases has run; no agent response or success is prefilled.
 No nonexistent replay-action IDs are used as prerequisites.
 
-Actual tooling results: **174 distinct tests pass across two environments**.
-The schema environment runs 159 and explicitly skips fifteen Pillow tests. Run the
+Actual tooling results: **181 distinct tests pass across two environments**.
+The schema environment runs 166 and explicitly skips fifteen Pillow tests. Run the
 fifteen media checks with a Pillow-equipped tooling Python:
 `python3 -m unittest discover -s tools/test_data -p '*media*.py'`.
 That separate run passes all fifteen. Do not count skipped decoder checks as passes
@@ -398,3 +398,15 @@ and envelope checks (1,260 JSON / 540 text, 3,600 claims), verify entry labels a
 unknowns, and resolve every text locator. Checkpoint/type/cardinality/schema and
 determinism regressions still pass. Published raw inputs remain the legacy
 format until the coordinated versioned migration; no importer was implemented.
+
+## Candidate vote and follower repair
+
+Candidate generation now allocates 360 unique non-author voting pairs, retaining
+240 HELPFUL / 120 NOT_HELPFUL votes and at least one vote per contribution. Vote
+times are no earlier than the referenced submission. One hero Person now has two
+distinct active followers at baseline, while total/subtype subscription quotas
+and people with no followers are preserved. Seven tests verify schema, stable
+IDs, timing, distinct voters, follow coverage, deterministic repeats and rejection
+of missing/duplicate actors. These are generated fictional workflow inputs, not
+executed votes, subscriptions or alerts. The published snapshots still contain
+the known self-vote/duplicate/follower defects and task workflows still need repair.

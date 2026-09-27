@@ -68,7 +68,9 @@ The preview and its original sources have already been distributed. Do not run
 hashes, or support files. The generator now refuses nonempty catalog/raw output directories. Its cohort/rumor timing and exact raw-envelope fixes pass all seven checkpoints,
 quota/schema/hash checks, all 1,800 source-envelope checks and entry-locator checks
 when generating only into temporary test folders; the published source records
-still contain the defects above. Other generator defects remain. These candidate
+still contain the defects above. Candidate vote/follower allocation also passes uniqueness, no-self-vote, timing
+and two-follower coverage checks; published community snapshots are unchanged.
+Other generator defects remain. These candidate
 checks are not a new published release or a compatible importer rehearsal.
 
 Before a corpus-wide repair, agree with Anshu and Miguel how immutable originals,
