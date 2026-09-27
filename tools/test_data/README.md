@@ -86,8 +86,9 @@ requires equal-time or unknown-time opposing evidence for every death rumor.
 
 Measured T+72 counts are 353 missing / 547 safe / 50 injured / 50 unresolved,
 against targets 650 / 250 / 50 / 50. Earlier cohorts match under this method.
-`generate_catalog.py` assigns 297 additional safe follow-ups outside the intended
-safe cohort. Six death rumors also lack the specified temporal opposition when
+The published generator snapshot assigned 297 additional safe follow-ups outside
+the intended safe cohort. The candidate generator fix is tested only in temporary
+output; the distributed source records have not been regenerated. Six death rumors also lack the specified temporal opposition when
 released. Do not rerun generation to silently rewrite published source history;
 coordinate a versioned repair and recompute hashes/hero closure before release.
 Seven regression tests cover ordering, unknown/equal times, future-source cutoff,
@@ -117,8 +118,8 @@ cases use analysis without publishing: hostile text stays source data. None of
 these eight runtime cases has run; no agent response or success is prefilled.
 No nonexistent replay-action IDs are used as prerequisites.
 
-Actual tooling results: **162 distinct tests pass across two environments**.
-The schema environment runs 147 and explicitly skips fifteen Pillow tests. Run the
+Actual tooling results: **171 distinct tests pass across two environments**.
+The schema environment runs 156 and explicitly skips fifteen Pillow tests. Run the
 fifteen media checks with a Pillow-equipped tooling Python:
 `python3 -m unittest discover -s tools/test_data -p '*media*.py'`.
 That separate run passes all fifteen. Do not count skipped decoder checks as passes
@@ -371,3 +372,19 @@ shape/content, unknown versions, altered rights/hashes, provenance, missing or
 duplicate members, symlinks, corrupted assets and idempotence. The strict audit
 checks nested license consistency; the legacy validator delegates to this writer
 so it cannot silently restore the old one-row shape. No new rights are granted.
+
+## Candidate cohort repair, not a rewritten release
+
+The generator now keeps all 300 extra FOUND_SAFE depth reports inside the intended
+250-person safe cohort. Its ten death rumors retain T+23 observation times that
+match existing opposing claims; later arrival is kept separate. In temporary
+folders, 1,800 sources / 3,600 claims pass all seven checkpoint targets, all ten
+rumor-opposition checks, exact type/cardinality quotas, catalog schema, source
+hashes, allocated ID bindings and deterministic second generation. Nine tests
+also verify all published raw reports remain unchanged. No application ran.
+
+The main generator now refuses a nonempty records or raw/reports output directory
+before loading or writing. This prevents silently replacing the distributed
+preview. Coordinate the namespace/version/source migration before adopting any
+new corpus; these two fixes do not resolve the other documented generation bugs.
+The delivered audit still correctly fails the old final cohorts and six rumors.

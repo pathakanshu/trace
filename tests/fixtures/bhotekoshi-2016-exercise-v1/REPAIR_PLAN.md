@@ -65,8 +65,11 @@ unit tests does **not** make the corpus audit pass.
 
 The preview and its original sources have already been distributed. Do not run
 `generate_catalog.py` or the legacy validator to silently overwrite them, their
-hashes, or support files. Existing generator functions still contain the defects
-above; only query/negative/hero generation has been independently repaired.
+hashes, or support files. The generator now refuses nonempty catalog/raw output directories. Its cohort
+and rumor timing fixes pass all seven checkpoints and quota/schema/hash checks
+when generating only into temporary test folders; the published source records
+still contain the defects above. Other generator defects remain. These candidate
+checks are not a new published release or a compatible importer rehearsal.
 
 Before a corpus-wide repair, agree with Anshu and Miguel how immutable originals,
 stable IDs, namespace/version and exact quotas will coexist. Appending corrective

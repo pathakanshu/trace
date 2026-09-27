@@ -185,10 +185,14 @@ def build_claims_and_sources(plan, groups, facilities, infrastructure, hazards, 
         person_claim(gid,"MISSING",rh,rel,"Competing fictional report still lists person missing; conflict intentionally retained.")
     for gid in range(951,961):
         rel=24 if gid<=954 else 36 if gid<=957 else 48
-        person_claim(gid,"DECEASED",rel-1,rel,"Unverified fictional rumor only; never a determination.")
+        # These ten identities already have equal-time opposing reports at T+23.
+        # Later availability of a rumor must not manufacture a newer observation.
+        person_claim(gid,"DECEASED",23,rel,"Unverified fictional rumor only; never a determination.")
     # Additional report depth to exact type quotas: 300 safe, 150 injured,
     # 100 stale missing, 550 sightings, 140 details.
-    for i in range(300): person_claim(1+i if i<3 else 251+(i%450),"FOUND_SAFE",71,72)
+    # Follow-up depth repeats the intended safe cohort rather than creating
+    # 297 extra safe individuals outside its 250-person allocation.
+    for i in range(300): person_claim(1+(i%250),"FOUND_SAFE",71,72)
     for i in range(150): person_claim(701+(i%50),"INJURED",71,72)
     for i in range(100): person_claim(1+(i%100),"MISSING",15,72,"Earlier fictional missing report retained as historical source history.")
     # Fill the 24/36/48-hour source batches with neutral observations so
@@ -368,7 +372,13 @@ def write_shards(records):
         for part,start in enumerate(range(0,len(rows),100),1):
             jsonl(folder/f"part-{part:04d}.jsonl",rows[start:start+100])
 
+def require_fresh_catalog_output(data):
+    for directory in (data/"records", data/"raw/reports"):
+        if directory.is_symlink() or (directory.exists() and (not directory.is_dir() or any(directory.iterdir()))):
+            raise ValueError("Refusing to regenerate nonempty catalog/source output. Preserve published inputs and coordinate a new namespace/version before regeneration.")
+
 def main():
+    require_fresh_catalog_output(DATA)
     plan=load_plan(); people,initial,groups=build_people(plan)
     locations=build_locations(plan); organizations,contributors=build_org_contributors()
     facilities,infrastructure,hazards,aids=build_subjects()
