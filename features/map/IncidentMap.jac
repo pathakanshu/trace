@@ -18,6 +18,7 @@ import from "maplibre-gl" { Map as MapLibreMap, Marker, NavigationControl, Attri
 import "maplibre-gl/dist/maplibre-gl.css";
 import from "topojson-client" { feature }
 import from ...lib.utils { cn }
+import from .Density { density_geojson }
 import from .Status { linked_people, pin_status, pin_label, pin_dot }
 sv import from ...services.geo { get_boundaries, get_bhotekoshi_corridor }
 sv import from ...services.trace { LocationView, PersonView }
@@ -28,7 +29,7 @@ glob INCIDENT_DISTRICT_ID: int = 30;
 # Read a CSS variable (e.g. "--primary") so map colours follow the theme tokens.
 # The theme uses oklch(...) colours, which MapLibre cannot parse, so we let a
 # tiny canvas convert the colour to "rgba(...)" first.
-def css_var(name: str) -> str {
+def css_var(name: str, opacity: float = -1.0) -> str {
     styles: any = getComputedStyle(document.documentElement);
     raw: str = styles.getPropertyValue(name).trim();
     canvas: any = document.createElement("canvas");
@@ -38,7 +39,7 @@ def css_var(name: str) -> str {
     ctx.fillStyle = raw;
     ctx.fillRect(0, 0, 1, 1);
     px: any = ctx.getImageData(0, 0, 1, 1).data;
-    return "rgba(" + str(px[0]) + "," + str(px[1]) + "," + str(px[2]) + "," + str(px[3] / 255) + ")";
+    return "rgba(" + str(px[0]) + "," + str(px[1]) + "," + str(px[2]) + "," + str(opacity if opacity >= 0 else px[3] / 255) + ")";
 }
 
 # A blank style: no tiles, no internet needed. Our GeoJSON layers go on top.
@@ -72,9 +73,10 @@ def add_boundary_layers(map_obj: any, topo: any) -> None {
         "paint": {"line-color": css_var("--muted-foreground"), "line-width": 1.2, "line-opacity": 0.6}
     });
     # Requests may finish in either order; late boundaries stay under the river.
-    if map_obj.getLayer("corridor-band") {
+    first_overlay = "report-heat" if map_obj.getLayer("report-heat") else "corridor-band";
+    if map_obj.getLayer(first_overlay) {
         for layer in ["district-fill", "district-line", "province-line"] {
-            map_obj.moveLayer(layer, "corridor-band");
+            map_obj.moveLayer(layer, first_overlay);
         }
     }
 }
@@ -86,19 +88,21 @@ def add_corridor_layers(map_obj: any, corridor: any) -> list {
     map_obj.addLayer({"id": "corridor-band", "type": "line", "source": "bhotekoshi-corridor",
         "filter": ["==", ["geometry-type"], "LineString"],
         "layout": {"line-cap": "round", "line-join": "round"},
-        "paint": {"line-color": css_var("--primary"), "line-opacity": 0.13,
+        "paint": {"line-color": css_var("--map-water", 1.0), "line-opacity": 0.13,
             "line-width": ["interpolate", ["linear"], ["zoom"], 8, 10, 12, 28, 16, 52]}});
     map_obj.addLayer({"id": "corridor-river", "type": "line", "source": "bhotekoshi-corridor",
         "filter": ["==", ["geometry-type"], "LineString"],
         "layout": {"line-cap": "round", "line-join": "round"},
-        "paint": {"line-color": css_var("--primary"), "line-opacity": 0.9,
+        "paint": {"line-color": css_var("--map-water", 1.0), "line-opacity": 0.9,
             "line-width": ["interpolate", ["linear"], ["zoom"], 8, 1.5, 12, 3.5, 16, 6]}});
+    if map_obj.getLayer("report-heat") { map_obj.moveLayer("report-heat", "corridor-band"); }
+    if map_obj.getLayer("report-circles") { map_obj.moveLayer("report-circles"); }
     labels: list = [];
     # HTML labels keep offline text rendering independent of a remote glyph server.
     for item in corridor.features {
         if item.geometry.type == "Point" {
             label: any = document.createElement("span");
-            label.className = "pointer-events-none rounded bg-card/90 px-1.5 py-0.5 text-xs font-medium text-primary shadow-sm";
+            label.className = "pointer-events-none rounded bg-card/90 px-1.5 py-0.5 text-xs font-medium text-foreground shadow-sm";
             label.textContent = item.properties.label;
             label.setAttribute("data-corridor-settlement", item.properties.label);
             marker: any = new(Marker, {"element": label, "anchor": "bottom-left", "offset": [8, -8]});
@@ -109,24 +113,50 @@ def add_corridor_layers(map_obj: any, corridor: any) -> list {
     return labels;
 }
 
+
+def update_density(map_obj: any, groups: list) -> None {
+    data = density_geojson(groups);
+    maximum = max([2] + [g.report_count for g in groups]);
+    weight = ["interpolate", ["linear"], ["get", "report_count"], 0, 0, 1, 0.05, maximum, 1];
+    if map_obj.getSource("report-counts") {
+        map_obj.getSource("report-counts").setData(data);
+        map_obj.setPaintProperty("report-heat", "heatmap-weight", weight);
+        return;
+    }
+    map_obj.addSource("report-counts", {"type": "geojson", "data": data});
+    map_obj.addLayer({"id": "report-heat", "type": "heatmap", "source": "report-counts",
+        "paint": {"heatmap-weight": weight,
+            "heatmap-intensity": ["interpolate", ["linear"], ["zoom"], 8, 0.6, 12, 1.2, 16, 2],
+            "heatmap-radius": ["interpolate", ["linear"], ["zoom"], 8, 14, 12, 28, 16, 42],
+            "heatmap-opacity": ["interpolate", ["linear"], ["zoom"], 10, 0.7, 14, 0.2, 16, 0],
+            "heatmap-color": ["interpolate", ["linear"], ["heatmap-density"],
+                0, css_var("--primary", 0.0), 0.2, css_var("--map-water"),
+                0.4, css_var("--primary"), 0.7, css_var("--status-warning"), 1, css_var("--status-missing")]}});
+    map_obj.addLayer({"id": "report-circles", "type": "circle", "source": "report-counts", "minzoom": 11,
+        "paint": {"circle-color": css_var("--primary"), "circle-opacity": 0.75,
+            "circle-stroke-color": css_var("--background"), "circle-stroke-width": 2,
+            "circle-radius": ["interpolate", ["linear"], ["get", "report_count"], 1, 7, 500, 20, 1500, 30]}});
+    if map_obj.getLayer("corridor-band") { map_obj.moveLayer("report-heat", "corridor-band"); }
+}
+
 # A small HTML pin. Classes use theme tokens.
-def make_pin(label: str, location_id: str, status: str, on_select: Callable[[str], None]) -> any {
+def make_pin(label: str, location_id: str, status: str, on_select: Callable[[str], None], label_left: bool = False) -> any {
     el: any = document.createElement("button");
     el.type = "button";
     el.setAttribute("aria-label", "Inspect " + label + " · " + pin_label(status));
     el.addEventListener("click", lambda { on_select(location_id); });
-    el.className = "flex cursor-pointer flex-col items-center gap-1 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
+    el.className = "flex cursor-pointer flex-row items-center gap-1 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
     dot: any = document.createElement("span");
     dot.className = "block size-3.5 rounded-full border-2 border-background shadow " + pin_dot(status);
     tag: any = document.createElement("span");
     tag.className = "whitespace-nowrap rounded border border-border bg-card/95 px-1.5 py-0.5 text-[10px] font-medium text-foreground shadow-sm";
     tag.textContent = label;
-    el.appendChild(dot);
-    el.appendChild(tag);
+    if label_left { el.appendChild(tag); el.appendChild(dot); }
+    else { el.appendChild(dot); el.appendChild(tag); }
     return el;
 }
 
-def:pub IncidentMap(locations: list[LocationView], people: list[PersonView], active: bool = True, className: str = "", focusLocationId: str = "", focusRequest: int = 0, onSelect: Callable[[str], None] | None = None) -> JsxElement {
+def:pub IncidentMap(locations: list[LocationView], people: list[PersonView], active: bool = True, className: str = "", focusLocationId: str = "", focusRequest: int = 0, onSelect: Callable[[str], None] | None = None, reportGroups: list = [], onSelectSettlement: Callable[[str], None] | None = None, onCorridorReady: Callable[[list], None] | None = None) -> JsxElement {
     has containerRef: Ref[HTMLDivElement] = Ref(),
         mapRef: Ref[any] = Ref(None),
         markersRef: Ref[list] = Ref([]),
@@ -134,6 +164,7 @@ def:pub IncidentMap(locations: list[LocationView], people: list[PersonView], act
         corridorStatus: str = "loading",
         corridorTimerRef: Ref[any] = Ref(None),
         onSelectRef: Ref[any] = Ref(None),
+        onSettlementRef: Ref[any] = Ref(None),
         status: str = "loading",    # loading | ready | error
         errorText: str = "",
         boundaryStatus: str = "loading",
@@ -146,6 +177,7 @@ def:pub IncidentMap(locations: list[LocationView], people: list[PersonView], act
     }
 
     can with [onSelect] entry { onSelectRef.current = onSelect; }
+    can with [onSelectSettlement] entry { onSettlementRef.current = onSelectSettlement; }
 
     # Start the map immediately. Boundary loading never gates evidence or pins.
     can with entry {
@@ -169,6 +201,13 @@ def:pub IncidentMap(locations: list[LocationView], people: list[PersonView], act
                 status = "ready";
                 load_boundaries(map_obj);
                 load_corridor(map_obj);
+                map_obj.on("click", "report-circles", lambda (event: any) {
+                    if event.features and len(event.features) > 0 and onSettlementRef.current {
+                        onSettlementRef.current.call(None, event.features[0].properties.key);
+                    }
+                });
+                map_obj.on("mouseenter", "report-circles", lambda { map_obj.getCanvas().style.cursor = "pointer"; });
+                map_obj.on("mouseleave", "report-circles", lambda { map_obj.getCanvas().style.cursor = ""; });
             });
             # Browser constructor lacks a Jac stub; see jac-cl-js-interop.
             observer: any = new(ResizeObserver, lambda { # jac:ignore[E1053]
@@ -213,6 +252,7 @@ def:pub IncidentMap(locations: list[LocationView], people: list[PersonView], act
             else {
                 settlementMarkersRef.current = add_corridor_layers(map_obj, corridor);
                 corridorStatus = "ready";
+                if onCorridorReady { (onCorridorReady as any).call(None, corridor.features); }
             }
         } except Exception {
             if mapRef.current == map_obj { corridorStatus = "unavailable"; }
@@ -222,17 +262,27 @@ def:pub IncidentMap(locations: list[LocationView], people: list[PersonView], act
     }
 
     # Keep pins in sync with the Location nodes (runs after every render).
-    can with [locations, people, status] entry {
+    can with [locations, people, reportGroups, status] entry {
         map_obj = mapRef.current;
         if not map_obj or status != "ready" { return; }
         for m in markersRef.current { m.remove(); }
         fresh: list = [];
-        for loc in locations {
-            marker: any = new(Marker, {"element": make_pin(loc.name, loc.id, pin_status(linked_people(loc, people)), select_location), "anchor": "top"});
+        pin_places: list[LocationView] = locations[:20] if len(locations) <= 20 or len(reportGroups) == 0 else [];
+        for index in range(len(pin_places)) {
+            loc = pin_places[index];
+            label_left = index % 2 == 1;
+            # Alternate labels around nearby demo pins; the dot stays at its true
+            # projected coordinate (half the 14px dot is compensated by offset).
+            marker: any = new(Marker, {"element": make_pin(loc.name, loc.id, pin_status(linked_people(loc, people)), select_location, label_left),
+                "anchor": "right" if label_left else "left", "offset": [7 if label_left else -7, 0]});
             marker.setLngLat([loc.longitude, loc.latitude]).addTo(map_obj);
             fresh.append(marker);
         }
         markersRef.current = fresh;
+    }
+
+    can with [reportGroups, status] entry {
+        if mapRef.current and status == "ready" { update_density(mapRef.current, reportGroups); }
     }
 
     # Tab panels stay mounted. Recalculate the canvas after the map becomes visible.

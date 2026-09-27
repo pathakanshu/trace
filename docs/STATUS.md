@@ -56,29 +56,28 @@ import quadratic); corpus lookups use a field filter so they walk real edges.
 Working on: corridor map + corpus report heat layer on `codex/anshu-map-scale`.
 Reserved: `features/map/*`, `services/geo.jac`, new
 `features/map/bhotekoshi-corridor.geojson`, README Map section, this section/log.
-Task 1 implemented: current OSM river/settlements, faint district, corridor view
-and attribution. Local browser endpoint/labels/pins work; 375px document has no
-overflow (canvas 341px, caption 343px). No screenshot file saved. Task 2 consumes
-Miguel's `place_counts` contract when it lands.
-Miguel: planned endpoint `get_bhotekoshi_corridor`; after its commit lands,
-replace the geo import in `main.jac` with exactly:
+Task 1 landed on main: **34f3d9a / 48b597f**. Current OSM river/settlements,
+faint district, corridor fit and ODbL attribution; not a measured flood extent.
+Task 2 consumer ready: exact-coordinate aggregation, weighted heat, clickable
+high-zoom circles, keyboard status breakdown, top-20 list, empty-count fallback.
+Miguel's backend/import registration landed in 814a07d during rebase.
+Eight count browser checks use labeled component fixtures; real imported-corpus
+integration and the rebased gates are next.
+
+Validation: **59 Jac tests**, **54-file compiler gate**, production web bundle;
+**9 Maya browser checks + 8 density component checks**, zero page errors.
+Hospital update creates one alert; source history/reload/reset remain correct.
+375px caption/legend/list have no document overflow. Actual local Maya screenshot:
+`/private/tmp/trace-corridor-mobile.png` (Anshu's machine, not a portable asset).
+Own isolated server 8092 stopped after checks; active developer checkout untouched.
+Hosted preview, actual imported corpus counts and physical phone not exercised.
+
+Miguel has registered the endpoint in 814a07d with:
 `import from services.geo { get_boundaries, get_bhotekoshi_corridor }`.
-I will not edit main.jac or services/trace.jac. Latest user prompt authorizes
-plain main push after rebase + both gates, deadline 09:40 EDT.
-
-App handoff: all four overnight tasks complete; **draft PR #4** is ready:
-https://github.com/pathakanshu/trace/pull/4 (`codex/anshu-night`). Audit/smoke work
-already landed on main. Remaining feature commits: 600bafd People → Map,
-ed3cb0b phone wrapping, 0e697ee report-location provenance regression.
-Gabriel: People callback is optional; unmapped reports get no link. No graph,
-endpoint, investigation, seed, dependency, live-model or hosted-deployment changes.
-
-App validation on main 70c03c2: **57 Jac tests, 52-file compiler gate**, production
-client build, local keyboard/mouse/repeated focus/search, 375px layout, publish /
-retry (1 then 0 alerts), reset and persisted restart pass. Screenshot capture
-failed; no screenshot claimed. Hosted/physical-phone rehearsal remains human work.
-Own local server 8092 is stopped. Active developer checkout was never switched.
-Jac language audit: GitHub 94.501% at 04:30 EDT; no Linguist padding/overrides.
+Keep the agreed `place_counts`, `located_reports`, `unlocated_reports` fields;
+UI consumes them automatically. Pull main and cold-restart before integration
+checks. I did not edit main.jac, services/trace.jac, graph, demo or other tabs.
+Overnight PR #4 was merged (7e694be); its old draft handoff is superseded.
 
 Dataset branch: **codex/test-data**, latest candidate evidence fix **814efd9**.
 Delivered: 8,027 records, 1,150 Person / 1,000 private identities, 1,800 reports,
@@ -200,3 +199,5 @@ Working on: (fill in)
 - 08:50 main: corpus import as its own incident (load_corpus, list_incidents, get_dashboard(incident_id), search_people, place counts, capped graph). 66 tests pass; Maya demo unchanged. Also registers get_bhotekoshi_corridor in main.jac.
 - 08:55 main: corpus counts cached between requests (server corpus dashboard 3-4 s down to about 1 s); verified on a restarted persisted server that the corpus survives and Reset plus hospital update still gives one alert.
 - 08:58 main: incident switcher (Maya story / corpus), Load exercise corpus in Demo controls, corpus totals strip; People status chips, 100 of N and server search; Organizations ranked by report_count; Graph per-kind totals and cap note. Demo-only controls and report checker hidden for the corpus. 66 tests, gate passed; browser-checked Maya reset + one hospital alert and the corpus views.
+
+- 08:55 codex/anshu-map-scale: 34f3d9a/48b597f corridor on main; density consumer and map label fix ready. 9 real Maya + 8 mocked-count browser checks pass, 375px screenshot `/private/tmp/trace-corridor-mobile.png`. Backend fields/import registration remain Miguel-owned; final rebase/test/compiler gates precede push.

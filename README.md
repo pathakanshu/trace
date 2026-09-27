@@ -99,6 +99,16 @@ visual guide, **not a measured 2016 flood extent**. © OpenStreetMap contributor
 an exact copy from `codex/test-data`; its provenance/archive references resolve
 on that branch, not to a bundled corpus here. No other corpus inputs were copied.
 
+When the dashboard supplies `place_counts`, Map aggregates exact coordinates
+without jitter and draws a heat layer weighted by report count. High-zoom circles
+and the keyboard-accessible list open settlement totals and missing/safe/other
+source assertions. The list shows at most the 20 busiest coordinates. The caption
+separates located and unlocated reports; neither the glow nor the river band is
+an uncertainty or flood boundary. Counts are reports, not unique people or media
+locations. An empty count list preserves the Maya pins and evidence panel.
+The additive count backend/importer is owned by Miguel; component fixtures do
+not establish that the corpus has been imported.
+
 The corridor loads independently of boundaries and evidence, with its own
 five-second unavailable message and late recovery. HTML settlement labels need
 no external glyph service. `get_bhotekoshi_corridor` is the server endpoint;
@@ -124,24 +134,22 @@ A failed request or five-second delay displays a boundaries-unavailable message;
 a late success restores boundaries without changing selection or viewport.
 The map observes container resizing and keeps viewport/selection across tabs.
 
-Map checks on Jac 0.34.1: all 48 repository tests passed (five focused map tests),
-the whole-program type-check and web client build passed, and nine automated
-Chromium browser checks passed without page errors. Browser checks covered the
-hospital update/one alert, retained source evidence, reload/reset, pan/zoom and
-selection across tabs, keyboard selection, 375px width without horizontal
-overflow, status/citation edge cases, and failed/slow boundary recovery.
-This was an isolated local preview; hosted deployment and a physical phone were
-not exercised. The generated large corpus remains unimported.
+Map checks (27 September, corridor/count consumer): 59 Jac tests and the
+54-file compiler gate pass, as does the production web client build. Nine real
+Maya browser checks pass (hospital update/one alert, retained police evidence,
+reload/reset, keyboard selection, pan/zoom/tab preservation, and failed/slow
+boundaries). Eight additional browser component checks use explicitly mocked
+count responses: exact-coordinate aggregation, 170 rows to four points,
+high-zoom circle selection, source-status sums, top-20 cap, empty fallback and
+corridor failure. Both suites pass at 375px with no document overflow or page
+errors. These count fixtures are not an importer or a corpus execution result.
+Local Maya screenshot: `/private/tmp/trace-corridor-mobile.png` on Anshu's host.
+Hosted deployment and physical-phone rehearsal remain untested.
 
-Overnight follow-up (27 September): 57 repository tests (six focused map tests),
-the 52-file compiler gate, and the production web client build passed. Browser interactions verified keyboard/mouse **Show on map**,
-repeat centering, retained People search, absence of links on unmapped reports,
-and the hospital update/reset. At 375x812, Map and Organizations had no document
-overflow, including long references/URLs in preview, published records and
-expanded original text; identical report retry created no extra alert. These
-were local browser checks via the connected extension; screenshot capture was
-unavailable. The nine-check script above predates these follow-up interactions.
-
+If a development preview retains a compiler overlay after a source correction,
+stop it and rebuild before restarting. A stale generated
+`.jac/client/.jac-build-error.json` may retain the old error; remove that marker
+only after a successful build confirms the correction. Do not reset shared data.
 
 ```sh
 jac test features/map/test_map.jac
@@ -151,6 +159,7 @@ jac build --client web
 jac start --dev --port 8092 --api_port 8093 main.jac
 # With Playwright already available to Node (no application dependency added):
 TRACE_MAP_URL=http://localhost:8092 node features/map/verify_map.cjs
+TRACE_MAP_URL=http://localhost:8092 node features/map/verify_density.cjs
 ```
 
 The browser check resets the preview's demo. It accepts localhost only.
