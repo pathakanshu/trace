@@ -69,7 +69,10 @@ hashes, or support files. The generator now refuses nonempty catalog/raw output 
 quota/schema/hash checks, all 1,800 source-envelope checks and entry-locator checks
 when generating only into temporary test folders; the published source records
 still contain the defects above. Candidate vote/follower allocation also passes uniqueness, no-self-vote, timing
-and two-follower coverage checks; published community snapshots are unchanged.
+and two-follower coverage checks. Candidate task snapshots now have matching
+submissions/assignees, cited review evidence and ordered times; media subscriptions
+wait for target release. Read-only substitution of these objects removes all 153
+forward references. Published community snapshots are unchanged.
 Other generator defects remain. These candidate
 checks are not a new published release or a compatible importer rehearsal.
 

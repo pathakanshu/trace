@@ -348,8 +348,10 @@ def build_community(contributors,claim_source,media_source):
         target={"kind":"media","id":rid("media",i-69)} if typ=="GEOLOCATION" else target
         media_evidence=[target["id"]] if target["kind"]=="media" else []
         evidence_source=media_source[target["id"]] if target["kind"]=="media" else claim_source[target["id"]]
+        submitted=max(at(24+i%48),at(source_release(int(evidence_source[-6:]))))
+        c["available_at"]=utc(submitted)
         c.update({"contribution_type":typ,"contributor_id":rid("contributor",1+(i-1)%80),"target":target,"body":body,"language":"ne" if typ=="TRANSLATION" else lang,"english_rendering":english,
-          "public_display":"anonymous" if i<=60 else "pseudonym","submitted_at":utc(at(24+i%48)),"evidence_source_ids":[evidence_source],
+          "public_display":"anonymous" if i<=60 else "pseudonym","submitted_at":utc(submitted),"evidence_source_ids":[evidence_source],
           "evidence_claim_ids":[target["id"]] if target["kind"]=="claim" else [],"evidence_media_ids":media_evidence,"proposed_location_id":rid("location",1+(i-1)%50) if typ=="GEOLOCATION" else None,
           "proposal_basis":"synthetic scenario proposal; requires review" if typ=="GEOLOCATION" else None,"translation_of":target if typ=="TRANSLATION" else None,
           "translation_method":"machine" if typ=="TRANSLATION" else None,"translation_review":None})
@@ -369,15 +371,40 @@ def build_community(contributors,claim_source,media_source):
         voted=max(at(30+i%42),submitted)
         r=common("vote",i,voted); r.update({"contributor_id":voter,"contribution_id":contribution["id"],"value":val,"voted_at":utc(voted)}); votes.append(r)
     types4=["GEOLOCATE","TRANSLATE","FIND_EARLIER_COPY","SOURCE_OR_CHALLENGE"]
+    contribution_types={"GEOLOCATE":"GEOLOCATION","TRANSLATE":"TRANSLATION",
+        "FIND_EARLIER_COPY":"EARLIER_COPY","SOURCE_OR_CHALLENGE":"SOURCE_CITATION"}
+    submissions={task_type:[c for c in contributions if c["contribution_type"]==contribution_type]
+        for task_type,contribution_type in contribution_types.items()}
+    reviewers=sorted(c["id"] for c in contributors if "reviewer" in c["roles"])
+    if len(reviewers)<2: raise ValueError("Reviewed task snapshots need distinct attributable reviewers")
     states=["OPEN"]*40+["IN_PROGRESS"]*20+["SUBMITTED"]*24+["REVIEWED"]*12; tasks=[]
     for i,state in enumerate(states,1):
-        typ=types4[(i-1)%4]; cids=[rid("contribution",i)] if state in ("SUBMITTED","REVIEWED") else []
-        r=common("task",i,at(30+i%42)); r.update({"task_type":typ,"title":f"Exercise {typ.lower()} task {i:03d}","target":{"kind":"media","id":rid("media",1+(i-1)%200)},"creator_id":rid("contributor",1+(i-1)%80),
-          "assignee_id":rid("contributor",1+(i%80)) if state!="OPEN" else None,"state":state,"created_at":utc(at(24+i%20)),"updated_at":utc(at(30+i%42)),"submission_contribution_ids":cids,
-          "review":{"contributor_id":rid("contributor",1+(i%80)),"reviewed_at":utc(at(30+i%42)),"note":"Synthetic workflow seed only; no truth, identity, or evidence verification result is asserted.","evidence_claim_ids":[]} if state=="REVIEWED" else None}); tasks.append(r)
+        typ=types4[(i-1)%4]; contribution=submissions[typ][(i-1)//4]
+        target=contribution["target"]
+        evidence_sources=contribution["evidence_source_ids"]
+        created=max(at(12),*(at(source_release(int(sid[-6:]))) for sid in evidence_sources))
+        updated=max(at(30+i%42),created)
+        has_submission=state in ("SUBMITTED","REVIEWED")
+        if has_submission:
+            updated=max(updated,datetime.fromisoformat(contribution["submitted_at"].replace("Z","+00:00")))
+        assignee=contribution["contributor_id"] if state!="OPEN" else None
+        # Review is a fictional workflow snapshot, not a tool result or verdict.
+        review=None
+        if state=="REVIEWED":
+            reviewer=next(actor for actor in reviewers if actor!=assignee)
+            evidence=sorted(cid for cid,sid in claim_source.items() if sid in evidence_sources)
+            if not evidence: raise ValueError("Task review needs actual cited source claims")
+            review={"contributor_id":reviewer,"reviewed_at":utc(updated),
+                "note":"Fictional workflow snapshot reviewing the cited submission/source reports; no truth, identity, geolocation or tool verification is asserted.",
+                "evidence_claim_ids":evidence}
+        r=common("task",i,updated); r.update({"task_type":typ,"title":f"Exercise {typ.lower()} task {i:03d}",
+            "target":dict(target),"creator_id":rid("contributor",1+(i-1)%80),"assignee_id":assignee,
+            "state":state,"created_at":utc(created),"updated_at":utc(updated),
+            "submission_contribution_ids":[contribution["id"]] if has_submission else [],"review":review})
+        tasks.append(r)
     return contributions,votes,tasks
 
-def build_followups():
+def build_followups(media_source):
     subjects=[("person",100),("location",20),("media",10),("incident",10),("organization",10)]; subs=[]; no=1
     for kind,count in subjects:
         limit={"person":1150,"location":1000,"media":200,"incident":1,"organization":32}[kind]
@@ -385,7 +412,8 @@ def build_followups():
             # Reuse one hero subject with a different actor while retaining the
             # exact 100 Person-subscription quota and people without followers.
             subject_number=1 if kind=="person" and i==count-1 else 1+i%limit
-            r=common("subscription",no,at(12)); r.update({"contributor_id":rid("contributor",1+(no-1)%80),"subject":{"kind":kind,"id":rid(kind,subject_number)},"created_at":utc(at(12)),"delivery":"in_app","active":True,"event_types":["new_claim","status_change"]}); subs.append(r); no+=1
+            created=max(at(12),at(source_release(int(media_source[rid(kind,subject_number)][-6:])))) if kind=="media" else at(12)
+            r=common("subscription",no,created); r.update({"contributor_id":rid("contributor",1+(no-1)%80),"subject":{"kind":kind,"id":rid(kind,subject_number)},"created_at":utc(created),"delivery":"in_app","active":True,"event_types":["new_claim","status_change"]}); subs.append(r); no+=1
     types=["PERSON_TIMELINE","ACCESS_HAZARD","AID_FACILITY","MEDIA_LINEAGE"]; investigations=[]
     for i in range(24):
         n=i+1; typ=types[i%4]; selected_claims=[rid("claim",1+i),rid("claim",1151+i)]
@@ -422,7 +450,7 @@ def main():
     # through the publisher on each immutable Source.
     claim_source_map={c["id"]:c["source_id"] for c in claims}; media_source_map={m["id"]:m["source_id"] for m in media}
     contributions,votes,tasks=build_community(contributors,claim_source_map,media_source_map)
-    subscriptions,investigations=build_followups()
+    subscriptions,investigations=build_followups(media_source_map)
     event=common("incident",1,at(0)); event_time=tim(None); event_time.update({"date":"2016-07-05","precision":"night","original_text":"Night of 5 July 2016 local time","timezone":"Asia/Kathmandu"})
     event.update({"name":"5 July 2016 Bhote Koshi flood response exercise","description":"Historical context: the night of 5 July 2016 Bhote Koshi flood in Sindhupalchok. This is a counterfactual software exercise: every person, report, institution, response action, and media item is fictional. The 1,000-person workload is a test scale, not a historical missing-person count.","event_time":event_time,"exercise_clock_start":utc(START),"display_timezone":"Asia/Kathmandu","historical_reference_ids":[f"hist-{i:06d}" for i in range(1,5)]})
     # Associate each Person record's initial claim with the exact release time

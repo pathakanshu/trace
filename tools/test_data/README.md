@@ -118,8 +118,8 @@ cases use analysis without publishing: hostile text stays source data. None of
 these eight runtime cases has run; no agent response or success is prefilled.
 No nonexistent replay-action IDs are used as prerequisites.
 
-Actual tooling results: **181 distinct tests pass across two environments**.
-The schema environment runs 166 and explicitly skips fifteen Pillow tests. Run the
+Actual tooling results: **184 distinct tests pass across two environments**.
+The schema environment runs 169 and explicitly skips fifteen Pillow tests. Run the
 fifteen media checks with a Pillow-equipped tooling Python:
 `python3 -m unittest discover -s tools/test_data -p '*media*.py'`.
 That separate run passes all fifteen. Do not count skipped decoder checks as passes
@@ -409,4 +409,14 @@ and people with no followers are preserved. Seven tests verify schema, stable
 IDs, timing, distinct voters, follow coverage, deterministic repeats and rejection
 of missing/duplicate actors. These are generated fictional workflow inputs, not
 executed votes, subscriptions or alerts. The published snapshots still contain
-the known self-vote/duplicate/follower defects and task workflows still need repair.
+the known self-vote/duplicate/follower defects and still require a coordinated versioned replacement.
+
+Candidate task snapshots now select matching typed contributions, align target
+and assignee, cite the actual submission source's claims, use distinct reviewers
+with reviewer roles, and keep creation/submission/review/release times ordered.
+Contributions wait for cited sources; media subscriptions wait for their targets.
+Person followers needed for the hero remain active at T+12. Replacing only these
+candidate workflow objects in a read-only structural check removes all 153 forward
+references and passes lifecycle checks. Three additional regressions verify this,
+exact task quotas, schema and missing-reviewer rejection. No task was executed,
+no fixture review establishes truth, and the delivered snapshot is unchanged.
