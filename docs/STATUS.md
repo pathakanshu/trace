@@ -217,7 +217,12 @@ Timeline handoff: `codex/person-timeline`, implementation **37e25a8**, documenta
 checks passed. These timeline commits are not on the main revision rehearsed above.
 Exact single new main import: `import from services.timeline { TimelineEntry, person_timeline }`.
 The People detail mount and complete integration notes are included on that branch.
-Next: the three requested Devpost screenshots outside the repo, then stop early.
+Completed: three real local Devpost screenshots, visually reviewed, saved outside
+the repo in `/Users/anshu/Downloads/trace-devpost-20260927/`:
+`01-people-investigation.png`, `02-graph.png`, `03-map-corpus-heat.png`.
+`capture-manifest.json` records the tested revision and computed SHA-256 checksums.
+People shows the actual REPLAYED run; Graph the hospital claim/alert; Map the
+generated corpus. No image edits. Isolated servers stopped; finished early.
 
 ## Gabriel (people)
 
