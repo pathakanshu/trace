@@ -34,15 +34,15 @@ Next: pitch, backup video, Devpost.
 
 ## Anshu (map, integration)
 
-Working on: migrate the existing license inventory to the specified per-Media
-shape in `tools/test_data/generate_licenses.py`, tests, licenses.json, strict
-audit/docs and legacy validator hook. Preserve the existing usage basis verbatim;
-original encoder version will be explicitly "not recorded", never guessed.
-Media-time repair 27a7285 is pushed: only actual_created_at changed in 200 media
-rows and 40 exact hero copies, with two refreshed shard hashes. Original 1,800
-raw reports, every other primary field, all asset bytes and ZIP hash are preserved.
-Repeat repair changed zero files; 154 tests pass (139 + 15 Pillow).
-Strict audit 22/16/2; media 11/0/1. The broader source/quota repair remains deferred.
+Working on: future-generator cohort fixes in `tools/test_data/generate_catalog.py`,
+`test_generator_cohorts.py` and docs. Exercise the candidate in temporary folders;
+do not replace published reports or claim the delivered corpus is repaired.
+Keep 300 extra safe reports inside the intended 250-person cohort and align death
+rumor observation times with existing opposing evidence. Also refuse accidental
+regeneration into nonempty published output directories before writing anything.
+License inventory 918d5b6 now has 200 exact-contract entries, unchanged usage basis,
+explicitly unrecorded encoder version. 162 tests pass (147 + 15 Pillow); strict
+audit 24/15/2, media 11/0/1. Media timestamp fix and asset/source preservation stand.
 
 App handoff: all four overnight tasks complete; draft PR #4 ready:
 https://github.com/pathakanshu/trace/pull/4 (branch `codex/anshu-night`).
@@ -68,9 +68,9 @@ ab3fc56. No Linguist overrides/exclusions added. Not organizer eligibility proof
 
 Corpus published on origin/codex/test-data: e710475 control pack (26 records),
 23f81dd 40 cited queries, a65364f checkpoint diagnostics, fb64b72 40 concrete
-negative cases. **154 distinct tooling tests pass across schema/Pillow environments**
-(139 + fifteen separately run media checks). Primary count stays 8,027; only 200 media creation-time fields were corrected
-from the original asset-run receipt. Source records and binary bundle are unchanged. Strict audit: **22 pass / 16 fail / 2 blocked**.
+negative cases. **162 distinct tooling tests pass across schema/Pillow environments**
+(147 + fifteen separately run media checks). Primary count stays 8,027; only 200 media creation-time fields were corrected
+from the original asset-run receipt. Source records and binary bundle are unchanged. Strict audit: **24 pass / 15 fail / 2 blocked**.
 New measured defects: T+72 fixture summary is 353 missing / 547 safe / 50 injured /
 50 unresolved, target 650 / 250 / 50 / 50. The generator assigns 297 safe follow-ups
 outside its intended cohort. Six death rumors lack required equal/unknown-time
@@ -153,3 +153,5 @@ Working on: (fill in)
 - 06:51 codex/test-data 741c2d4: source scope/DAG audit passes; 145 tests. Found media timestamp cause in build_media; reserve only metadata/hero/hash repair from original asset-run receipt, with source/asset bytes preserved.
 
 - 06:58 codex/test-data 27a7285: 200 media creation times repaired from original receipt, 40 hero copies refreshed; raw sources/assets unchanged. 154 tests and media 11/0/1. Per-Media license inventory next, preserving existing terms and unknown encoder version.
+
+- 07:02 codex/test-data 918d5b6: 200 per-Media usage records, original terms and unknown encoder version preserved; 162 tests. Preparing generator cohort fix only in temporary output; published source repair still needs version coordination.
