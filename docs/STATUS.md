@@ -34,64 +34,52 @@ Next: pitch, backup video, Devpost.
 
 ## Anshu (map, integration)
 
-Working on: candidate vote/follower generation in
-`tools/test_data/generate_catalog.py`, `test_generator_community.py` and docs.
-Select distinct non-author voters, keep vote times after submissions, and give
-one hero Person two active followers without changing subscription quotas.
-Test candidate objects only; published votes/subscriptions remain untouched.
-948c5e4 is remotely rehearsed: clean clone, all 400 restored assets, 174 passing
-tooling tests, exact published audit reproduction (24/15/2; media 11/0/1).
-No tracked clone changes or .jac store. Candidate raw generation now passes all
-1,800 envelope/hash and 3,600 claim-entry checks; no delivered reports rewritten.
+Working on: candidate task/submission/review chronology and media-subscription
+release times in `tools/test_data/generate_catalog.py`,
+`test_generator_community.py` and data docs. Candidate objects only; no published
+workflow/source replacement or runtime mutation.
 
-App handoff: all four overnight tasks complete; draft PR #4 ready:
-https://github.com/pathakanshu/trace/pull/4 (branch `codex/anshu-night`).
-Tasks 1/2 are already on main. Remaining feature commits: 600bafd People report
-→ Map and ed3cb0b phone wrapping; 0e697ee adds report-location regression.
-Gabriel: optional onShowOnMap callback in PeopleTab/Panels; no identity,
-investigation or service changes. Unmapped reports get no link and cannot borrow
-another report's media location. Repeated explicit navigation recenters the map.
+App handoff: all four overnight tasks complete; **draft PR #4** is ready:
+https://github.com/pathakanshu/trace/pull/4 (`codex/anshu-night`). Audit/smoke work
+already landed on main. Remaining feature commits: 600bafd People → Map,
+ed3cb0b phone wrapping, 0e697ee report-location provenance regression.
+Gabriel: People callback is optional; unmapped reports get no link. No graph,
+endpoint, investigation, seed, dependency, live-model or hosted-deployment changes.
 
-App validation on main base 70c03c2: **57 tests**, **52-file compiler gate**,
-and production client build pass. Offline smoke blocks socket connections and
-compares both actual replay fixtures/citations, source history, graph links,
-one alert, repeat safety and two resets. Browser keyboard/mouse, search retention,
-map selection, 375x812 Map/Organizations long text, publish/retry (1 then 0 alerts)
-and reset pass in isolated localhost. No console errors observed. Cold-start
-bundled client works; hospital claim ID and single alert survive process restart;
-Watch adds zero; reset restores Missing. Screenshot capture timed out; DOM and
-interactions were verified. Hosted/physical-phone checks remain human follow-up.
+App validation on main 70c03c2: **57 Jac tests, 52-file compiler gate**, production
+client build, local keyboard/mouse/repeated focus/search, 375px layout, publish /
+retry (1 then 0 alerts), reset and persisted restart pass. Screenshot capture
+failed; no screenshot claimed. Hosted/physical-phone rehearsal remains human work.
+Own local server 8092 is stopped. Active developer checkout was never switched.
+Jac language audit: GitHub 94.501% at 04:30 EDT; no Linguist padding/overrides.
 
-Language audit: GitHub languages API reported Jac 303,368/321,021 bytes (94.501%),
-JS 9,598 and CSS 8,055, Sep 27 04:30 EDT; cache may lag local Jac 317,497 bytes at
-ab3fc56. No Linguist overrides/exclusions added. Not organizer eligibility proof.
+Dataset branch: **codex/test-data**, latest candidate vote/follower fix **8efadde**.
+Delivered: 8,027 records, 1,150 Person / 1,000 private identities, 1,800 reports,
+3,600 claims; geography **170/1,000**. Hero is **658 reference-closed records**.
+Published release has 200 dummy images + 200 thumbnails; restore/hash guide:
+`demo/datasets/bhotekoshi-2016-exercise-v1/README.md` on codex/test-data.
+Original sources/asset bytes are preserved. Only media creation metadata was
+corrected from its original run receipt; licenses now have 200 contract entries.
 
-Corpus published on origin/codex/test-data: e710475 control pack (26 records),
-23f81dd 40 cited queries, a65364f checkpoint diagnostics, fb64b72 40 concrete
-negative cases. **174 distinct tooling tests pass across schema/Pillow environments**
-(159 + fifteen separately run media checks). Primary count stays 8,027; only 200 media creation-time fields were corrected
-from the original asset-run receipt. Source records and binary bundle are unchanged. Strict audit: **24 pass / 15 fail / 2 blocked**.
-New measured defects: T+72 fixture summary is 353 missing / 547 safe / 50 injured /
-50 unresolved, target 650 / 250 / 50 / 50. The generator assigns 297 safe follow-ups
-outside its intended cohort. Six death rumors lack required equal/unknown-time
-opposition at release. Sources must not be silently rewritten; coordinate a
-versioned repair. Also 153 future references, legacy support shapes and only
-170/1,000 locations remain. Retry/injection cases are plans, not executed results.
-All 1,800 raw hashes match, but 1,260 JSON reports fail the required envelope
-shape. Bundle restore twice verified 400 files and preserved bytes/mtimes;
-unpacker now rejects symlink escapes, corrupt inventory and overwrites.
-Community defects: 360 self-votes, 120 duplicate voting pairs, 36 task target
-mismatches, missing review citations and no hero Person with two followers.
-Private integration/repair guide on codex/test-data:
-`tests/fixtures/bhotekoshi-2016-exercise-v1/REPAIR_PLAN.md`. Coordinate immutable
-source/version/quota decisions before any corpus-wide regeneration.
-No corpus importer/replay/reset or model answers were fabricated or run.
+**181 tooling tests pass** (166 core + 15 Pillow). Delivered strict audit:
+**24 pass / 15 fail / 2 blocked**; media **11 / 0 / 1**. Clean remote clone at
+948c5e4 reproduced the then-current 174 tests and both audits exactly, restored
+400 files, left tracked files clean and created no .jac runtime store.
 
-Coordination: branch only, ready for Miguel to integrate. Keeping original
-handoff boundary despite the board's offered self-integration option. No shared
-graph, endpoint, investigation, seed, dependency or live model changes. No hosted
-deployment. Use the board's 09:00 draft/11:00 final planning; timing/replay
-eligibility still need team confirmation.
+Candidate generator fixes pass temporary-output tests for all seven checkpoint
+cohorts, ten rumor-opposition cases, exact raw envelopes/excerpts/locators,
+non-author unique votes and two hero followers. Main generation refuses nonempty
+catalog/raw directories. These are **not fixes to the distributed source/workflow
+snapshots**. No importer/replay/reset, identity decision, alert or agent answer
+was fabricated or run for this corpus.
+
+Needs team decision before replacing published inputs: namespace/version and
+immutable-source migration. Current release still has final-cohort drift, six
+unopposed rumors, 153 forward references, invalid community snapshots, ambiguous
+hard negatives, legacy support/replay shapes and missing geography. Details and
+integration sequence: `tests/fixtures/bhotekoshi-2016-exercise-v1/REPAIR_PLAN.md`
+on codex/test-data. Keep all private expectations out of app/model inputs.
+Branch-only handoff; Miguel integrates. No main merge or JacHammer deployment.
 
 ## Gabriel (people)
 
@@ -159,3 +147,5 @@ Working on: (fill in)
 - 07:06 codex/test-data 971066e: temporary candidate now meets every checkpoint and rumor constraint; 171 tests. Published reports untouched and regeneration guarded. Candidate exact raw-envelope generation next.
 
 - 07:11 codex/test-data 948c5e4: 174 tests and both audits reproduced from clean remote clone + restored release assets. Candidate raw envelopes pass; delivered originals remain legacy. Candidate voter/follower fixes next.
+
+- 07:17 codex/test-data 8efadde: 181 tests; candidate unique non-author votes and two hero followers pass. Published snapshots unchanged. Task/review and media-follow release coherence next; Anshu handoff section condensed with guide links.
