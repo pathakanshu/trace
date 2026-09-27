@@ -10,6 +10,8 @@ import from services.trace {
     DashboardSnapshot, get_dashboard, reset_demo, add_hospital_update, run_watch, run_resolve
 }
 import from services.geo { get_boundaries }
+# People (Gabriel): human identity review. Pending integration review by Anshu.
+import from features.people.services { review_identity, propose_identity, IdentityDecisionResult }
 
 # Explicitly include the generated base so Jac 0.34 copies it into the client
 # build. trace-tokens.css also imports it and adds Trace's light/dark tokens.

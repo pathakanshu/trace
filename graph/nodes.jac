@@ -89,6 +89,60 @@ node Alert {
         severity: str = "info";
 }
 
+# One complete earlier review of a pair (kept verbatim in the decision).
+obj IdentityReviewEntry {
+    has decision: str,
+        reviewer: str,
+        decided_at: str,
+        note: str = "",
+        basis: list[str] = [],
+        evidence_claim_ids: list[str] = [];
+}
+
+# A human review of whether two Person records refer to the same person.
+# PROPOSED by Gabriel (People) - schema owner: Miguel.
+# It never merges or edits the Person nodes; it only records a decision that
+# points at BOTH original records (edge Reviews: IdentityDecision --> Person).
+# One node per pair (pair_key = the two Person jids sorted and joined by "|"),
+# so repeating the same decision cannot create a duplicate association.
+# A changed decision keeps the earlier one in f"history".
+node IdentityDecision {
+    has pair_key: str,
+        person_a_id: str,
+        person_b_id: str,
+        person_a_name: str = "",
+        person_b_name: str = "",
+        incident_name: str = "",
+        decision: str = "PENDING",          # CONFIRMED | REJECTED
+        reviewer: str = "",
+        decided_at: str = "",
+        note: str = "",
+        # Rule reasons shown to the reviewer at decision time.
+        basis: list[str] = [],
+        # Claim jids the reviewer had in front of them (both records' claims
+        # plus any claims an agent cited). Only ids that resolved to Claims.
+        evidence_claim_ids: list[str] = [],
+        # Every earlier decision on this pair, complete, oldest first.
+        # (Legacy string form "REJECTED by X at T" is no longer written.)
+        history: list[str] = [],
+        past_reviews: list[IdentityReviewEntry] = [];
+}
+
+# A pair proposed by an agent (or ResolveWalker) for human review.
+# PROPOSED by Gabriel (People) - schema owner: Miguel; producer: investigation agent.
+# One node per pair; re-proposing updates the rationale/citations in place.
+# It is a suggestion only: it creates no association and no decision.
+node IdentityProposal {
+    has pair_key: str,
+        person_a_id: str,
+        person_b_id: str,
+        incident_name: str = "",
+        proposed_by: str = "",
+        rationale: str = "",
+        cited_claim_ids: list[str] = [],
+        proposed_at: str = "";
+}
+
 # One line in the "Agent activity" feed: which walker did what, and when.
 # Attached straight to root so the UI can list them in order.
 node ActivityEntry {
