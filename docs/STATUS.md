@@ -33,11 +33,29 @@ Next: pitch, backup video, Devpost.
 
 ## Anshu (map, integration)
 
-Working on: (fill in)
-Files: (fill in)
+Working on: `codex/anshu-night`: publishing language audit and offline full-demo
+regression, then People-to-Map selection and 375px Map/Organizations.
+Files: `docs/STATUS.md`, `tests/test_demo_flow.jac`; possible `.gitattributes`
+only for genuinely generated/vendor content after measurement. Later:
+`features/map/`, `features/organizations/`, a minimal People report link and
+`components/TraceDashboard*` for selection; README Map subsection only.
 Done: map status colours, map tests, boundary fallback (on main, b71547e).
-Suggested next: check the 40% Jac share the way GitHub counts languages;
-an end-to-end demo smoke script in a new file; "Show on map" from People.
+Language audit (GitHub languages API, 27 Sep 04:30 EDT): Jac 303,368 bytes
+(94.501%), JavaScript 9,598 (2.990%), CSS 8,055 (2.509%); total 321,021.
+Source: `gh api repos/pathakanshu/trace/languages`. GitHub caches default-branch
+Linguist analysis; local tracked Jac at ab3fc56 totals 317,497 bytes, so this
+API snapshot can lag main. No language overrides/exclusions needed or added.
+Method: https://github.com/github-linguist/linguist/blob/main/docs/how-linguist-works.md
+This measures language share, not organizer eligibility or authored-code credit.
+Offline flow: focused test passes; it checks both recorded runs/citations,
+source preservation, one alert, repeat safety, map/graph references and two
+resets with socket connections blocked. Full suite/build gate pending push.
+Coordination: main is `ab3fc56`; I will push this branch only for Miguel to
+integrate. No edits to investigation files, seed, graph schema, endpoints or
+dependency declarations; no live model calls or large-corpus import.
+Human follow-up: `anshu-next.md` says 11:00 final/10:00 freeze; this board says
+12:00 final/09:00 draft. Keep the earlier required draft deadline and confirm
+organizer timing before submission; no deadline assumption is treated as verified.
 
 ## Gabriel (people)
 
