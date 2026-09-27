@@ -232,6 +232,19 @@ def run_audit(root):
         ["Declared lineage only, not independent corroboration or executed ingestion/retry/correction behavior. Zero correction links cannot establish correction-story coverage."])
     checks[-1]["observed"].update(provenance_counts)
 
+    license_errors, license_counts = [], {}
+    try:
+        from generate_licenses import validate_licenses
+        license_counts = validate_licenses(json.loads((data / "licenses.json").read_text()),
+            {row["id"]: row for row in records}, read_jsonl(fixtures / "oracle/media-families.jsonl"),
+            json.loads((data / "asset-measurements.json").read_text()))
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        license_errors.append(str(error).replace(str(root), "<repo>"))
+    add("media_license_inventory", license_errors, "One exact-contract entry per Media, matching origin/hash/recorded run time and unchanged usage basis",
+        [rel(data / "licenses.json"), rel(data / "records/media"), rel(data / "asset-measurements.json")],
+        ["Original encoder version remains explicitly unrecorded. Structural provenance comparison; actual file bytes are checked independently by media audit. No license grant is inferred."])
+    checks[-1]["observed"].update(license_counts)
+
     checkpoint_errors, rumor_errors, measured_checkpoints = [], [], []
     identity_path = fixtures / "oracle/identities.jsonl"
     try:
@@ -421,7 +434,7 @@ def run_audit(root):
     summary = dict(Counter(check["status"] for check in checks))
     summary = {status: summary.get(status, 0) for status in ("pass", "fail", "blocked")}
     return {"dataset_id": DATASET, "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "tools": [{"name": "tools/test_data/audit_contracts.py", "version": "1.14"}, {"name": "jsonschema", "version": version("jsonschema")}],
+            "tools": [{"name": "tools/test_data/audit_contracts.py", "version": "1.15"}, {"name": "jsonschema", "version": version("jsonschema")}],
             "checks": checks, "summary": summary}
 
 

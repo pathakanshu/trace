@@ -43,7 +43,7 @@ it does not fall back to a stale schema report when jsonschema is unavailable.
 
 Run its own offline checks with:
 `python3 -m unittest discover -s tools/test_data -p test_contract_audit.py`.
-The current corpus audit has 22 pass / 16 fail / 2 blocked; failures are intentional
+The current corpus audit has 24 pass / 15 fail / 2 blocked; failures are intentional
 findings in the partial dataset, not successful runtime behavior.
 
 ## Isolated control pack
@@ -117,8 +117,8 @@ cases use analysis without publishing: hostile text stays source data. None of
 these eight runtime cases has run; no agent response or success is prefilled.
 No nonexistent replay-action IDs are used as prerequisites.
 
-Actual tooling results: **154 distinct tests pass across two environments**.
-The schema environment runs 139 and explicitly skips fifteen Pillow tests. Run the
+Actual tooling results: **162 distinct tests pass across two environments**.
+The schema environment runs 147 and explicitly skips fifteen Pillow tests. Run the
 fifteen media checks with a Pillow-equipped tooling Python:
 `python3 -m unittest discover -s tools/test_data -p '*media*.py'`.
 That separate run passes all fifteen. Do not count skipped decoder checks as passes
@@ -354,3 +354,20 @@ corpus has zero such edges; that pass does not supply correction-story coverage.
 Eight tests cover cycles/self-links/duplicates/missing endpoints, long chains,
 scoped reference reuse, publisher types, disclosures and input preservation.
 This is fixture validation, not runtime retry/ingestion or independent-source proof.
+
+## Per-Media license inventory
+
+`python3 tools/test_data/generate_licenses.py` writes the specified closed license
+shape: 200 entries, one per Media, 120 generated and 80 derived. It preserves
+the original usage basis verbatim and the existing shared lic-000001 reference.
+Each entry has its catalog hash and recorded asset-run start. Original encoder
+version is explicitly "not recorded"; current audit versions are not backfilled
+as generation history. No private family IDs, parent IDs or recipes are emitted.
+
+The writer verifies actual image bytes before mutation, rejects changed terms,
+checks all family/receipt membership, confines paths and preserves repeated
+bytes/mtime. The real second run changed zero files. Eight tests cover saved
+shape/content, unknown versions, altered rights/hashes, provenance, missing or
+duplicate members, symlinks, corrupted assets and idempotence. The strict audit
+checks nested license consistency; the legacy validator delegates to this writer
+so it cannot silently restore the old one-row shape. No new rights are granted.

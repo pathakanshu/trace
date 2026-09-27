@@ -1,10 +1,10 @@
 {
   "dataset_id": "bhotekoshi-2016-exercise-v1",
-  "generated_at": "2026-09-27T10:55:38Z",
+  "generated_at": "2026-09-27T11:00:30Z",
   "tools": [
     {
       "name": "tools/test_data/audit_contracts.py",
-      "version": "1.14"
+      "version": "1.15"
     },
     {
       "name": "jsonschema",
@@ -47,12 +47,10 @@
     },
     {
       "rule_id": "support_shape:licenses.json",
-      "status": "fail",
+      "status": "pass",
       "observed": {
-        "failure_count": 1,
-        "examples": [
-          "row 1: expected an object"
-        ]
+        "failure_count": 0,
+        "examples": []
       },
       "expected": [
         "dataset_id",
@@ -916,6 +914,29 @@
       ]
     },
     {
+      "rule_id": "media_license_inventory",
+      "status": "pass",
+      "observed": {
+        "failure_count": 0,
+        "examples": [],
+        "entries": 200,
+        "origins": {
+          "generated": 120,
+          "derived": 80
+        },
+        "original_encoder_version_recorded": false
+      },
+      "expected": "One exact-contract entry per Media, matching origin/hash/recorded run time and unchanged usage basis",
+      "evidence_paths": [
+        "demo/datasets/bhotekoshi-2016-exercise-v1/licenses.json",
+        "demo/datasets/bhotekoshi-2016-exercise-v1/records/media",
+        "demo/datasets/bhotekoshi-2016-exercise-v1/asset-measurements.json"
+      ],
+      "limitations": [
+        "Original encoder version remains explicitly unrecorded. Structural provenance comparison; actual file bytes are checked independently by media audit. No license grant is inferred."
+      ]
+    },
+    {
       "rule_id": "fixture_checkpoint_recomputation",
       "status": "fail",
       "observed": {
@@ -1422,8 +1443,8 @@
     }
   ],
   "summary": {
-    "pass": 22,
-    "fail": 16,
+    "pass": 24,
+    "fail": 15,
     "blocked": 2
   }
 }
