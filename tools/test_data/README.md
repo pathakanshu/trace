@@ -117,11 +117,11 @@ cases use analysis without publishing: hostile text stays source data. None of
 these eight runtime cases has run; no agent response or success is prefilled.
 No nonexistent replay-action IDs are used as prerequisites.
 
-Actual tooling results: **104 distinct tests pass across two environments**.
-The schema environment runs 101 and explicitly skips three Pillow tests. Run the
-three decoder checks with a Pillow-equipped tooling Python:
-`python3 -m unittest discover -s tools/test_data -p test_negative_media.py`.
-That separate run passes all three. Do not count skipped decoder checks as passes
+Actual tooling results: **110 distinct tests pass across two environments**.
+The schema environment runs 101 and explicitly skips nine Pillow tests. Run the
+nine media checks with a Pillow-equipped tooling Python:
+`python3 -m unittest discover -s tools/test_data -p '*media*.py'`.
+That separate run passes all nine. Do not count skipped decoder checks as passes
 when only one environment is available. No application dependency was added.
 
 ## Immutable raw-source audit
@@ -241,3 +241,26 @@ runtime (which lacks jsonschema) returned the expected blocked result; hashes an
 mtimes of all 1,903 dataset files remained identical. That run is **not** a passed
 schema/media validation. Prefer the read-only strict audit for current conformance;
 legacy generation/export routines still use incomplete support formats.
+
+## Fresh read-only media audit
+
+In a Pillow-equipped tooling environment, run:
+`python3 tools/test_data/audit_media.py`.
+`--output demo/datasets/bhotekoshi-2016-exercise-v1/media-audit.json` saves only
+measured validation results. Exit 2 means the implemented file checks passed but
+application verification is blocked; it is not a successful EvidenceWalker run.
+
+Actual run: Pillow 12.3.0 / Python 3.12.14, **9 pass / 0 fail / 1 blocked**.
+Decoded all 200 images and 200 thumbnails; actual SHA-256/bytes/dimensions/MIME
+match the catalog and manifest. There are 160 distinct image hashes, 120 disjoint
+families (40 exact, 20 resize, 10 reencode, 10 crop, 40 singleton), 36 GPS/24
+non-GPS EXIF/60 no-EXIF bases, ten reciprocal singleton negative pairs and five
+earlier-publication-arrives-later cases. Original plus thumbnail bytes total
+6,022,750, below 250 MiB. All base long edges and 320px thumbnails meet bounds.
+
+Checks establish exact-byte copies, changed derivative bytes, recipe geometry,
+EXIF presence and file integrity. They do not establish crop/resize pixel content,
+near-copy detection performance, caption truth, geolocation, authenticity, human
+visual similarity or an application verification result. Six new media-auditor
+unit tests run alongside the three negative-decoder tests in the Pillow suite.
+No image or thumbnail was modified.

@@ -27,6 +27,9 @@ of historical missing people.
   `00629b3cc4b832e092f206b54f15c57d438e124dfaca97b904b4c1a21d8a444b`.
   The actual bundle was restored twice into a fresh temporary checkout; both
   runs verified 400 files and the repeat preserved bytes/modification times.
+  A fresh Pillow file audit passes nine checks: hashes/properties, 160 distinct
+  image hashes, family geometry, EXIF coverage, thumbnails and chronology. Its
+  application-verification check remains blocked; no app signals were created.
 
 ## Measured defects that block claiming a complete corpus
 

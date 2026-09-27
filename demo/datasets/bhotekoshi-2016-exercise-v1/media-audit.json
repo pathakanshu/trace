@@ -1,0 +1,202 @@
+{
+  "dataset_id": "bhotekoshi-2016-exercise-v1",
+  "generated_at": "2026-09-27T10:13:09Z",
+  "tools": [
+    {
+      "name": "tools/test_data/audit_media.py",
+      "version": "1.0"
+    },
+    {
+      "name": "Pillow",
+      "version": "12.3.0"
+    },
+    {
+      "name": "Python",
+      "version": "3.12.14"
+    }
+  ],
+  "checks": [
+    {
+      "rule_id": "decoded_image_properties",
+      "status": "pass",
+      "observed": {
+        "failure_count": 0,
+        "examples": [],
+        "decoded": 200,
+        "manifest_sha256": "99db4a6df29b4288dcb7a27295b1d0c5b6423bac5d41ca5aa91a58f5700cbe58"
+      },
+      "expected": "200 actual decoded images match catalog/manifest hash, bytes, dimensions and MIME",
+      "evidence_paths": [
+        "demo/assets/bhotekoshi-2016-exercise-v1",
+        "tests/fixtures/bhotekoshi-2016-exercise-v1/oracle/media-families.jsonl",
+        "demo/datasets/bhotekoshi-2016-exercise-v1/records/media",
+        "demo/datasets/bhotekoshi-2016-exercise-v1/manifest.json"
+      ],
+      "limitations": []
+    },
+    {
+      "rule_id": "decoded_thumbnails",
+      "status": "pass",
+      "observed": {
+        "failure_count": 0,
+        "examples": [],
+        "decoded": 200
+      },
+      "expected": "200 decoded thumbnails, measured hashes and 320-pixel long edge",
+      "evidence_paths": [
+        "demo/assets/bhotekoshi-2016-exercise-v1",
+        "tests/fixtures/bhotekoshi-2016-exercise-v1/oracle/media-families.jsonl"
+      ],
+      "limitations": []
+    },
+    {
+      "rule_id": "distinct_image_hashes",
+      "status": "pass",
+      "observed": {
+        "failure_count": 0,
+        "examples": [],
+        "unique_sha256": 160
+      },
+      "expected": 160,
+      "evidence_paths": [
+        "demo/assets/bhotekoshi-2016-exercise-v1",
+        "tests/fixtures/bhotekoshi-2016-exercise-v1/oracle/media-families.jsonl"
+      ],
+      "limitations": []
+    },
+    {
+      "rule_id": "family_structure_and_transform_geometry",
+      "status": "pass",
+      "observed": {
+        "failure_count": 0,
+        "examples": [],
+        "families": 120,
+        "classes": {
+          "base_plus_exact_copy": 40,
+          "base_plus_resize": 20,
+          "base_plus_reencode": 10,
+          "base_plus_crop": 10,
+          "singleton": 40
+        }
+      },
+      "expected": {
+        "base_plus_exact_copy": 40,
+        "base_plus_resize": 20,
+        "base_plus_reencode": 10,
+        "base_plus_crop": 10,
+        "singleton": 40
+      },
+      "evidence_paths": [
+        "demo/assets/bhotekoshi-2016-exercise-v1",
+        "tests/fixtures/bhotekoshi-2016-exercise-v1/oracle/media-families.jsonl"
+      ],
+      "limitations": [
+        "Verifies exact-copy hashes, changed derivative bytes, dimensions/crop bounds and metadata policy. Does not prove crop/resize pixel content or evaluate an application near-copy matcher."
+      ]
+    },
+    {
+      "rule_id": "base_exif_coverage",
+      "status": "pass",
+      "observed": {
+        "failure_count": 0,
+        "examples": [],
+        "classes": {
+          "controlled_gps_exif": 36,
+          "non_gps_exif": 24,
+          "no_exif": 60
+        }
+      },
+      "expected": {
+        "controlled_gps_exif": 36,
+        "non_gps_exif": 24,
+        "no_exif": 60
+      },
+      "evidence_paths": [
+        "demo/assets/bhotekoshi-2016-exercise-v1",
+        "tests/fixtures/bhotekoshi-2016-exercise-v1/oracle/media-families.jsonl"
+      ],
+      "limitations": [
+        "EXIF/GPS presence is controlled metadata, not verified location, capture time or authenticity."
+      ]
+    },
+    {
+      "rule_id": "base_image_dimensions",
+      "status": "pass",
+      "observed": {
+        "failure_count": 0,
+        "examples": [],
+        "bases_checked": 120
+      },
+      "expected": "120 bases with 1280..1920-pixel long edge",
+      "evidence_paths": [
+        "demo/assets/bhotekoshi-2016-exercise-v1",
+        "tests/fixtures/bhotekoshi-2016-exercise-v1/oracle/media-families.jsonl"
+      ],
+      "limitations": []
+    },
+    {
+      "rule_id": "lookalike_oracle_links",
+      "status": "pass",
+      "observed": {
+        "failure_count": 0,
+        "examples": [],
+        "pairs": 10
+      },
+      "expected": 10,
+      "evidence_paths": [
+        "demo/assets/bhotekoshi-2016-exercise-v1",
+        "tests/fixtures/bhotekoshi-2016-exercise-v1/oracle/media-families.jsonl"
+      ],
+      "limitations": [
+        "Checks held-out pair topology only, not visual similarity or an identity/face model."
+      ]
+    },
+    {
+      "rule_id": "earlier_publication_arrives_later",
+      "status": "pass",
+      "observed": {
+        "failure_count": 0,
+        "examples": [],
+        "families": 5
+      },
+      "expected": "At least five earlier publications become available after their later copies",
+      "evidence_paths": [
+        "demo/assets/bhotekoshi-2016-exercise-v1",
+        "tests/fixtures/bhotekoshi-2016-exercise-v1/oracle/media-families.jsonl"
+      ],
+      "limitations": [
+        "Catalog chronology only; runtime ingestion has not been executed."
+      ]
+    },
+    {
+      "rule_id": "primary_asset_budget",
+      "status": "pass",
+      "observed": {
+        "failure_count": 0,
+        "examples": [],
+        "actual_bytes": 6022750
+      },
+      "expected": 262144000,
+      "evidence_paths": [
+        "demo/assets/bhotekoshi-2016-exercise-v1",
+        "tests/fixtures/bhotekoshi-2016-exercise-v1/oracle/media-families.jsonl"
+      ],
+      "limitations": []
+    },
+    {
+      "rule_id": "application_media_evidence",
+      "status": "blocked",
+      "observed": "No application EvidenceWalker or near-copy/crop detection was executed.",
+      "expected": "Actual runtime checks with tool/version/input hashes/results before claiming application verification",
+      "evidence_paths": [],
+      "limitations": [
+        "Caption/GPS conflict semantics, human visual review and scene authenticity are not established by these file checks."
+      ]
+    }
+  ],
+  "summary": {
+    "pass": 9,
+    "fail": 0,
+    "blocked": 1
+  }
+}
