@@ -49,8 +49,10 @@ Method: https://github.com/github-linguist/linguist/blob/main/docs/how-linguist-
 This measures language share, not organizer eligibility or authored-code credit.
 Offline flow: focused test passes; it checks both recorded runs/citations,
 source preservation, one alert, repeat safety, map/graph references and two
-resets with socket connections blocked. Full suite/build gate pending push.
-Coordination: main is `ab3fc56`; I will push this branch only for Miguel to
+resets with socket connections blocked. On main e444edd: 56 tests passed;
+compiler gate passed (52 files). Recording verdicts are compared to their
+actual fixture values, including Miguel's v4 police NEEDS_REVIEW result.
+Coordination: base main is `e444edd`; I will push this branch only for Miguel to
 integrate. No edits to investigation files, seed, graph schema, endpoints or
 dependency declarations; no live model calls or large-corpus import.
 Human follow-up: `anshu-next.md` says 11:00 final/10:00 freeze; this board says
@@ -82,3 +84,5 @@ Working on: (fill in)
   left stale imports. Live eval waits on the key and passphrase in the
   coordinator's shell.
 - 04:33 main 3a6e013: prompt v4 sends label definitions (byLLM dropped enum-field sem), DIRECT-with-source goes to review, 45 s call limit, seeded runs re-recorded (police now NEEDS_REVIEW), five-case eval in docs/INVESTIGATION.md. Redeploy JacHammer: fixtures and prompt changed.
+
+- 04:39 codex/anshu-night 7f6a866: Jac share 94.501%; offline full demo regression, two resets and replay citation/provenance checks. 56 tests and 52-file compiler gate pass. Next: minimal People report-to-Map callback (Gabriel), then 375px checks.
