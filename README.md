@@ -11,7 +11,8 @@ next (stop, retrieve the named source and compare, or hand it to a person). Labe
 come from the model; every action, traversal, timestamp and number comes from Jac.
 
 It is one Jac app with five tabs: Map, People, Media, Sources, and Graph. All
-people and reports are fictional.
+seeded people and reports are fictional. The separate community media library
+contains user-supplied files whose original source, date and location are unverified.
 
 ## Start here
 
@@ -72,6 +73,9 @@ in [docs/INVESTIGATION.md](docs/INVESTIGATION.md).
 - Media supports image uploads, real SHA-256 copy matching, editable upload details,
   comments, and attributed assertions through the shared snapshot. Seeded checks
   remain simulated. Real EXIF extraction, C2PA, and video analysis are not implemented.
+  A [shared review gallery](features/media/README.md) also contains 20 supplied
+  photos and nine clips with saved, removable browser-level usefulness votes,
+  search and sorting. Thumbnails load first; videos load only after Play.
 - Graph inspects real node IDs, typed edges, identity reviews, and upload copy links
   from the shared snapshot. Derived/candidate links are labeled. Investigation runs
   appear as Investigation nodes with a stored edge from the incident and derived
