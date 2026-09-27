@@ -11,7 +11,7 @@ retain earlier claims and their provenance. All people and reports are fictional
 - [AGENTS.md](AGENTS.md): engineering and evidence rules.
 - [Team contract](docs/TEAM.md): ownership, tab interfaces, and integration checks.
 - [Publishing contract](docs/PUBLISHING.md): report validation, provenance, alerts, and reset.
-- [Investigation setup](docs/INVESTIGATION_SETUP.md): optional Jev report-attribution checks, credentials, budget, and limitations.
+- [Report investigation](docs/INVESTIGATION.md): the Nemotron report-attribution check, its setup, request cap, ledger, statuses, and tests.
 
 ## Install and run
 
@@ -27,8 +27,8 @@ jac start --dev main.jac
 ```
 
 Open the URL printed by the server. Run only one server against this checkout's
-`.jac/data/` graph store. The core demo needs no model credentials. For the optional
-Jev integration, follow the separate setup guide linked above.
+`.jac/data/` graph store. The core demo needs no model credentials. Live report checks need
+the server settings in the investigation guide linked above.
 
 ## Current behavior and limits
 
@@ -47,10 +47,11 @@ Jev integration, follow the separate setup guide linked above.
 - Graph inspects real node IDs, typed edges, identity reviews, and upload copy links
   from the shared snapshot. Derived/candidate links are labeled. Investigation runs
   and media contribution child nodes are not yet projected.
-- People also offers an optional budgeted Jev check of one source report's
-  attribution, with at most one follow-up source comparison. Results are advisory,
-  stored separately from claims, and unavailable without explicit configuration.
-  Offline tests do not establish provider access or semantic accuracy.
+- People also offers a capped NVIDIA Nemotron check of one source report's
+  attribution, with at most one follow-up source comparison. The model returns
+  labels only; Jac chooses the next step. Results are advisory, stored separately
+  from claims, and unavailable without the server passphrase and key. Offline tests
+  use a mock model and do not establish semantic accuracy.
 - No authentication, public publishing, continuous monitoring, or external alert
   delivery. CGX/PFIF import, free-text extraction, broader community workflows, and the
   large planned corpus are not implemented. Retry guarantees are tested sequentially.
@@ -71,8 +72,8 @@ jac build --check_only
 jac build --client web
 ```
 
-The investigation suite uses injected responses and does not require paid model
-calls. Browser acceptance steps are in the team contract; previously recorded
+The investigation suite uses a mock model (byLLM `MockLLM`) and a temporary ledger;
+it makes no network or paid model calls. Browser acceptance steps are in the team contract; previously recorded
 publishing/browser verification and its limits are in the publishing contract.
 Local preview is the tested deployment fallback; public hosted access and a second
 physical device still need verification.
@@ -87,18 +88,17 @@ physical device still need verification.
 | `graph/nodes.jac`, `graph/edges.jac`, `graph/activity.jac` | Persistent schema and activity helpers |
 | `walkers/` | Ingestion, identity proposals/reviews, seeded and upload evidence, watching |
 | `services/trace.jac`, `services/geo.jac` | Shared snapshot/actions and boundary data |
-| `services/investigation.jac`, `investigation/`, `integrations/jev.jac` | Report checks, questions, and provider adapter |
+| `services/investigation.jac`, `integrations/nemotron.jac` | Report checks and the model boundary (typed labels, passphrase, ledger) |
 | `demo/seed.jac`, `demo/reset.jac`, `tests/` | Executable fixtures, isolated reset, and tests |
 | `styles/trace-tokens.css` | Trace theme tokens; imports generated `global.css` |
 
 `.jac/` and `dist/` are generated/ignored. `.jac/data/` holds local graph data;
-`.trace-local/` holds persistent spending accounting. Neither is source code or a
+`.trace-local/` holds the persistent model request ledger. Neither is source code or a
 cleanup target. `geometry.topo.json` is required map data.
 
 ## Future reference only
 
 [Dataset rules](docs/plans/test-data/TEST_DATA_RULES.md) and their linked schemas,
 quotas, and generation prompt specify a future corpus, not current fixtures or APIs.
-The [broader investigation plan](docs/plans/JEV_INVESTIGATION_PLAN.md) describes
-unimplemented extensions. Read these only for work on those plans; current code,
+Read these only for work on that corpus; current code,
 tests, and the feature contracts above describe the implemented app.

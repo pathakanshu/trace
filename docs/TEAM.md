@@ -43,7 +43,7 @@ and the producer. Prefer additive fields with defaults while branches still
 consume the shared interface. Extend reset and its isolation checks for new types.
 
 Use [the publishing contract](PUBLISHING.md) for source/report/alert behavior and
-[the investigation setup](INVESTIGATION_SETUP.md) for the optional report checker.
+[the investigation guide](INVESTIGATION.md) for the report checker.
 Current feature limits live in [README](../README.md); evidence and product rules
 live in [AGENTS.md](../AGENTS.md).
 
@@ -73,7 +73,7 @@ until it does, the Graph tab draws the derived `Alert.claim_id` link.
 - Publish the hospital example and retry it: every view receives the update,
   earlier reports remain, and the retry creates no extra claim or alert.
 - Reset twice and rehearse again. Unrelated incidents/shared nodes survive.
-- With Jev disabled, a report check shows unavailability and the core demo works.
+- Without the live passphrase, a report check shows unavailability and the core demo works.
 - At phone width, the tab strip scrolls, activity moves below the panel, and the
   document has no horizontal overflow.
 

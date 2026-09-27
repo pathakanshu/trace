@@ -14,7 +14,9 @@ def:pub InvestigationPanel(snapshot: DashboardSnapshot) -> JsxElement {
         error = "";
         result = None;
         try {
-            response = await investigate_report(snapshot.incident_id, personId, claimId);
+            # The passphrase field arrives with the panel update; until then only
+            # saved and recorded results can be shown.
+            response = await investigate_report(snapshot.incident_id, personId, claimId, "");
             result = response;
             resultIncident = snapshot.incident_id;
             if not response { error = "No response received. Try again; completed checks are cached."; }

@@ -1,20 +1,53 @@
-"""A selected report -> attribution -> cited-source check, at most two Jev calls.
+"""A selected report -> attribution -> cited-source check, at most two model calls.
 No automatic investigation on refresh; no whole-incident model scan.
+The model returns labels; Jac chooses the next action and records the result.
 """
 import json;
 import hashlib;
 import from graph.nodes { Incident, InvestigationRun }
 import from graph.edges { Involves, About, Asserts, HasInvestigation }
 import from graph.activity { now_iso, log_activity }
-import from integrations.jev { evaluate, JEV_MODEL }
-import from investigation.questions { attribution_questions, comparison_questions, PROMPT_VERSION }
+import from integrations.nemotron { evaluate_attribution, evaluate_support, NEMOTRON_MODEL, PROMPT_VERSION }
 
-def:pub investigate_report(incident_id: str, person_id: str, claim_id: str) -> dict {
-    return run_report_check(incident_id, person_id, claim_id=claim_id);
+"""Investigate one source report. The passphrase is checked on the server and
+is only needed when no saved result exists and a live call would be made."""
+def:pub investigate_report(incident_id: str, person_id: str, claim_id: str, passphrase: str) -> dict {
+    return run_report_check(incident_id, person_id, claim_id=claim_id, passphrase=passphrase);
 }
 
-# The callable is a private test seam. RPC accepts IDs only.
-def run_report_check(incident_id: str, person_id: str, evaluator: any = None, claim_id: str = "") -> dict {
+"""The fields that identify what a report says, without graph ids.
+
+Node ids change on every reset, so a fingerprint over content lets a recorded
+run match freshly seeded evidence. ingested_at is left out for the same reason.
+"""
+def report_content(record: dict) -> dict {
+    return {"person_name": record["person_name"], "source_name": record["source_name"],
+        "assertion": record["assertion"], "excerpt": record["excerpt"],
+        "reported_at": record["reported_at"], "reference": record["reference"]};
+}
+
+def content_fingerprint(selected_report: dict, referenced: list[dict]) -> str {
+    others = sorted([report_content(r) for r in referenced], key=lambda (r: dict) -> str { return json.dumps(r, sort_keys=True); });
+    packet = [report_content(selected_report), others, NEMOTRON_MODEL, PROMPT_VERSION];
+    return hashlib.sha256(json.dumps(packet, sort_keys=True).encode()).hexdigest();
+}
+
+def total_usage(observations: list[dict]) -> dict {
+    usage = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0};
+    for observation in observations {
+        for field in usage {
+            usage[field] += int(observation.get("usage", {}).get(field, 0));
+        }
+    }
+    return usage;
+}
+
+# attribute and compare are private test seams with the signatures of
+# evaluate_attribution and evaluate_support. RPC accepts IDs and the passphrase only.
+def run_report_check(incident_id: str, person_id: str, claim_id: str = "", passphrase: str = "",
+    attribute: any = None, compare: any = None) -> dict {
+    attribute = attribute or evaluate_attribution;
+    compare = compare or evaluate_support;
     incidents = [i for i in [root -->[?:Incident]] if jid(i) == incident_id];
     if not incidents { return {"status": "FAILED", "message": "Incident changed; refresh before investigating."}; }
     incident = incidents[0];
@@ -55,37 +88,37 @@ def run_report_check(incident_id: str, person_id: str, evaluator: any = None, cl
     if len(source_ids) > 8 {
         return {"status": "PARTIAL", "message": "Too many possible source references; choose a report for manual review."};
     }
-    candidates = [by_source[sid] for sid in source_ids];
+    candidate_names = sorted(set([by_source[sid]["name"] for sid in source_ids]));
     referenced = [r for r in records if r["source_id"] in source_ids];
-    fingerprint = hashlib.sha256(json.dumps([incident_id, person_id, selected_report, referenced, PROMPT_VERSION, JEV_MODEL], sort_keys=True).encode()).hexdigest();
+    fingerprint = content_fingerprint(selected_report, referenced);
     for saved in [incident ->:HasInvestigation:->] {
         if saved.fingerprint == fingerprint {
+            # A saved answer is shown again with its original model and run time.
             result = json.loads(saved.result_json);
+            result["mode"] = "CACHED";
             result["cached"] = True;
             result["run_id"] = jid(saved);
             return result;
         }
     }
-    packet = {"report": selected_report, "candidate_sources": candidates};
-    questions = attribution_questions(candidates);
-    first = evaluator(packet, questions) if evaluator else evaluate(packet, questions);
+    first = attribute(selected_report["excerpt"], candidate_names, passphrase);
     if first.get("status") != "LIVE" { return first; }
     trace: list[str] = ["Read the selected report from " + str(selected_report["source_name"]) + "."];
     citations: list[dict] = [selected_report];
-    observations: list[dict] = [{"kind": "ATTRIBUTION", "claim_id": selected_report["claim_id"], "provider_result": first}];
-    attribution = first["answers"]["attribution"];
-    reference = first["answers"]["reference"];
-    trace.append("Jev classified the report's attribution as " + str(attribution["choice"]) + " (advisory).");
+    observations: list[dict] = [{"kind": "ATTRIBUTION", "claim_id": selected_report["claim_id"],
+        "attribution": first["attribution"], "referenced_source": first["referenced_source"],
+        "usage": first.get("usage", {}), "usage_source": first.get("usage_source", "estimate")}];
+    attribution = first["attribution"];
+    trace.append("Nemotron labeled the report's attribution " + attribution + " (advisory).");
     message = "Attribution checked. This does not establish whether the report is true or independently corroborated.";
     status = "COMPLETED";
-    if attribution["confidence"] < 0.8 or attribution["choice"] == "UNCLEAR" {
+    if attribution == "UNCLEAR" {
         status = "NEEDS_REVIEW";
         message = "Attribution remains uncertain. Review the cited report.";
-    } elif attribution["choice"] == "RELAY" {
-        matching = [r for r in referenced if r["source_id"] == reference["choice"]];
+    } elif attribution == "RELAY" {
         # Multiple records from one named publisher cannot identify a particular publication.
-        same_name = [r for r in referenced if matching and r["source_name"] == matching[0]["source_name"]];
-        if reference["confidence"] < 0.8 or len(matching) != 1 or len(same_name) != 1 {
+        matching = [r for r in referenced if r["source_name"] == first["referenced_source"]];
+        if len(matching) != 1 {
             status = "NEEDS_REVIEW";
             message = "The report appears to relay another source, but a unique source report could not be identified.";
         } else {
@@ -96,31 +129,33 @@ def run_report_check(incident_id: str, person_id: str, evaluator: any = None, cl
             } else {
                 citations.append(target);
                 trace.append("Jac retrieved the named source report: " + str(target["source_name"]) + ". Person identities remain separate.");
-                second_packet = {"report": selected_report, "referenced_report": target};
-                second_questions = comparison_questions();
-                second = evaluator(second_packet, second_questions) if evaluator else evaluate(second_packet, second_questions);
-                observations.append({"kind": "SOURCE_COMPARISON", "claim_id": target["claim_id"], "provider_result": second});
+                second = compare(selected_report["excerpt"], target["excerpt"], passphrase);
                 if second.get("status") != "LIVE" {
                     status = "PARTIAL";
                     message = str(second.get("message", "Follow-up unavailable."));
-                    trace.append("Follow-up did not produce an accepted model result.");
+                    trace.append("The comparison did not produce an accepted model result.");
                 } else {
-                    support = second["answers"]["support"];
-                    trace.append("Jev's cited-source comparison: " + str(support["choice"]) + " (advisory).");
+                    observations.append({"kind": "SOURCE_COMPARISON", "claim_id": target["claim_id"],
+                        "support": second["support"], "usage": second.get("usage", {}),
+                        "usage_source": second.get("usage_source", "estimate")});
+                    trace.append("Nemotron's cited-source comparison: " + second["support"] + " (advisory).");
                     status = "NEEDS_REVIEW";
                     message = "Review the proposed source relationship. Repeated reporting does not establish independent confirmation or matching identity.";
                 }
             }
         }
     }
-    result = {"status": status, "message": message, "cached": False, "person_id": person_id,
-        "model": JEV_MODEL, "prompt_version": PROMPT_VERSION, "created_at": now_iso(),
-        "trace": trace, "citations": citations, "observations": observations,
+    sources_of_usage = [o["usage_source"] for o in observations];
+    result = {"status": status, "message": message, "mode": "LIVE", "cached": False,
+        "person_id": person_id, "model": NEMOTRON_MODEL, "prompt_version": PROMPT_VERSION,
+        "run_at": now_iso(), "usage": total_usage(observations),
+        "usage_source": "provider" if all([s == "provider" for s in sources_of_usage]) else "estimate",
+        "fingerprint": fingerprint, "trace": trace, "citations": citations, "observations": observations,
         "scope": "Selected report only; no media verification or identity decision."};
-    # Failures are retryable; persist completed/review results, not unavailable follow-ups.
+    # Retryable outcomes are not saved; completed and review results are.
     if status != "PARTIAL" {
         run = InvestigationRun(person_id=person_id, fingerprint=fingerprint,
-            result_json=json.dumps(result), created_at=result["created_at"]);
+            result_json=json.dumps(result), created_at=result["run_at"]);
         incident +>:HasInvestigation():+> run;
         result["run_id"] = jid(run);
     }

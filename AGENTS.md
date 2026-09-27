@@ -52,7 +52,7 @@ Researchers gather/filter sources, compare timelines/accounts, inspect lineage, 
 ## Engineering and Collaboration
 
 Use small files/functions, descriptive names, explicit data flow, and actionable errors. Explain unfamiliar Jac and LLM calls. Avoid broad refactors, clever abstractions, and unnecessary concurrency.
-Layout: `graph/` schema; `walkers/` behavior; `services/` endpoints/snapshots; `features/` tab UI and feature services; `components/` shared UI; `integrations/` adapters; `investigation/` question definitions; `demo/` fixtures/reset; `tests/` checks. Preserve scaffold conventions. README records tested setup/versions/commands and demo instructions.
+Layout: `graph/` schema; `walkers/` behavior; `services/` endpoints/snapshots; `features/` tab UI and feature services; `components/` shared UI; `integrations/` adapters (model boundary in `integrations/nemotron.jac`); `demo/` fixtures/reset; `tests/` checks. Preserve scaffold conventions. README records tested setup/versions/commands and demo instructions.
 Integrate create → persist → display before parallel work. Coordinate interfaces/edits, preserve teammates’ changes, commit working increments, and repair breakages. No destructive resets or force-pushes.
 Minimize dependencies; verify Jac/JacHammer compatibility and pin versions. Keep secrets server-side, outside Git. Ask about major architecture/data/eligibility changes; resolve routine choices simply.
 
