@@ -203,6 +203,14 @@ def run_audit(root):
     add("catalog_release_closure", future, "A record never reveals a referenced record before its available_at", [rel(data / "records")])
     add("catalog_lifecycle_times", lifecycle_errors(records), "Workflow/report times respect release and publication cutoffs", [rel(data / "records")], ["Actual media creation time is deliberately not compared with the fictional exercise clock."])
 
+    from audit_sources import audit_sources
+    raw_errors, envelope_errors, source_counts = audit_sources(root, records, DATASET)
+    add("raw_source_integrity", raw_errors, "Original source bytes have correct SHA-256, UTF-8 and confined per-source paths",
+        [rel(data / "raw/reports"), rel(data / "records/source")])
+    checks[-1]["observed"].update(source_counts)
+    add("raw_source_envelopes", envelope_errors, "Structured envelopes match the documented closed shape, publisher, entries and excerpts; plain text preserves excerpts",
+        [rel(data / "raw/reports"), rel(data / "records/claim")], ["No extraction model or application importer was invoked."])
+
     checkpoint_errors, rumor_errors, measured_checkpoints = [], [], []
     identity_path = fixtures / "oracle/identities.jsonl"
     try:
@@ -303,7 +311,7 @@ def run_audit(root):
     summary = dict(Counter(check["status"] for check in checks))
     summary = {status: summary.get(status, 0) for status in ("pass", "fail", "blocked")}
     return {"dataset_id": DATASET, "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "tools": [{"name": "tools/test_data/audit_contracts.py", "version": "1.3"}, {"name": "jsonschema", "version": version("jsonschema")}],
+            "tools": [{"name": "tools/test_data/audit_contracts.py", "version": "1.4"}, {"name": "jsonschema", "version": version("jsonschema")}],
             "checks": checks, "summary": summary}
 
 

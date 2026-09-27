@@ -42,7 +42,7 @@ it does not fall back to a stale schema report when jsonschema is unavailable.
 
 Run its own offline checks with:
 `python3 -m unittest discover -s tools/test_data -p test_contract_audit.py`.
-The current corpus audit has 13 pass / 10 fail / 2 blocked; failures are intentional
+The current corpus audit has 14 pass / 11 fail / 2 blocked; failures are intentional
 findings in the partial dataset, not successful runtime behavior.
 
 ## Isolated control pack
@@ -116,9 +116,21 @@ cases use analysis without publishing: hostile text stays source data. None of
 these eight runtime cases has run; no agent response or success is prefilled.
 No nonexistent replay-action IDs are used as prerequisites.
 
-Actual tooling results: **45 distinct tests pass across two environments**.
-The schema environment runs 42 and explicitly skips three Pillow tests. Run the
+Actual tooling results: **50 distinct tests pass across two environments**.
+The schema environment runs 47 and explicitly skips three Pillow tests. Run the
 three decoder checks with a Pillow-equipped tooling Python:
 `python3 -m unittest discover -s tools/test_data -p test_negative_media.py`.
 That separate run passes all three. Do not count skipped decoder checks as passes
 when only one environment is available. No application dependency was added.
+
+## Immutable raw-source audit
+
+All 1,800 public source files have measured matching SHA-256 and UTF-8 bytes.
+All 3,600 claims were associated with their source. The 540 plain-text reports
+preserve their excerpts. The **1,260 structured JSON reports fail the specified
+raw-envelope shape**: they use the older `fictional_exercise_record/title/claims`
+layout instead of the contract's publisher/reference/original_content/entries.
+The strict audit now reports that mismatch; a matching hash alone is not enough.
+Five tests cover valid control envelopes, changed bytes, valid hashes on invalid
+envelopes, incorrect locators, escaping symlinks and the actual legacy corpus.
+No source bytes, recorded hashes or claims are repaired by this audit.
