@@ -39,7 +39,7 @@ the contact sheet. Binary images are intentionally excluded from Git.
 - `../../../tests/fixtures/bhotekoshi-2016-exercise-v1/hero/`: the 50-individual
   hero profile (62 Person records), with related record closure. The manifest
   selects 24 media seeds across all five duplicate classes. Repaired closure has
-  658 records, including 40 media, 54 locations and the incident. Every selected
+  748 records, including 40 media, 54 locations, 62 Person subscriptions and the incident. Every selected
   record equals its full-corpus counterpart; no primary record was changed.
 - `tests/fixtures/bhotekoshi-2016-exercise-v1/` from repository root: evaluator
   expectations, identity/media families, replay actions and scenarios. Keep these
@@ -78,7 +78,7 @@ application media verification; file checks do not prove caption truth.
 
 The metadata-only correction preserves stable IDs and the media bundle. Repair release dependencies and support contracts before building a
 complete importer/replay around this preview. Top-level shape checks do not
-exhaustively validate nested semantics. The data tools' 191 distinct tests pass across schema and Pillow environments;
+exhaustively validate nested semantics. The data tools' 193 distinct tests pass across schema and Pillow environments;
 its corpus audit intentionally exits 1 for the observed data failures.
 
 - All 1,800 original source hashes match. However, the 1,260 JSON sources use

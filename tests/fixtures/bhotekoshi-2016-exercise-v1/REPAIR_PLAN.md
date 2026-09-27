@@ -10,9 +10,9 @@ of historical missing people.
 - `origin/codex/test-data`: 8,027 primary records, including 1,150 Person records
   representing 1,000 private identities, 1,800 sources, 3,600 claims, 32
   organizations, 200 media records and only 170/1,000 required locations.
-- Hero selection: `tests/fixtures/bhotekoshi-2016-exercise-v1/hero/`, 658 exact
+- Hero selection: `tests/fixtures/bhotekoshi-2016-exercise-v1/hero/`, 748 exact
   full-catalog records: 62 Person, 304 claims, 125 sources, 40 media, 54 locations,
-  one incident and required supporting records. It now has complete reference
+  62 Person subscriptions, 63 contributors, one incident and required supporting records. It now has complete reference
   closure. A scenario ID in its manifest does not mean the story is executable.
 - Contract-shaped private identity labels preserve all IDs, membership and ages.
   Initial locations are 50 existing points and 950 unknowns; this is incomplete

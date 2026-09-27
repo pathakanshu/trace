@@ -74,6 +74,8 @@ class CandidateGenerationTests(unittest.TestCase):
         self.assertEqual(manifest['identity_group_count'],50);self.assertEqual(result['counts']['person'],62)
         rows=[json.loads(line) for path in (self.fixtures/'hero').glob('*.jsonl') for line in path.read_text().splitlines()]
         self.assertEqual(reference_errors(rows),([],[],[]));self.assertTrue(all(row==self.catalog[row['id']] for row in rows))
+        followers={r['contributor_id'] for r in rows if r['kind']=='subscription' and r['active'] and r['subject']=={'kind':'person','id':'per-000001'}}
+        self.assertEqual(len(followers),2)
 
     def test_actual_copied_assets_match_candidate_records_and_published_bytes(self):
         self.assertEqual(hashes(self.root/'demo/assets'/DATASET),self.before_assets)

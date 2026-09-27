@@ -17,11 +17,13 @@ from generate_queries import ROOT, DATASET, read_catalog
 def select_hero(records, plan):
     catalog={r['id']:r for r in records}
     if len(catalog)!=len(records):raise ValueError('Duplicate primary catalog ID')
-    by_source,by_person=defaultdict(list),defaultdict(list)
+    by_source,by_person,person_subscriptions=defaultdict(list),defaultdict(list),defaultdict(list)
     for row in records:
         if row['kind']=='claim':
             by_source[row['source_id']].append(row['id'])
             if row['subject']['kind']=='person':by_person[row['subject']['id']].append(row['id'])
+        elif row['kind']=='subscription' and row['subject']['kind']=='person':
+            person_subscriptions[row['subject']['id']].append(row['id'])
     pending=set(plan['hero_person_ids']) | set(plan['hero_media_ids'])
     pending.update(r['id'] for r in records if r['kind']=='organization')
     pending.update(ident for story in plan['story_plans'] for ident in story['focal_ids'])
@@ -33,7 +35,8 @@ def select_hero(records, plan):
         if row is None:raise ValueError('Hero dependency missing from primary catalog: '+ident)
         selected.add(ident)
         pending.update(target for _,target in references(row) if target not in selected)
-        if row['kind']=='person':pending.update(set(by_person[ident])-selected)
+        if row['kind']=='person':
+            pending.update((set(by_person[ident]) | set(person_subscriptions[ident]))-selected)
         if row['kind']=='source':pending.update(set(by_source[ident])-selected)
     return sorted((catalog[ident] for ident in selected),key=lambda r:(r['kind'],r['id']))
 

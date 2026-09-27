@@ -118,8 +118,8 @@ cases use analysis without publishing: hostile text stays source data. None of
 these eight runtime cases has run; no agent response or success is prefilled.
 No nonexistent replay-action IDs are used as prerequisites.
 
-Actual tooling results: **191 distinct tests pass across two environments**.
-The schema environment runs 176 and explicitly skips fifteen Pillow tests. Run the
+Actual tooling results: **193 distinct tests pass across two environments**.
+The schema environment runs 178 and explicitly skips fifteen Pillow tests. Run the
 fifteen media checks with a Pillow-equipped tooling Python:
 `python3 -m unittest discover -s tools/test_data -p '*media*.py'`.
 That separate run passes all fifteen. Do not count skipped decoder checks as passes
@@ -158,13 +158,13 @@ No application or database was loaded, and the distributed bundle is unchanged.
 
 `python3 tools/test_data/generate_hero.py` selects existing public records by the
 stable hero allocation and story focal IDs, then follows every explicit catalog
-reference. Included Person records pull their claims; included sources pull all
+reference. Included Person records pull their claims and subscriptions; included sources pull all
 claims in that report. An organization's inclusion does not pull every publication.
 The former exporter omitted incident references and misread facility/aid fields.
 The repaired selection adds `inc-000001`, `loc-000841` and `loc-000925`, all copied
 unchanged from the full catalog, and sorts rows deterministically.
 
-The saved profile now contains **658 records**, including 50 hidden individuals,
+The saved profile now contains **748 records**, including 50 hidden individuals,
 62 Person records, 304 claims, 125 sources, 40 media and 54 locations. It has no
 missing/cross-incident/future references and all saved objects equal full-catalog
 objects. Eight tests cover saved closure/quotas, deterministic order, missing
@@ -438,3 +438,13 @@ all status/type/source-cardinality quotas and stable ID bindings. The full hero
 check now passes. This is not an importer, story execution or completed corpus:
 geography, ambiguous negatives, narrative plans and supporting shapes still need
 work and the new candidate is not published over immutable source records.
+
+Hero export now retains every subscription targeting an included Person, plus
+its contributor dependency. The delivered profile is **748 exact catalog rows**:
+50 identities / 62 Person, 304 claims, 125 sources, 40 media, 54 locations, 62
+subscriptions and 63 contributors, plus other required records. No primary
+record, vote, review or alert was created or changed. Two additional hero tests
+verify follower coverage and prevent subscriptions to unselected people from
+expanding the profile. The complete candidate rehearsal also requires both
+Maya followers to survive hero export; its source/workflow replacement is still
+not published. Current delivered people still have only one follower each.

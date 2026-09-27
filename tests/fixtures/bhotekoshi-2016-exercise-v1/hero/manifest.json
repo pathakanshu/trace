@@ -170,7 +170,7 @@
     "aid": 1,
     "claim": 304,
     "contribution": 2,
-    "contributor": 34,
+    "contributor": 63,
     "facility": 1,
     "hazard": 0,
     "incident": 1,
@@ -181,7 +181,7 @@
     "organization": 32,
     "person": 62,
     "source": 125,
-    "subscription": 1,
+    "subscription": 62,
     "task": 0,
     "vote": 0
   },

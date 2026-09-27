@@ -1,6 +1,6 @@
 {
   "dataset_id": "bhotekoshi-2016-exercise-v1",
-  "generated_at": "2026-09-27T11:00:30Z",
+  "generated_at": "2026-09-27T11:34:14Z",
   "tools": [
     {
       "name": "tools/test_data/audit_contracts.py",
@@ -1243,7 +1243,7 @@
           "aid": 1,
           "claim": 304,
           "contribution": 2,
-          "contributor": 34,
+          "contributor": 63,
           "facility": 1,
           "incident": 1,
           "infrastructure": 1,
@@ -1252,7 +1252,7 @@
           "organization": 32,
           "person": 62,
           "source": 125,
-          "subscription": 1
+          "subscription": 62
         }
       },
       "expected": "50 individuals / 62 Person records, five image classes, required references, unchanged full-catalog records and measured manifest counts",

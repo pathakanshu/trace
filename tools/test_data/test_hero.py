@@ -18,10 +18,28 @@ class HeroTests(unittest.TestCase):
         rows=[r for path in sorted(self.directory.glob('*.jsonl')) for r in read_jsonl(path)]
         manifest=json.loads((self.directory/'manifest.json').read_text())
         self.assertEqual(hero_errors(rows,self.records,self.plan,manifest,self.groups,self.families,self.quotas),[])
-        self.assertEqual(len(rows),658)
+        self.assertEqual(len(rows),748)
         self.assertEqual(sum(r['kind']=='person' for r in rows),62)
         self.assertEqual(sum(r['kind']=='media' for r in rows),40)
         self.assertTrue({'inc-000001','loc-000841','loc-000925'}<={r['id'] for r in rows})
+
+    def test_selected_person_subscriptions_and_contributors_are_retained(self):
+        rows=select_hero(self.records,self.plan);people={r['id'] for r in rows if r['kind']=='person'}
+        expected={r['id'] for r in self.records if r['kind']=='subscription' and r['subject']['kind']=='person' and r['subject']['id'] in people}
+        subscriptions=[r for r in rows if r['kind']=='subscription']
+        self.assertEqual({r['id'] for r in subscriptions},expected);self.assertEqual(len(subscriptions),62)
+        ids={r['id'] for r in rows}
+        self.assertTrue(all(r['contributor_id'] in ids for r in subscriptions))
+
+    def test_unselected_person_followers_do_not_expand_the_hero(self):
+        rows=[{'id':'inc-000001','kind':'incident','incident_id':'inc-000001'}]
+        for n in (1,2):
+            rows.extend([{'id':f'per-{n:06d}','kind':'person','incident_id':'inc-000001'},
+                {'id':f'act-{n:06d}','kind':'contributor','incident_id':'inc-000001'},
+                {'id':f'sub-{n:06d}','kind':'subscription','incident_id':'inc-000001','contributor_id':f'act-{n:06d}',
+                 'subject':{'kind':'person','id':f'per-{n:06d}'}}])
+        plan={'hero_person_ids':['per-000001'],'hero_media_ids':[],'story_plans':[]}
+        self.assertEqual({r['id'] for r in select_hero(rows,plan)},{'inc-000001','per-000001','act-000001','sub-000001'})
 
     def test_selection_is_deterministic_and_does_not_mutate_catalog(self):
         original=copy.deepcopy(self.records)
