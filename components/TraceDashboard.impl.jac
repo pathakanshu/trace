@@ -56,7 +56,10 @@ impl TraceDashboard.handleReset -> None {
     busy = "reset";
     try {
         await reset_demo();
-        notice = "Demo reset. Maya Gurung is back to a single MISSING claim.";
+        notice = "Demo reset. Maya Gurung is back to one police report saying she is missing.";
+        bannerId = "";
+        storyStep = 1;
+        activeTab = "Map";
         await loadDashboard();
     } except Exception as e {
         error = "Reset failed: " + str(e);
@@ -68,8 +71,14 @@ impl TraceDashboard.handleHospitalUpdate -> None {
     busy = "hospital";
     try {
         created = await add_hospital_update();
-        notice = "IngestWalker added the Central Hospital claim. WatchWalker created " + str(created) + " alert(s).";
-        await loadDashboard();
+        # Read the fresh snapshot here: state set by loadDashboard is not
+        # visible inside this handler until the next render.
+        fresh = await get_dashboard(incidentId);
+        snapshot = fresh;
+        notice = "Hospital report added. Trace sent " + str(created) + " alert(s) to people following Maya.";
+        if created > 0 and len(fresh.alerts) > 0 {
+            bannerId = fresh.alerts[0].id or fresh.alerts[0].created_at;
+        }
     } except Exception as e {
         error = "Hospital update failed: " + str(e);
     }
@@ -80,7 +89,7 @@ impl TraceDashboard.handleRunWatch -> None {
     busy = "watch";
     try {
         created = await run_watch();
-        notice = "WatchWalker finished: " + str(created) + " new alert(s).";
+        notice = "Checked for new reports: " + str(created) + " new alert(s).";
         await loadDashboard();
     } except Exception as e {
         error = "WatchWalker failed: " + str(e);
@@ -92,7 +101,7 @@ impl TraceDashboard.handleRunResolve -> None {
     busy = "resolve";
     try {
         found = await run_resolve();
-        notice = "ResolveWalker found " + str(len(found)) + " potential duplicate(s). Nothing was merged.";
+        notice = "Found " + str(len(found)) + " possible match(es). Nothing was merged.";
         await loadDashboard();
     } except Exception as e {
         error = "ResolveWalker failed: " + str(e);
@@ -134,4 +143,60 @@ impl TraceDashboard.handleShowOnMap(claimId: str) -> None {
     activeTab = "Map";
     target: any = document.getElementById("tab-Map");
     if target { target.focus(); }
+}
+
+# Same as handleShowOnMap, but by person: a new claim (the hospital report)
+# may have no place of its own, while earlier reports about the person do.
+impl TraceDashboard.handleShowPersonOnMap(personId: str) -> None {
+    current = snapshot;
+    if current is None { return; }
+    places = [p for p in current.locations if personId in [e.person_id for e in p.evidence]];
+    if not places { return; }
+    mapFocusId = places[0].id;
+    mapFocusRequest = mapFocusRequest + 1;
+    activeTab = "Map";
+}
+
+impl TraceDashboard.handleToggleTheme -> None {
+    nextDark = not darkMode;
+    apply_theme(nextDark);
+    darkMode = nextDark;
+    try {
+        localStorage.setItem("trace-theme", "dark" if nextDark else "light");
+    } except Exception {
+        return;
+    }
+}
+
+# A story step only changes the view. Map steps fly to the first place that
+# has linked reports (the bridge in the Maya story).
+impl TraceDashboard.handleStoryStep(step: int) -> None {
+    tab = story_tab(step);
+    storyStep = step;
+    activeTab = tab;
+    current = snapshot;
+    if tab == "Map" and current {
+        places = [p for p in current.locations if len(p.evidence) > 0];
+        if places {
+            mapFocusId = places[0].id;
+            mapFocusRequest = mapFocusRequest + 1;
+        }
+    }
+}
+
+# The big story button runs the real action; nothing here is simulated.
+impl TraceDashboard.handleStoryAction(step: int) -> None {
+    if step == 1 {
+        activeTab = "People";
+        scroll_to_later("panel-People");
+    } elif step == 2 {
+        activeTab = "People";
+        reviewRequest = reviewRequest + 1;
+        scroll_to_later("identity-review");
+    } elif step == 3 {
+        await handleHospitalUpdate();
+    } elif step == 4 {
+        activeTab = "People";
+        scroll_to_later("report-investigation");
+    }
 }

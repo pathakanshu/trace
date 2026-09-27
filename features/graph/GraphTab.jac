@@ -39,7 +39,7 @@ def:pub GraphTab(snapshot: DashboardSnapshot, onRefresh: Callable[[], any]) -> J
 
     if graph == None {
         return <div className="flex flex-col gap-5">
-            <SectionHeading title="Graph" subtitle="Inspect the stored records behind every tab and how they connect." />
+            <SectionHeading title="Graph" subtitle="The records behind every tab, and how they connect: source → report → person → alert." />
             <EmptyPanel icon={Alert02Icon} title="Graph projection not connected yet"
                 text="The dashboard snapshot does not include a graph field yet. Once services/trace.jac sets snapshot.graph from build_graph_snapshot, records appear here." />
         </div>;

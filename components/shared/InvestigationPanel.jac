@@ -60,10 +60,10 @@ def:pub InvestigationPanel(snapshot: DashboardSnapshot, onRefresh: Callable[[], 
     unsavedLive: any = liveResponse if (liveIncident == snapshot.incident_id
         and liveResponse and liveResponse.get("status") in ["UNAVAILABLE", "FAILED", "BUDGET_LIMIT", "PARTIAL"]) else None;
 
-    return <section className="mt-6 flex flex-col gap-3 rounded-md border border-border bg-card p-4" aria-label="Report investigation">
+    return <section id="report-investigation" className="mt-6 flex scroll-mt-4 flex-col gap-3 rounded-md border border-border bg-card p-4" aria-label="Report investigation">
         <div>
-            <h3 className="font-display text-xl">{"Investigate a report"}</h3>
-            <p className="text-sm text-muted-foreground">{"Check attribution in a selected report and inspect a named source when available. Findings need human review."}</p>
+            <h3 className="font-display text-xl">{"Where did this report come from?"}</h3>
+            <p className="text-sm text-muted-foreground">{"Pick a report. Trace checks who it quotes and compares it with that source when it can. A person makes the final call."}</p>
         </div>
         <div className="flex flex-wrap items-end gap-3">
             <label className="flex min-w-48 flex-col gap-1 text-sm">

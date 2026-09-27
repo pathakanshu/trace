@@ -74,3 +74,9 @@
   --color-map-land: var(--map-land);
   --font-display: var(--font-display-stack);
 }
+
+/* Presentation sizing: slightly larger type on wide screens and projectors,
+   so the back of the room can read captions. Everything scales with rem. */
+@media (min-width: 1280px) {
+  html { font-size: 17px; }
+}

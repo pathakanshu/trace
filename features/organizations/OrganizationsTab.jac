@@ -11,7 +11,7 @@ def:pub CorpusOrganizations(snapshot: DashboardSnapshot, query: str, onQuery: Ca
     orgs = [o for o in snapshot.organizations if q == "" or q in o.name.lower()];
     orgs.sort(key=lambda (o: OrganizationView) -> int { return 0 - (o.report_count or 0); });
     return <div className="flex min-w-0 flex-col gap-5">
-        <SectionHeading title="Organizations"
+        <SectionHeading title="Sources"
             subtitle={fmt_count(len(snapshot.organizations)) + " publishers in the generated exercise corpus, ordered by how many source reports each one published."} />
         <label className="flex max-w-xl flex-col gap-2 text-sm">
             <span className="font-medium">{"Search organizations"}</span>
@@ -48,7 +48,7 @@ def:pub OrganizationsTab(snapshot: DashboardSnapshot, onRefresh: Callable[[], an
     institutions = [o.name for o in snapshot.organizations];
     visible = [name for name in institutions if q == "" or q in name.lower()];
     return <div className="flex min-w-0 flex-col gap-5">
-        <SectionHeading title="Organizations" subtitle="Read reports published by police, hospitals, government, and aid organizations." />
+        <SectionHeading title="Sources" subtitle="Reports published by police, hospitals, government and aid groups. Each one keeps its original text." />
         <PublishReport snapshot={snapshot} onRefresh={onRefresh} />
         <label className="flex max-w-xl flex-col gap-2 text-sm">
             <span className="font-medium">{"Search organizations"}</span>

@@ -1,8 +1,10 @@
 """Reported-location inspector. Evidence follows real media/claim graph edges."""
 import from .IncidentMap { IncidentMap }
+import from .MapLegend { MapLegend }
 import from .Density { aggregate_places }
 import from .Status { linked_people, pin_status, pin_label, pin_dot, current_reports }
 import from ...components.shared.Display { SectionHeading, friendly_time, status_sentence }
+import from ...components.shared.InfoTip { InfoTip }
 sv import from ...services.trace { DashboardSnapshot, LocationView }
 
 def:pub MapTab(snapshot: DashboardSnapshot, onRefresh: Callable[[], any], active: bool = True, focusLocationId: str = "", focusRequest: int = 0) -> JsxElement {
@@ -26,29 +28,13 @@ def:pub MapTab(snapshot: DashboardSnapshot, onRefresh: Callable[[], any], active
     }
     selected = [place for place in snapshot.locations if place.id == selectedId];
     return <div className="flex flex-col gap-5">
-        <SectionHeading title="Map" subtitle="Select a reported place to inspect its linked evidence and sources." />
-        <div className="h-[50svh] min-h-80">
+        <SectionHeading title="Map" subtitle="Tap a pin or a place name to see who reported what, and when." />
+        <div className="relative h-[60svh] min-h-80">
             <IncidentMap locations={snapshot.locations} people={snapshot.people} active={active} focusLocationId={focusLocationId} focusRequest={focusRequest} onSelect={choose_place} reportGroups={groups} onSelectSettlement={choose_settlement} onCorridorReady={lambda (features: list) { settlementAnchors = features; }} />
+            <MapLegend showPins={show_places} showHeat={len(groups) > 0} />
         </div>
-        <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs" aria-label="Map status legend">
-            {for status in (["MISSING", "REVIEW", "FOUND_SAFE", "UNKNOWN"] if show_places else []) {
-                <span key={status} className="inline-flex items-center gap-2">
-                    <span className={"size-2.5 rounded-full " + pin_dot(status)} aria-hidden="true" />{pin_label(status)}
-                </span>
-            }}
-            <span className="inline-flex items-center gap-2"><span className="h-1 w-5 bg-status-warning" aria-hidden="true" />{"Affected river: Bhote Koshi"}</span>
-            <span className="inline-flex items-center gap-2"><span className="h-0.5 w-5 bg-map-water" aria-hidden="true" />{"Other rivers (OpenStreetMap)"}</span>
-        </div>
-        {show_places and <p className="text-xs text-muted-foreground">{"Pin colour follows linked people's current reports; needs review includes conflicting reports, injury, or death. District outline: Sindhupalchok. Pins are reported media locations, not live person tracking. Unknown or invalid coordinates are omitted."}</p>}
-        <p className="min-w-0 break-words text-xs text-muted-foreground" aria-label="River corridor context">{"Bhote Koshi river corridor (current OpenStreetMap linework). Not a measured 2016 flood extent. The translucent band is a visual guide along the river."}</p>
         {(len(counts) > 0 or located > 0 or unlocated > 0) and <section className="min-w-0 flex flex-col gap-3" aria-label="Report density">
             <p className="break-words text-sm" aria-live="polite">{str(located) + " reports with a location, clustered at " + str(len(groups)) + " settlements; " + str(unlocated) + " reports have no verified location."}</p>
-            <p className="text-xs text-muted-foreground">{"Heat shows report counts, not unique people, image locations or flood severity. Reports at the same coordinates stay together; the glow is a display effect, not an uncertainty boundary."}</p>
-            <div className="flex flex-wrap items-center gap-2 text-xs" aria-label="Report density legend">
-                <span className="size-3 rounded-full bg-primary" aria-hidden="true" />{"Fewer reports"}
-                <span className="size-3 rounded-full bg-status-warning" aria-hidden="true" />
-                <span className="size-3 rounded-full bg-status-missing" aria-hidden="true" />{"More reports"}
-            </div>
             <div className="flex flex-wrap gap-2" aria-label="Busiest report settlements">
                 {for group in groups[:20] {
                     <button key={group["key"]} type="button" aria-pressed={selectedSettlement == group["key"]}
@@ -95,8 +81,10 @@ def LocationEvidencePanel(selected: LocationView, snapshot: DashboardSnapshot) -
                 <p className="mt-1 text-xs text-muted-foreground">{str(selected.latitude) + ", " + str(selected.longitude) + " · Location: " + selected.id}</p>
             </div>
             <div className="flex min-w-0 flex-col gap-3" aria-label="Current reports for linked people" aria-live="polite">
-                <h4 className="font-medium">{"Current reports for linked people"}</h4>
-                <p className="text-xs text-muted-foreground">{"These are person status reports, not evidence that the person is currently at this pin."}</p>
+                <div className="flex items-center gap-1">
+                    <h4 className="font-medium">{"Latest reports about people linked here"}</h4>
+                    <InfoTip label="About these reports" lines={["These are reports about each person's status. They do not show that the person is at this pin now."]} />
+                </div>
                 {not people and <p className="text-sm text-muted-foreground">{"No person is linked by a report at this place."}</p>}
                 {for person in people {
                     <article key={person.id} className="rounded-md border border-border p-3 text-sm">
@@ -126,7 +114,10 @@ def LocationEvidencePanel(selected: LocationView, snapshot: DashboardSnapshot) -
                     }}
                 </div>
                 <div className="flex min-w-0 flex-col gap-3">
-                    <h4 className="font-medium">{"Linked media"}</h4>
+                    <div className="flex items-center gap-1">
+                        <h4 className="font-medium">{"Linked photos and videos"}</h4>
+                        <InfoTip label="About this media" lines={["Demo media are simulated.", "A link in the graph is not an independent check of where a photo was taken."]} />
+                    </div>
                     {for media in snapshot.media {
                         if media.id in selected.media_ids {
                             <article key={media.id} className="rounded-md border border-border p-3 text-sm">
@@ -136,7 +127,6 @@ def LocationEvidencePanel(selected: LocationView, snapshot: DashboardSnapshot) -
                             </article>
                         }
                     }}
-                    <p className="text-xs text-muted-foreground">{"Seeded media are simulated. The graph link is not an independent geolocation check."}</p>
                 </div>
             </div>
         </section>;
