@@ -298,12 +298,16 @@ def:pub get_dashboard(incident_id: str = "") -> DashboardSnapshot {
 # The incidents a viewer can switch between. Seeds the demo on first use.
 def:pub list_incidents() -> list[IncidentOption] {
     if not _incident() { seed_demo(); }
+    # Concurrent first requests on an empty store can each seed a demo copy.
+    # Offer only the copy every other call uses; Reset removes the extras.
+    demo = _incident();
+    demo_id = jid(demo) if demo else "";
     options: list[IncidentOption] = [];
     # The field filter makes Jac walk real edges; the corpus is not indexed.
     for incident in [root -->[?:Incident, name != ""]] {
         kind = "demo" if incident.name == INCIDENT_NAME else (
             "corpus" if incident.name == CORPUS_INCIDENT_NAME else "");
-        if not kind { continue; }
+        if not kind or (kind == "demo" and jid(incident) != demo_id) { continue; }
         options.append(IncidentOption(id=jid(incident), name=incident.name, kind=kind,
             record_count=sum(_scan(incident).totals.values())));
     }

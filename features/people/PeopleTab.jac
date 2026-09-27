@@ -1,13 +1,14 @@
 """Gabriel's workspace. Search and selection belong to this tab, not the shell."""
 import from .Panels { PeoplePanel, ClaimsPanel }
 import from .IdentityReview { IdentityReview }
+import from .PeopleStats { PeopleStats }
 import from .CorpusPeople { CorpusPeople }
 import from ...components.shared.Display { SectionHeading }
 import from ...components.shared.Scale { is_corpus_snapshot }
 sv import from ...services.trace { DashboardSnapshot, PersonView, search_people }
 sv import from ...walkers.resolve { DuplicateCandidate }
 
-def:pub PeopleTab(snapshot: DashboardSnapshot, onRefresh: Callable[[], any], onShowOnMap: Callable[[str], None] | None = None) -> JsxElement {
+def:pub PeopleTab(snapshot: DashboardSnapshot, onRefresh: Callable[[], any], onShowOnMap: Callable[[str], None] | None = None, reviewRequest: int = 0) -> JsxElement {
     has query: str = "", selectedId: str = "", reviewKey: str = "",
         results: list[PersonView] | None = None, searching: bool = False,
         searchError: str = "", searchedFor: str = "";
@@ -20,6 +21,15 @@ def:pub PeopleTab(snapshot: DashboardSnapshot, onRefresh: Callable[[], any], onS
         searchError = "";
         selectedId = "";
         reviewKey = "";
+    }
+
+    # The story guide asks to open a match review: prefer an undecided one.
+    can with [reviewRequest] entry {
+        if reviewRequest <= 0 or len(snapshot.duplicates) == 0 { return; }
+        pending = [d for d in snapshot.duplicates if d.decision == "PENDING"];
+        first = pending[0] if len(pending) > 0 else snapshot.duplicates[0];
+        query = "";
+        reviewKey = first.person_a_id + "|" + first.person_b_id;
     }
 
     async def runSearch -> None {
@@ -78,7 +88,8 @@ def:pub PeopleTab(snapshot: DashboardSnapshot, onRefresh: Callable[[], any], onS
     }
 
     return <div className="flex flex-col gap-5">
-        <SectionHeading title="People" subtitle="Find a case, compare source reports, and review possible identity matches." />
+        <SectionHeading title="People" subtitle="Find someone, see every report about them, and check possible matches." />
+        <PeopleStats people={snapshot.people} duplicates={snapshot.duplicates} />
         <label className="flex max-w-xl flex-col gap-2 text-sm">
             <span className="font-medium">{"Search people"}</span>
             <input type="search" value={query}
@@ -87,7 +98,7 @@ def:pub PeopleTab(snapshot: DashboardSnapshot, onRefresh: Callable[[], any], onS
                 className="h-11 w-full rounded-md border border-input bg-card px-3 text-base outline-none focus-visible:ring-2 focus-visible:ring-ring" />
             <span className="text-xs text-muted-foreground">{str(len(people)) + " of " + str(len(snapshot.people)) + " people shown"}</span>
         </label>
-        {reviewPanel}
+        <div id="identity-review" className="scroll-mt-4">{reviewPanel}</div>
         <div className="grid items-start gap-8 xl:grid-cols-2">
             <PeoplePanel people={people} duplicates={duplicates}
                 selectedId={selected.id if selected else ""}

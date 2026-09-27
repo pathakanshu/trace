@@ -18,9 +18,22 @@ def usage_line(usage_source: str, total_tokens: int) -> str {
     return f"{total_tokens} tokens ({label}); about ${cost:.4f}";
 }
 
-def:pub InvestigationPanel(snapshot: DashboardSnapshot, onRefresh: Callable[[], any]) -> JsxElement {
+def:pub InvestigationPanel(snapshot: DashboardSnapshot, onRefresh: Callable[[], any], focusRequest: int = 0) -> JsxElement {
     has selectedId: str = "", selectedClaim: str = "", passphrase: str = "",
         busy: bool = False, liveResponse: any = None, liveIncident: str = "", error: str = "";
+
+    # The story guide opens the stored check that went furthest: the one where
+    # Jac retrieved a named source to compare (most citations).
+    can with [focusRequest] entry {
+        if focusRequest <= 0 or len(snapshot.investigations) == 0 { return; }
+        best: any = snapshot.investigations[0];
+        for inv in snapshot.investigations {
+            if len(inv.citations) > len(best.citations) { best = inv; }
+        }
+        selectedId = best.person_id;
+        selectedClaim = best.claim_id;
+        liveResponse = None;
+    }
     # Reset recreates people and claims with new ids, so a stored selection
     # only counts while it still exists in the current snapshot.
     selectedPeople = [p for p in snapshot.people if p.id == selectedId];
@@ -60,10 +73,10 @@ def:pub InvestigationPanel(snapshot: DashboardSnapshot, onRefresh: Callable[[], 
     unsavedLive: any = liveResponse if (liveIncident == snapshot.incident_id
         and liveResponse and liveResponse.get("status") in ["UNAVAILABLE", "FAILED", "BUDGET_LIMIT", "PARTIAL"]) else None;
 
-    return <section className="mt-6 flex flex-col gap-3 rounded-md border border-border bg-card p-4" aria-label="Report investigation">
+    return <section id="report-investigation" className="mt-6 flex scroll-mt-4 flex-col gap-3 rounded-md border border-border bg-card p-4" aria-label="Report investigation">
         <div>
-            <h3 className="font-display text-xl">{"Investigate a report"}</h3>
-            <p className="text-sm text-muted-foreground">{"Check attribution in a selected report and inspect a named source when available. Findings need human review."}</p>
+            <h3 className="font-display text-xl">{"Where did this report come from?"}</h3>
+            <p className="text-sm text-muted-foreground">{"Pick a report. Trace checks who it quotes and compares it with that source when it can. A person makes the final call."}</p>
         </div>
         <div className="flex flex-wrap items-end gap-3">
             <label className="flex min-w-48 flex-col gap-1 text-sm">
