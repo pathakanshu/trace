@@ -84,3 +84,18 @@ impl TraceDashboard.handleTabKey(event: any, index: int) -> None {
     target: any = document.getElementById("tab-" + nextTab);
     if target { target.focus(); }
 }
+
+# Navigation resolves real claim/location links in the current shared snapshot.
+# A counter allows revisiting the same report after panning elsewhere.
+impl TraceDashboard.handleShowOnMap(claimId: str) -> None {
+    current = snapshot;
+    if current is None { return; }
+    locations = current.locations;
+    places = [p for p in locations if claimId in [e.claim_id for e in p.evidence]];
+    if not places { return; }
+    mapFocusId = places[0].id;
+    mapFocusRequest = mapFocusRequest + 1;
+    activeTab = "Map";
+    target: any = document.getElementById("tab-Map");
+    if target { target.focus(); }
+}

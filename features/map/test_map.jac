@@ -93,3 +93,43 @@ test "map-linked person keeps conflicting current reports and separate candidate
     market = [p for p in after.locations if p.name == "Tatopani Market"][0];
     assert len(market.evidence) == 0;
 }
+
+test "report navigation requires its own media link and valid coordinates" {
+    reset_demo();
+    initial = get_dashboard();
+    police = [c for p in initial.people for c in p.claims if c.source_name == "Nepal Police Demo"][0];
+    community = [c for p in initial.people for c in p.claims if c.source_name == "Community Report Demo"][0];
+    assert [e.claim_id for l in initial.locations for e in l.evidence] == [police.id];
+    assert add_hospital_update() == 1;
+    updated = get_dashboard();
+    hospital = [c for p in updated.people for c in p.claims if c.source_name == "Central Hospital Demo"][0];
+    # Same subject and even a newer status do not imply a location for this report.
+    mapped_ids = [e.claim_id for l in updated.locations for e in l.evidence];
+    assert mapped_ids == [police.id];
+    assert hospital.id not in mapped_ids and community.id not in mapped_ids;
+
+    incident = [root -->[?:Incident, name == INCIDENT_NAME]][0];
+    maya = [p for p in [incident ->:Involves:->] if p.name == "Maya Gurung"][0];
+    hospital_claim = [c for c in [maya <-:About:<-] if jid(c) == hospital.id][0];
+    evidence = Media(media_type="image", description="Controlled report-navigation fixture");
+    unknown = Location(name="No known location");
+    incident +>:Contains():+> evidence;
+    evidence +>:LocatedAt():+> unknown;
+    hospital_claim +>:SupportedBy():+> evidence;
+    assert hospital.id not in [e.claim_id for l in get_dashboard().locations for e in l.evidence];
+
+    # The explicit media/location relationship makes this report navigable.
+    unknown.latitude = 27.9486;
+    unknown.longitude = 85.9442;
+    located = get_dashboard();
+    hospital_places = [l for l in located.locations if hospital.id in [e.claim_id for e in l.evidence]];
+    assert len(hospital_places) == 1 and hospital_places[0].id == jid(unknown);
+    assert hospital_places[0].evidence[0].person_id == jid(maya);
+    assert hospital_places[0].evidence[0].source_reference == hospital.source_reference;
+    assert community.id not in [e.claim_id for l in located.locations for e in l.evidence];
+    assert len(located.alerts) == 1;
+    reset_demo();
+    restored = get_dashboard();
+    assert hospital.id not in [e.claim_id for l in restored.locations for e in l.evidence];
+    assert len(restored.locations) == 2 and len(restored.alerts) == 0;
+}

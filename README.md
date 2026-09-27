@@ -91,6 +91,12 @@ in [docs/INVESTIGATION.md](docs/INVESTIGATION.md).
 
 ### Map
 
+People reports with mapped evidence offer **Show on map**. It opens Map,
+selects the first linked place in snapshot order, and centers its pin. Repeating
+the link centers it again; normal tab switches preserve the viewport and People
+search. Reports without valid mapped evidence have no link. This navigation
+follows the report's media location, not the person's current whereabouts.
+
 Pins show the most urgent current report among people linked by a claim at that
 media location: Missing, Needs review, Reported safe, then No current status.
 Needs review includes conflicting reports, injury, or death. The evidence panel
@@ -113,6 +119,16 @@ selection across tabs, keyboard selection, 375px width without horizontal
 overflow, status/citation edge cases, and failed/slow boundary recovery.
 This was an isolated local preview; hosted deployment and a physical phone were
 not exercised. The generated large corpus remains unimported.
+
+Overnight follow-up (27 September): 57 repository tests (six focused map tests),
+the 52-file compiler gate, and the production web client build passed. Browser interactions verified keyboard/mouse **Show on map**,
+repeat centering, retained People search, absence of links on unmapped reports,
+and the hospital update/reset. At 375x812, Map and Organizations had no document
+overflow, including long references/URLs in preview, published records and
+expanded original text; identical report retry created no extra alert. These
+were local browser checks via the connected extension; screenshot capture was
+unavailable. The nine-check script above predates these follow-up interactions.
+
 
 ```sh
 jac test features/map/test_map.jac

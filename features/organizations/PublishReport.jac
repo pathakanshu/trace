@@ -25,7 +25,7 @@ def:pub PublishReport(snapshot: DashboardSnapshot, onRefresh: Callable[[], any])
     def review(event: any) -> None;
     async def publish -> None;
 
-    return <section className="rounded-md border border-border bg-card p-4 md:p-5">
+    return <section className="min-w-0 break-words rounded-md border border-border bg-card p-4 md:p-5">
         <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
             <div>
                 <h3 className="font-display text-2xl">{"Publish a report"}</h3>
@@ -77,7 +77,7 @@ def:pub PublishReport(snapshot: DashboardSnapshot, onRefresh: Callable[[], any])
             </fieldset>
             {not reviewing and <div><Button type="submit" disabled={busy or len(organizations) == 0}>{"Review report"}</Button></div>}
         </form>
-        {reviewing and <div className="mt-4 flex flex-col gap-3 rounded-md border border-primary/40 bg-accent/30 p-4" aria-label="Report preview">
+        {reviewing and <div className="mt-4 flex min-w-0 flex-col gap-3 rounded-md border border-primary/40 bg-accent/30 p-4" aria-label="Report preview">
             <h4 className="font-medium">{"Review before publishing"}</h4>
             <p className="text-sm">{(selectedOrg.name if selectedOrg else "Unknown institution") + " reports " + (selectedPerson.name if selectedPerson else "Unknown person") + " as " + status_sentence(claimType) + "."}</p>
             <p className="text-sm">{summary}</p>

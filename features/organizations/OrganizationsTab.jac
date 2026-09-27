@@ -8,7 +8,7 @@ def:pub OrganizationsTab(snapshot: DashboardSnapshot, onRefresh: Callable[[], an
     q = query.strip().lower();
     institutions = [o.name for o in snapshot.organizations];
     visible = [name for name in institutions if q == "" or q in name.lower()];
-    return <div className="flex flex-col gap-5">
+    return <div className="flex min-w-0 flex-col gap-5">
         <SectionHeading title="Organizations" subtitle="Read reports published by police, hospitals, government, and aid organizations." />
         <PublishReport snapshot={snapshot} onRefresh={onRefresh} />
         <label className="flex max-w-xl flex-col gap-2 text-sm">
@@ -23,12 +23,12 @@ def:pub OrganizationsTab(snapshot: DashboardSnapshot, onRefresh: Callable[[], an
         </p>}
         <div className="grid items-start gap-4 xl:grid-cols-2">
             {for name in visible {
-                <section key={name} className="flex flex-col gap-4 rounded-md border border-border bg-card p-4">
+                <section key={name} className="flex min-w-0 flex-col gap-4 break-words rounded-md border border-border bg-card p-4">
                     <h3 className="font-display text-xl">{name}</h3>
                     {for p in snapshot.people {
                         for c in p.claims {
                             if c.source_name == name {
-                            <article key={c.id} className="flex flex-col gap-1 border-l-2 border-primary pl-3">
+                            <article key={c.id} className="flex min-w-0 flex-col gap-1 border-l-2 border-primary pl-3">
                                 <span className="text-xs text-muted-foreground">{source_kind(c.source_type) + " · " + friendly_time(c.timestamp)}</span>
                                 <span className="text-sm font-medium">{p.name + " · " + status_sentence(c.claim_type)}</span>
                                 <p className="text-sm">{c.value}</p>

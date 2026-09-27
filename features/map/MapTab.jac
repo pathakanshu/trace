@@ -4,13 +4,18 @@ import from .Status { linked_people, pin_status, pin_label, pin_dot, current_rep
 import from ...components.shared.Display { SectionHeading, friendly_time, status_sentence }
 sv import from ...services.trace { DashboardSnapshot, LocationView }
 
-def:pub MapTab(snapshot: DashboardSnapshot, onRefresh: Callable[[], any], active: bool = True) -> JsxElement {
+def:pub MapTab(snapshot: DashboardSnapshot, onRefresh: Callable[[], any], active: bool = True, focusLocationId: str = "", focusRequest: int = 0) -> JsxElement {
     has selectedId: str = "";
+    can with [focusLocationId, focusRequest] entry {
+        if focusRequest > 0 and focusLocationId in [p.id for p in snapshot.locations] {
+            selectedId = focusLocationId;
+        }
+    }
     selected = [place for place in snapshot.locations if place.id == selectedId];
     return <div className="flex flex-col gap-5">
         <SectionHeading title="Map" subtitle="Select a reported place to inspect its linked evidence and sources." />
         <div className="h-[50svh] min-h-80">
-            <IncidentMap locations={snapshot.locations} people={snapshot.people} active={active} onSelect={lambda (id: str) { selectedId = id; }} />
+            <IncidentMap locations={snapshot.locations} people={snapshot.people} active={active} focusLocationId={focusLocationId} focusRequest={focusRequest} onSelect={lambda (id: str) { selectedId = id; }} />
         </div>
         <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs" aria-label="Map status legend">
             {for status in ["MISSING", "REVIEW", "FOUND_SAFE", "UNKNOWN"] {
