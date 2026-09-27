@@ -14,6 +14,7 @@ import from features.organizations.services { publish_report }
 import from services.investigation { investigate_report }
 # People (Gabriel): human identity review.
 import from features.people.services { review_identity, propose_identity, IdentityDecisionResult }
+import from features.media.media_upload { UploadRecord, upload_image, list_image_uploads, list_incident_media, check_media_duplicates, edit_media, delete_media, add_media_comment, add_media_assertion }
 
 # Explicitly include the generated base so Jac 0.34 copies it into the client
 # build. trace-tokens.css also imports it and adds Trace's light/dark tokens.

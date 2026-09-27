@@ -9,6 +9,7 @@ everything into small f"obj" "view" types below.
 """
 
 import math;
+import from features.media.media_upload { UploadRecord, list_incident_media }
 
 import from graph.nodes {
     Incident, Person, Claim, Source, Media, Location,
@@ -93,7 +94,8 @@ obj DashboardSnapshot {
         activity: list[ActivityView] = [],
         duplicates: list[DuplicateCandidate] = [],
         hospital_update_added: bool = False,
-        graph: GraphSnapshot = GraphSnapshot();
+        graph: GraphSnapshot = GraphSnapshot(),
+        media_records: list[UploadRecord] = [];
 }
 
 # ---------- Actions (the demo buttons) ----------
@@ -159,6 +161,7 @@ def:pub get_dashboard() -> DashboardSnapshot {
         snap.organizations.append(OrganizationView(id=jid(org), name=org.name,
             organization_type=org.organization_type, is_demo=org.is_demo));
     }
+    snap.media_records = list_incident_media(incident.name);
     snap.incident_name = incident.name;
     snap.incident_description = incident.description;
     snap.incident_region = incident.region;

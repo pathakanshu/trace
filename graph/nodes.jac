@@ -179,3 +179,19 @@ node InvestigationRun {
     has person_id: str, fingerprint: str, result_json: str,
         created_at: str = "";
 }
+
+# Metadata and attributed contributions attached to a canonical Media record.
+node MediaMetadata {
+    has media_id: str = "", filename: str = "", display_name: str = "",
+        source_reference: str = "", sha256: str = "", data_url: str = "",
+        duplicate_ids: list[str] = [];
+}
+
+node MediaComment {
+    has body: str = "", author: str = "", created_at: str = "";
+}
+
+node MediaAssertion {
+    has assertion_type: str = "", value: str = "", source: str = "",
+        asserted_at: str = "", provenance: str = "", status: str = "reported";
+}

@@ -32,6 +32,9 @@ Pure shared browser helpers use `cl def:pub` so Jac 0.34 does not turn them into
 server calls. Shared presentation lives in `components/shared/Display.jac`.
 Do not import another tab's UI or depend on it to save data.
 
+Media reads `snapshot.media_records`, including upload details and contributions.
+Each media mutation refreshes the same snapshot used by Graph and the other tabs.
+
 All persistent types belong in `graph/`, with existing walker entry points in
 `walkers/`. The Graph tab reads the same graph; it does not own a separate store.
 For a new server action, coordinate the function import/registration in
@@ -65,7 +68,7 @@ until it does, the Graph tab draws the derived `Alert.claim_id` link.
 
 - Switch through all five tabs: one visible panel, unchanged URL/document.
   Left/Right and Home/End move tab focus and selection; hidden panels cannot take focus.
-- Search People and filter Media; switch away/back and verify both remain.
+- Search People and Media; switch away/back and verify both queries remain.
 - Pan/zoom/select Map, switch away/back: viewport, selection, and size remain correct.
 - Publish the hospital example and retry it: every view receives the update,
   earlier reports remain, and the retry creates no extra claim or alert.

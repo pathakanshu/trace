@@ -37,19 +37,22 @@ Jev integration, follow the separate setup guide linked above.
 - WatchWalker creates in-app alerts from new source claims. Strictly newer dated
   reports are updates; differing latest or undated reports require review.
 - People shows sourced timelines and deterministic name/age match candidates.
-  Human identity confirmation is not implemented; candidates do not merge records.
+  Human reviewers can confirm/reject associations with attribution and history.
+  Decisions preserve both records and do not merge timelines or change status.
 - Map uses bundled Nepal boundaries and graph-backed evidence pins. Reported
   locations are unverified. No street tiles or map API key are needed.
-- Media shows **simulated checks from fixture fields**. Uploads, real EXIF/hash
-  extraction, C2PA, and video analysis are not implemented.
-- Graph shows a relationship tree from the shared snapshot. It is not yet a full
-  visualization of every node/edge type, including investigation runs.
+- Media supports image uploads, real SHA-256 copy matching, editable upload details,
+  comments, and attributed assertions through the shared snapshot. Seeded checks
+  remain simulated. Real EXIF extraction, C2PA, and video analysis are not implemented.
+- Graph inspects real node IDs, typed edges, identity reviews, and upload copy links
+  from the shared snapshot. Derived/candidate links are labeled. Investigation runs
+  and media contribution child nodes are not yet projected.
 - People also offers an optional budgeted Jev check of one source report's
   attribution, with at most one follow-up source comparison. Results are advisory,
   stored separately from claims, and unavailable without explicit configuration.
   Offline tests do not establish provider access or semantic accuracy.
 - No authentication, public publishing, continuous monitoring, or external alert
-  delivery. CGX/PFIF import, free-text extraction, community contributions, and the
+  delivery. CGX/PFIF import, free-text extraction, broader community workflows, and the
   large planned corpus are not implemented. Retry guarantees are tested sequentially.
 
 ## Demo and checks
@@ -63,7 +66,7 @@ Jev integration, follow the separate setup guide linked above.
    **Simulate hospital report** remains the scripted fallback.
 
 ```sh
-jac test tests/test_trace.jac tests/test_publishing.jac tests/test_investigation.jac
+jac test tests features/people/test_identity_review.jac features/graph/test_graph.jac features/media/test_media.jac features/media/test_media_integration.jac
 jac build --check_only
 jac build --client web
 ```
@@ -82,7 +85,7 @@ physical device still need verification.
 | `components/TraceDashboard*`, `components/shared/` | Shared shell and presentation |
 | `features/<tab>/` | Tab UI, feature services, and focused tests |
 | `graph/nodes.jac`, `graph/edges.jac`, `graph/activity.jac` | Persistent schema and activity helpers |
-| `walkers/` | Ingestion, candidate resolution, simulated evidence, and watching |
+| `walkers/` | Ingestion, identity proposals/reviews, seeded and upload evidence, watching |
 | `services/trace.jac`, `services/geo.jac` | Shared snapshot/actions and boundary data |
 | `services/investigation.jac`, `investigation/`, `integrations/jev.jac` | Report checks, questions, and provider adapter |
 | `demo/seed.jac`, `demo/reset.jac`, `tests/` | Executable fixtures, isolated reset, and tests |
