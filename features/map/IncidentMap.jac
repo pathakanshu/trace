@@ -18,8 +18,9 @@ import from "maplibre-gl" { Map as MapLibreMap, Marker, NavigationControl }
 import "maplibre-gl/dist/maplibre-gl.css";
 import from "topojson-client" { feature }
 import from ...lib.utils { cn }
+import from .Status { linked_people, pin_status, pin_label, pin_dot }
 sv import from ...services.geo { get_boundaries }
-sv import from ...services.trace { LocationView }
+sv import from ...services.trace { LocationView, PersonView }
 
 # The incident's district in geometry.topo.json (सिन्धुपाल्चोक / Sindhupalchok).
 glob INCIDENT_DISTRICT_ID: int = 30;
@@ -73,14 +74,14 @@ def add_boundary_layers(map_obj: any, topo: any) -> None {
 }
 
 # A small HTML pin. Classes use theme tokens.
-def make_pin(label: str, location_id: str, on_select: Callable[[str], None]) -> any {
+def make_pin(label: str, location_id: str, status: str, on_select: Callable[[str], None]) -> any {
     el: any = document.createElement("button");
     el.type = "button";
-    el.setAttribute("aria-label", "Inspect " + label);
+    el.setAttribute("aria-label", "Inspect " + label + " · " + pin_label(status));
     el.addEventListener("click", lambda { on_select(location_id); });
     el.className = "flex cursor-pointer flex-col items-center gap-1 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
     dot: any = document.createElement("span");
-    dot.className = "block size-3.5 rounded-full border-2 border-background bg-primary shadow";
+    dot.className = "block size-3.5 rounded-full border-2 border-background shadow " + pin_dot(status);
     tag: any = document.createElement("span");
     tag.className = "whitespace-nowrap rounded border border-border bg-card/95 px-1.5 py-0.5 text-[10px] font-medium text-foreground shadow-sm";
     tag.textContent = label;
@@ -89,13 +90,16 @@ def make_pin(label: str, location_id: str, on_select: Callable[[str], None]) -> 
     return el;
 }
 
-def:pub IncidentMap(locations: list[LocationView], active: bool = True, className: str = "", onSelect: Callable[[str], None] | None = None) -> JsxElement {
+def:pub IncidentMap(locations: list[LocationView], people: list[PersonView], active: bool = True, className: str = "", onSelect: Callable[[str], None] | None = None) -> JsxElement {
     has containerRef: Ref[HTMLDivElement] = Ref(),
         mapRef: Ref[any] = Ref(None),
         markersRef: Ref[list] = Ref([]),
         onSelectRef: Ref[any] = Ref(None),
         status: str = "loading",    # loading | ready | error
-        errorText: str = "";
+        errorText: str = "",
+        boundaryStatus: str = "loading",
+        boundaryTimerRef: Ref[any] = Ref(None),
+        resizeRef: Ref[any] = Ref(None);
 
     def select_location(location_id: str) -> None {
         if onSelectRef.current { onSelectRef.current(location_id); }
@@ -103,12 +107,10 @@ def:pub IncidentMap(locations: list[LocationView], active: bool = True, classNam
 
     can with [onSelect] entry { onSelectRef.current = onSelect; }
 
-    # Create the map once, when the component first appears.
-    async can with entry {
+    # Start the map immediately. Boundary loading never gates evidence or pins.
+    can with entry {
         if mapRef.current or not containerRef.current { return; }
         try {
-            topo: any = await get_boundaries();
-            if topo["error"] { status = "error"; errorText = str(topo["error"]); return; }
             map_obj: any = new(MapLibreMap, {
                 "container": containerRef.current,
                 "style": blank_style(),
@@ -116,46 +118,68 @@ def:pub IncidentMap(locations: list[LocationView], active: bool = True, classNam
                 "fitBoundsOptions": {"padding": 16},
                 "attributionControl": False
             });
+            mapRef.current = map_obj;
             map_obj.addControl(new(NavigationControl, {"showCompass": False}), "top-left");
             map_obj.on("load", lambda {
-                try {
-                    add_boundary_layers(map_obj, topo);
-                    # Fit once; switching tabs preserves the user's viewport.
-                    if len(locations) > 0 {
-                        west = locations[0].longitude;
-                        east = west;
-                        south = locations[0].latitude;
-                        north = south;
-                        for loc in locations {
-                            west = min(west, loc.longitude);
-                            east = max(east, loc.longitude);
-                            south = min(south, loc.latitude);
-                            north = max(north, loc.latitude);
-                        }
-                        map_obj.fitBounds([[west, south], [east, north]],
-                            {"padding": 70, "maxZoom": 13, "duration": 0});
+                if mapRef.current != map_obj { return; }
+                # Fit once; later refreshes and tab switches retain the viewport.
+                if len(locations) > 0 {
+                    west = locations[0].longitude;
+                    east = west;
+                    south = locations[0].latitude;
+                    north = south;
+                    for loc in locations {
+                        west = min(west, loc.longitude);
+                        east = max(east, loc.longitude);
+                        south = min(south, loc.latitude);
+                        north = max(north, loc.latitude);
                     }
-                    status = "ready";
-                } except Exception as e {
-                    status = "error";
-                    errorText = str(e);
+                    map_obj.fitBounds([[west, south], [east, north]],
+                        {"padding": 70, "maxZoom": 13, "duration": 0});
                 }
+                status = "ready";
+                load_boundaries(map_obj);
             });
-            mapRef.current = map_obj;
+            # Browser constructor lacks a Jac stub; see jac-cl-js-interop.
+            observer: any = new(ResizeObserver, lambda { # jac:ignore[E1053]
+                if mapRef.current { mapRef.current.resize(); }
+            });
+            resizeRef.current = observer;
+            observer.observe(containerRef.current);
         } except Exception as e {
             status = "error";
             errorText = str(e);
         }
     }
 
+    async def load_boundaries(map_obj: any) -> None {
+        # Show a useful fallback after five seconds; a late success may recover.
+        boundaryTimerRef.current = setTimeout(lambda {
+            if mapRef.current == map_obj { boundaryStatus = "unavailable"; }
+        }, 5000);
+        try {
+            topo: any = await get_boundaries();
+            if mapRef.current != map_obj { return; }
+            if topo["error"] { boundaryStatus = "unavailable"; }
+            else {
+                add_boundary_layers(map_obj, topo);
+                boundaryStatus = "ready";
+            }
+        } except Exception {
+            if mapRef.current == map_obj { boundaryStatus = "unavailable"; }
+        } finally {
+            if boundaryTimerRef.current { clearTimeout(boundaryTimerRef.current); }
+        }
+    }
+
     # Keep pins in sync with the Location nodes (runs after every render).
-    can with [locations, status] entry {
+    can with [locations, people, status] entry {
         map_obj = mapRef.current;
         if not map_obj or status != "ready" { return; }
         for m in markersRef.current { m.remove(); }
         fresh: list = [];
         for loc in locations {
-            marker: any = new(Marker, {"element": make_pin(loc.name, loc.id, select_location), "anchor": "top"});
+            marker: any = new(Marker, {"element": make_pin(loc.name, loc.id, pin_status(linked_people(loc, people)), select_location), "anchor": "top"});
             marker.setLngLat([loc.longitude, loc.latitude]).addTo(map_obj);
             fresh.append(marker);
         }
@@ -171,6 +195,8 @@ def:pub IncidentMap(locations: list[LocationView], active: bool = True, classNam
 
     # Remove the map when the component unmounts.
     can with exit {
+        if boundaryTimerRef.current { clearTimeout(boundaryTimerRef.current); }
+        if resizeRef.current { resizeRef.current.disconnect(); }
         if mapRef.current { mapRef.current.remove(); mapRef.current = None; }
     }
 
@@ -178,6 +204,9 @@ def:pub IncidentMap(locations: list[LocationView], active: bool = True, classNam
         {#* Explicit size: MapLibre's CSS forces position:relative on this div, so f"absolute inset-0" would collapse it to 0px tall. *#}
         <div ref={containerRef} className="h-full min-h-80 w-full" />
         {status == "loading" and <div className="absolute inset-0 flex items-center justify-center text-sm text-muted-foreground">{"Loading map of Nepal..."}</div>}
+        {status == "ready" and boundaryStatus != "ready" and <p role="status" className="pointer-events-none absolute bottom-2 left-2 right-2 rounded border border-border bg-card/95 p-2 text-center text-xs text-muted-foreground">
+            {"Boundaries unavailable. Pins, place list, and linked evidence remain available." if boundaryStatus == "unavailable" else "Loading district boundaries; pins and evidence are ready."}
+        </p>}
         {status == "error" and <div className="absolute inset-0 flex items-center justify-center pl-6 pr-6 text-center text-sm text-destructive">{"Map unavailable: " + errorText}</div>}
     </div>;
 }

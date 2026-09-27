@@ -58,7 +58,7 @@ obj MediaView {
 
 obj LocationEvidenceView {
     has claim_id: str, person_name: str, source_name: str, claim_type: str,
-        summary: str, reported_at: str, source_reference: str;
+        summary: str, reported_at: str, source_reference: str, person_id: str = "";
 }
 
 obj LocationView {
@@ -211,7 +211,9 @@ def:pub get_dashboard() -> DashboardSnapshot {
                     claim_id=jid(claim), person_name=people[0].name if people else "Unknown",
                     source_name=sources[0].name if sources else "Unknown",
                     claim_type=claim.claim_type, summary=claim.value,
-                    reported_at=claim.timestamp, source_reference=claim.source_reference));
+                    reported_at=claim.timestamp, source_reference=claim.source_reference,
+                    person_id=jid(people[0]) if people else ""));
+                existing.append(jid(claim));
             }
         }
     }
