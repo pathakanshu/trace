@@ -18,9 +18,22 @@ def usage_line(usage_source: str, total_tokens: int) -> str {
     return f"{total_tokens} tokens ({label}); about ${cost:.4f}";
 }
 
-def:pub InvestigationPanel(snapshot: DashboardSnapshot, onRefresh: Callable[[], any]) -> JsxElement {
+def:pub InvestigationPanel(snapshot: DashboardSnapshot, onRefresh: Callable[[], any], focusRequest: int = 0) -> JsxElement {
     has selectedId: str = "", selectedClaim: str = "", passphrase: str = "",
         busy: bool = False, liveResponse: any = None, liveIncident: str = "", error: str = "";
+
+    # The story guide opens the stored check that went furthest: the one where
+    # Jac retrieved a named source to compare (most citations).
+    can with [focusRequest] entry {
+        if focusRequest <= 0 or len(snapshot.investigations) == 0 { return; }
+        best: any = snapshot.investigations[0];
+        for inv in snapshot.investigations {
+            if len(inv.citations) > len(best.citations) { best = inv; }
+        }
+        selectedId = best.person_id;
+        selectedClaim = best.claim_id;
+        liveResponse = None;
+    }
     # Reset recreates people and claims with new ids, so a stored selection
     # only counts while it still exists in the current snapshot.
     selectedPeople = [p for p in snapshot.people if p.id == selectedId];

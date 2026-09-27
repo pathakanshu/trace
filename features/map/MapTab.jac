@@ -3,7 +3,7 @@ import from .IncidentMap { IncidentMap }
 import from .MapLegend { MapLegend }
 import from .Density { aggregate_places }
 import from .Status { linked_people, pin_status, pin_label, pin_dot, current_reports }
-import from ...components.shared.Display { SectionHeading, friendly_time, status_sentence }
+import from ...components.shared.Display { SectionHeading, friendly_time, status_sentence, plural }
 import from ...components.shared.InfoTip { InfoTip }
 sv import from ...services.trace { DashboardSnapshot, LocationView }
 
@@ -29,18 +29,18 @@ def:pub MapTab(snapshot: DashboardSnapshot, onRefresh: Callable[[], any], active
     selected = [place for place in snapshot.locations if place.id == selectedId];
     return <div className="flex flex-col gap-5">
         <SectionHeading title="Map" subtitle="Tap a pin or a place name to see who reported what, and when." />
-        <div className="relative h-[60svh] min-h-80">
+        <div className="relative h-[55svh] min-h-80">
             <IncidentMap locations={snapshot.locations} people={snapshot.people} active={active} focusLocationId={focusLocationId} focusRequest={focusRequest} onSelect={choose_place} reportGroups={groups} onSelectSettlement={choose_settlement} onCorridorReady={lambda (features: list) { settlementAnchors = features; }} />
             <MapLegend showPins={show_places} showHeat={len(groups) > 0} />
         </div>
         {(len(counts) > 0 or located > 0 or unlocated > 0) and <section className="min-w-0 flex flex-col gap-3" aria-label="Report density">
-            <p className="break-words text-sm" aria-live="polite">{str(located) + " reports with a location, clustered at " + str(len(groups)) + " settlements; " + str(unlocated) + " reports have no verified location."}</p>
+            <p className="break-words text-sm" aria-live="polite">{plural(located, "report") + " with a location, clustered at " + plural(len(groups), "settlement") + "; " + plural(unlocated, "report") + (" has" if unlocated == 1 else " have") + " no verified location."}</p>
             <div className="flex flex-wrap gap-2" aria-label="Busiest report settlements">
                 {for group in groups[:20] {
                     <button key={group["key"]} type="button" aria-pressed={selectedSettlement == group["key"]}
                         onClick={lambda { choose_settlement(str(group["key"])); }}
-                        className={"min-w-0 max-w-full break-words rounded-md border px-3 py-2 text-left text-sm focus-visible:ring-2 focus-visible:ring-ring " + ("border-primary bg-accent text-primary" if selectedSettlement == group["key"] else "border-border bg-card")}>
-                        {str(group["name"]) + " · " + str(group["report_count"]) + " reports"}
+                        className={"min-w-0 max-w-full break-words rounded-md border px-3 py-2 text-left text-sm focus-visible:ring-2 focus-visible:ring-ring " + ("border-primary bg-primary text-primary-foreground" if selectedSettlement == group["key"] else "border-border bg-card")}>
+                        {str(group["name"]) + " · " + plural(int(group["report_count"]), "report")}
                     </button>
                 }}
             </div>
@@ -58,7 +58,7 @@ def:pub MapTab(snapshot: DashboardSnapshot, onRefresh: Callable[[], any], active
             {for place in snapshot.locations[:20] {
                 <button key={place.id} type="button" aria-pressed={selectedId == place.id}
                     onClick={lambda { choose_place(place.id); }}
-                    className={"inline-flex max-w-full items-center gap-2 rounded-md border px-3 py-2 text-left text-sm focus-visible:ring-2 focus-visible:ring-ring " + ("border-primary bg-accent text-primary" if selectedId == place.id else "border-border bg-card")}>
+                    className={"inline-flex max-w-full items-center gap-2 rounded-md border px-3 py-2 text-left text-sm focus-visible:ring-2 focus-visible:ring-ring " + ("border-primary bg-primary text-primary-foreground" if selectedId == place.id else "border-border bg-card")}>
                     <span className={"size-2.5 shrink-0 rounded-full " + pin_dot(pin_status(linked_people(place, snapshot.people)))} aria-hidden="true" />
                     <span className="break-words">{place.name + " · " + pin_label(pin_status(linked_people(place, snapshot.people)))}</span>
                 </button>

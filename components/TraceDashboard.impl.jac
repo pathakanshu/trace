@@ -204,6 +204,7 @@ impl TraceDashboard.handleStoryAction(step: int) -> None {
         await handleHospitalUpdate();
     } elif step == 4 {
         activeTab = "People";
+        investigateRequest = investigateRequest + 1;
         scroll_to_later("report-investigation");
     }
 }

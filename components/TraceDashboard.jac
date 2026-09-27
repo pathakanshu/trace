@@ -68,7 +68,7 @@ def:pub TraceDashboard() -> JsxElement {
         mapFocusId: str = "", mapFocusRequest: int = 0,
         incidents: list[IncidentOption] = [], incidentId: str = "",
         darkMode: bool = USE_DARK_THEME,
-        storyStep: int = 1, reviewRequest: int = 0, bannerId: str = "";
+        storyStep: int = 1, reviewRequest: int = 0, investigateRequest: int = 0, bannerId: str = "";
 
     can with entry {
         # Local copy: a state update is not readable until the next render.
@@ -206,7 +206,7 @@ def:pub TraceDashboard() -> JsxElement {
             <span>{error}</span>
             <Button variant="outline" size="sm" onClick={loadDashboard}>{"Try again"}</Button>
         </div>}
-        {notice and <p role="status" className="mx-4 mt-4 rounded-md border-l-4 border-primary bg-primary/5 px-3 py-2 text-sm md:mx-6">{notice}</p>}
+        {notice and len(banner_alerts) == 0 and <p role="status" className="mx-4 mt-4 rounded-md border-l-4 border-primary bg-primary/5 px-3 py-2 text-sm md:mx-6">{notice}</p>}
 
         {snap and <div className="grid flex-1 xl:grid-cols-[minmax(0,1fr)_320px]">
             <main className="min-w-0 p-4 md:p-6">
@@ -216,7 +216,7 @@ def:pub TraceDashboard() -> JsxElement {
                 </div>
                 <div id="panel-People" role="tabpanel" aria-labelledby="tab-People" tabIndex={0} hidden={activeTab != "People"}>
                     <PeopleTab snapshot={snap} onRefresh={loadDashboard} onShowOnMap={handleShowOnMap} reviewRequest={reviewRequest} />
-                    {not corpus_view and <InvestigationPanel snapshot={snap} onRefresh={loadDashboard} />}
+                    {not corpus_view and <InvestigationPanel snapshot={snap} onRefresh={loadDashboard} focusRequest={investigateRequest} />}
                 </div>
                 <div id="panel-Media" role="tabpanel" aria-labelledby="tab-Media" tabIndex={0} hidden={activeTab != "Media"}>
                     <MediaTab snapshot={snap} onRefresh={loadDashboard} />

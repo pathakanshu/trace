@@ -58,13 +58,14 @@ def:pub StoryBar(step: int, hospitalAdded: bool, busy: str,
     return <section aria-label="Maya's story, step by step" className="border-b border-border bg-card/60">
         <div className="flex flex-col gap-3 px-4 py-3 md:px-6">
             <div className="flex flex-wrap items-center gap-2">
-                <span className="mr-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">{"Maya's story"}</span>
-                <ol className="flex min-w-0 flex-1 flex-wrap items-center gap-1.5">
+                <span className="order-1 mr-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">{"Maya's story"}</span>
+                {#* Phones: one scrolling row under the label. Wider: inline and wrapping. *#}
+                <ol className="order-3 -mx-1 flex w-full min-w-0 flex-nowrap items-center gap-1.5 overflow-x-auto px-1 pb-1 md:order-2 md:mx-0 md:w-auto md:flex-1 md:flex-wrap md:overflow-visible md:px-0 md:pb-0">
                     {for i in range(len(STORY_STEPS)) {
-                        <li key={STORY_STEPS[i]["short"]} className="flex items-center gap-1.5">
+                        <li key={STORY_STEPS[i]["short"]} className="flex shrink-0 items-center gap-1.5">
                             <button type="button" aria-current={"step" if step == i + 1 else None}
                                 onClick={lambda { onStep(i + 1); }}
-                                className={cn("inline-flex min-h-10 items-center gap-2 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                                className={cn("inline-flex min-h-10 items-center gap-2 whitespace-nowrap rounded-full border px-3 py-1.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                                     "border-primary bg-primary text-primary-foreground shadow-sm" if step == i + 1
                                     else ("border-primary/40 bg-primary/10 text-foreground hover:bg-primary/20" if i + 1 < step
                                     else "border-border bg-background text-muted-foreground hover:bg-accent hover:text-foreground"))}>
@@ -79,6 +80,7 @@ def:pub StoryBar(step: int, hospitalAdded: bool, busy: str,
                         </li>
                     }}
                 </ol>
+                <div className="order-2 ml-auto flex items-center gap-1 md:order-3">
                 <Button variant="ghost" size="sm" disabled={busy != ""} onClick={lambda { onReset(); }}>
                     <HugeiconsIcon icon={RotateLeft01Icon} strokeWidth={2} />{"Start over"}
                 </Button>
@@ -86,6 +88,7 @@ def:pub StoryBar(step: int, hospitalAdded: bool, busy: str,
                     aria-expanded={not collapsed} onClick={lambda { collapsed = not collapsed; }}>
                     <HugeiconsIcon icon={ArrowDown01Icon if collapsed else ArrowUp01Icon} strokeWidth={2} />
                 </Button>
+                </div>
             </div>
             {not collapsed and <div key={step}
                 className="flex flex-col gap-4 rounded-xl border border-border bg-background p-4 shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-300 motion-reduce:animate-none lg:flex-row lg:items-center lg:justify-between">
