@@ -1,10 +1,10 @@
 {
   "dataset_id": "bhotekoshi-2016-exercise-v1",
-  "generated_at": "2026-09-27T10:36:20Z",
+  "generated_at": "2026-09-27T10:46:27Z",
   "tools": [
     {
       "name": "tools/test_data/audit_contracts.py",
-      "version": "1.12"
+      "version": "1.13"
     },
     {
       "name": "jsonschema",
@@ -364,6 +364,401 @@
         "demo/datasets/bhotekoshi-2016-exercise-v1/records"
       ],
       "limitations": []
+    },
+    {
+      "rule_id": "catalog_quota_coverage",
+      "status": "fail",
+      "observed": {
+        "failure_count": 1,
+        "examples": [
+          "primary_catalog_counts: measured coverage differs from quota"
+        ],
+        "dimensions": [
+          {
+            "rule": "primary_catalog_counts",
+            "actual": {
+              "aid": 40,
+              "claim": 3600,
+              "contribution": 240,
+              "contributor": 80,
+              "facility": 36,
+              "hazard": 18,
+              "incident": 1,
+              "infrastructure": 30,
+              "investigation": 24,
+              "location": 170,
+              "media": 200,
+              "organization": 32,
+              "person": 1150,
+              "source": 1800,
+              "subscription": 150,
+              "task": 96,
+              "vote": 360
+            },
+            "expected": {
+              "incident": 1,
+              "person": 1150,
+              "organization": 32,
+              "source": 1800,
+              "claim": 3600,
+              "media": 200,
+              "location": 1000,
+              "facility": 36,
+              "infrastructure": 30,
+              "hazard": 18,
+              "aid": 40,
+              "contributor": 80,
+              "contribution": 240,
+              "vote": 360,
+              "task": 96,
+              "subscription": 150,
+              "investigation": 24
+            },
+            "comparison": "exact",
+            "passed": false
+          },
+          {
+            "rule": "organizations_by_type",
+            "actual": {
+              "POLICE_RESCUE": 6,
+              "HOSPITAL": 8,
+              "NGO": 8,
+              "GOVERNMENT": 4,
+              "COMMUNITY_NEWS": 6
+            },
+            "expected": {
+              "POLICE_RESCUE": 6,
+              "HOSPITAL": 8,
+              "NGO": 8,
+              "GOVERNMENT": 4,
+              "COMMUNITY_NEWS": 6
+            },
+            "comparison": "exact",
+            "passed": true
+          },
+          {
+            "rule": "facilities_by_type",
+            "actual": {
+              "TREATMENT": 8,
+              "SHELTER": 12,
+              "AID_DISTRIBUTION": 8,
+              "COORDINATION_COMMUNICATIONS": 8
+            },
+            "expected": {
+              "TREATMENT": 8,
+              "SHELTER": 12,
+              "AID_DISTRIBUTION": 8,
+              "COORDINATION_COMMUNICATIONS": 8
+            },
+            "comparison": "exact",
+            "passed": true
+          },
+          {
+            "rule": "infrastructure_by_type",
+            "actual": {
+              "ROAD_SEGMENT": 10,
+              "BRIDGE": 8,
+              "POWER": 6,
+              "WATER_COMMUNICATIONS": 6
+            },
+            "expected": {
+              "ROAD_SEGMENT": 10,
+              "BRIDGE": 8,
+              "POWER": 6,
+              "WATER_COMMUNICATIONS": 6
+            },
+            "comparison": "exact",
+            "passed": true
+          },
+          {
+            "rule": "hazards_by_type",
+            "actual": {
+              "FLOOD": 8,
+              "SLOPE_DEBRIS": 6,
+              "ACCESS_SECONDARY": 4
+            },
+            "expected": {
+              "FLOOD": 8,
+              "SLOPE_DEBRIS": 6,
+              "ACCESS_SECONDARY": 4
+            },
+            "comparison": "exact",
+            "passed": true
+          },
+          {
+            "rule": "aid_by_type",
+            "actual": {
+              "NEED": 20,
+              "OFFER": 12,
+              "DELIVERY": 8
+            },
+            "expected": {
+              "NEED": 20,
+              "OFFER": 12,
+              "DELIVERY": 8
+            },
+            "comparison": "exact",
+            "passed": true
+          },
+          {
+            "rule": "investigations_by_topic",
+            "actual": {
+              "PERSON_TIMELINE": 6,
+              "ACCESS_HAZARD": 6,
+              "AID_FACILITY": 6,
+              "MEDIA_LINEAGE": 6
+            },
+            "expected": {
+              "PERSON_TIMELINE": 6,
+              "ACCESS_HAZARD": 6,
+              "AID_FACILITY": 6,
+              "MEDIA_LINEAGE": 6
+            },
+            "comparison": "exact",
+            "passed": true
+          },
+          {
+            "rule": "community.contribution_types",
+            "actual": {
+              "COMMENT": 70,
+              "CORRECTION": 30,
+              "TRANSLATION": 30,
+              "GEOLOCATION": 40,
+              "EARLIER_COPY": 25,
+              "SOURCE_CITATION": 25,
+              "CHALLENGE": 20
+            },
+            "expected": {
+              "COMMENT": 70,
+              "CORRECTION": 30,
+              "TRANSLATION": 30,
+              "GEOLOCATION": 40,
+              "EARLIER_COPY": 25,
+              "SOURCE_CITATION": 25,
+              "CHALLENGE": 20
+            },
+            "comparison": "exact",
+            "passed": true
+          },
+          {
+            "rule": "community.vote_values",
+            "actual": {
+              "HELPFUL": 240,
+              "NOT_HELPFUL": 120
+            },
+            "expected": {
+              "HELPFUL": 240,
+              "NOT_HELPFUL": 120
+            },
+            "comparison": "exact",
+            "passed": true
+          },
+          {
+            "rule": "community.task_types",
+            "actual": {
+              "GEOLOCATE": 24,
+              "TRANSLATE": 24,
+              "FIND_EARLIER_COPY": 24,
+              "SOURCE_OR_CHALLENGE": 24
+            },
+            "expected": {
+              "GEOLOCATE": 24,
+              "TRANSLATE": 24,
+              "FIND_EARLIER_COPY": 24,
+              "SOURCE_OR_CHALLENGE": 24
+            },
+            "comparison": "exact",
+            "passed": true
+          },
+          {
+            "rule": "community.task_states",
+            "actual": {
+              "OPEN": 40,
+              "IN_PROGRESS": 20,
+              "SUBMITTED": 24,
+              "REVIEWED": 12
+            },
+            "expected": {
+              "OPEN": 40,
+              "IN_PROGRESS": 20,
+              "SUBMITTED": 24,
+              "REVIEWED": 12
+            },
+            "comparison": "exact",
+            "passed": true
+          },
+          {
+            "rule": "subscriptions_by_subject_kind",
+            "actual": {
+              "person": 100,
+              "location": 20,
+              "media": 10,
+              "incident": 10,
+              "organization": 10
+            },
+            "expected": {
+              "person": 100,
+              "location": 20,
+              "media": 10,
+              "incident": 10,
+              "organization": 10
+            },
+            "comparison": "exact",
+            "passed": true
+          },
+          {
+            "rule": "sources.publisher_type_counts",
+            "actual": {
+              "organization": 1400,
+              "contributor": 400
+            },
+            "expected": {
+              "organization": 1400,
+              "contributor": 400
+            },
+            "comparison": "exact",
+            "passed": true
+          },
+          {
+            "rule": "sources.format_counts",
+            "actual": {
+              "structured_json": 1260,
+              "pasted_text": 540
+            },
+            "expected": {
+              "structured_json": 1260,
+              "pasted_text": 540
+            },
+            "comparison": "exact",
+            "passed": true
+          },
+          {
+            "rule": "sources.claim_cardinality_histogram",
+            "actual": {
+              "2": 500,
+              "1": 900,
+              "4": 300,
+              "5": 100
+            },
+            "expected": {
+              "1": 900,
+              "2": 500,
+              "4": 300,
+              "5": 100
+            },
+            "comparison": "exact",
+            "passed": true
+          },
+          {
+            "rule": "sources.authored_independent",
+            "actual": 1350,
+            "expected": 1350,
+            "comparison": "exact",
+            "passed": true
+          },
+          {
+            "rule": "sources.declared_dependent",
+            "actual": 450,
+            "expected": 450,
+            "comparison": "exact",
+            "passed": true
+          },
+          {
+            "rule": "sources.minimum_reports_per_organization",
+            "actual": 43,
+            "expected": 15,
+            "comparison": "minimum",
+            "passed": true
+          },
+          {
+            "rule": "claims_by_subject_kind",
+            "actual": {
+              "person": 2800,
+              "media": 150,
+              "infrastructure": 200,
+              "hazard": 150,
+              "aid": 150,
+              "facility": 100,
+              "organization": 50
+            },
+            "expected": {
+              "person": 2800,
+              "infrastructure": 200,
+              "hazard": 150,
+              "aid": 150,
+              "facility": 100,
+              "media": 150,
+              "organization": 50
+            },
+            "comparison": "exact",
+            "passed": true
+          },
+          {
+            "rule": "person_claims_by_type",
+            "actual": {
+              "MISSING": 1300,
+              "FOUND_SAFE": 600,
+              "SEEN_AT_LOCATION": 550,
+              "PERSON_DETAIL": 140,
+              "INJURED": 200,
+              "DECEASED": 10
+            },
+            "expected": {
+              "MISSING": 1300,
+              "SEEN_AT_LOCATION": 550,
+              "FOUND_SAFE": 600,
+              "INJURED": 200,
+              "DECEASED": 10,
+              "PERSON_DETAIL": 140
+            },
+            "comparison": "exact",
+            "passed": true
+          },
+          {
+            "rule": "community.anonymous_display_contributions",
+            "actual": 60,
+            "expected": 60,
+            "comparison": "exact",
+            "passed": true
+          },
+          {
+            "rule": "community.nepali_with_english_rendering_minimum",
+            "actual": 70,
+            "expected": 40,
+            "comparison": "minimum",
+            "passed": true
+          },
+          {
+            "rule": "images.uploads_cited_by_claim_minimum",
+            "actual": 200,
+            "expected": 160,
+            "comparison": "minimum",
+            "passed": true
+          },
+          {
+            "rule": "images.claims_citing_two_or_more_uploads_minimum",
+            "actual": 60,
+            "expected": 60,
+            "comparison": "minimum",
+            "passed": true
+          },
+          {
+            "rule": "images.claims_citing_exactly_one_upload_minimum",
+            "actual": 100,
+            "expected": 100,
+            "comparison": "minimum",
+            "passed": true
+          }
+        ]
+      },
+      "expected": "Exact catalog/subtype/publisher/claim counts and documented media/community minima",
+      "evidence_paths": [
+        "demo/datasets/bhotekoshi-2016-exercise-v1/records",
+        "demo/spec/quotas.json"
+      ],
+      "limitations": [
+        "25 measured coverage dimensions, not semantic correctness. No-dependency declarations are not independent corroboration; translation quality, geometry, media content and runtime behavior need their separate checks."
+      ]
     },
     {
       "rule_id": "catalog_reference_closure",
@@ -1007,7 +1402,7 @@
   ],
   "summary": {
     "pass": 21,
-    "fail": 15,
+    "fail": 16,
     "blocked": 2
   }
 }

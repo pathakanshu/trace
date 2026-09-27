@@ -198,6 +198,12 @@ def run_audit(root):
     add("catalog_schema", parse_errors + schema_errors, "All records pass Draft 2020-12 with format checking", [rel(data / "records"), rel(schema_path)])
     duplicate_ids = [key for key, count in Counter(r["id"] for r in records).items() if count > 1]
     add("catalog_unique_ids", duplicate_ids, "Every catalog ID occurs once", [rel(data / "records")])
+    from audit_quotas import quota_errors
+    coverage_errors, coverage_dimensions = quota_errors(records, json.loads((root / "demo/spec/quotas.json").read_text()))
+    add("catalog_quota_coverage", coverage_errors, "Exact catalog/subtype/publisher/claim counts and documented media/community minima",
+        [rel(data / "records"), "demo/spec/quotas.json"],
+        ["25 measured coverage dimensions, not semantic correctness. No-dependency declarations are not independent corroboration; translation quality, geometry, media content and runtime behavior need their separate checks."])
+    checks[-1]["observed"]["dimensions"] = coverage_dimensions
     missing, cross_incident, future = reference_errors(records)
     add("catalog_reference_closure", missing, "Every catalog reference resolves", [rel(data / "records")])
     add("catalog_incident_isolation", cross_incident, "References remain inside the primary incident", [rel(data / "records")])
@@ -408,7 +414,7 @@ def run_audit(root):
     summary = dict(Counter(check["status"] for check in checks))
     summary = {status: summary.get(status, 0) for status in ("pass", "fail", "blocked")}
     return {"dataset_id": DATASET, "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "tools": [{"name": "tools/test_data/audit_contracts.py", "version": "1.12"}, {"name": "jsonschema", "version": version("jsonschema")}],
+            "tools": [{"name": "tools/test_data/audit_contracts.py", "version": "1.13"}, {"name": "jsonschema", "version": version("jsonschema")}],
             "checks": checks, "summary": summary}
 
 

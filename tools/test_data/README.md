@@ -43,7 +43,7 @@ it does not fall back to a stale schema report when jsonschema is unavailable.
 
 Run its own offline checks with:
 `python3 -m unittest discover -s tools/test_data -p test_contract_audit.py`.
-The current corpus audit has 21 pass / 15 fail / 2 blocked; failures are intentional
+The current corpus audit has 21 pass / 16 fail / 2 blocked; failures are intentional
 findings in the partial dataset, not successful runtime behavior.
 
 ## Isolated control pack
@@ -117,8 +117,8 @@ cases use analysis without publishing: hostile text stays source data. None of
 these eight runtime cases has run; no agent response or success is prefilled.
 No nonexistent replay-action IDs are used as prerequisites.
 
-Actual tooling results: **129 distinct tests pass across two environments**.
-The schema environment runs 114 and explicitly skips fifteen Pillow tests. Run the
+Actual tooling results: **137 distinct tests pass across two environments**.
+The schema environment runs 122 and explicitly skips fifteen Pillow tests. Run the
 fifteen media checks with a Pillow-equipped tooling Python:
 `python3 -m unittest discover -s tools/test_data -p '*media*.py'`.
 That separate run passes all fifteen. Do not count skipped decoder checks as passes
@@ -314,3 +314,19 @@ generation-tool version was not captured. License conversion is deferred until
 provenance is reconciled; no timestamp is inferred from mtime or replaced with
 the audit clock. Four regressions cover valid/equal ordering, reversed times,
 measurement coverage/byte drift and invalid/unknown timestamps.
+
+## Fresh catalog quota coverage
+
+The strict audit recomputes 25 exact/minimum coverage dimensions directly from
+current catalog records: primary counts, publisher and subject types, report
+formats/cardinality/dependency declarations, facility/infrastructure/hazard/aid
+types, community/task/investigation/subscription types and media references.
+24 dimensions pass; primary counts fail solely because locations are 170/1,000.
+Every organization has at least 43 reports (minimum 15); 70 Nepali contributions
+have nonblank English renderings, 200 uploads are cited, 60 claims cite two or
+more uploads and 100 cite exactly one. Eight mutation regressions cover these
+counts and boundary cases. No private targets or cached reports supply counts.
+
+These counts do not imply correct voting, translation quality, source
+independence, geographic placement or story semantics. No-dependency declarations
+are counted for fixture coverage, never treated as independent corroboration.
