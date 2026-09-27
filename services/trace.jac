@@ -22,6 +22,7 @@ import from walkers.ingest { IngestWalker }
 import from walkers.resolve { ResolveWalker, DuplicateCandidate }
 import from walkers.watch { WatchWalker, STATUS_CLAIMS }
 import from demo.seed { seed_demo, INCIDENT_NAME, PERSON_NAME, HOSPITAL_UPDATE }
+import from features.graph.services { GraphSnapshot, build_graph_snapshot }
 
 # ---------- View objects sent to the UI ----------
 
@@ -91,7 +92,8 @@ obj DashboardSnapshot {
         alerts: list[AlertView] = [],
         activity: list[ActivityView] = [],
         duplicates: list[DuplicateCandidate] = [],
-        hospital_update_added: bool = False;
+        hospital_update_added: bool = False,
+        graph: GraphSnapshot = GraphSnapshot();
 }
 
 # ---------- Actions (the demo buttons) ----------
@@ -223,6 +225,7 @@ def:pub get_dashboard() -> DashboardSnapshot {
     snap.alerts.reverse();
 
     snap.duplicates = (incident spawn ResolveWalker(quiet=True)).candidates;
+    snap.graph = build_graph_snapshot(incident, snap.duplicates);
     return snap;
 }
 
