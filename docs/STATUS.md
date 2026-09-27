@@ -26,11 +26,10 @@ Rules:
 
 ## Miguel (investigation stages)
 
-Working on: stage 4, live eval of five report cases (needs the key and
-passphrase in the running shell), then the JacHammer deploy.
-Files: `docs/INVESTIGATION.md`, `README.md` (top, model config, demo steps),
-`docs/DEPLOY_CHECKLIST.md`.
-Next: fill the PENDING eval rows, deploy with `docs/DEPLOY_CHECKLIST.md`.
+Working on: stage 4 done locally (live eval, prompt v4, 45 s call limit,
+re-recorded seeded runs). Pending: redeploy JacHammer and run the live step
+from `docs/DEPLOY_CHECKLIST.md`.
+Next: pitch, backup video, Devpost.
 
 ## Anshu (map, integration)
 
@@ -64,3 +63,4 @@ Working on: (fill in)
   records in Graph. After a pull, use Stop then Run Preview; hot reload alone
   left stale imports. Live eval waits on the key and passphrase in the
   coordinator's shell.
+- 04:33 main 3a6e013: prompt v4 sends label definitions (byLLM dropped enum-field sem), DIRECT-with-source goes to review, 45 s call limit, seeded runs re-recorded (police now NEEDS_REVIEW), five-case eval in docs/INVESTIGATION.md. Redeploy JacHammer: fixtures and prompt changed.
