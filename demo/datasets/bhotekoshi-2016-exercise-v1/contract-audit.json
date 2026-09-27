@@ -1,10 +1,10 @@
 {
   "dataset_id": "bhotekoshi-2016-exercise-v1",
-  "generated_at": "2026-09-27T09:27:16Z",
+  "generated_at": "2026-09-27T09:32:50Z",
   "tools": [
     {
       "name": "tools/test_data/audit_contracts.py",
-      "version": "1.2"
+      "version": "1.3"
     },
     {
       "name": "jsonschema",
@@ -305,23 +305,10 @@
     },
     {
       "rule_id": "support_shape:invalid-inputs.jsonl",
-      "status": "fail",
+      "status": "pass",
       "observed": {
-        "failure_count": 40,
-        "examples": [
-          "row 1: missing: description, expected_error_class, expected_record_delta, id, input_encoding, precondition_action_ids, required_capability; unexpected: case_id, expected, is_runtime_result",
-          "row 2: missing: description, expected_error_class, expected_record_delta, id, input_encoding, precondition_action_ids, required_capability; unexpected: case_id, expected, is_runtime_result",
-          "row 3: missing: description, expected_error_class, expected_record_delta, id, input_encoding, precondition_action_ids, required_capability; unexpected: case_id, expected, is_runtime_result",
-          "row 4: missing: description, expected_error_class, expected_record_delta, id, input_encoding, precondition_action_ids, required_capability; unexpected: case_id, expected, is_runtime_result",
-          "row 5: missing: description, expected_error_class, expected_record_delta, id, input_encoding, precondition_action_ids, required_capability; unexpected: case_id, expected, is_runtime_result",
-          "row 6: missing: description, expected_error_class, expected_record_delta, id, input_encoding, precondition_action_ids, required_capability; unexpected: case_id, expected, is_runtime_result",
-          "row 7: missing: description, expected_error_class, expected_record_delta, id, input_encoding, precondition_action_ids, required_capability; unexpected: case_id, expected, is_runtime_result",
-          "row 8: missing: description, expected_error_class, expected_record_delta, id, input_encoding, precondition_action_ids, required_capability; unexpected: case_id, expected, is_runtime_result",
-          "row 9: missing: description, expected_error_class, expected_record_delta, id, input_encoding, precondition_action_ids, required_capability; unexpected: case_id, expected, is_runtime_result",
-          "row 10: missing: description, expected_error_class, expected_record_delta, id, input_encoding, precondition_action_ids, required_capability; unexpected: case_id, expected, is_runtime_result",
-          "row 11: missing: description, expected_error_class, expected_record_delta, id, input_encoding, precondition_action_ids, required_capability; unexpected: case_id, expected, is_runtime_result",
-          "row 12: missing: description, expected_error_class, expected_record_delta, id, input_encoding, precondition_action_ids, required_capability; unexpected: case_id, expected, is_runtime_result"
-        ]
+        "failure_count": 0,
+        "examples": []
       },
       "expected": [
         "id",
@@ -639,6 +626,21 @@
       ]
     },
     {
+      "rule_id": "negative_case_contracts",
+      "status": "pass",
+      "observed": {
+        "failure_count": 0,
+        "examples": []
+      },
+      "expected": "40 distinct concrete negative/retry inputs, eight per category, explicit zero-delta expectations and capabilities",
+      "evidence_paths": [
+        "tests/fixtures/bhotekoshi-2016-exercise-v1/invalid-inputs.jsonl"
+      ],
+      "limitations": [
+        "Fixture shape/content checks only. Runtime retry, prompt-injection resistance, unsupported adapters and graph mutation counts have not been executed."
+      ]
+    },
+    {
       "rule_id": "control_pack",
       "status": "pass",
       "observed": {
@@ -683,8 +685,8 @@
     }
   ],
   "summary": {
-    "pass": 11,
-    "fail": 11,
+    "pass": 13,
+    "fail": 10,
     "blocked": 2
   }
 }

@@ -42,7 +42,7 @@ it does not fall back to a stale schema report when jsonschema is unavailable.
 
 Run its own offline checks with:
 `python3 -m unittest discover -s tools/test_data -p test_contract_audit.py`.
-The current corpus audit has 11 pass / 11 fail / 2 blocked; failures are intentional
+The current corpus audit has 13 pass / 10 fail / 2 blocked; failures are intentional
 findings in the partial dataset, not successful runtime behavior.
 
 ## Isolated control pack
@@ -54,7 +54,7 @@ across incident/publisher scopes. The generator preflights every destination,
 refuses differing existing content or escaping paths, and leaves identical files
 untouched. There is no runtime import or reset call.
 
-Run all 32 tooling checks with
+Run the tooling checks with
 `python3 -m unittest discover -s tools/test_data -p 'test_*.py'`.
 The tests include saved-source tampering, malformed control rows, exact schema
 and counts, reference/release isolation, raw hash/excerpt checks, collision scopes,
@@ -91,3 +91,34 @@ released. Do not rerun generation to silently rewrite published source history;
 coordinate a versioned repair and recompute hashes/hero closure before release.
 Seven regression tests cover ordering, unknown/equal times, future-source cutoff,
 identity partitioning and these actual partial-corpus defects.
+
+## Private negative inputs
+
+`python3 tools/test_data/generate_invalid.py` replaces the 40 `bad-*` placeholders
+with contract-shaped `case-000001` through `case-000040`, eight per category:
+malformed/missing, bad/cross-incident references, time/semantic errors, media
+path/size errors, and retry/prompt-injection/unsupported-format procedures.
+
+The checked-in file is tested directly, then compared with deterministic generator
+output. Parser, schema, reference and chronology tests prove the intended faults;
+valid baseline records are checked first. Missing/traversal/absolute asset paths
+are intentional **negative inputs**, never proposed files in the accepted corpus.
+Traversal/absolute paths are rejected lexically and are never opened. Oversize
+uses 1,025 real bytes against an explicit 1,024-byte test configuration, not a
+claim about the app's production upload limit. Embedded byte strings include a
+real 1x1 PNG control and a truncated derivative. They remain outside the 200-image
+corpus and do not require a new binary bundle.
+
+`input` objects with `procedure`, `setup` and `repeat_count` are fixture-runner
+plans, not application endpoint payloads. A future compatible adapter must run
+setup before measuring the expected zero delta for retries. Prompt-injection
+cases use analysis without publishing: hostile text stays source data. None of
+these eight runtime cases has run; no agent response or success is prefilled.
+No nonexistent replay-action IDs are used as prerequisites.
+
+Actual tooling results: **45 distinct tests pass across two environments**.
+The schema environment runs 42 and explicitly skips three Pillow tests. Run the
+three decoder checks with a Pillow-equipped tooling Python:
+`python3 -m unittest discover -s tools/test_data -p test_negative_media.py`.
+That separate run passes all three. Do not count skipped decoder checks as passes
+when only one environment is available. No application dependency was added.

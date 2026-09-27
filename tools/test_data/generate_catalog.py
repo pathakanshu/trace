@@ -401,8 +401,8 @@ def main():
     # Rebuild the held-out, citation-bound query suite after public shards exist.
     from generate_queries import write_queries
     write_queries(ROOT)
-    cats=["MALFORMED_MISSING","BAD_CROSS_INCIDENT_REF","TIME_SEMANTICS","MEDIA_PATH_SIZE","RETRY_INJECTION_UNSUPPORTED"]
-    jsonl(FIX/"invalid-inputs.jsonl",[{"case_id":f"bad-{i:06d}","category":cats[(i-1)//8],"input":{"case":"intentionally_invalid_synthetic_fixture","index":i},"expected":"reject_or_report_unsupported_without_mutation","is_runtime_result":False} for i in range(1,41)])
+    from generate_invalid import write_cases
+    write_cases(ROOT)
     # Private expected identity membership is isolated from all importable
     # records. Identity oracle groups are labels, not application input.
     jsonl(FIX/"oracle/identities.jsonl",[{"identity_id":g["identity_id"],"person_ids":g["person_ids"],"hero":g["hero"],"canonical_age":g["canonical_age"]} for g in groups])

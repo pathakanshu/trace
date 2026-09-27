@@ -232,6 +232,17 @@ def run_audit(root):
     add("query_evidence_and_cutoffs", query_errors, "40 distinct questions, exact category counts, real citations available by cutoff, no answer fields",
         [rel(query_path), rel(data / "records")], ["No query was answered or scored by an application/model."])
 
+    invalid_path = fixtures / "invalid-inputs.jsonl"
+    invalid_errors = []
+    try:
+        from generate_invalid import validate_cases
+        invalid_quota = json.loads((root / "demo/spec/quotas.json").read_text())["evaluation"]["invalid_input_categories"]
+        validate_cases(read_jsonl(invalid_path), invalid_quota)
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        invalid_errors.append(str(error).replace(str(root), "<repo>"))
+    add("negative_case_contracts", invalid_errors, "40 distinct concrete negative/retry inputs, eight per category, explicit zero-delta expectations and capabilities",
+        [rel(invalid_path)], ["Fixture shape/content checks only. Runtime retry, prompt-injection resistance, unsupported adapters and graph mutation counts have not been executed."])
+
     control_path = fixtures / "control/records.jsonl"
     control_errors = []
     expected_controls = json.loads((root / "demo/spec/quotas.json").read_text())["control_pack_excluded_from_primary"]
@@ -292,7 +303,7 @@ def run_audit(root):
     summary = dict(Counter(check["status"] for check in checks))
     summary = {status: summary.get(status, 0) for status in ("pass", "fail", "blocked")}
     return {"dataset_id": DATASET, "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "tools": [{"name": "tools/test_data/audit_contracts.py", "version": "1.2"}, {"name": "jsonschema", "version": version("jsonschema")}],
+            "tools": [{"name": "tools/test_data/audit_contracts.py", "version": "1.3"}, {"name": "jsonschema", "version": version("jsonschema")}],
             "checks": checks, "summary": summary}
 
 

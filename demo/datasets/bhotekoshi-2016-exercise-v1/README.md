@@ -53,17 +53,17 @@ kinds need an explicit application mapping; do not silently drop them.
 
 The older `schema-validation.json` and `validation-report.json` cover 19 limited
 checks; their zero failures do **not** mean complete contract conformance.
-The stricter supplementary `contract-audit.json` reports **11 checks passed,
-11 failed, 2 blocked**. All 8,027 primary records pass the catalog JSON Schema,
+The stricter supplementary `contract-audit.json` reports **13 checks passed,
+10 failed, 2 blocked**. All 8,027 primary records pass the catalog JSON Schema,
 but 153 references reveal records before their release time. Manifest, license,
-identity/checkpoint oracle, replay, negative-input and validation-report
+identity/checkpoint oracle, replay and validation-report
 support shapes differ from the documented contract. The separate 26-record
 control pack now passes its file checks. See each rule's measured examples; no application replay was run.
 
 This audit leaves the catalog, stable IDs, media bundle and previous reports
 unchanged. Repair release dependencies and support contracts before building a
 complete importer/replay around this preview. Top-level shape checks do not
-exhaustively validate nested semantics. The data tools' 32 unit tests pass;
+exhaustively validate nested semantics. The data tools' 45 distinct tests pass across schema and Pillow environments;
 its corpus audit intentionally exits 1 for the observed data failures.
 
 - Geography is 170/1,000: the remaining 830 records require verified geographic
@@ -74,8 +74,12 @@ its corpus audit intentionally exits 1 for the observed data failures.
   isolation/reset still requires a compatible importer.
 - The private query suite contains 40 distinct questions, real claim/source
   citations, time cutoffs and explicit uncertainty. Seven query tests pass; no
-  answers were generated or evaluated by the application. Invalid-input files
-  still contain planning placeholders. The full evaluation suite is unfinished.
+  answers were generated or evaluated by the application.
+- All 40 private negative cases now have concrete inputs and documented expected
+  errors/deltas. Parser/schema/reference/time and image-decoder fixture checks
+  ran; retry/injection/unsupported application cases remain unexecuted. See
+  `tools/test_data/README.md` for runner semantics and separate Pillow checks.
+  The full evaluation suite is unfinished.
 - Checkpoint oracle rows are specified targets, not executed observations.
   Fixture-only recomputation finds T+72 counts 353 missing / 547 safe / 50 injured
   / 50 unresolved, versus required 650 / 250 / 50 / 50. Another check finds six

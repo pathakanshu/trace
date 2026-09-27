@@ -5,3 +5,6 @@ node_modules/
 # Binary controlled media is packaged separately from text/catalog commits.
 demo/assets/bhotekoshi-2016-exercise-v1/
 demo/datasets/bhotekoshi-2016-exercise-v1/contact-sheet.png
+
+# Local Python bytecode from offline dataset validation.
+tools/test_data/__pycache__/

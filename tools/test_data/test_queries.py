@@ -9,7 +9,7 @@ class QueryFixtureTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.catalog = read_catalog(ROOT)
-        cls.queries = build_queries(cls.catalog)
+        cls.queries = [json.loads(line) for line in (ROOT / "tests/fixtures" / DATASET / "queries.jsonl").read_text().splitlines()]
         cls.quota = json.loads((ROOT / "demo/spec/quotas.json").read_text())["evaluation"]["query_types"]
 
     def test_exact_counts_closed_shapes_real_evidence_and_cutoffs(self):
