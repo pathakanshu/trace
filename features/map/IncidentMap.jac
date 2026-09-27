@@ -126,9 +126,9 @@ def update_density(map_obj: any, groups: list) -> None {
     map_obj.addSource("report-counts", {"type": "geojson", "data": data});
     map_obj.addLayer({"id": "report-heat", "type": "heatmap", "source": "report-counts",
         "paint": {"heatmap-weight": weight,
-            "heatmap-intensity": ["interpolate", ["linear"], ["zoom"], 8, 0.6, 12, 1.2, 16, 2],
-            "heatmap-radius": ["interpolate", ["linear"], ["zoom"], 8, 14, 12, 28, 16, 42],
-            "heatmap-opacity": ["interpolate", ["linear"], ["zoom"], 10, 0.7, 14, 0.2, 16, 0],
+            "heatmap-intensity": ["interpolate", ["linear"], ["zoom"], 8, 2.5, 12, 3, 16, 3],
+            "heatmap-radius": ["interpolate", ["linear"], ["zoom"], 8, 32, 12, 60, 16, 80],
+            "heatmap-opacity": ["interpolate", ["linear"], ["zoom"], 10, 0.85, 13, 0.6, 16, 0],
             "heatmap-color": ["interpolate", ["linear"], ["heatmap-density"],
                 0, css_var("--primary", 0.0), 0.2, css_var("--map-water"),
                 0.4, css_var("--primary"), 0.7, css_var("--status-warning"), 1, css_var("--status-missing")]}});
@@ -136,7 +136,6 @@ def update_density(map_obj: any, groups: list) -> None {
         "paint": {"circle-color": css_var("--primary"), "circle-opacity": 0.75,
             "circle-stroke-color": css_var("--background"), "circle-stroke-width": 2,
             "circle-radius": ["interpolate", ["linear"], ["get", "report_count"], 1, 7, 500, 20, 1500, 30]}});
-    if map_obj.getLayer("corridor-band") { map_obj.moveLayer("report-heat", "corridor-band"); }
 }
 
 # A small HTML pin. Classes use theme tokens.
