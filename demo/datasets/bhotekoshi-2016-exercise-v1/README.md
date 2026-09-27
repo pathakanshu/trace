@@ -50,10 +50,20 @@ kinds need an explicit application mapping; do not silently drop them.
 
 ## Actual validation and remaining work
 
-The checked-in `schema-validation.json` and `validation-report.json` record the
-checks actually executed. All 8,027 records passed schema validation; 19 data
-checks passed, zero failed, and geographic acceptance is blocked. This does not
-establish application behavior or complete specification conformance.
+The older `schema-validation.json` and `validation-report.json` cover 19 limited
+checks; their zero failures do **not** mean complete contract conformance.
+The stricter supplementary `contract-audit.json` reports **8 checks passed,
+11 failed, 2 blocked**. All 8,027 primary records pass the catalog JSON Schema,
+but 153 references reveal records before their release time. Manifest, license,
+identity/checkpoint oracle, replay, query, negative-input and validation-report
+support shapes differ from the documented contract. The required control pack
+is absent. See each rule's measured examples; no application replay was run.
+
+This audit leaves the catalog, stable IDs, media bundle and previous reports
+unchanged. Repair release dependencies and support contracts before building a
+complete importer/replay around this preview. Top-level shape checks do not
+exhaustively validate nested semantics. The audit tool's ten unit tests pass;
+its corpus audit intentionally exits 1 for the observed data failures.
 
 - Geography is 170/1,000: the remaining 830 records require verified geographic
   inputs. The current points reuse four settlement anchors; no approved area
@@ -73,6 +83,9 @@ separate tooling environment (no application dependency changes are required):
 ```sh
 python3 tools/test_data/schema_check.py
 python3 tools/test_data/validate_dataset.py
+# Strict supplementary audit (currently exits 1 for genuine corpus failures):
+python3 tools/test_data/audit_contracts.py
+python3 -m unittest discover -s tools/test_data -p test_contract_audit.py
 ```
 
 Run these after restoring media. The validator writes measured reports and hero

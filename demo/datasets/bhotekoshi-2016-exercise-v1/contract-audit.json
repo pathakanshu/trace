@@ -1,0 +1,525 @@
+{
+  "dataset_id": "bhotekoshi-2016-exercise-v1",
+  "generated_at": "2026-09-27T09:04:47Z",
+  "tools": [
+    {
+      "name": "tools/test_data/audit_contracts.py",
+      "version": "1.0"
+    },
+    {
+      "name": "jsonschema",
+      "version": "4.25.1"
+    }
+  ],
+  "checks": [
+    {
+      "rule_id": "support_shape:manifest.json",
+      "status": "fail",
+      "observed": {
+        "failure_count": 1,
+        "examples": [
+          "row 1: missing: asset_tools, deviations, files, generated_at, generator, limitations, profiles, quota_path, sampler, scenario_clock_start, schema_path; unexpected: asset_bundle, assets, created_at, fictional_content_notice, geography, record_counts, record_shards, runtime_outputs_prefilled"
+        ],
+        "manifest_sha256": "99db4a6df29b4288dcb7a27295b1d0c5b6423bac5d41ca5aa91a58f5700cbe58"
+      },
+      "expected": [
+        "schema_version",
+        "dataset_id",
+        "seed",
+        "sampler",
+        "generated_at",
+        "generator",
+        "asset_tools",
+        "scenario_clock_start",
+        "schema_path",
+        "quota_path",
+        "files",
+        "profiles",
+        "deviations",
+        "limitations"
+      ],
+      "evidence_paths": [
+        "demo/datasets/bhotekoshi-2016-exercise-v1/manifest.json"
+      ],
+      "limitations": [
+        "Exact top-level fields only; a pass does not validate every nested value."
+      ]
+    },
+    {
+      "rule_id": "support_shape:licenses.json",
+      "status": "fail",
+      "observed": {
+        "failure_count": 1,
+        "examples": [
+          "row 1: expected an object"
+        ]
+      },
+      "expected": [
+        "dataset_id",
+        "assets"
+      ],
+      "evidence_paths": [
+        "demo/datasets/bhotekoshi-2016-exercise-v1/licenses.json"
+      ],
+      "limitations": [
+        "Exact top-level fields only; a pass does not validate every nested value."
+      ]
+    },
+    {
+      "rule_id": "support_shape:context/historical-references.jsonl",
+      "status": "pass",
+      "observed": {
+        "failure_count": 0,
+        "examples": []
+      },
+      "expected": [
+        "id",
+        "url",
+        "title",
+        "publisher",
+        "publication_date",
+        "retrieval_date",
+        "supported_statement",
+        "passage_or_figure",
+        "event_time",
+        "scope_and_uncertainty"
+      ],
+      "evidence_paths": [
+        "demo/datasets/bhotekoshi-2016-exercise-v1/context/historical-references.jsonl"
+      ],
+      "limitations": [
+        "Exact top-level fields only; a pass does not validate every nested value."
+      ]
+    },
+    {
+      "rule_id": "support_shape:oracle/identities.jsonl",
+      "status": "fail",
+      "observed": {
+        "failure_count": 1000,
+        "examples": [
+          "row 1: missing: id, initial_cluster, initial_location_id, initial_precision, primary_person_id; unexpected: hero, identity_id",
+          "row 2: missing: id, initial_cluster, initial_location_id, initial_precision, primary_person_id; unexpected: hero, identity_id",
+          "row 3: missing: id, initial_cluster, initial_location_id, initial_precision, primary_person_id; unexpected: hero, identity_id",
+          "row 4: missing: id, initial_cluster, initial_location_id, initial_precision, primary_person_id; unexpected: hero, identity_id",
+          "row 5: missing: id, initial_cluster, initial_location_id, initial_precision, primary_person_id; unexpected: hero, identity_id",
+          "row 6: missing: id, initial_cluster, initial_location_id, initial_precision, primary_person_id; unexpected: hero, identity_id",
+          "row 7: missing: id, initial_cluster, initial_location_id, initial_precision, primary_person_id; unexpected: hero, identity_id",
+          "row 8: missing: id, initial_cluster, initial_location_id, initial_precision, primary_person_id; unexpected: hero, identity_id",
+          "row 9: missing: id, initial_cluster, initial_location_id, initial_precision, primary_person_id; unexpected: hero, identity_id",
+          "row 10: missing: id, initial_cluster, initial_location_id, initial_precision, primary_person_id; unexpected: hero, identity_id",
+          "row 11: missing: id, initial_cluster, initial_location_id, initial_precision, primary_person_id; unexpected: hero, identity_id",
+          "row 12: missing: id, initial_cluster, initial_location_id, initial_precision, primary_person_id; unexpected: hero, identity_id"
+        ]
+      },
+      "expected": [
+        "id",
+        "person_ids",
+        "canonical_age",
+        "primary_person_id",
+        "initial_location_id",
+        "initial_precision",
+        "initial_cluster"
+      ],
+      "evidence_paths": [
+        "tests/fixtures/bhotekoshi-2016-exercise-v1/oracle/identities.jsonl"
+      ],
+      "limitations": [
+        "Exact top-level fields only; a pass does not validate every nested value."
+      ]
+    },
+    {
+      "rule_id": "support_shape:oracle/identity-pairs.jsonl",
+      "status": "pass",
+      "observed": {
+        "failure_count": 0,
+        "examples": []
+      },
+      "expected": [
+        "id",
+        "person_a_id",
+        "person_b_id",
+        "same_individual",
+        "evidence_claim_ids",
+        "rationale",
+        "tags"
+      ],
+      "evidence_paths": [
+        "tests/fixtures/bhotekoshi-2016-exercise-v1/oracle/identity-pairs.jsonl"
+      ],
+      "limitations": [
+        "Exact top-level fields only; a pass does not validate every nested value."
+      ]
+    },
+    {
+      "rule_id": "support_shape:oracle/media-families.jsonl",
+      "status": "pass",
+      "observed": {
+        "failure_count": 0,
+        "examples": []
+      },
+      "expected": [
+        "id",
+        "base_media_id",
+        "family_class",
+        "content_category",
+        "base_metadata",
+        "members",
+        "unrelated_lookalike_family_ids",
+        "tags"
+      ],
+      "evidence_paths": [
+        "tests/fixtures/bhotekoshi-2016-exercise-v1/oracle/media-families.jsonl"
+      ],
+      "limitations": [
+        "Exact top-level fields only; a pass does not validate every nested value."
+      ]
+    },
+    {
+      "rule_id": "support_shape:oracle/checkpoints.jsonl",
+      "status": "fail",
+      "observed": {
+        "failure_count": 7,
+        "examples": [
+          "row 1: missing: at, hours_from_start, id, identity_summaries, required_assertions, summary_counts; unexpected: FOUND_SAFE, INJURED, MISSING, UNRESOLVED, hour, individuals",
+          "row 2: missing: at, hours_from_start, id, identity_summaries, required_assertions, summary_counts; unexpected: FOUND_SAFE, INJURED, MISSING, UNRESOLVED, hour, individuals",
+          "row 3: missing: at, hours_from_start, id, identity_summaries, required_assertions, summary_counts; unexpected: FOUND_SAFE, INJURED, MISSING, UNRESOLVED, hour, individuals",
+          "row 4: missing: at, hours_from_start, id, identity_summaries, required_assertions, summary_counts; unexpected: FOUND_SAFE, INJURED, MISSING, UNRESOLVED, hour, individuals",
+          "row 5: missing: at, hours_from_start, id, identity_summaries, required_assertions, summary_counts; unexpected: FOUND_SAFE, INJURED, MISSING, UNRESOLVED, hour, individuals",
+          "row 6: missing: at, hours_from_start, id, identity_summaries, required_assertions, summary_counts; unexpected: FOUND_SAFE, INJURED, MISSING, UNRESOLVED, hour, individuals",
+          "row 7: missing: at, hours_from_start, id, identity_summaries, required_assertions, summary_counts; unexpected: FOUND_SAFE, INJURED, MISSING, UNRESOLVED, hour, individuals"
+        ]
+      },
+      "expected": [
+        "id",
+        "hours_from_start",
+        "at",
+        "identity_summaries",
+        "summary_counts",
+        "required_assertions"
+      ],
+      "evidence_paths": [
+        "tests/fixtures/bhotekoshi-2016-exercise-v1/oracle/checkpoints.jsonl"
+      ],
+      "limitations": [
+        "Exact top-level fields only; a pass does not validate every nested value."
+      ]
+    },
+    {
+      "rule_id": "support_shape:replay/scenarios.jsonl",
+      "status": "fail",
+      "observed": {
+        "failure_count": 12,
+        "examples": [
+          "row 1: missing: action_ids, expected_assertions, focal_refs, required_capabilities, tabs; unexpected: expected_runtime_outputs, focal_ids, runtime_outputs_must_be_generated_by_application",
+          "row 2: missing: action_ids, expected_assertions, focal_refs, required_capabilities, tabs; unexpected: expected_runtime_outputs, focal_ids, runtime_outputs_must_be_generated_by_application",
+          "row 3: missing: action_ids, expected_assertions, focal_refs, required_capabilities, tabs; unexpected: expected_runtime_outputs, focal_ids, runtime_outputs_must_be_generated_by_application",
+          "row 4: missing: action_ids, expected_assertions, focal_refs, required_capabilities, tabs; unexpected: expected_runtime_outputs, focal_ids, runtime_outputs_must_be_generated_by_application",
+          "row 5: missing: action_ids, expected_assertions, focal_refs, required_capabilities, tabs; unexpected: expected_runtime_outputs, focal_ids, runtime_outputs_must_be_generated_by_application",
+          "row 6: missing: action_ids, expected_assertions, focal_refs, required_capabilities, tabs; unexpected: expected_runtime_outputs, focal_ids, runtime_outputs_must_be_generated_by_application",
+          "row 7: missing: action_ids, expected_assertions, focal_refs, required_capabilities, tabs; unexpected: expected_runtime_outputs, focal_ids, runtime_outputs_must_be_generated_by_application",
+          "row 8: missing: action_ids, expected_assertions, focal_refs, required_capabilities, tabs; unexpected: expected_runtime_outputs, focal_ids, runtime_outputs_must_be_generated_by_application",
+          "row 9: missing: action_ids, expected_assertions, focal_refs, required_capabilities, tabs; unexpected: expected_runtime_outputs, focal_ids, runtime_outputs_must_be_generated_by_application",
+          "row 10: missing: action_ids, expected_assertions, focal_refs, required_capabilities, tabs; unexpected: expected_runtime_outputs, focal_ids, runtime_outputs_must_be_generated_by_application",
+          "row 11: missing: action_ids, expected_assertions, focal_refs, required_capabilities, tabs; unexpected: expected_runtime_outputs, focal_ids, runtime_outputs_must_be_generated_by_application",
+          "row 12: missing: action_ids, expected_assertions, focal_refs, required_capabilities, tabs; unexpected: expected_runtime_outputs, focal_ids, runtime_outputs_must_be_generated_by_application"
+        ]
+      },
+      "expected": [
+        "id",
+        "title",
+        "purpose",
+        "tabs",
+        "focal_refs",
+        "action_ids",
+        "required_capabilities",
+        "expected_assertions"
+      ],
+      "evidence_paths": [
+        "tests/fixtures/bhotekoshi-2016-exercise-v1/replay/scenarios.jsonl"
+      ],
+      "limitations": [
+        "Exact top-level fields only; a pass does not validate every nested value."
+      ]
+    },
+    {
+      "rule_id": "support_shape:replay/actions.jsonl",
+      "status": "fail",
+      "observed": {
+        "failure_count": 100,
+        "examples": [
+          "row 1: missing: actor_id, after_action_ids, at, expected_assertions, id, operation, payload, requires_capabilities, scenario_ids; unexpected: action, action_id, evidence_claim_ids, expected_decision, generated_result, person_a_id, person_b_id",
+          "row 2: missing: actor_id, after_action_ids, at, expected_assertions, id, operation, payload, requires_capabilities, scenario_ids; unexpected: action, action_id, evidence_claim_ids, expected_decision, generated_result, person_a_id, person_b_id",
+          "row 3: missing: actor_id, after_action_ids, at, expected_assertions, id, operation, payload, requires_capabilities, scenario_ids; unexpected: action, action_id, evidence_claim_ids, expected_decision, generated_result, person_a_id, person_b_id",
+          "row 4: missing: actor_id, after_action_ids, at, expected_assertions, id, operation, payload, requires_capabilities, scenario_ids; unexpected: action, action_id, evidence_claim_ids, expected_decision, generated_result, person_a_id, person_b_id",
+          "row 5: missing: actor_id, after_action_ids, at, expected_assertions, id, operation, payload, requires_capabilities, scenario_ids; unexpected: action, action_id, evidence_claim_ids, expected_decision, generated_result, person_a_id, person_b_id",
+          "row 6: missing: actor_id, after_action_ids, at, expected_assertions, id, operation, payload, requires_capabilities, scenario_ids; unexpected: action, action_id, evidence_claim_ids, expected_decision, generated_result, person_a_id, person_b_id",
+          "row 7: missing: actor_id, after_action_ids, at, expected_assertions, id, operation, payload, requires_capabilities, scenario_ids; unexpected: action, action_id, evidence_claim_ids, expected_decision, generated_result, person_a_id, person_b_id",
+          "row 8: missing: actor_id, after_action_ids, at, expected_assertions, id, operation, payload, requires_capabilities, scenario_ids; unexpected: action, action_id, evidence_claim_ids, expected_decision, generated_result, person_a_id, person_b_id",
+          "row 9: missing: actor_id, after_action_ids, at, expected_assertions, id, operation, payload, requires_capabilities, scenario_ids; unexpected: action, action_id, evidence_claim_ids, expected_decision, generated_result, person_a_id, person_b_id",
+          "row 10: missing: actor_id, after_action_ids, at, expected_assertions, id, operation, payload, requires_capabilities, scenario_ids; unexpected: action, action_id, evidence_claim_ids, expected_decision, generated_result, person_a_id, person_b_id",
+          "row 11: missing: actor_id, after_action_ids, at, expected_assertions, id, operation, payload, requires_capabilities, scenario_ids; unexpected: action, action_id, evidence_claim_ids, expected_decision, generated_result, person_a_id, person_b_id",
+          "row 12: missing: actor_id, after_action_ids, at, expected_assertions, id, operation, payload, requires_capabilities, scenario_ids; unexpected: action, action_id, evidence_claim_ids, expected_decision, generated_result, person_a_id, person_b_id"
+        ]
+      },
+      "expected": [
+        "id",
+        "scenario_ids",
+        "at",
+        "actor_id",
+        "operation",
+        "payload",
+        "requires_capabilities",
+        "after_action_ids",
+        "expected_assertions"
+      ],
+      "evidence_paths": [
+        "tests/fixtures/bhotekoshi-2016-exercise-v1/replay/actions.jsonl"
+      ],
+      "limitations": [
+        "Exact top-level fields only; a pass does not validate every nested value."
+      ]
+    },
+    {
+      "rule_id": "support_shape:queries.jsonl",
+      "status": "fail",
+      "observed": {
+        "failure_count": 40,
+        "examples": [
+          "row 1: missing: acceptable_uncertainty, at, forbidden_conclusions, id, question, required_claim_ids, required_source_ids; unexpected: expected_evidence_ids, expected_limitations, prompt, query_id, runtime_answer",
+          "row 2: missing: acceptable_uncertainty, at, forbidden_conclusions, id, question, required_claim_ids, required_source_ids; unexpected: expected_evidence_ids, expected_limitations, prompt, query_id, runtime_answer",
+          "row 3: missing: acceptable_uncertainty, at, forbidden_conclusions, id, question, required_claim_ids, required_source_ids; unexpected: expected_evidence_ids, expected_limitations, prompt, query_id, runtime_answer",
+          "row 4: missing: acceptable_uncertainty, at, forbidden_conclusions, id, question, required_claim_ids, required_source_ids; unexpected: expected_evidence_ids, expected_limitations, prompt, query_id, runtime_answer",
+          "row 5: missing: acceptable_uncertainty, at, forbidden_conclusions, id, question, required_claim_ids, required_source_ids; unexpected: expected_evidence_ids, expected_limitations, prompt, query_id, runtime_answer",
+          "row 6: missing: acceptable_uncertainty, at, forbidden_conclusions, id, question, required_claim_ids, required_source_ids; unexpected: expected_evidence_ids, expected_limitations, prompt, query_id, runtime_answer",
+          "row 7: missing: acceptable_uncertainty, at, forbidden_conclusions, id, question, required_claim_ids, required_source_ids; unexpected: expected_evidence_ids, expected_limitations, prompt, query_id, runtime_answer",
+          "row 8: missing: acceptable_uncertainty, at, forbidden_conclusions, id, question, required_claim_ids, required_source_ids; unexpected: expected_evidence_ids, expected_limitations, prompt, query_id, runtime_answer",
+          "row 9: missing: acceptable_uncertainty, at, forbidden_conclusions, id, question, required_claim_ids, required_source_ids; unexpected: expected_evidence_ids, expected_limitations, prompt, query_id, runtime_answer",
+          "row 10: missing: acceptable_uncertainty, at, forbidden_conclusions, id, question, required_claim_ids, required_source_ids; unexpected: expected_evidence_ids, expected_limitations, prompt, query_id, runtime_answer",
+          "row 11: missing: acceptable_uncertainty, at, forbidden_conclusions, id, question, required_claim_ids, required_source_ids; unexpected: expected_evidence_ids, expected_limitations, prompt, query_id, runtime_answer",
+          "row 12: missing: acceptable_uncertainty, at, forbidden_conclusions, id, question, required_claim_ids, required_source_ids; unexpected: expected_evidence_ids, expected_limitations, prompt, query_id, runtime_answer"
+        ]
+      },
+      "expected": [
+        "id",
+        "query_type",
+        "question",
+        "at",
+        "required_claim_ids",
+        "required_source_ids",
+        "acceptable_uncertainty",
+        "forbidden_conclusions"
+      ],
+      "evidence_paths": [
+        "tests/fixtures/bhotekoshi-2016-exercise-v1/queries.jsonl"
+      ],
+      "limitations": [
+        "Exact top-level fields only; a pass does not validate every nested value."
+      ]
+    },
+    {
+      "rule_id": "support_shape:invalid-inputs.jsonl",
+      "status": "fail",
+      "observed": {
+        "failure_count": 40,
+        "examples": [
+          "row 1: missing: description, expected_error_class, expected_record_delta, id, input_encoding, precondition_action_ids, required_capability; unexpected: case_id, expected, is_runtime_result",
+          "row 2: missing: description, expected_error_class, expected_record_delta, id, input_encoding, precondition_action_ids, required_capability; unexpected: case_id, expected, is_runtime_result",
+          "row 3: missing: description, expected_error_class, expected_record_delta, id, input_encoding, precondition_action_ids, required_capability; unexpected: case_id, expected, is_runtime_result",
+          "row 4: missing: description, expected_error_class, expected_record_delta, id, input_encoding, precondition_action_ids, required_capability; unexpected: case_id, expected, is_runtime_result",
+          "row 5: missing: description, expected_error_class, expected_record_delta, id, input_encoding, precondition_action_ids, required_capability; unexpected: case_id, expected, is_runtime_result",
+          "row 6: missing: description, expected_error_class, expected_record_delta, id, input_encoding, precondition_action_ids, required_capability; unexpected: case_id, expected, is_runtime_result",
+          "row 7: missing: description, expected_error_class, expected_record_delta, id, input_encoding, precondition_action_ids, required_capability; unexpected: case_id, expected, is_runtime_result",
+          "row 8: missing: description, expected_error_class, expected_record_delta, id, input_encoding, precondition_action_ids, required_capability; unexpected: case_id, expected, is_runtime_result",
+          "row 9: missing: description, expected_error_class, expected_record_delta, id, input_encoding, precondition_action_ids, required_capability; unexpected: case_id, expected, is_runtime_result",
+          "row 10: missing: description, expected_error_class, expected_record_delta, id, input_encoding, precondition_action_ids, required_capability; unexpected: case_id, expected, is_runtime_result",
+          "row 11: missing: description, expected_error_class, expected_record_delta, id, input_encoding, precondition_action_ids, required_capability; unexpected: case_id, expected, is_runtime_result",
+          "row 12: missing: description, expected_error_class, expected_record_delta, id, input_encoding, precondition_action_ids, required_capability; unexpected: case_id, expected, is_runtime_result"
+        ]
+      },
+      "expected": [
+        "id",
+        "category",
+        "description",
+        "input_encoding",
+        "input",
+        "precondition_action_ids",
+        "expected_error_class",
+        "expected_record_delta",
+        "required_capability"
+      ],
+      "evidence_paths": [
+        "tests/fixtures/bhotekoshi-2016-exercise-v1/invalid-inputs.jsonl"
+      ],
+      "limitations": [
+        "Exact top-level fields only; a pass does not validate every nested value."
+      ]
+    },
+    {
+      "rule_id": "support_shape:validation-report.json",
+      "status": "fail",
+      "observed": {
+        "failure_count": 1,
+        "examples": [
+          "row 1: missing: tools; unexpected: blocked, errors, jsonschema_version, limitations, validator"
+        ]
+      },
+      "expected": [
+        "dataset_id",
+        "generated_at",
+        "tools",
+        "checks",
+        "summary"
+      ],
+      "evidence_paths": [
+        "demo/datasets/bhotekoshi-2016-exercise-v1/validation-report.json"
+      ],
+      "limitations": [
+        "Exact top-level fields only; a pass does not validate every nested value."
+      ]
+    },
+    {
+      "rule_id": "catalog_schema",
+      "status": "pass",
+      "observed": {
+        "failure_count": 0,
+        "examples": []
+      },
+      "expected": "All records pass Draft 2020-12 with format checking",
+      "evidence_paths": [
+        "demo/datasets/bhotekoshi-2016-exercise-v1/records",
+        "demo/spec/trace-record.schema.json"
+      ],
+      "limitations": []
+    },
+    {
+      "rule_id": "catalog_unique_ids",
+      "status": "pass",
+      "observed": {
+        "failure_count": 0,
+        "examples": []
+      },
+      "expected": "Every catalog ID occurs once",
+      "evidence_paths": [
+        "demo/datasets/bhotekoshi-2016-exercise-v1/records"
+      ],
+      "limitations": []
+    },
+    {
+      "rule_id": "catalog_reference_closure",
+      "status": "pass",
+      "observed": {
+        "failure_count": 0,
+        "examples": []
+      },
+      "expected": "Every catalog reference resolves",
+      "evidence_paths": [
+        "demo/datasets/bhotekoshi-2016-exercise-v1/records"
+      ],
+      "limitations": []
+    },
+    {
+      "rule_id": "catalog_incident_isolation",
+      "status": "pass",
+      "observed": {
+        "failure_count": 0,
+        "examples": []
+      },
+      "expected": "References remain inside the primary incident",
+      "evidence_paths": [
+        "demo/datasets/bhotekoshi-2016-exercise-v1/records"
+      ],
+      "limitations": []
+    },
+    {
+      "rule_id": "catalog_release_closure",
+      "status": "fail",
+      "observed": {
+        "failure_count": 153,
+        "examples": [
+          "sub-000121.subject -> med-000001 (2016-07-08T12:15:00Z > 2016-07-06T00:15:00Z)",
+          "sub-000122.subject -> med-000002 (2016-07-08T12:15:00Z > 2016-07-06T00:15:00Z)",
+          "sub-000123.subject -> med-000003 (2016-07-06T12:15:00Z > 2016-07-06T00:15:00Z)",
+          "sub-000124.subject -> med-000004 (2016-07-06T12:15:00Z > 2016-07-06T00:15:00Z)",
+          "sub-000125.subject -> med-000005 (2016-07-06T12:15:00Z > 2016-07-06T00:15:00Z)",
+          "sub-000126.subject -> med-000006 (2016-07-06T12:15:00Z > 2016-07-06T00:15:00Z)",
+          "sub-000127.subject -> med-000007 (2016-07-06T12:15:00Z > 2016-07-06T00:15:00Z)",
+          "sub-000128.subject -> med-000008 (2016-07-06T12:15:00Z > 2016-07-06T00:15:00Z)",
+          "sub-000129.subject -> med-000009 (2016-07-06T12:15:00Z > 2016-07-06T00:15:00Z)",
+          "sub-000130.subject -> med-000010 (2016-07-06T12:15:00Z > 2016-07-06T00:15:00Z)",
+          "tsk-000001.target -> med-000001 (2016-07-08T12:15:00Z > 2016-07-06T19:15:00Z)",
+          "tsk-000002.target -> med-000002 (2016-07-08T12:15:00Z > 2016-07-06T20:15:00Z)"
+        ]
+      },
+      "expected": "A record never reveals a referenced record before its available_at",
+      "evidence_paths": [
+        "demo/datasets/bhotekoshi-2016-exercise-v1/records"
+      ],
+      "limitations": []
+    },
+    {
+      "rule_id": "catalog_lifecycle_times",
+      "status": "pass",
+      "observed": {
+        "failure_count": 0,
+        "examples": []
+      },
+      "expected": "Workflow/report times respect release and publication cutoffs",
+      "evidence_paths": [
+        "demo/datasets/bhotekoshi-2016-exercise-v1/records"
+      ],
+      "limitations": [
+        "Actual media creation time is deliberately not compared with the fictional exercise clock."
+      ]
+    },
+    {
+      "rule_id": "control_pack",
+      "status": "fail",
+      "observed": {
+        "failure_count": 1,
+        "examples": [
+          "[Errno 2] No such file or directory: '<repo>/tests/fixtures/bhotekoshi-2016-exercise-v1/control/records.jsonl'"
+        ]
+      },
+      "expected": {
+        "incident": 2,
+        "person": 10,
+        "organization": 2,
+        "source": 2,
+        "claim": 10
+      },
+      "evidence_paths": [
+        "tests/fixtures/bhotekoshi-2016-exercise-v1/control/records.jsonl"
+      ],
+      "limitations": []
+    },
+    {
+      "rule_id": "complete_geographic_placement",
+      "status": "blocked",
+      "observed": "170/1000 location records present; this audit cannot approve geographic sampling or area inputs.",
+      "expected": "Independently validate before claiming complete",
+      "evidence_paths": [
+        "demo/datasets/bhotekoshi-2016-exercise-v1/README.md"
+      ],
+      "limitations": [
+        "This audit does not run application walkers or load a runtime database."
+      ]
+    },
+    {
+      "rule_id": "runtime_import_replay_reset",
+      "status": "blocked",
+      "observed": "No compatible corpus importer/replay runner was invoked; existing small-app smoke tests do not validate this corpus.",
+      "expected": "Independently validate before claiming complete",
+      "evidence_paths": [
+        "demo/datasets/bhotekoshi-2016-exercise-v1/README.md"
+      ],
+      "limitations": [
+        "This audit does not run application walkers or load a runtime database."
+      ]
+    }
+  ],
+  "summary": {
+    "pass": 8,
+    "fail": 11,
+    "blocked": 2
+  }
+}

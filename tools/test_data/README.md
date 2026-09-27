@@ -23,3 +23,24 @@ regeneration does not preserve these curation edits. Reconcile the private
 family oracle and distribution checksum before publishing regenerated media.
 The location quota and evaluation suite remain incomplete; see the dataset
 README. None of these tools imports records into the running application.
+
+## Supplementary contract audit
+
+`python3 tools/test_data/audit_contracts.py` reads the existing corpus without
+regenerating records, touching assets, or importing app/runtime modules. It
+checks all primary records against the actual catalog schema, support-file
+closed top-level shapes, ID/reference/incident/release closure, lifecycle times,
+and the control-pack presence/count/schema. Dates are parsed, unknown observation
+times stay unknown, and actual media creation dates are separate from 2016.
+
+`--output demo/datasets/bhotekoshi-2016-exercise-v1/contract-audit.json` saves
+measured results using the specification's validation-report shape. Exit 1 means
+observed failures, 2 means blocked checks without observed failures, and 0 means
+only these implemented checks passed. It never certifies geography, live replay,
+model results, or all nested supporting semantics. Unlike the legacy validator,
+it does not fall back to a stale schema report when jsonschema is unavailable.
+
+Run its own offline checks with:
+`python3 -m unittest discover -s tools/test_data -p test_contract_audit.py`.
+The current corpus audit has 8 pass / 11 fail / 2 blocked; failures are intentional
+findings in the partial dataset, not successful runtime behavior.
