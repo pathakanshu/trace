@@ -54,7 +54,7 @@ kinds need an explicit application mapping; do not silently drop them.
 The older `schema-validation.json` and `validation-report.json` cover 19 limited
 checks; their zero failures do **not** mean complete contract conformance.
 The stricter supplementary `contract-audit.json` reports **11 checks passed,
-9 failed, 2 blocked**. All 8,027 primary records pass the catalog JSON Schema,
+11 failed, 2 blocked**. All 8,027 primary records pass the catalog JSON Schema,
 but 153 references reveal records before their release time. Manifest, license,
 identity/checkpoint oracle, replay, negative-input and validation-report
 support shapes differ from the documented contract. The separate 26-record
@@ -63,7 +63,7 @@ control pack now passes its file checks. See each rule's measured examples; no a
 This audit leaves the catalog, stable IDs, media bundle and previous reports
 unchanged. Repair release dependencies and support contracts before building a
 complete importer/replay around this preview. Top-level shape checks do not
-exhaustively validate nested semantics. The audit/control/query tools' 25 unit tests pass;
+exhaustively validate nested semantics. The data tools' 32 unit tests pass;
 its corpus audit intentionally exits 1 for the observed data failures.
 
 - Geography is 170/1,000: the remaining 830 records require verified geographic
@@ -77,6 +77,11 @@ its corpus audit intentionally exits 1 for the observed data failures.
   answers were generated or evaluated by the application. Invalid-input files
   still contain planning placeholders. The full evaluation suite is unfinished.
 - Checkpoint oracle rows are specified targets, not executed observations.
+  Fixture-only recomputation finds T+72 counts 353 missing / 547 safe / 50 injured
+  / 50 unresolved, versus required 650 / 250 / 50 / 50. Another check finds six
+  death rumors without the required equal-time or undated opposing status when
+  released. These are generator defects; no application decision was executed.
+  Published sources remain unchanged pending a coordinated, versioned repair.
 - No importer, application replay, reset, alert, identity-resolution, agent trace,
   or UI asset-loading behavior was verified for this corpus. In particular,
   **reset is not confirmed working for this dataset**.

@@ -203,6 +203,24 @@ def run_audit(root):
     add("catalog_release_closure", future, "A record never reveals a referenced record before its available_at", [rel(data / "records")])
     add("catalog_lifecycle_times", lifecycle_errors(records), "Workflow/report times respect release and publication cutoffs", [rel(data / "records")], ["Actual media creation time is deliberately not compared with the fictional exercise clock."])
 
+    checkpoint_errors, rumor_errors, measured_checkpoints = [], [], []
+    identity_path = fixtures / "oracle/identities.jsonl"
+    try:
+        from audit_checkpoints import recompute, rumor_conflicts
+        identity_groups = read_jsonl(identity_path)
+        checkpoint_quotas = json.loads((root / "demo/spec/quotas.json").read_text())
+        measured_checkpoints, checkpoint_errors = recompute(records, identity_groups, checkpoint_quotas)
+        rumor_errors = rumor_conflicts(records, identity_groups)
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        checkpoint_errors.append(str(error).replace(str(root), "<repo>"))
+        rumor_errors.append("Unable to compute rumor conflicts: " + str(error))
+    add("fixture_checkpoint_recomputation", checkpoint_errors, "Private visible-at-cutoff status cohorts match quota targets",
+        [rel(identity_path), rel(data / "records"), "demo/spec/quotas.json"],
+        ["Fixture diagnostic only: private identity grouping; latest known status plus unknown-time competition; death rumors remain unresolved. No application status or identity decision was executed."])
+    checks[-1]["observed"]["checkpoints"] = measured_checkpoints
+    add("rumor_temporal_opposition", rumor_errors, "Each fictional death rumor has visible equal-time or unknown-time opposing status evidence",
+        [rel(identity_path), rel(data / "records")], ["Does not prove any report true/false or check all challenge attribution semantics."])
+
     query_path = fixtures / "queries.jsonl"
     query_errors = []
     try:
@@ -274,7 +292,7 @@ def run_audit(root):
     summary = dict(Counter(check["status"] for check in checks))
     summary = {status: summary.get(status, 0) for status in ("pass", "fail", "blocked")}
     return {"dataset_id": DATASET, "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "tools": [{"name": "tools/test_data/audit_contracts.py", "version": "1.1"}, {"name": "jsonschema", "version": version("jsonschema")}],
+            "tools": [{"name": "tools/test_data/audit_contracts.py", "version": "1.2"}, {"name": "jsonschema", "version": version("jsonschema")}],
             "checks": checks, "summary": summary}
 
 

@@ -1,10 +1,10 @@
 {
   "dataset_id": "bhotekoshi-2016-exercise-v1",
-  "generated_at": "2026-09-27T09:18:23Z",
+  "generated_at": "2026-09-27T09:27:16Z",
   "tools": [
     {
       "name": "tools/test_data/audit_contracts.py",
-      "version": "1.1"
+      "version": "1.2"
     },
     {
       "name": "jsonschema",
@@ -459,6 +459,170 @@
       ]
     },
     {
+      "rule_id": "fixture_checkpoint_recomputation",
+      "status": "fail",
+      "observed": {
+        "failure_count": 2,
+        "examples": [
+          "T+72 MISSING: observed 353, expected 650",
+          "T+72 FOUND_SAFE: observed 547, expected 250"
+        ],
+        "checkpoints": [
+          {
+            "hour": 0,
+            "observed": {
+              "NOT_YET_REPORTED": 1000,
+              "MISSING": 0,
+              "FOUND_SAFE": 0,
+              "INJURED": 0,
+              "UNRESOLVED": 0
+            },
+            "expected": {
+              "MISSING": 0,
+              "FOUND_SAFE": 0,
+              "INJURED": 0,
+              "UNRESOLVED": 0,
+              "NOT_YET_REPORTED": 1000
+            }
+          },
+          {
+            "hour": 6,
+            "observed": {
+              "NOT_YET_REPORTED": 700,
+              "MISSING": 300,
+              "FOUND_SAFE": 0,
+              "INJURED": 0,
+              "UNRESOLVED": 0
+            },
+            "expected": {
+              "MISSING": 300,
+              "FOUND_SAFE": 0,
+              "INJURED": 0,
+              "UNRESOLVED": 0,
+              "NOT_YET_REPORTED": 700
+            }
+          },
+          {
+            "hour": 12,
+            "observed": {
+              "NOT_YET_REPORTED": 0,
+              "MISSING": 1000,
+              "FOUND_SAFE": 0,
+              "INJURED": 0,
+              "UNRESOLVED": 0
+            },
+            "expected": {
+              "MISSING": 1000,
+              "FOUND_SAFE": 0,
+              "INJURED": 0,
+              "UNRESOLVED": 0,
+              "NOT_YET_REPORTED": 0
+            }
+          },
+          {
+            "hour": 24,
+            "observed": {
+              "NOT_YET_REPORTED": 0,
+              "MISSING": 850,
+              "FOUND_SAFE": 100,
+              "INJURED": 20,
+              "UNRESOLVED": 30
+            },
+            "expected": {
+              "MISSING": 850,
+              "FOUND_SAFE": 100,
+              "INJURED": 20,
+              "UNRESOLVED": 30,
+              "NOT_YET_REPORTED": 0
+            }
+          },
+          {
+            "hour": 36,
+            "observed": {
+              "NOT_YET_REPORTED": 0,
+              "MISSING": 760,
+              "FOUND_SAFE": 160,
+              "INJURED": 40,
+              "UNRESOLVED": 40
+            },
+            "expected": {
+              "MISSING": 760,
+              "FOUND_SAFE": 160,
+              "INJURED": 40,
+              "UNRESOLVED": 40,
+              "NOT_YET_REPORTED": 0
+            }
+          },
+          {
+            "hour": 48,
+            "observed": {
+              "NOT_YET_REPORTED": 0,
+              "MISSING": 690,
+              "FOUND_SAFE": 210,
+              "INJURED": 50,
+              "UNRESOLVED": 50
+            },
+            "expected": {
+              "MISSING": 690,
+              "FOUND_SAFE": 210,
+              "INJURED": 50,
+              "UNRESOLVED": 50,
+              "NOT_YET_REPORTED": 0
+            }
+          },
+          {
+            "hour": 72,
+            "observed": {
+              "NOT_YET_REPORTED": 0,
+              "MISSING": 353,
+              "FOUND_SAFE": 547,
+              "INJURED": 50,
+              "UNRESOLVED": 50
+            },
+            "expected": {
+              "MISSING": 650,
+              "FOUND_SAFE": 250,
+              "INJURED": 50,
+              "UNRESOLVED": 50,
+              "NOT_YET_REPORTED": 0
+            }
+          }
+        ]
+      },
+      "expected": "Private visible-at-cutoff status cohorts match quota targets",
+      "evidence_paths": [
+        "tests/fixtures/bhotekoshi-2016-exercise-v1/oracle/identities.jsonl",
+        "demo/datasets/bhotekoshi-2016-exercise-v1/records",
+        "demo/spec/quotas.json"
+      ],
+      "limitations": [
+        "Fixture diagnostic only: private identity grouping; latest known status plus unknown-time competition; death rumors remain unresolved. No application status or identity decision was executed."
+      ]
+    },
+    {
+      "rule_id": "rumor_temporal_opposition",
+      "status": "fail",
+      "observed": {
+        "failure_count": 6,
+        "examples": [
+          "clm-001595 has no available equal-time or unknown-time opposing status",
+          "clm-001596 has no available equal-time or unknown-time opposing status",
+          "clm-001597 has no available equal-time or unknown-time opposing status",
+          "clm-001763 has no available equal-time or unknown-time opposing status",
+          "clm-001764 has no available equal-time or unknown-time opposing status",
+          "clm-001765 has no available equal-time or unknown-time opposing status"
+        ]
+      },
+      "expected": "Each fictional death rumor has visible equal-time or unknown-time opposing status evidence",
+      "evidence_paths": [
+        "tests/fixtures/bhotekoshi-2016-exercise-v1/oracle/identities.jsonl",
+        "demo/datasets/bhotekoshi-2016-exercise-v1/records"
+      ],
+      "limitations": [
+        "Does not prove any report true/false or check all challenge attribution semantics."
+      ]
+    },
+    {
       "rule_id": "query_evidence_and_cutoffs",
       "status": "pass",
       "observed": {
@@ -520,7 +684,7 @@
   ],
   "summary": {
     "pass": 11,
-    "fail": 9,
+    "fail": 11,
     "blocked": 2
   }
 }

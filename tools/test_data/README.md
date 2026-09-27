@@ -42,7 +42,7 @@ it does not fall back to a stale schema report when jsonschema is unavailable.
 
 Run its own offline checks with:
 `python3 -m unittest discover -s tools/test_data -p test_contract_audit.py`.
-The current corpus audit has 11 pass / 9 fail / 2 blocked; failures are intentional
+The current corpus audit has 11 pass / 11 fail / 2 blocked; failures are intentional
 findings in the partial dataset, not successful runtime behavior.
 
 ## Isolated control pack
@@ -54,7 +54,7 @@ across incident/publisher scopes. The generator preflights every destination,
 refuses differing existing content or escaping paths, and leaves identical files
 untouched. There is no runtime import or reset call.
 
-Run all 25 tooling checks with
+Run all 32 tooling checks with
 `python3 -m unittest discover -s tools/test_data -p 'test_*.py'`.
 The tests include saved-source tampering, malformed control rows, exact schema
 and counts, reference/release isolation, raw hash/excerpt checks, collision scopes,
@@ -74,3 +74,20 @@ Seven query tests check deterministic generation, exact contract/category counts
 real citation closure, cutoff isolation, both media publication contexts, missing
 inputs and rejected extra result fields. The old `qry-*` placeholders were not
 contract IDs; the suite now uses `query-000001` through `query-000040`.
+
+## Checkpoint fixture diagnostics
+
+The audit recomputes private identity cohorts from visible claims at each cutoff.
+It combines latest known observation-time statuses with undated competing claims;
+all exercise death rumors remain unresolved. This is a fixture design check, not
+application summary logic or a completed human identity review. A separate rule
+requires equal-time or unknown-time opposing evidence for every death rumor.
+
+Measured T+72 counts are 353 missing / 547 safe / 50 injured / 50 unresolved,
+against targets 650 / 250 / 50 / 50. Earlier cohorts match under this method.
+`generate_catalog.py` assigns 297 additional safe follow-ups outside the intended
+safe cohort. Six death rumors also lack the specified temporal opposition when
+released. Do not rerun generation to silently rewrite published source history;
+coordinate a versioned repair and recompute hashes/hero closure before release.
+Seven regression tests cover ordering, unknown/equal times, future-source cutoff,
+identity partitioning and these actual partial-corpus defects.
