@@ -8,7 +8,7 @@ derived links marked derived, and separates reported time from ingestion time.
 import from services.trace { reset_demo, add_hospital_update }
 import from demo.seed { INCIDENT_NAME }
 import from demo.reset { clear_incident }
-import from graph.nodes { Incident, Person, IdentityDecision }
+import from graph.nodes { Incident, Person, IdentityDecision, IdentityProposal }
 import from graph.edges { Involves, Reviews }
 import from walkers.resolve { ResolveWalker }
 import from features.organizations.services { publish_report }
@@ -173,8 +173,14 @@ test "identity review is a stored node linked to both records and cleared on res
     assert sorted([e.to_id for e in reviews]) == ids;
     assert all([e.status == "confirmed" and not e.derived for e in reviews]);
 
-    # Reset must remove the review too, not keep both people alive through it.
+    root ++> IdentityProposal(
+        pair_key="|".join(ids), person_a_id=jid(maya), person_b_id=jid(alias),
+        incident_name=INCIDENT_NAME, proposed_by="Graph test"
+    );
+
+    # Reset must remove the review and proposal too, not keep both people alive.
     clear_incident(INCIDENT_NAME);
     assert len([root -->[?:IdentityDecision]]) == 0;
+    assert len([root -->[?:IdentityProposal]]) == 0;
     assert len([root -->[?:Incident, name == INCIDENT_NAME]]) == 0;
 }

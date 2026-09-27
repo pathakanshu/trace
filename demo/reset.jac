@@ -1,7 +1,7 @@
 """Delete only the named demo's records; retain shared or unrelated data.
 Unknown node types and legacy unscoped activity are deliberately left alone.
 """
-import from graph.nodes { Incident, ActivityEntry }
+import from graph.nodes { Incident, ActivityEntry, IdentityProposal }
 import from graph.edges {
     Involves, Contains, About, Asserts, HasOrganization, Publishes,
     HasSubscription, Receives, LocatedAt, HasSignal, HasInvestigation, Reviews
@@ -31,6 +31,10 @@ def clear_incident(incident_name: str) -> None {
             found[jid(media)] = media;
             for place in [media ->:LocatedAt:->] { found[jid(place)] = place; }
             for signal in [media ->:HasSignal:->] { found[jid(signal)] = signal; }
+        }
+        # Agent proposals hang off root, keyed by incident name, with no edges.
+        for proposal in [root -->[?:IdentityProposal]] {
+            if proposal.incident_name == incident_name { found[jid(proposal)] = proposal; }
         }
         for activity in [root -->[?:ActivityEntry]] {
             if activity.incident_id == jid(incident) { found[jid(activity)] = activity; }
