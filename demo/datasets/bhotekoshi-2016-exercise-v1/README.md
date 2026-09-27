@@ -38,7 +38,9 @@ the contact sheet. Binary images are intentionally excluded from Git.
   archived geographic input. Current mapping is not a 2016 flood boundary.
 - `../../../tests/fixtures/bhotekoshi-2016-exercise-v1/hero/`: the 50-individual
   hero profile (62 Person records), with related record closure. The manifest
-  selects 24 media seeds across all five duplicate classes; closure has 40 media.
+  selects 24 media seeds across all five duplicate classes. Repaired closure has
+  658 records, including 40 media, 54 locations and the incident. Every selected
+  record equals its full-corpus counterpart; no primary record was changed.
 - `tests/fixtures/bhotekoshi-2016-exercise-v1/` from repository root: evaluator
   expectations, identity/media families, replay actions and scenarios. Keep these
   private fixtures out of application ingestion, retrieval, prompts and indexes.
@@ -56,7 +58,7 @@ kinds need an explicit application mapping; do not silently drop them.
 
 The older `schema-validation.json` and `validation-report.json` cover 19 limited
 checks; their zero failures do **not** mean complete contract conformance.
-The stricter supplementary `contract-audit.json` reports **14 checks passed,
+The stricter supplementary `contract-audit.json` reports **15 checks passed,
 11 failed, 2 blocked**. All 8,027 primary records pass the catalog JSON Schema,
 but 153 references reveal records before their release time. Manifest, license,
 identity/checkpoint oracle, replay and validation-report
@@ -66,7 +68,7 @@ control pack now passes its file checks. See each rule's measured examples; no a
 This audit leaves the catalog, stable IDs, media bundle and previous reports
 unchanged. Repair release dependencies and support contracts before building a
 complete importer/replay around this preview. Top-level shape checks do not
-exhaustively validate nested semantics. The data tools' 60 distinct tests pass across schema and Pillow environments;
+exhaustively validate nested semantics. The data tools' 68 distinct tests pass across schema and Pillow environments;
 its corpus audit intentionally exits 1 for the observed data failures.
 
 - All 1,800 original source hashes match. However, the 1,260 JSON sources use
@@ -87,6 +89,9 @@ its corpus audit intentionally exits 1 for the observed data failures.
   ran; retry/injection/unsupported application cases remain unexecuted. See
   `tools/test_data/README.md` for runner semantics and separate Pillow checks.
   The full evaluation suite is unfinished.
+- The hero selection is reference-closed, but its twelve story plans are not
+  executable. Some focal IDs do not match the narrative (treatment vs shelter,
+  comments vs correction/translation); scenario semantics still need repair.
 - Checkpoint oracle rows are specified targets, not executed observations.
   Fixture-only recomputation finds T+72 counts 353 missing / 547 safe / 50 injured
   / 50 unresolved, versus required 650 / 250 / 50 / 50. Another check finds six

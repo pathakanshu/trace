@@ -1,10 +1,10 @@
 {
   "dataset_id": "bhotekoshi-2016-exercise-v1",
-  "generated_at": "2026-09-27T09:36:26Z",
+  "generated_at": "2026-09-27T09:43:50Z",
   "tools": [
     {
       "name": "tools/test_data/audit_contracts.py",
-      "version": "1.4"
+      "version": "1.5"
     },
     {
       "name": "jsonschema",
@@ -688,6 +688,37 @@
       ]
     },
     {
+      "rule_id": "hero_record_identity_and_closure",
+      "status": "pass",
+      "observed": {
+        "failure_count": 0,
+        "examples": [],
+        "counts": {
+          "aid": 1,
+          "claim": 304,
+          "contribution": 2,
+          "contributor": 34,
+          "facility": 1,
+          "incident": 1,
+          "infrastructure": 1,
+          "location": 54,
+          "media": 40,
+          "organization": 32,
+          "person": 62,
+          "source": 125,
+          "subscription": 1
+        }
+      },
+      "expected": "50 individuals / 62 Person records, five image classes, required references, unchanged full-catalog records and measured manifest counts",
+      "evidence_paths": [
+        "tests/fixtures/bhotekoshi-2016-exercise-v1/hero",
+        "demo/datasets/bhotekoshi-2016-exercise-v1/records"
+      ],
+      "limitations": [
+        "Scenario IDs select planned focal records; this does not validate all story semantics, replay execution or runtime import."
+      ]
+    },
+    {
       "rule_id": "control_pack",
       "status": "pass",
       "observed": {
@@ -732,7 +763,7 @@
     }
   ],
   "summary": {
-    "pass": 14,
+    "pass": 15,
     "fail": 11,
     "blocked": 2
   }

@@ -251,6 +251,24 @@ def run_audit(root):
     add("negative_case_contracts", invalid_errors, "40 distinct concrete negative/retry inputs, eight per category, explicit zero-delta expectations and capabilities",
         [rel(invalid_path)], ["Fixture shape/content checks only. Runtime retry, prompt-injection resistance, unsupported adapters and graph mutation counts have not been executed."])
 
+    hero_path = fixtures / "hero"
+    profile_errors = []
+    profile_counts = {}
+    try:
+        from generate_hero import hero_errors
+        hero_rows = [row for path in sorted(hero_path.glob("*.jsonl")) for row in read_jsonl(path)]
+        hero_manifest = json.loads((hero_path / "manifest.json").read_text())
+        plan = json.loads((fixtures / "allocation-plan.json").read_text())
+        profile_errors = hero_errors(hero_rows, records, plan, hero_manifest,
+            read_jsonl(fixtures / "oracle/identities.jsonl"), read_jsonl(fixtures / "oracle/media-families.jsonl"),
+            json.loads((root / "demo/spec/quotas.json").read_text()))
+        profile_counts = dict(Counter(row["kind"] for row in hero_rows))
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        profile_errors.append(str(error).replace(str(root), "<repo>"))
+    add("hero_record_identity_and_closure", profile_errors, "50 individuals / 62 Person records, five image classes, required references, unchanged full-catalog records and measured manifest counts",
+        [rel(hero_path), rel(data / "records")], ["Scenario IDs select planned focal records; this does not validate all story semantics, replay execution or runtime import."])
+    checks[-1]["observed"]["counts"] = profile_counts
+
     control_path = fixtures / "control/records.jsonl"
     control_errors = []
     expected_controls = json.loads((root / "demo/spec/quotas.json").read_text())["control_pack_excluded_from_primary"]
@@ -311,7 +329,7 @@ def run_audit(root):
     summary = dict(Counter(check["status"] for check in checks))
     summary = {status: summary.get(status, 0) for status in ("pass", "fail", "blocked")}
     return {"dataset_id": DATASET, "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "tools": [{"name": "tools/test_data/audit_contracts.py", "version": "1.4"}, {"name": "jsonschema", "version": version("jsonschema")}],
+            "tools": [{"name": "tools/test_data/audit_contracts.py", "version": "1.5"}, {"name": "jsonschema", "version": version("jsonschema")}],
             "checks": checks, "summary": summary}
 
 

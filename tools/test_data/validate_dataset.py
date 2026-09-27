@@ -193,52 +193,11 @@ def main():
     for kind,rows in records.items():
         for r in rows: scan(r,"records/"+kind+"/"+r["id"])
     check("private expectations separated from catalog inputs",not leaked,"; ".join(leaked[:8]) or "no private truth/runtime result fields in catalog")
-    # Write checkpoint oracle and hero profile from deterministic closure.
+    # Existing checkpoint rows are only targets. The standalone hero selector
+    # now uses all schema reference fields, including incident and location IDs.
     write_jsonl(FIX/"oracle/checkpoints.jsonl",QUOTAS["checkpoint_oracle_targets"])
-    plan=json.loads((FIX/"allocation-plan.json").read_text(encoding="utf-8")); story=plan["story_plans"]
-    hero_ids=set(plan["hero_person_ids"]); hero_media=set(plan["hero_media_ids"])
-    profile_ids=collections.defaultdict(set); pending=[]
-    def add_ref(kind,ident):
-        if kind in catalog and ident in catalog[kind] and ident not in profile_ids[kind]: profile_ids[kind].add(ident); pending.append((kind,ident))
-    for x in hero_ids: add_ref("person",x)
-    for x in hero_media: add_ref("media",x)
-    for sc in story:
-        for x in sc["focal_ids"]:
-            kind=next((k for k,p in PREFIX.items() if x.startswith(p+"-")),None)
-            if kind: add_ref(kind,x)
-    for x in catalog["organization"]: add_ref("organization",x)
-    while pending:
-        kind,ident=pending.pop(); r=catalog[kind][ident]
-        # Known typed references in the normalized record contract.
-        refs=[]
-        if kind=="source":
-            refs=[(r["publisher"]["kind"],r["publisher"]["id"]),*(("source",d["source_id"]) for d in r["dependencies"])]
-            refs += [("claim",c["id"]) for c in records["claim"] if c["source_id"]==ident]
-        elif kind=="claim":
-            refs=[(r["subject"]["kind"],r["subject"]["id"]),("source",r["source_id"])]
-            refs += [("location",r["location_id"])] if r["location_id"] else []
-            refs += [("media",m) for m in r["supporting_media_ids"]+r["corrects_claim_ids"]+r["related_claim_ids"]]
-            refs += [(x["kind"],x["id"]) for x in r["assertion"]["related_subjects"]]
-        elif kind=="person": refs += [("claim",x) for x in r["support_needs_claim_ids"]]; refs += [("claim",c["id"]) for c in records["claim"] if c["subject"]=={"kind":"person","id":ident}]
-        elif kind=="media": refs=[("source",r["source_id"])] + ([("location",r["claimed_location_id"])] if r["claimed_location_id"] else []) + ([("media",r["declared_predecessor_media_id"])] if r["declared_predecessor_media_id"] else [])
-        elif kind in ("facility","aid"): refs += [(fld,target) for fld,target in (("location_id","location"),("operator_organization_id","organization"),("organization_id","organization")) if r.get(fld)]
-        elif kind in ("infrastructure","hazard"): refs += [("location",x) for x in r["location_ids"]]
-        elif kind=="contribution":
-            refs=[("contributor",r["contributor_id"]),(r["target"]["kind"],r["target"]["id"])]
-            refs += [("source",x) for x in r["evidence_source_ids"]]+[("claim",x) for x in r["evidence_claim_ids"]]+[("media",x) for x in r["evidence_media_ids"]]
-            if r["proposed_location_id"]: refs.append(("location",r["proposed_location_id"]))
-        elif kind=="subscription": refs=[("contributor",r["contributor_id"]),(r["subject"]["kind"],r["subject"]["id"])]
-        elif kind=="investigation": refs=[("contributor",r["owner_id"]),*((x["kind"],x["id"]) for x in r["subject_refs"]),*(("source",x) for x in r["selected_source_ids"]),*(("claim",x) for x in r["selected_claim_ids"])]
-        elif kind=="vote": refs=[("contributor",r["contributor_id"]),("contribution",r["contribution_id"])]
-        elif kind=="task": refs=[("contributor",r["creator_id"]),("contributor",r["assignee_id"]) if r["assignee_id"] else ("contributor",r["creator_id"]),(r["target"]["kind"],r["target"]["id"]),*(("contribution",x) for x in r["submission_contribution_ids"])]
-        for k,x in refs: add_ref(k,x)
-    hero_dir=FIX/"hero"; hero_dir.mkdir(parents=True,exist_ok=True)
-    for kind,all_rows in records.items():
-        chosen=[r for r in all_rows if r["id"] in profile_ids[kind]]
-        if chosen: write_jsonl(hero_dir/f"{kind}.jsonl",chosen)
-    gid_by_person={pid:g["identity_id"] for g in groups for pid in g["person_ids"]}
-    hero_group_ids={gid_by_person[x] for x in hero_ids if x in gid_by_person}
-    write_json(hero_dir/"manifest.json",{"dataset_id":DATASET,"profile":"hero-50","private_fixture":True,"identity_group_count":len(hero_group_ids),"person_record_ids":sorted(hero_ids),"identity_group_ids":sorted(hero_group_ids),"image_upload_ids":sorted(hero_media),"image_family_classes":sorted({fam_by_media[x]["family_class"] for x in hero_media}),"scenario_ids":[s["id"] for s in story],"record_counts_from_foreign_key_closure":{k:len(v) for k,v in sorted(profile_ids.items())},"primary_records_must_not_import_oracle_fields":True})
+    from generate_hero import write_hero
+    write_hero(ROOT)
     # Package assets separately and record the actual checksum and file inventory.
     archive=Path(tempfile.gettempdir())/f"{DATASET}-assets.zip"; asset_files=sorted([p for p in ASSETS.rglob("*") if p.is_file()]); asset_hashes=[{"path":p.relative_to(ROOT).as_posix(),"sha256":digest(p),"byte_size":p.stat().st_size} for p in asset_files]
     if archive.is_file(): archive_meta={"path":str(archive),"sha256":digest(archive),"byte_size":archive.stat().st_size}

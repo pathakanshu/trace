@@ -42,7 +42,7 @@ it does not fall back to a stale schema report when jsonschema is unavailable.
 
 Run its own offline checks with:
 `python3 -m unittest discover -s tools/test_data -p test_contract_audit.py`.
-The current corpus audit has 14 pass / 11 fail / 2 blocked; failures are intentional
+The current corpus audit has 15 pass / 11 fail / 2 blocked; failures are intentional
 findings in the partial dataset, not successful runtime behavior.
 
 ## Isolated control pack
@@ -116,8 +116,8 @@ cases use analysis without publishing: hostile text stays source data. None of
 these eight runtime cases has run; no agent response or success is prefilled.
 No nonexistent replay-action IDs are used as prerequisites.
 
-Actual tooling results: **60 distinct tests pass across two environments**.
-The schema environment runs 57 and explicitly skips three Pillow tests. Run the
+Actual tooling results: **68 distinct tests pass across two environments**.
+The schema environment runs 65 and explicitly skips three Pillow tests. Run the
 three decoder checks with a Pillow-equipped tooling Python:
 `python3 -m unittest discover -s tools/test_data -p test_negative_media.py`.
 That separate run passes all three. Do not count skipped decoder checks as passes
@@ -151,3 +151,25 @@ The actual published bundle was restored twice into a fresh temporary checkout:
 modification times preserved on the second run. Measured ZIP SHA-256 remains
 `00629b3cc4b832e092f206b54f15c57d438e124dfaca97b904b4c1a21d8a444b`.
 No application or database was loaded, and the distributed bundle is unchanged.
+
+## Hero selection and closure
+
+`python3 tools/test_data/generate_hero.py` selects existing public records by the
+stable hero allocation and story focal IDs, then follows every explicit catalog
+reference. Included Person records pull their claims; included sources pull all
+claims in that report. An organization's inclusion does not pull every publication.
+The former exporter omitted incident references and misread facility/aid fields.
+The repaired selection adds `inc-000001`, `loc-000841` and `loc-000925`, all copied
+unchanged from the full catalog, and sorts rows deterministically.
+
+The saved profile now contains **658 records**, including 50 hidden individuals,
+62 Person records, 304 claims, 125 sources, 40 media and 54 locations. It has no
+missing/cross-incident/future references and all saved objects equal full-catalog
+objects. Eight tests cover saved closure/quotas, deterministic order, missing
+inputs, altered/duplicate records, typed correction links, idempotent export and
+symlink confinement. The legacy validator delegates hero export to this tool.
+
+This fixes reference closure only. The twelve named story plans still require
+semantic repair and executable actions: for example, the shelter story points to
+a treatment facility, and the correction/translation stories point to comments.
+The manifest's scenario IDs are planned coverage, never proof of story execution.
