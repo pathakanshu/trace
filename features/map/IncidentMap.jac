@@ -5,7 +5,7 @@ access token, so the demo keeps working offline.
 
 What it draws:
   - district + province borders from geometry.topo.json (via get_boundaries)
-  - Natural Earth rivers across Nepal as muted context (via get_nepal_rivers)
+  - OpenStreetMap rivers across Nepal as muted context (via get_nepal_rivers)
   - current OSM river corridor and settlement labels, with district outline
   - one pin per Location node from the Trace graph
 
@@ -93,7 +93,7 @@ def first_layer(map_obj: any, ids: list[str]) -> any {
 # Context rivers stay thin and muted so the affected Bhote Koshi reads first.
 def add_river_layers(map_obj: any, rivers: any) -> None {
     map_obj.addSource("nepal-rivers", {"type": "geojson", "data": rivers,
-        "attribution": "Rivers: <a href='https://www.naturalearthdata.com/' target='_blank' rel='noopener noreferrer'>Natural Earth</a>"});
+        "attribution": "© <a href='https://www.openstreetmap.org/copyright' target='_blank' rel='noopener noreferrer'>OpenStreetMap contributors</a> (ODbL)"});
     map_obj.addLayer({"id": "nepal-rivers", "type": "line", "source": "nepal-rivers",
         "layout": {"line-cap": "round", "line-join": "round"},
         "paint": {"line-color": css_var("--map-water", 1.0), "line-opacity": 0.55,
@@ -116,7 +116,8 @@ def add_corridor_layers(map_obj: any, corridor: any) -> list {
         "layout": {"line-cap": "round", "line-join": "round"},
         "paint": {"line-color": css_var("--status-warning", 1.0), "line-opacity": 0.95,
             "line-width": ["interpolate", ["linear"], ["zoom"], 8, 1.5, 12, 3.5, 16, 6]}});
-    if map_obj.getLayer("report-heat") { map_obj.moveLayer("report-heat", "corridor-band"); }
+    # Three of the four corpus settlements sit on this river, so report heat stays above it.
+    if map_obj.getLayer("report-heat") { map_obj.moveLayer("report-heat"); }
     if map_obj.getLayer("report-circles") { map_obj.moveLayer("report-circles"); }
     labels: list = [];
     # HTML labels keep offline text rendering independent of a remote glyph server.
@@ -209,7 +210,7 @@ def:pub IncidentMap(locations: list[LocationView], people: list[PersonView], act
                 "bounds": [[85.82, 27.74], [86.00, 28.06]],
                 "fitBoundsOptions": {"padding": 42},
                 # Zoom out no further than all of Nepal; one world copy only.
-                "minZoom": 6.5,
+                "minZoom": 6,
                 "maxZoom": 14,
                 "maxBounds": [[79.0, 25.5], [89.5, 31.2]],
                 "renderWorldCopies": False,

@@ -37,7 +37,7 @@ def:pub MapTab(snapshot: DashboardSnapshot, onRefresh: Callable[[], any], active
                 </span>
             }}
             <span className="inline-flex items-center gap-2"><span className="h-1 w-5 bg-status-warning" aria-hidden="true" />{"Affected river: Bhote Koshi"}</span>
-            <span className="inline-flex items-center gap-2"><span className="h-0.5 w-5 bg-map-water" aria-hidden="true" />{"Other rivers (Natural Earth)"}</span>
+            <span className="inline-flex items-center gap-2"><span className="h-0.5 w-5 bg-map-water" aria-hidden="true" />{"Other rivers (OpenStreetMap)"}</span>
         </div>
         {show_places and <p className="text-xs text-muted-foreground">{"Pin colour follows linked people's current reports; needs review includes conflicting reports, injury, or death. District outline: Sindhupalchok. Pins are reported media locations, not live person tracking. Unknown or invalid coordinates are omitted."}</p>}
         <p className="min-w-0 break-words text-xs text-muted-foreground" aria-label="River corridor context">{"Bhote Koshi river corridor (current OpenStreetMap linework). Not a measured 2016 flood extent. The translucent band is a visual guide along the river."}</p>

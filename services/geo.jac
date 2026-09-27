@@ -80,7 +80,7 @@ def:pub get_bhotekoshi_corridor() -> dict {
     return _cache["corridor"];
 }
 
-# Natural Earth 10m river centerlines (public domain), clipped to Nepal's bbox.
+# OpenStreetMap waterway=river ways inside Nepal (ODbL), simplified to about 400 m.
 def:pub get_nepal_rivers() -> dict {
     if "rivers" not in _cache {
         try {
