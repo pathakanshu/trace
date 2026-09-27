@@ -35,8 +35,15 @@ Next: pitch, backup video, Devpost.
 ## Anshu (map, integration)
 
 Working on: all four tasks pushed; draft PR #4 is ready for integration.
-Cold-start rehearsal complete; next, read-only review of remaining corpus
-requirements in the separate codex/test-data worktree (no app import).
+Cold-start rehearsal complete. Corpus-only follow-up on codex/test-data:
+add tools/test_data/audit_contracts.py and its tests, measured contract-audit.json,
+and dataset/tooling README notes. Audit db99ea5 is pushed: 8 pass / 11 fail /
+2 blocked, including 153 future references and nonconforming support files.
+Control fix e710475 is pushed: 26 records/two raw control reports, 18 tooling
+tests pass; audit is now 9 pass / 10 fail / 2 blocked. Primary records/assets
+are unchanged. Next: private queries.jsonl, generate_queries.py + tests and
+generator hookup; replace unreferenced qry-* placeholders with contract query-*
+IDs and real cited-evidence questions. No public ID changes or app import.
 Additional regression in features/map/test_map.jac passes: a new report does
 not inherit another report's media location; invalid coordinates stay unmapped,
 and only its explicit valid media link makes it navigable. Tasks 1/2 are on main. Gabriel: optional onShowOnMap callback in PeopleTab/Panels;
