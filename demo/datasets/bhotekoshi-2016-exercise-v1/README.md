@@ -78,7 +78,7 @@ application media verification; file checks do not prove caption truth.
 
 The metadata-only correction preserves stable IDs and the media bundle. Repair release dependencies and support contracts before building a
 complete importer/replay around this preview. Top-level shape checks do not
-exhaustively validate nested semantics. The data tools' 193 distinct tests pass across schema and Pillow environments;
+exhaustively validate nested semantics. The data tools' 206 distinct tests pass across schema and Pillow environments;
 its corpus audit intentionally exits 1 for the observed data failures.
 
 - All 1,800 original source hashes match. However, the 1,260 JSON sources use
@@ -93,6 +93,9 @@ its corpus audit intentionally exits 1 for the observed data failures.
   polygons or historical flood boundary are supplied. Five context features now
   pass hash/version/coordinate comparison with eight archived OSM elements; all
   170 points match their cited anchors but reuse only four coordinate pairs.
+  All 170 also pass actual full district-30 polygon membership (including hole
+  handling), with zero edge hits; this does not approve terrain, uncertainty
+  envelopes, reporting zones or historical boundaries.
   This does not establish terrain suitability or district/country geofencing.
 - Private identity rows now match the specified contract, preserving all IDs,
   membership and ages. Initial locations are 50 existing points and 950 unknowns;

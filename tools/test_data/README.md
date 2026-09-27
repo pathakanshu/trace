@@ -43,7 +43,7 @@ it does not fall back to a stale schema report when jsonschema is unavailable.
 
 Run its own offline checks with:
 `python3 -m unittest discover -s tools/test_data -p test_contract_audit.py`.
-The current corpus audit has 24 pass / 15 fail / 2 blocked; failures are intentional
+The current corpus audit has 25 pass / 15 fail / 2 blocked; failures are intentional
 findings in the partial dataset, not successful runtime behavior.
 
 ## Isolated control pack
@@ -118,8 +118,8 @@ cases use analysis without publishing: hostile text stays source data. None of
 these eight runtime cases has run; no agent response or success is prefilled.
 No nonexistent replay-action IDs are used as prerequisites.
 
-Actual tooling results: **193 distinct tests pass across two environments**.
-The schema environment runs 178 and explicitly skips fifteen Pillow tests. Run the
+Actual tooling results: **206 distinct tests pass across two environments**.
+The schema environment runs 191 and explicitly skips fifteen Pillow tests. Run the
 fifteen media checks with a Pillow-equipped tooling Python:
 `python3 -m unittest discover -s tools/test_data -p '*media*.py'`.
 That separate run passes all fifteen. Do not count skipped decoder checks as passes
@@ -448,3 +448,23 @@ verify follower coverage and prevent subscriptions to unselected people from
 expanding the profile. The complete candidate rehearsal also requires both
 Maya followers to survive hero export; its source/workflow replacement is still
 not published. Current delivered people still have only one follower each.
+
+## Actual district membership
+
+`audit_boundaries.py` decodes the referenced district directly from full
+`geometry.topo.json`, with signed arc reversal, optional quantized delta decoding,
+exact joins and ring validation. Ray crossing handles concavity and holes; points
+on edges are counted separately with a numerical tolerance of 1e-10 degrees.
+The decoder follows the [TopoJSON specification](https://github.com/topojson/topojson-specification).
+All 170 current Point locations (four coordinate pairs) are inside their declared
+Sindhupalchok district 30, with zero boundary hits. The audit records the actual
+boundary-file SHA-256. Thirteen tests cover real data, holes, concavity, reversed
+arcs, quantization, multipolygons, invalid inputs, and reference/path failures.
+
+This passes only existing point membership. It does not approve the 1,000-location
+quota, uncertainty circles, terrain, inhabited reporting zones, area polygons or
+historical boundaries. Only referenced districts are decoded. Exploratory decoding
+found degenerate rings in unrelated districts 33, 34 and 48; those input bytes
+were not repaired and no nationwide polygon-validity claim is made. Transboundary
+context features are not forced into Nepal. New non-Nepal catalog locations need
+a separate check against their declared country's verified geometry.

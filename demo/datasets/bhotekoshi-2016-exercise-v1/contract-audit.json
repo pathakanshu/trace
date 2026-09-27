@@ -1,10 +1,10 @@
 {
   "dataset_id": "bhotekoshi-2016-exercise-v1",
-  "generated_at": "2026-09-27T11:34:14Z",
+  "generated_at": "2026-09-27T11:44:46Z",
   "tools": [
     {
       "name": "tools/test_data/audit_contracts.py",
-      "version": "1.15"
+      "version": "1.16"
     },
     {
       "name": "jsonschema",
@@ -1418,6 +1418,32 @@
       ]
     },
     {
+      "rule_id": "existing_location_district_membership",
+      "status": "pass",
+      "observed": {
+        "failure_count": 0,
+        "examples": [],
+        "location_records_checked": 170,
+        "district_polygons_loaded": 1,
+        "checked_district_codes": [
+          "30"
+        ],
+        "distinct_point_district_checks": 4,
+        "boundary_hits": 0,
+        "geometry_sha256": "23bb3510efadbd2b039eba18f21be5a3c47e13a9cba6dadc4a9f7e700ae2d885",
+        "boundary_epoch": "unverified; repository display geometry"
+      },
+      "expected": "Existing Nepal Point locations lie inside or on their explicitly referenced district polygon",
+      "evidence_paths": [
+        "geometry.topo.json",
+        "demo/datasets/bhotekoshi-2016-exercise-v1/records/location"
+      ],
+      "limitations": [
+        "Only referenced district rings are decoded; unrelated polygons are not certified. Boundary hits are reported separately.",
+        "Current display geometry epoch is unverified. No 2016 border, uncertainty envelope, terrain, riverbed, approved zone or area-placement certification."
+      ]
+    },
+    {
       "rule_id": "complete_geographic_placement",
       "status": "blocked",
       "observed": "170/1000 location records present; this audit cannot approve geographic sampling or area inputs.",
@@ -1443,7 +1469,7 @@
     }
   ],
   "summary": {
-    "pass": 24,
+    "pass": 25,
     "fail": 15,
     "blocked": 2
   }

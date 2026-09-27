@@ -421,6 +421,19 @@ def run_audit(root):
         [rel(data / "records/location"), rel(data / "context/geography.geojson")], ["Declared country metadata is compared; actual boundary/terrain/inhabited-zone placement is not established. Four reused anchors do not satisfy the 1,000-location specification."])
     checks[-1]["observed"].update(anchor_counts)
 
+    boundary_errors, boundary_counts = [], {}
+    try:
+        from audit_boundaries import audit_boundaries
+        boundary_errors, boundary_counts = audit_boundaries(root, records)
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        boundary_errors.append(str(error).replace(str(root), "<repo>"))
+    add("existing_location_district_membership", boundary_errors,
+        "Existing Nepal Point locations lie inside or on their explicitly referenced district polygon",
+        ["geometry.topo.json", rel(data / "records/location")],
+        ["Only referenced district rings are decoded; unrelated polygons are not certified. Boundary hits are reported separately.",
+         "Current display geometry epoch is unverified. No 2016 border, uncertainty envelope, terrain, riverbed, approved zone or area-placement certification."])
+    checks[-1]["observed"].update(boundary_counts)
+
     quotas = json.loads((root / "demo/spec/quotas.json").read_text())
     locations = sum(row["kind"] == "location" for row in records)
     expected_locations = quotas["primary_catalog_counts"]["location"]
@@ -434,7 +447,7 @@ def run_audit(root):
     summary = dict(Counter(check["status"] for check in checks))
     summary = {status: summary.get(status, 0) for status in ("pass", "fail", "blocked")}
     return {"dataset_id": DATASET, "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "tools": [{"name": "tools/test_data/audit_contracts.py", "version": "1.15"}, {"name": "jsonschema", "version": version("jsonschema")}],
+            "tools": [{"name": "tools/test_data/audit_contracts.py", "version": "1.16"}, {"name": "jsonschema", "version": version("jsonschema")}],
             "checks": checks, "summary": summary}
 
 
