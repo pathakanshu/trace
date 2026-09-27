@@ -322,3 +322,4 @@ Working on: (fill in)
 
 - 10:08 EDT Anshu: timeline ready on `codex/person-timeline` (37e25a8); 12 focused / 80 total Jac tests, compiler, web build and five UI checks pass. Exact import/mount above. Starting latest-main fresh-clone regression; no main push.
 - 10:16 EDT Anshu: final fresh-clone main 8489a32 rehearsal PASS: 17 scenario, three map and three restart checks; all three earlier bugs retested fixed; 68 Jac tests/gate pass. Timings, 92.308% Jac and repro steps in Anshu section. Report only on codex/anshu-final-rehearsal; no main push.
+- 10:58 main fd27d5f: PFIF 1.2-1.4 import in Organizations (features/organizations/pfif.jac + PfifImport.jac; endpoint import_pfif registered in main.jac). Notes become cited claims via IngestWalker, note_record_id is the reference (idempotent), unknown statuses skipped and listed, DOCTYPE/ENTITY refused. 4 new tests, 84 total; gate passed after removing a stale local agent worktree.

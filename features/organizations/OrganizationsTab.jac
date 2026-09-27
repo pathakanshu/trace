@@ -1,5 +1,6 @@
 """Anshu: institutional reports and a structured, reviewed publishing form."""
 import from .PublishReport { PublishReport }
+import from .PfifImport { PfifImport }
 import from ...components.shared.Display { SectionHeading, source_kind, status_sentence, friendly_time }
 import from ...components.shared.Scale { is_corpus_snapshot, fmt_count, org_type_label }
 sv import from ...services.trace { DashboardSnapshot, OrganizationView }
@@ -50,6 +51,7 @@ def:pub OrganizationsTab(snapshot: DashboardSnapshot, onRefresh: Callable[[], an
     return <div className="flex min-w-0 flex-col gap-5">
         <SectionHeading title="Organizations" subtitle="Read reports published by police, hospitals, government, and aid organizations." />
         <PublishReport snapshot={snapshot} onRefresh={onRefresh} />
+        <PfifImport snapshot={snapshot} onRefresh={onRefresh} />
         <label className="flex max-w-xl flex-col gap-2 text-sm">
             <span className="font-medium">{"Search organizations"}</span>
             <input type="search" value={query}
