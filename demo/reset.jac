@@ -4,7 +4,7 @@ Unknown node types and legacy unscoped activity are deliberately left alone.
 import from graph.nodes { Incident, ActivityEntry }
 import from graph.edges {
     Involves, Contains, About, Asserts, HasOrganization, Publishes,
-    HasSubscription, Receives, LocatedAt, HasSignal, HasInvestigation
+    HasSubscription, Receives, LocatedAt, HasSignal, HasInvestigation, Reviews
 }
 
 def clear_incident(incident_name: str) -> None {
@@ -18,6 +18,9 @@ def clear_incident(incident_name: str) -> None {
                 found[jid(claim)] = claim;
                 for source in [claim <-:Asserts:<-] { found[jid(source)] = source; }
             }
+            # A review of two people in this incident goes with them. One that also
+            # names an outside person stays protected by the check below.
+            for decision in [person <-:Reviews:<-] { found[jid(decision)] = decision; }
             for sub in [person ->:HasSubscription:->] {
                 found[jid(sub)] = sub;
                 for alert in [sub ->:Receives:->] { found[jid(alert)] = alert; }
