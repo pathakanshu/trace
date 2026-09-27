@@ -53,6 +53,108 @@ import quadratic); corpus lookups use a field filter so they walk real edges.
 
 ## Anshu (map, integration)
 
+### Fresh-clone judge rehearsal — 27 September, 09:32 EDT
+
+Tested **bfdac73506fce5c4f957b029ce2815653ba88da0** from a new clone at
+`/private/tmp/trace-judge-rehearsal-20260927-0920`. Confirmed `.jac/data` did
+not exist before the first start. Ran documented `jac install`, then Jac 0.34.1
+`jac start --port 8096 main.jac` cold, with NVIDIA_NIM_API_KEY and
+TRACE_LIVE_PASSPHRASE absent. No live calls, secrets, or `.trace-local/` work.
+Report branch: **codex/anshu-judge-rehearsal**. Only STATUS changed; no app
+fixes or main push. Results below describe this tested revision, not untested
+commits subsequently pulled for the report rebase.
+
+**Bugs / exact reproductions**
+
+1. **P1 — Reset strands the investigation selection.** Fresh Maya story →
+   People → in "Investigate a report", select **Maya G.** → Demo controls →
+   **Reset demo**. Expected: selector points at a current Person/Claim and its
+   REPLAYED run remains available. Actual: Source report has **zero options**,
+   Investigate is disabled, REPLAYED disappears, and the panel says "No check
+   recorded yet for this report." The fresh snapshot still contains both
+   replay records. **Reload fixes it.** Suspected cause (code inspection):
+   InvestigationPanel retains selectedId/selectedClaim across the reset's new
+   graph IDs. Miguel: clear/revalidate both on incident change; do not erase
+   saved runs. Outside this task's permitted fix scope. Screenshot:
+   `/private/tmp/trace-judge-investigation-reset.png`.
+2. **P2 — Corpus Media tab contradicts its total.** Load exercise corpus →
+   select it → Media, with search blank. Expected: imported media metadata or
+   an explicit explanation that files/records are unavailable in this view.
+   Actual: totals say **Media 200**, but the collection says **No matching
+   media / Upload an image or change the search**. This is not a search filter
+   the judge entered. Verified snapshot: `media` has 200 records, while
+   `media_records` and `list_incident_media` both return zero. Screenshot:
+   `/private/tmp/trace-judge-corpus-media-375.png`. No new media was invented
+   or uploaded to conceal the gap.
+3. **P2 — Seeded Maya previews are broken on a clean clone.** Select Maya →
+   Media. Expected: usable preview or deliberate "preview unavailable" tile.
+   Actual: all three cards show browser broken-image icons; requests for
+   `/demo/flooded_bridge.jpg`, `/demo/reposted_flood_video.mp4`, and
+   `/demo/flood_video_earliest.mp4` return **404**. The cards do correctly say
+   they are seeded demonstration records, but the preview UI is broken.
+   Screenshot: `/private/tmp/trace-judge-maya-media-375.png`.
+
+**Pass/fail checklist**
+
+- PASS: fresh empty-store cold start; first page ready in 326 ms after server
+  readiness (this is page time, not dependency install/build time).
+- PASS: Reset → People shows Maya Gurung and Maya G.; each investigation
+  selector displays its actual REPLAYED run (two stored runs total).
+- PASS: hospital action creates exactly **one alert**; both police MISSING and
+  hospital FOUND_SAFE reports remain; Graph shows Alert and both Investigation
+  records (40 nodes / 42 edges at that step).
+- PASS: empty passphrase on the **uncached hospital report** returns
+  **UNAVAILABLE**, with no crash or live request. Saved replay checks remain
+  viewable without credentials by design.
+- PASS: corpus loaded twice through real UI controls (second browser tab kept
+  its pre-import Load button); second import returned `created: {}` and exactly
+  two incidents remained. First Load disables itself; the incident selector is
+  absent until a second incident exists. During the second tab's import, the
+  first tab successfully switched corpus → Maya. No forced disabled clicks.
+- PASS: three further Maya → corpus → Maya cycles preserve hospital reports
+  and one alert; incident switch buttons disable while a switch is pending.
+- PASS: while corpus is selected, Reset is hidden and the UI directs the user
+  back to Maya. A deliberate local reset_demo endpoint stress call while viewing
+  corpus leaves its totals/counts/zero alerts unchanged. Reset after switching
+  back restores Maya's initial claim, zero alerts, and two replay records.
+- PASS: stop and cold restart preserve both incident IDs, full Maya application
+  state, and corpus totals/place counts/alerts. Comparison excludes regenerated
+  `_jac_*` DTO metadata, not application IDs/content. Restarted UI shows the
+  hospital already added, one alert, and the corpus reopens through the selector.
+- PASS: all five tabs on **both incidents** at 375×812 have document width 375
+  (10 checks); screenshots saved for each. This layout pass does not waive the
+  Media content bugs above. No JavaScript page errors in the successful runs.
+- FAIL: investigation replay/selection after choosing a person and then Reset
+  (bug 1); corpus Media visibility (bug 2); Maya preview availability (bug 3).
+
+**Corpus tab timing**, milliseconds from click to visible panel plus two paint
+frames, local Chromium, 1280×900, already loaded incident; three rounds:
+
+| Tab | Samples (ms) | Median (ms) |
+| --- | --- | --- |
+| People | 59, 67, 67 | 67 |
+| Organizations | 68, 67, 67 | 67 |
+| Graph | 83, 83, 83 | 83 |
+| Map | 66, 66, 67 | 66 |
+
+Incident loading is separate: first corpus switch during the repeat import
+**6.362 s**; subsequent corpus switches **1.356–1.843 s**. Maya switches
+**89–142 ms**. These are local measurements, not JacHammer latency claims.
+
+**GitHub Linguist:** `gh api repos/pathakanshu/trace/languages`, with main
+confirmed as bfdac73 at measurement: Jac **368,316 bytes / 92.2210%**,
+JavaScript **23,013 / 5.7621%**, CSS **8,055 / 2.0169%** (399,384 total).
+This is GitHub's language classification, not line/extension counting.
+**Above 50%; no .gitattributes exclusions proposed or applied.**
+
+Evidence on Anshu's host: `/private/tmp/trace-judge-results.json`,
+`/private/tmp/trace-judge-investigations.json`,
+`/private/tmp/trace-judge-restart.json`, and screenshots listed above. Initial
+investigation-selector harness timeouts were corrected and rerun successfully;
+they are not reported as application bugs. No test scripts/assets are pushed.
+
+### Earlier map/data handoff
+
 Done: corridor map + corpus report heat layer on `codex/anshu-map-scale`.
 Reserved: `features/map/*`, `services/geo.jac`, new
 `features/map/bhotekoshi-corridor.geojson`, README Map section, this section/log.
@@ -212,3 +314,4 @@ Working on: (fill in)
 
 - 09:22 main: corpus heat was drawn under the river band, so the three riverside settlements barely showed. Heat now draws above it with a larger radius and intensity at corridor zoom; four hot spots visible locally. 66 tests, gate passed. JacHammer sandbox restart loses the corpus: click Load exercise corpus again after each Stop / Run Preview.
 - 09:26 JacHammer go/no-go: GO on 5528766. Fresh preview: Load exercise corpus about 25 s; corpus Map heat at four settlements, People chips + 100 of 1,150, Organizations 32 ranked, Graph 7,053 records (401 shown). Maya story: Reset shows both REPLAYED runs, hospital report gives exactly one alert. Note: the corpus has its own generated "Maya Gurung"; in the pitch, show corpus scale from the totals, heat map and Organizations, not by opening Maya there.
+- 09:32 codex/anshu-judge-rehearsal (Anshu): fresh bfdac73 clone / empty store / cold restart rehearsal complete. Three reproducible findings in Anshu section: stale investigation selector after Reset, corpus Media 200→empty view, three 404 Maya previews. Core judge flow, repeat load, incident/reset isolation, persistence, empty-passphrase fallback and ten 375px layouts pass. Corpus tab medians 66–83 ms; GitHub Linguist Jac 92.221%. STATUS-only branch push; no main push, app edits or live calls.
