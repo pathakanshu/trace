@@ -53,17 +53,17 @@ kinds need an explicit application mapping; do not silently drop them.
 
 The older `schema-validation.json` and `validation-report.json` cover 19 limited
 checks; their zero failures do **not** mean complete contract conformance.
-The stricter supplementary `contract-audit.json` reports **9 checks passed,
-10 failed, 2 blocked**. All 8,027 primary records pass the catalog JSON Schema,
+The stricter supplementary `contract-audit.json` reports **11 checks passed,
+9 failed, 2 blocked**. All 8,027 primary records pass the catalog JSON Schema,
 but 153 references reveal records before their release time. Manifest, license,
-identity/checkpoint oracle, replay, query, negative-input and validation-report
+identity/checkpoint oracle, replay, negative-input and validation-report
 support shapes differ from the documented contract. The separate 26-record
 control pack now passes its file checks. See each rule's measured examples; no application replay was run.
 
 This audit leaves the catalog, stable IDs, media bundle and previous reports
 unchanged. Repair release dependencies and support contracts before building a
 complete importer/replay around this preview. Top-level shape checks do not
-exhaustively validate nested semantics. The audit/control tools' 18 unit tests pass;
+exhaustively validate nested semantics. The audit/control/query tools' 25 unit tests pass;
 its corpus audit intentionally exits 1 for the observed data failures.
 
 - Geography is 170/1,000: the remaining 830 records require verified geographic
@@ -72,8 +72,10 @@ its corpus audit intentionally exits 1 for the observed data failures.
 - The control pack is under `tests/fixtures/bhotekoshi-2016-exercise-v1/control/`.
   Its two incidents and ten people are outside the primary counts; runtime
   isolation/reset still requires a compatible importer.
-- Query and invalid-input files currently contain planning placeholders. They
-  are not a finished evaluation suite; expected query evidence is unpopulated.
+- The private query suite contains 40 distinct questions, real claim/source
+  citations, time cutoffs and explicit uncertainty. Seven query tests pass; no
+  answers were generated or evaluated by the application. Invalid-input files
+  still contain planning placeholders. The full evaluation suite is unfinished.
 - Checkpoint oracle rows are specified targets, not executed observations.
 - No importer, application replay, reset, alert, identity-resolution, agent trace,
   or UI asset-loading behavior was verified for this corpus. In particular,
@@ -89,7 +91,7 @@ python3 tools/test_data/schema_check.py
 python3 tools/test_data/validate_dataset.py
 # Strict supplementary audit (currently exits 1 for genuine corpus failures):
 python3 tools/test_data/audit_contracts.py
-python3 -m unittest discover -s tools/test_data -p test_contract_audit.py
+python3 -m unittest discover -s tools/test_data -p 'test_*.py'
 ```
 
 Run these after restoring media. The validator writes measured reports and hero

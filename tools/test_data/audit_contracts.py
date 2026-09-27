@@ -203,6 +203,17 @@ def run_audit(root):
     add("catalog_release_closure", future, "A record never reveals a referenced record before its available_at", [rel(data / "records")])
     add("catalog_lifecycle_times", lifecycle_errors(records), "Workflow/report times respect release and publication cutoffs", [rel(data / "records")], ["Actual media creation time is deliberately not compared with the fictional exercise clock."])
 
+    query_path = fixtures / "queries.jsonl"
+    query_errors = []
+    try:
+        from generate_queries import validate_queries
+        query_quota = json.loads((root / "demo/spec/quotas.json").read_text())["evaluation"]["query_types"]
+        validate_queries(read_jsonl(query_path), {row["id"]: row for row in records}, query_quota)
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        query_errors.append(str(error).replace(str(root), "<repo>"))
+    add("query_evidence_and_cutoffs", query_errors, "40 distinct questions, exact category counts, real citations available by cutoff, no answer fields",
+        [rel(query_path), rel(data / "records")], ["No query was answered or scored by an application/model."])
+
     control_path = fixtures / "control/records.jsonl"
     control_errors = []
     expected_controls = json.loads((root / "demo/spec/quotas.json").read_text())["control_pack_excluded_from_primary"]
@@ -263,7 +274,7 @@ def run_audit(root):
     summary = dict(Counter(check["status"] for check in checks))
     summary = {status: summary.get(status, 0) for status in ("pass", "fail", "blocked")}
     return {"dataset_id": DATASET, "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "tools": [{"name": "tools/test_data/audit_contracts.py", "version": "1.0"}, {"name": "jsonschema", "version": version("jsonschema")}],
+            "tools": [{"name": "tools/test_data/audit_contracts.py", "version": "1.1"}, {"name": "jsonschema", "version": version("jsonschema")}],
             "checks": checks, "summary": summary}
 
 

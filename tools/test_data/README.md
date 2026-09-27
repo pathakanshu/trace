@@ -42,7 +42,7 @@ it does not fall back to a stale schema report when jsonschema is unavailable.
 
 Run its own offline checks with:
 `python3 -m unittest discover -s tools/test_data -p test_contract_audit.py`.
-The current corpus audit has 9 pass / 10 fail / 2 blocked; failures are intentional
+The current corpus audit has 11 pass / 9 fail / 2 blocked; failures are intentional
 findings in the partial dataset, not successful runtime behavior.
 
 ## Isolated control pack
@@ -54,8 +54,23 @@ across incident/publisher scopes. The generator preflights every destination,
 refuses differing existing content or escaping paths, and leaves identical files
 untouched. There is no runtime import or reset call.
 
-Run all 18 tooling checks with
+Run all 25 tooling checks with
 `python3 -m unittest discover -s tools/test_data -p 'test_*.py'`.
 The tests include saved-source tampering, malformed control rows, exact schema
 and counts, reference/release isolation, raw hash/excerpt checks, collision scopes,
 idempotent generation and refusal to overwrite different files or escape root.
+
+## Private research queries
+
+`python3 tools/test_data/generate_queries.py` writes 40 held-out questions with
+real catalog claim/source citations and explicit time cutoffs, uncertainty and
+forbidden conclusions. The category quotas are 10 person, 8 geographic access,
+8 aid/facility, 8 media lineage and 6 insufficient-evidence questions. Baseline
+questions cannot cite later reports. Queries use public evidence only; hidden
+identity/media-family answers are never read by this generator. No model answer
+or verification result is generated. Keep queries out of application inputs.
+
+Seven query tests check deterministic generation, exact contract/category counts,
+real citation closure, cutoff isolation, both media publication contexts, missing
+inputs and rejected extra result fields. The old `qry-*` placeholders were not
+contract IDs; the suite now uses `query-000001` through `query-000040`.

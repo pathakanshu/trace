@@ -398,8 +398,9 @@ def main():
     for i,pair in enumerate(pairs[:80]+pairs[165:185],1):
         actions.append({"action_id":f"act-{i:06d}","action":"human_review_required","person_a_id":pair["person_a_id"],"person_b_id":pair["person_b_id"],"expected_decision":"confirm_same_individual" if pair["same_individual"] else "reject_match","evidence_claim_ids":pair["evidence_claim_ids"],"generated_result":False})
     jsonl(replay/"actions.jsonl",actions)
-    qtypes=["PERSON_CHANGE"]*10+["GEOGRAPHIC_ACCESS"]*8+["AID_FACILITY"]*8+["MEDIA_LINEAGE"]*8+["INSUFFICIENT_EVIDENCE"]*6
-    jsonl(FIX/"queries.jsonl",[{"query_id":f"qry-{i:06d}","query_type":t,"prompt":"Answer from cited exercise sources, distinguish unknowns, and do not infer verification.","expected_evidence_ids":[],"expected_limitations":["Application must generate answer and trace at runtime."],"runtime_answer":None} for i,t in enumerate(qtypes,1)])
+    # Rebuild the held-out, citation-bound query suite after public shards exist.
+    from generate_queries import write_queries
+    write_queries(ROOT)
     cats=["MALFORMED_MISSING","BAD_CROSS_INCIDENT_REF","TIME_SEMANTICS","MEDIA_PATH_SIZE","RETRY_INJECTION_UNSUPPORTED"]
     jsonl(FIX/"invalid-inputs.jsonl",[{"case_id":f"bad-{i:06d}","category":cats[(i-1)//8],"input":{"case":"intentionally_invalid_synthetic_fixture","index":i},"expected":"reject_or_report_unsupported_without_mutation","is_runtime_result":False} for i in range(1,41)])
     # Private expected identity membership is isolated from all importable

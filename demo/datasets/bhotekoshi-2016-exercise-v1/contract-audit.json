@@ -1,10 +1,10 @@
 {
   "dataset_id": "bhotekoshi-2016-exercise-v1",
-  "generated_at": "2026-09-27T09:11:45Z",
+  "generated_at": "2026-09-27T09:18:23Z",
   "tools": [
     {
       "name": "tools/test_data/audit_contracts.py",
-      "version": "1.0"
+      "version": "1.1"
     },
     {
       "name": "jsonschema",
@@ -281,23 +281,10 @@
     },
     {
       "rule_id": "support_shape:queries.jsonl",
-      "status": "fail",
+      "status": "pass",
       "observed": {
-        "failure_count": 40,
-        "examples": [
-          "row 1: missing: acceptable_uncertainty, at, forbidden_conclusions, id, question, required_claim_ids, required_source_ids; unexpected: expected_evidence_ids, expected_limitations, prompt, query_id, runtime_answer",
-          "row 2: missing: acceptable_uncertainty, at, forbidden_conclusions, id, question, required_claim_ids, required_source_ids; unexpected: expected_evidence_ids, expected_limitations, prompt, query_id, runtime_answer",
-          "row 3: missing: acceptable_uncertainty, at, forbidden_conclusions, id, question, required_claim_ids, required_source_ids; unexpected: expected_evidence_ids, expected_limitations, prompt, query_id, runtime_answer",
-          "row 4: missing: acceptable_uncertainty, at, forbidden_conclusions, id, question, required_claim_ids, required_source_ids; unexpected: expected_evidence_ids, expected_limitations, prompt, query_id, runtime_answer",
-          "row 5: missing: acceptable_uncertainty, at, forbidden_conclusions, id, question, required_claim_ids, required_source_ids; unexpected: expected_evidence_ids, expected_limitations, prompt, query_id, runtime_answer",
-          "row 6: missing: acceptable_uncertainty, at, forbidden_conclusions, id, question, required_claim_ids, required_source_ids; unexpected: expected_evidence_ids, expected_limitations, prompt, query_id, runtime_answer",
-          "row 7: missing: acceptable_uncertainty, at, forbidden_conclusions, id, question, required_claim_ids, required_source_ids; unexpected: expected_evidence_ids, expected_limitations, prompt, query_id, runtime_answer",
-          "row 8: missing: acceptable_uncertainty, at, forbidden_conclusions, id, question, required_claim_ids, required_source_ids; unexpected: expected_evidence_ids, expected_limitations, prompt, query_id, runtime_answer",
-          "row 9: missing: acceptable_uncertainty, at, forbidden_conclusions, id, question, required_claim_ids, required_source_ids; unexpected: expected_evidence_ids, expected_limitations, prompt, query_id, runtime_answer",
-          "row 10: missing: acceptable_uncertainty, at, forbidden_conclusions, id, question, required_claim_ids, required_source_ids; unexpected: expected_evidence_ids, expected_limitations, prompt, query_id, runtime_answer",
-          "row 11: missing: acceptable_uncertainty, at, forbidden_conclusions, id, question, required_claim_ids, required_source_ids; unexpected: expected_evidence_ids, expected_limitations, prompt, query_id, runtime_answer",
-          "row 12: missing: acceptable_uncertainty, at, forbidden_conclusions, id, question, required_claim_ids, required_source_ids; unexpected: expected_evidence_ids, expected_limitations, prompt, query_id, runtime_answer"
-        ]
+        "failure_count": 0,
+        "examples": []
       },
       "expected": [
         "id",
@@ -472,6 +459,22 @@
       ]
     },
     {
+      "rule_id": "query_evidence_and_cutoffs",
+      "status": "pass",
+      "observed": {
+        "failure_count": 0,
+        "examples": []
+      },
+      "expected": "40 distinct questions, exact category counts, real citations available by cutoff, no answer fields",
+      "evidence_paths": [
+        "tests/fixtures/bhotekoshi-2016-exercise-v1/queries.jsonl",
+        "demo/datasets/bhotekoshi-2016-exercise-v1/records"
+      ],
+      "limitations": [
+        "No query was answered or scored by an application/model."
+      ]
+    },
+    {
       "rule_id": "control_pack",
       "status": "pass",
       "observed": {
@@ -516,8 +519,8 @@
     }
   ],
   "summary": {
-    "pass": 9,
-    "fail": 10,
+    "pass": 11,
+    "fail": 9,
     "blocked": 2
   }
 }
