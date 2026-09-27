@@ -36,14 +36,17 @@ Next: pitch, backup video, Devpost.
 
 Working on: all four tasks pushed; draft PR #4 is ready for integration.
 Cold-start rehearsal complete. Corpus-only follow-up on codex/test-data:
-add tools/test_data/audit_contracts.py and its tests, measured contract-audit.json,
-and dataset/tooling README notes. Audit db99ea5 is pushed: 8 pass / 11 fail /
-2 blocked, including 153 future references and nonconforming support files.
-Control fix e710475 is pushed: 26 records/two raw control reports, 18 tooling
-tests pass; audit is now 9 pass / 10 fail / 2 blocked. Primary records/assets
-are unchanged. Next: private queries.jsonl, generate_queries.py + tests and
-generator hookup; replace unreferenced qry-* placeholders with contract query-*
-IDs and real cited-evidence questions. No public ID changes or app import.
+23f81dd pushed 40 cited private queries; e710475 added 26 isolated control records.
+25 tooling tests pass; measured audit 11 pass / 9 fail / 2 blocked. Primary
+8,027 records and the media bundle remain unchanged; no corpus app import.
+Working next: tools/test_data/audit_checkpoints.py + tests, audit_contracts.py,
+measured contract-audit.json and dataset/tooling README. A read-only diagnostic
+found 297 T+72 safe follow-ups assigned outside the intended safe cohort in
+existing generate_catalog.py. Add a fixture-only checkpoint recomputation and
+regression; do not silently rewrite published reports or claim app execution.
+Then author contract-shaped private invalid-inputs.jsonl with generator/tests;
+replace unreferenced bad-* placeholder IDs with required case-* IDs. No shared
+app contracts or dependencies change. All data is on origin/codex/test-data.
 Additional regression in features/map/test_map.jac passes: a new report does
 not inherit another report's media location; invalid coordinates stay unmapped,
 and only its explicit valid media link makes it navigable. Tasks 1/2 are on main. Gabriel: optional onShowOnMap callback in PeopleTab/Panels;
@@ -126,3 +129,5 @@ Working on: (fill in)
 - 04:53 codex/anshu-night 0e697ee: extra report-location provenance regression; 57 tests, 52-file gate and production web bundle pass. Draft PR #4 includes the full handoff.
 
 - 05:00 codex/anshu-night 4375ad3: cold-started bundled client; both replay views work, hospital claim ID and one alert survive process restart, repeat watch adds zero, reset restores Missing. PR #4 ready.
+
+- 05:15 codex/test-data 23f81dd: 40 cited private questions and 26 control records published; 25 tooling tests pass. Audit still reports corpus failures. Investigating final-cohort drift before any source rewrite.
