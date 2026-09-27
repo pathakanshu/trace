@@ -19,6 +19,9 @@ python3 tools/test_data/unpack_assets.py /tmp/trace-test-data-assets/bhotekoshi-
 
 Python 3.10+ is required for the unpack helper. It checks the ZIP checksum and
 all 400 members before writing anything; matching existing files are preserved.
+The actual bundle was restored twice into a fresh temporary checkout: both runs
+verified 200 images and 200 thumbnails; the second preserved bytes and mtimes.
+Ten unpacker regressions cover malformed archives, path escapes and overwrites.
 The download URL, SHA-256 and byte count are in `asset-distribution.json`.
 GitHub repository access may require authentication. The release also includes
 the contact sheet. Binary images are intentionally excluded from Git.
@@ -63,7 +66,7 @@ control pack now passes its file checks. See each rule's measured examples; no a
 This audit leaves the catalog, stable IDs, media bundle and previous reports
 unchanged. Repair release dependencies and support contracts before building a
 complete importer/replay around this preview. Top-level shape checks do not
-exhaustively validate nested semantics. The data tools' 50 distinct tests pass across schema and Pillow environments;
+exhaustively validate nested semantics. The data tools' 60 distinct tests pass across schema and Pillow environments;
 its corpus audit intentionally exits 1 for the observed data failures.
 
 - All 1,800 original source hashes match. However, the 1,260 JSON sources use

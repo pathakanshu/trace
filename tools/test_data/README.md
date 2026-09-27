@@ -116,8 +116,8 @@ cases use analysis without publishing: hostile text stays source data. None of
 these eight runtime cases has run; no agent response or success is prefilled.
 No nonexistent replay-action IDs are used as prerequisites.
 
-Actual tooling results: **50 distinct tests pass across two environments**.
-The schema environment runs 47 and explicitly skips three Pillow tests. Run the
+Actual tooling results: **60 distinct tests pass across two environments**.
+The schema environment runs 57 and explicitly skips three Pillow tests. Run the
 three decoder checks with a Pillow-equipped tooling Python:
 `python3 -m unittest discover -s tools/test_data -p test_negative_media.py`.
 That separate run passes all three. Do not count skipped decoder checks as passes
@@ -134,3 +134,20 @@ The strict audit now reports that mismatch; a matching hash alone is not enough.
 Five tests cover valid control envelopes, changed bytes, valid hashes on invalid
 envelopes, incorrect locators, escaping symlinks and the actual legacy corpus.
 No source bytes, recorded hashes or claims are repaired by this audit.
+
+## Asset restore rehearsal and failure checks
+
+The unpack helper now validates declared/uncompressed sizes before decoding ZIP
+members, rejects duplicate inventories and archive symlinks, confines paths even
+when the asset root itself is a symlink, preflights existing files/parents, and
+uses exclusive file creation. It refuses changed existing assets. Ten tests cover
+success/idempotence, checksums, inventory, member sizes, path/symlink escapes,
+non-file destinations, overwrite prevention and the 250 MiB primary budget.
+Preflight is not a transaction against concurrent filesystem changes; restore into
+an idle checkout. Optional video packs are outside this helper.
+
+The actual published bundle was restored twice into a fresh temporary checkout:
+400 files (200 images + 200 thumbnails) verified each time, with all bytes and
+modification times preserved on the second run. Measured ZIP SHA-256 remains
+`00629b3cc4b832e092f206b54f15c57d438e124dfaca97b904b4c1a21d8a444b`.
+No application or database was loaded, and the distributed bundle is unchanged.
