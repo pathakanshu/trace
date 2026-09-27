@@ -25,6 +25,8 @@ import from graph.activity { now_iso }
 glob CORPUS_INCIDENT_NAME: str = "Bhote Koshi exercise corpus (generated)";
 glob CORPUS_DIR: str = "demo/datasets/bhotekoshi-2016-exercise-v1/records";
 glob EXTRACTION_METHOD: str = "exercise_corpus_import";
+# Counts per corpus incident id, filled by services/trace.jac; cleared on import.
+glob CORPUS_SCAN_CACHE: dict = {};
 # Kinds with a Trace rec type. Everything else is counted, never dropped silently.
 glob MAPPED_KINDS: list[str] = [
     "incident", "organization", "source", "claim", "person", "location",
@@ -57,6 +59,7 @@ def corpus_incident() -> Incident | None {
 def load_exercise_corpus() -> dict {
     previous = os.environ.get("JAC_TOPOLOGY_INDEX");
     os.environ["JAC_TOPOLOGY_INDEX"] = "0";
+    CORPUS_SCAN_CACHE.clear();
     try {
         return _import_corpus();
     } finally {

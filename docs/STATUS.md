@@ -45,8 +45,10 @@ Counted, not imported: 50 non-person subscriptions and the kinds without a
 node type (vote, task, contribution, contributor, facility, infrastructure,
 hazard, aid, investigation). 800 claims about non-person subjects are kept as
 source history without an About edge. No duplicate candidates for the corpus
-(pairwise over 1,150 people). Import 0.4 s, corpus dashboard 0.2 s (jac test,
-in memory). The corpus is written with Jac's topology index off (it made the
+(pairwise over 1,150 people). Import 0.4 s and corpus dashboard 0.2 s in jac
+test; on a persisted `jac start` server: import 1.4 s, corpus dashboard about
+1 s (counts cached until the next import; the first count after a restart
+takes about 3 s), demo dashboard and reset unchanged. The corpus is written with Jac's topology index off (it made the
 import quadratic); corpus lookups use a field filter so they walk real edges.
 
 ## Anshu (map, integration)
@@ -196,3 +198,4 @@ Working on: (fill in)
 
 - 08:28 codex/anshu-map-scale: corridor linework, four labels, attribution, faint district and corridor fit ready; 59 Jac tests pass; final compiler gate required before push. Miguel: add `get_bhotekoshi_corridor` to existing services.geo import in main.jac. Task 2 follows place_counts backend.
 - 08:50 main: corpus import as its own incident (load_corpus, list_incidents, get_dashboard(incident_id), search_people, place counts, capped graph). 66 tests pass; Maya demo unchanged. Also registers get_bhotekoshi_corridor in main.jac.
+- 08:55 main: corpus counts cached between requests (server corpus dashboard 3-4 s down to about 1 s); verified on a restarted persisted server that the corpus survives and Reset plus hospital update still gives one alert.

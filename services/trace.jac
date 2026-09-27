@@ -28,7 +28,7 @@ import from walkers.watch { WatchWalker, STATUS_CLAIMS }
 import from demo.seed { seed_demo, INCIDENT_NAME, PERSON_NAME, HOSPITAL_UPDATE }
 import from features.graph.services { GraphSnapshot, build_graph_snapshot }
 import from demo.corpus {
-    CORPUS_INCIDENT_NAME, unmapped_counts, read_kind
+    CORPUS_INCIDENT_NAME, CORPUS_SCAN_CACHE, unmapped_counts, read_kind
 }
 
 # The corpus has 1,150 people; the browser gets a page of them plus counts.
@@ -368,6 +368,16 @@ obj IncidentScan {
 # of its supporting media (how the demo records place).
 def _scan(incident: Incident) -> IncidentScan {
     inc_id = jid(incident);
+    # The corpus only changes on import (which clears this cache), and a full
+    # count is thousands of traversals on the persisted server, so reuse it.
+    hit = CORPUS_SCAN_CACHE.get(inc_id) if incident.name == CORPUS_INCIDENT_NAME else None;
+    if isinstance(hit, IncidentScan) {
+        cached: IncidentScan = hit;
+        return IncidentScan(people=[incident ->:Involves:->],
+            organizations=[incident ->:HasOrganization:->], media=[incident ->:Contains:->],
+            status_counts=cached.status_counts, places=cached.places, located=cached.located,
+            claim_count=cached.claim_count, totals=cached.totals);
+    }
     claims: dict = {};
     sources: dict = {};
     status_counts: dict[str, int] = {};
@@ -423,7 +433,7 @@ def _scan(incident: Incident) -> IncidentScan {
     for m in media {
         for loc in [m ->:LocatedAt:->] { location_ids[jid(loc)] = True; }
     }
-    return IncidentScan(
+    result = IncidentScan(
         people=people, organizations=organizations, media=media,
         status_counts=status_counts, places=list(places.values()),
         located=located, claim_count=len(claims),
@@ -433,6 +443,12 @@ def _scan(incident: Incident) -> IncidentScan {
             "locations": len(location_ids), "subscriptions": subscriptions
         }
     );
+    if incident.name == CORPUS_INCIDENT_NAME {
+        CORPUS_SCAN_CACHE[inc_id] = IncidentScan(status_counts=result.status_counts,
+            places=result.places, located=result.located, claim_count=result.claim_count,
+            totals=result.totals);
+    }
+    return result;
 }
 
 def _fill_counts(snap: DashboardSnapshot, incident: Incident) -> IncidentScan {
