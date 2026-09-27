@@ -59,7 +59,7 @@ kinds need an explicit application mapping; do not silently drop them.
 The older `schema-validation.json` and `validation-report.json` cover 19 limited
 checks; their zero failures do **not** mean complete contract conformance.
 The stricter supplementary `contract-audit.json` reports **15 checks passed,
-11 failed, 2 blocked**. All 8,027 primary records pass the catalog JSON Schema,
+14 failed, 2 blocked**. All 8,027 primary records pass the catalog JSON Schema,
 but 153 references reveal records before their release time. Manifest, license,
 identity/checkpoint oracle, replay and validation-report
 support shapes differ from the documented contract. The separate 26-record
@@ -68,13 +68,16 @@ control pack now passes its file checks. See each rule's measured examples; no a
 This audit leaves the catalog, stable IDs, media bundle and previous reports
 unchanged. Repair release dependencies and support contracts before building a
 complete importer/replay around this preview. Top-level shape checks do not
-exhaustively validate nested semantics. The data tools' 68 distinct tests pass across schema and Pillow environments;
+exhaustively validate nested semantics. The data tools' 74 distinct tests pass across schema and Pillow environments;
 its corpus audit intentionally exits 1 for the observed data failures.
 
 - All 1,800 original source hashes match. However, the 1,260 JSON sources use
   a legacy envelope that fails the specified raw-report shape; the 540 text
   sources preserve claim excerpts. Coordinate a versioned conversion before
   relying on the contract-shaped importer. Original source files are unchanged.
+- Community checks find 360 self-votes, 120 duplicate voting pairs, 36 task
+  submission target mismatches, missing cited review evidence and no hero person
+  with two distinct active followers. Existing snapshots are unchanged.
 - Geography is 170/1,000: the remaining 830 records require verified geographic
   inputs. The current points reuse four settlement anchors; no approved area
   polygons or historical flood boundary are supplied.
@@ -119,3 +122,8 @@ Run these after restoring media. The validator writes measured reports and hero
 fixtures; exit zero means implemented checks passed, even if geography remains
 blocked. Read the `blocked` array. Do not present a zero exit code as full corpus
 completion. Generation commands are documented in `tools/test_data/README.md`.
+
+For a concrete repair/integration handoff, read the private
+`tests/fixtures/bhotekoshi-2016-exercise-v1/REPAIR_PLAN.md` from repository root.
+Corpus-wide repair needs an explicit immutable-source/versioning decision before
+changing already distributed inputs. Keep that guidance outside application data.

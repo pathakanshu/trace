@@ -1,10 +1,10 @@
 {
   "dataset_id": "bhotekoshi-2016-exercise-v1",
-  "generated_at": "2026-09-27T09:43:50Z",
+  "generated_at": "2026-09-27T09:48:39Z",
   "tools": [
     {
       "name": "tools/test_data/audit_contracts.py",
-      "version": "1.5"
+      "version": "1.6"
     },
     {
       "name": "jsonschema",
@@ -719,6 +719,100 @@
       ]
     },
     {
+      "rule_id": "community_vote_rules",
+      "status": "fail",
+      "observed": {
+        "failure_count": 480,
+        "examples": [
+          "act-000001 -> con-000001: 2 votes for the same pair",
+          "act-000001 -> con-000081: 2 votes for the same pair",
+          "act-000002 -> con-000002: 2 votes for the same pair",
+          "act-000002 -> con-000082: 2 votes for the same pair",
+          "act-000003 -> con-000003: 2 votes for the same pair",
+          "act-000003 -> con-000083: 2 votes for the same pair",
+          "act-000004 -> con-000004: 2 votes for the same pair",
+          "act-000004 -> con-000084: 2 votes for the same pair",
+          "act-000005 -> con-000005: 2 votes for the same pair",
+          "act-000005 -> con-000085: 2 votes for the same pair",
+          "act-000006 -> con-000006: 2 votes for the same pair",
+          "act-000006 -> con-000086: 2 votes for the same pair"
+        ],
+        "votes": 360,
+        "self_votes": 360,
+        "duplicate_vote_pairs": 120,
+        "extra_votes_on_duplicate_pairs": 120,
+        "task_submission_target_mismatches": 36,
+        "max_distinct_hero_followers": 1
+      },
+      "expected": "Cross-record community constraints in record-contract.md and TEST_DATA_RULES.md",
+      "evidence_paths": [
+        "demo/datasets/bhotekoshi-2016-exercise-v1/records",
+        "demo/spec/record-contract.md"
+      ],
+      "limitations": [
+        "Validates fictional workflow inputs only; no votes, reviews or alerts were executed. Matching task/submission targets is checked; task state does not establish truth."
+      ]
+    },
+    {
+      "rule_id": "task_submission_and_review",
+      "status": "fail",
+      "observed": {
+        "failure_count": 59,
+        "examples": [
+          "tsk-000061: submission target differs: con-000061",
+          "tsk-000062: submission target differs: con-000062",
+          "tsk-000063: submission target differs: con-000063",
+          "tsk-000064: submission target differs: con-000064",
+          "tsk-000065: submission target differs: con-000065",
+          "tsk-000066: submission target differs: con-000066",
+          "tsk-000067: submission target differs: con-000067",
+          "tsk-000068: submission target differs: con-000068",
+          "tsk-000069: submission target differs: con-000069",
+          "tsk-000070: submission target differs: con-000070",
+          "tsk-000071: submission target differs: con-000071",
+          "tsk-000072: submission target differs: con-000072"
+        ],
+        "votes": 360,
+        "self_votes": 360,
+        "duplicate_vote_pairs": 120,
+        "extra_votes_on_duplicate_pairs": 120,
+        "task_submission_target_mismatches": 36,
+        "max_distinct_hero_followers": 1
+      },
+      "expected": "Cross-record community constraints in record-contract.md and TEST_DATA_RULES.md",
+      "evidence_paths": [
+        "demo/datasets/bhotekoshi-2016-exercise-v1/records",
+        "demo/spec/record-contract.md"
+      ],
+      "limitations": [
+        "Validates fictional workflow inputs only; no votes, reviews or alerts were executed. Matching task/submission targets is checked; task state does not establish truth."
+      ]
+    },
+    {
+      "rule_id": "subscription_coverage_and_uniqueness",
+      "status": "fail",
+      "observed": {
+        "failure_count": 1,
+        "examples": [
+          "No hero Person has two distinct active followers"
+        ],
+        "votes": 360,
+        "self_votes": 360,
+        "duplicate_vote_pairs": 120,
+        "extra_votes_on_duplicate_pairs": 120,
+        "task_submission_target_mismatches": 36,
+        "max_distinct_hero_followers": 1
+      },
+      "expected": "Cross-record community constraints in record-contract.md and TEST_DATA_RULES.md",
+      "evidence_paths": [
+        "demo/datasets/bhotekoshi-2016-exercise-v1/records",
+        "demo/spec/record-contract.md"
+      ],
+      "limitations": [
+        "Validates fictional workflow inputs only; no votes, reviews or alerts were executed. Matching task/submission targets is checked; task state does not establish truth."
+      ]
+    },
+    {
       "rule_id": "control_pack",
       "status": "pass",
       "observed": {
@@ -764,7 +858,7 @@
   ],
   "summary": {
     "pass": 15,
-    "fail": 11,
+    "fail": 14,
     "blocked": 2
   }
 }

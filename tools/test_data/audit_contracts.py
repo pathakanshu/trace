@@ -269,6 +269,19 @@ def run_audit(root):
         [rel(hero_path), rel(data / "records")], ["Scenario IDs select planned focal records; this does not validate all story semantics, replay execution or runtime import."])
     checks[-1]["observed"]["counts"] = profile_counts
 
+    from audit_community import community_errors
+    try:
+        hero_person_ids = json.loads((fixtures / "allocation-plan.json").read_text())["hero_person_ids"]
+        community_findings, community_counts = community_errors(records, hero_person_ids)
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        community_findings = {key: [str(error).replace(str(root), "<repo>")] for key in
+            ("community_vote_rules", "task_submission_and_review", "subscription_coverage_and_uniqueness")}
+        community_counts = {}
+    for rule, errors in community_findings.items():
+        add(rule, errors, "Cross-record community constraints in record-contract.md and TEST_DATA_RULES.md",
+            [rel(data / "records"), "demo/spec/record-contract.md"], ["Validates fictional workflow inputs only; no votes, reviews or alerts were executed. Matching task/submission targets is checked; task state does not establish truth."])
+        checks[-1]["observed"].update(community_counts)
+
     control_path = fixtures / "control/records.jsonl"
     control_errors = []
     expected_controls = json.loads((root / "demo/spec/quotas.json").read_text())["control_pack_excluded_from_primary"]
@@ -329,7 +342,7 @@ def run_audit(root):
     summary = dict(Counter(check["status"] for check in checks))
     summary = {status: summary.get(status, 0) for status in ("pass", "fail", "blocked")}
     return {"dataset_id": DATASET, "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "tools": [{"name": "tools/test_data/audit_contracts.py", "version": "1.5"}, {"name": "jsonschema", "version": version("jsonschema")}],
+            "tools": [{"name": "tools/test_data/audit_contracts.py", "version": "1.6"}, {"name": "jsonschema", "version": version("jsonschema")}],
             "checks": checks, "summary": summary}
 
 

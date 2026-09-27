@@ -42,7 +42,7 @@ it does not fall back to a stale schema report when jsonschema is unavailable.
 
 Run its own offline checks with:
 `python3 -m unittest discover -s tools/test_data -p test_contract_audit.py`.
-The current corpus audit has 15 pass / 11 fail / 2 blocked; failures are intentional
+The current corpus audit has 15 pass / 14 fail / 2 blocked; failures are intentional
 findings in the partial dataset, not successful runtime behavior.
 
 ## Isolated control pack
@@ -116,8 +116,8 @@ cases use analysis without publishing: hostile text stays source data. None of
 these eight runtime cases has run; no agent response or success is prefilled.
 No nonexistent replay-action IDs are used as prerequisites.
 
-Actual tooling results: **68 distinct tests pass across two environments**.
-The schema environment runs 65 and explicitly skips three Pillow tests. Run the
+Actual tooling results: **74 distinct tests pass across two environments**.
+The schema environment runs 71 and explicitly skips three Pillow tests. Run the
 three decoder checks with a Pillow-equipped tooling Python:
 `python3 -m unittest discover -s tools/test_data -p test_negative_media.py`.
 That separate run passes all three. Do not count skipped decoder checks as passes
@@ -173,3 +173,16 @@ This fixes reference closure only. The twelve named story plans still require
 semantic repair and executable actions: for example, the shelter story points to
 a treatment facility, and the correction/translation stories point to comments.
 The manifest's scenario IDs are planned coverage, never proof of story execution.
+
+## Community semantics and repair handoff
+
+The supplementary audit now checks self/duplicate votes, task/submission targets,
+review evidence/times, and subscription uniqueness/coverage. Actual defects are
+360 self-votes, 120 duplicate voting pairs, 36 task target mismatches and no hero
+Person with two distinct active followers. Six tests include valid counterexamples,
+independent failure modes and the actual partial-corpus characterization.
+No community records, votes, reviews or subscriptions are mutated by this audit.
+
+`tests/fixtures/bhotekoshi-2016-exercise-v1/REPAIR_PLAN.md` gives measured defects,
+reusable artifacts, immutable-source/versioning decisions and the integration
+sequence for the app owner. It is private developer guidance, never app input.
