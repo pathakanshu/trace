@@ -225,6 +225,13 @@ def run_audit(root):
     add("raw_source_envelopes", envelope_errors, "Structured envelopes match the documented closed shape, publisher, entries and excerpts; plain text preserves excerpts",
         [rel(data / "raw/reports"), rel(data / "records/claim")], ["No extraction model or application importer was invoked."])
 
+    from audit_provenance import provenance_errors
+    provenance_findings, provenance_counts = provenance_errors(records)
+    add("publication_scope_and_lineage_dags", provenance_findings, "Unique scoped publication references, correct publisher types/disclosures, acyclic source and correction links",
+        [rel(data / "records/source"), rel(data / "records/claim"), rel(data / "records/organization")],
+        ["Declared lineage only, not independent corroboration or executed ingestion/retry/correction behavior. Zero correction links cannot establish correction-story coverage."])
+    checks[-1]["observed"].update(provenance_counts)
+
     checkpoint_errors, rumor_errors, measured_checkpoints = [], [], []
     identity_path = fixtures / "oracle/identities.jsonl"
     try:
@@ -414,7 +421,7 @@ def run_audit(root):
     summary = dict(Counter(check["status"] for check in checks))
     summary = {status: summary.get(status, 0) for status in ("pass", "fail", "blocked")}
     return {"dataset_id": DATASET, "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "tools": [{"name": "tools/test_data/audit_contracts.py", "version": "1.13"}, {"name": "jsonschema", "version": version("jsonschema")}],
+            "tools": [{"name": "tools/test_data/audit_contracts.py", "version": "1.14"}, {"name": "jsonschema", "version": version("jsonschema")}],
             "checks": checks, "summary": summary}
 
 

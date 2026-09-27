@@ -1,10 +1,10 @@
 {
   "dataset_id": "bhotekoshi-2016-exercise-v1",
-  "generated_at": "2026-09-27T10:46:27Z",
+  "generated_at": "2026-09-27T10:50:40Z",
   "tools": [
     {
       "name": "tools/test_data/audit_contracts.py",
-      "version": "1.13"
+      "version": "1.14"
     },
     {
       "name": "jsonschema",
@@ -895,6 +895,27 @@
       ]
     },
     {
+      "rule_id": "publication_scope_and_lineage_dags",
+      "status": "pass",
+      "observed": {
+        "failure_count": 0,
+        "examples": [],
+        "sources_checked": 1800,
+        "unique_publication_scopes": 1800,
+        "declared_dependency_edges": 450,
+        "claim_correction_edges": 0
+      },
+      "expected": "Unique scoped publication references, correct publisher types/disclosures, acyclic source and correction links",
+      "evidence_paths": [
+        "demo/datasets/bhotekoshi-2016-exercise-v1/records/source",
+        "demo/datasets/bhotekoshi-2016-exercise-v1/records/claim",
+        "demo/datasets/bhotekoshi-2016-exercise-v1/records/organization"
+      ],
+      "limitations": [
+        "Declared lineage only, not independent corroboration or executed ingestion/retry/correction behavior. Zero correction links cannot establish correction-story coverage."
+      ]
+    },
+    {
       "rule_id": "fixture_checkpoint_recomputation",
       "status": "fail",
       "observed": {
@@ -1401,7 +1422,7 @@
     }
   ],
   "summary": {
-    "pass": 21,
+    "pass": 22,
     "fail": 16,
     "blocked": 2
   }

@@ -43,7 +43,7 @@ it does not fall back to a stale schema report when jsonschema is unavailable.
 
 Run its own offline checks with:
 `python3 -m unittest discover -s tools/test_data -p test_contract_audit.py`.
-The current corpus audit has 21 pass / 16 fail / 2 blocked; failures are intentional
+The current corpus audit has 22 pass / 16 fail / 2 blocked; failures are intentional
 findings in the partial dataset, not successful runtime behavior.
 
 ## Isolated control pack
@@ -117,8 +117,8 @@ cases use analysis without publishing: hostile text stays source data. None of
 these eight runtime cases has run; no agent response or success is prefilled.
 No nonexistent replay-action IDs are used as prerequisites.
 
-Actual tooling results: **137 distinct tests pass across two environments**.
-The schema environment runs 122 and explicitly skips fifteen Pillow tests. Run the
+Actual tooling results: **145 distinct tests pass across two environments**.
+The schema environment runs 130 and explicitly skips fifteen Pillow tests. Run the
 fifteen media checks with a Pillow-equipped tooling Python:
 `python3 -m unittest discover -s tools/test_data -p '*media*.py'`.
 That separate run passes all fifteen. Do not count skipped decoder checks as passes
@@ -330,3 +330,14 @@ counts and boundary cases. No private targets or cached reports supply counts.
 These counts do not imply correct voting, translation quality, source
 independence, geographic placement or story semantics. No-dependency declarations
 are counted for fixture coverage, never treated as independent corroboration.
+
+## Publication scopes and lineage DAGs
+
+All 1,800 publication references are unique within their incident/typed-publisher
+scope; publisher types and dependency disclosures agree. All 450 declared source
+lineage edges form a DAG. Topological checking does not assume numeric ID order
+means chronology. Claim correction edges are also checked, but the current
+corpus has zero such edges; that pass does not supply correction-story coverage.
+Eight tests cover cycles/self-links/duplicates/missing endpoints, long chains,
+scoped reference reuse, publisher types, disclosures and input preservation.
+This is fixture validation, not runtime retry/ingestion or independent-source proof.
