@@ -65,6 +65,11 @@ og_title = "Trace"
 og_description = "One incident. Every trace."
 og_site_name = "Trace"
 [scale]
+# Deploys are public, and the admin portal would otherwise ship with a
+# default password. Trace does not use it.
+[scale.admin]
+enabled = false
+
 [scale.microservices]
 enabled = false
 
