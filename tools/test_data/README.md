@@ -43,7 +43,7 @@ it does not fall back to a stale schema report when jsonschema is unavailable.
 
 Run its own offline checks with:
 `python3 -m unittest discover -s tools/test_data -p test_contract_audit.py`.
-The current corpus audit has 20 pass / 15 fail / 2 blocked; failures are intentional
+The current corpus audit has 21 pass / 15 fail / 2 blocked; failures are intentional
 findings in the partial dataset, not successful runtime behavior.
 
 ## Isolated control pack
@@ -117,8 +117,8 @@ cases use analysis without publishing: hostile text stays source data. None of
 these eight runtime cases has run; no agent response or success is prefilled.
 No nonexistent replay-action IDs are used as prerequisites.
 
-Actual tooling results: **119 distinct tests pass across two environments**.
-The schema environment runs 108 and explicitly skips eleven Pillow tests. Run the
+Actual tooling results: **125 distinct tests pass across two environments**.
+The schema environment runs 114 and explicitly skips eleven Pillow tests. Run the
 eleven media checks with a Pillow-equipped tooling Python:
 `python3 -m unittest discover -s tools/test_data -p '*media*.py'`.
 That separate run passes all eleven. Do not count skipped decoder checks as passes
@@ -282,3 +282,26 @@ river segments. These are archive-consistency checks. They do not establish
 2016 geography, a historical flood boundary, country/district geofencing, terrain
 suitability or approved inhabited sampling zones; geographic completion stays
 blocked at 170/1,000. Declared country metadata agreement is not a boundary test.
+
+## Public input boundary
+
+The strict audit scans all 8,027 catalog records and 1,800 original reports for
+private identity/family labels, evaluator IDs and prefilled runtime-result fields.
+All 400 media/thumbnail paths stay inside the public asset directory; source
+paths stay inside raw/reports. Traversal and symlink escapes into private fixtures
+are rejected before a file is read. No private oracle files are opened by this
+check. Six tests cover nested markers, actual inputs, confined paths, symlinks,
+byte preservation and treating hostile instructions as inert source text.
+
+This is a static fixture audit, not an application authorization, prompt-injection
+or retrieval-isolation test. It detects the enumerated marker fields, not every
+possible encoded disclosure. Actual importer/model boundaries remain untested.
+
+## Clean-clone handoff rehearsal
+
+A fresh shallow clone from origin/codex/test-data at b77e59d, with a fresh GitHub
+release download, passed all 119 then-current tests. Both fresh audits reproduced
+the published checks exactly (excluding run timestamps): contract 20/15/2 and
+media 10/0/1. Bundle restore verified all 400 files and the documented SHA-256;
+tracked files stayed clean and no .jac runtime store was created. This was a
+fresh checkout on the same laptop, not a second-laptop application rehearsal.

@@ -1,10 +1,10 @@
 {
   "dataset_id": "bhotekoshi-2016-exercise-v1",
-  "generated_at": "2026-09-27T10:24:26Z",
+  "generated_at": "2026-09-27T10:36:20Z",
   "tools": [
     {
       "name": "tools/test_data/audit_contracts.py",
-      "version": "1.11"
+      "version": "1.12"
     },
     {
       "name": "jsonschema",
@@ -430,6 +430,26 @@
       ],
       "limitations": [
         "Actual media creation time is deliberately not compared with the fictional exercise clock."
+      ]
+    },
+    {
+      "rule_id": "public_input_private_oracle_boundary",
+      "status": "pass",
+      "observed": {
+        "failure_count": 0,
+        "examples": [],
+        "catalog_records_checked": 8027,
+        "raw_sources_read": 1800,
+        "confined_media_paths": 400,
+        "private_oracle_files_read": 0
+      },
+      "expected": "Delivered catalog/raw inputs contain no private oracle fields/IDs and reference only approved raw/asset directories",
+      "evidence_paths": [
+        "demo/datasets/bhotekoshi-2016-exercise-v1/records",
+        "demo/datasets/bhotekoshi-2016-exercise-v1/raw/reports"
+      ],
+      "limitations": [
+        "Static fixture-content/path check only. Does not validate application serving, retrieval/prompt isolation or injection resistance. Media byte validity is checked separately."
       ]
     },
     {
@@ -986,7 +1006,7 @@
     }
   ],
   "summary": {
-    "pass": 20,
+    "pass": 21,
     "fail": 15,
     "blocked": 2
   }

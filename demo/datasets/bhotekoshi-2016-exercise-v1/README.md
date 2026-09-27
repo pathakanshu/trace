@@ -58,7 +58,7 @@ kinds need an explicit application mapping; do not silently drop them.
 
 The older `schema-validation.json` and `validation-report.json` cover 19 limited
 checks; their zero failures do **not** mean complete contract conformance.
-The stricter supplementary `contract-audit.json` reports **20 checks passed,
+The stricter supplementary `contract-audit.json` reports **21 checks passed,
 15 failed, 2 blocked**. All 8,027 primary records pass the catalog JSON Schema,
 but 153 references reveal records before their release time. Manifest, license,
 checkpoint oracle, replay and validation-report
@@ -75,7 +75,7 @@ verification; these file checks do not prove crop matching or caption truth.
 This audit leaves the catalog, stable IDs, media bundle and previous reports
 unchanged. Repair release dependencies and support contracts before building a
 complete importer/replay around this preview. Top-level shape checks do not
-exhaustively validate nested semantics. The data tools' 119 distinct tests pass across schema and Pillow environments;
+exhaustively validate nested semantics. The data tools' 125 distinct tests pass across schema and Pillow environments;
 its corpus audit intentionally exits 1 for the observed data failures.
 
 - All 1,800 original source hashes match. However, the 1,260 JSON sources use
@@ -148,3 +148,7 @@ For a concrete repair/integration handoff, read the private
 `tests/fixtures/bhotekoshi-2016-exercise-v1/REPAIR_PLAN.md` from repository root.
 Corpus-wide repair needs an explicit immutable-source/versioning decision before
 changing already distributed inputs. Keep that guidance outside application data.
+
+The static public/private-boundary check passes for 8,027 catalog rows, 1,800
+raw inputs and 400 confined asset paths. It reads no private oracle files. This
+does not establish application retrieval isolation or prompt-injection resistance.

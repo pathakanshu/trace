@@ -204,6 +204,13 @@ def run_audit(root):
     add("catalog_release_closure", future, "A record never reveals a referenced record before its available_at", [rel(data / "records")])
     add("catalog_lifecycle_times", lifecycle_errors(records), "Workflow/report times respect release and publication cutoffs", [rel(data / "records")], ["Actual media creation time is deliberately not compared with the fictional exercise clock."])
 
+    from audit_public_inputs import audit_public_inputs
+    input_errors, input_counts = audit_public_inputs(root, records, DATASET)
+    add("public_input_private_oracle_boundary", input_errors, "Delivered catalog/raw inputs contain no private oracle fields/IDs and reference only approved raw/asset directories",
+        [rel(data / "records"), rel(data / "raw/reports")],
+        ["Static fixture-content/path check only. Does not validate application serving, retrieval/prompt isolation or injection resistance. Media byte validity is checked separately."])
+    checks[-1]["observed"].update(input_counts)
+
     from audit_sources import audit_sources
     raw_errors, envelope_errors, source_counts = audit_sources(root, records, DATASET)
     add("raw_source_integrity", raw_errors, "Original source bytes have correct SHA-256, UTF-8 and confined per-source paths",
@@ -401,7 +408,7 @@ def run_audit(root):
     summary = dict(Counter(check["status"] for check in checks))
     summary = {status: summary.get(status, 0) for status in ("pass", "fail", "blocked")}
     return {"dataset_id": DATASET, "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "tools": [{"name": "tools/test_data/audit_contracts.py", "version": "1.11"}, {"name": "jsonschema", "version": version("jsonschema")}],
+            "tools": [{"name": "tools/test_data/audit_contracts.py", "version": "1.12"}, {"name": "jsonschema", "version": version("jsonschema")}],
             "checks": checks, "summary": summary}
 
 
