@@ -39,8 +39,10 @@ and asset restore 4039c8d are pushed. Next: `tools/test_data/generate_hero.py`,
 hero tests, `validate_dataset.py` hero-export hookup, strict audit and READMEs.
 Hero closure is missing its incident and two referenced locations; repair the
 private selection from unchanged public records, preserving all primary bytes.
-Scenario names/focal references also need a separate semantic audit; do not
-claim all twelve stories are executable merely because their IDs are listed.
+Next semantic checks: `tools/test_data/audit_community.py` and tests, strict
+audit/report, and private fixture `REPAIR_PLAN.md`. Scenario focal refs and
+community vote/task/subscription invariants need measured checks. Do not claim
+all twelve stories are executable merely because their IDs are listed.
 
 App handoff: all four overnight tasks complete; draft PR #4 ready:
 https://github.com/pathakanshu/trace/pull/4 (branch `codex/anshu-night`).
