@@ -1,6 +1,6 @@
 {
   "dataset_id": "bhotekoshi-2016-exercise-v1",
-  "generated_at": "2026-09-27T09:04:47Z",
+  "generated_at": "2026-09-27T09:11:45Z",
   "tools": [
     {
       "name": "tools/test_data/audit_contracts.py",
@@ -473,12 +473,10 @@
     },
     {
       "rule_id": "control_pack",
-      "status": "fail",
+      "status": "pass",
       "observed": {
-        "failure_count": 1,
-        "examples": [
-          "[Errno 2] No such file or directory: '<repo>/tests/fixtures/bhotekoshi-2016-exercise-v1/control/records.jsonl'"
-        ]
+        "failure_count": 0,
+        "examples": []
       },
       "expected": {
         "incident": 2,
@@ -518,8 +516,8 @@
     }
   ],
   "summary": {
-    "pass": 8,
-    "fail": 11,
+    "pass": 9,
+    "fail": 10,
     "blocked": 2
   }
 }

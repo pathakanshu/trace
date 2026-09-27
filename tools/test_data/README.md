@@ -42,5 +42,20 @@ it does not fall back to a stale schema report when jsonschema is unavailable.
 
 Run its own offline checks with:
 `python3 -m unittest discover -s tools/test_data -p test_contract_audit.py`.
-The current corpus audit has 8 pass / 11 fail / 2 blocked; failures are intentional
+The current corpus audit has 9 pass / 10 fail / 2 blocked; failures are intentional
 findings in the partial dataset, not successful runtime behavior.
+
+## Isolated control pack
+
+`python3 tools/test_data/generate_controls.py` creates only the 26 control records
+and their two original source documents. It never regenerates primary records or
+assets. IDs are reserved from 900001; names/reference text deliberately collide
+across incident/publisher scopes. The generator preflights every destination,
+refuses differing existing content or escaping paths, and leaves identical files
+untouched. There is no runtime import or reset call.
+
+Run all 18 tooling checks with
+`python3 -m unittest discover -s tools/test_data -p 'test_*.py'`.
+The tests include saved-source tampering, malformed control rows, exact schema
+and counts, reference/release isolation, raw hash/excerpt checks, collision scopes,
+idempotent generation and refusal to overwrite different files or escape root.

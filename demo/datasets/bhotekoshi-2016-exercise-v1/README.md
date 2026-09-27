@@ -29,7 +29,8 @@ the contact sheet. Binary images are intentionally excluded from Git.
   records for 1,000 fictional individuals, 32 organizations, 1,800 sources,
   3,600 claims, 200 media records and 170 locations. See `manifest.json` for all
   counts, shard hashes and asset paths.
-- `raw/reports/`: 1,800 original fictional source documents.
+- `raw/reports/`: 1,800 primary fictional source documents plus two separate
+  control reports (`src-900001.json`, `src-900002.json`).
 - `context/`: cited historical context, verified current OSM geography and the
   archived geographic input. Current mapping is not a 2016 flood boundary.
 - `../../../tests/fixtures/bhotekoshi-2016-exercise-v1/hero/`: the 50-individual
@@ -52,22 +53,25 @@ kinds need an explicit application mapping; do not silently drop them.
 
 The older `schema-validation.json` and `validation-report.json` cover 19 limited
 checks; their zero failures do **not** mean complete contract conformance.
-The stricter supplementary `contract-audit.json` reports **8 checks passed,
-11 failed, 2 blocked**. All 8,027 primary records pass the catalog JSON Schema,
+The stricter supplementary `contract-audit.json` reports **9 checks passed,
+10 failed, 2 blocked**. All 8,027 primary records pass the catalog JSON Schema,
 but 153 references reveal records before their release time. Manifest, license,
 identity/checkpoint oracle, replay, query, negative-input and validation-report
-support shapes differ from the documented contract. The required control pack
-is absent. See each rule's measured examples; no application replay was run.
+support shapes differ from the documented contract. The separate 26-record
+control pack now passes its file checks. See each rule's measured examples; no application replay was run.
 
 This audit leaves the catalog, stable IDs, media bundle and previous reports
 unchanged. Repair release dependencies and support contracts before building a
 complete importer/replay around this preview. Top-level shape checks do not
-exhaustively validate nested semantics. The audit tool's ten unit tests pass;
+exhaustively validate nested semantics. The audit/control tools' 18 unit tests pass;
 its corpus audit intentionally exits 1 for the observed data failures.
 
 - Geography is 170/1,000: the remaining 830 records require verified geographic
   inputs. The current points reuse four settlement anchors; no approved area
   polygons or historical flood boundary are supplied.
+- The control pack is under `tests/fixtures/bhotekoshi-2016-exercise-v1/control/`.
+  Its two incidents and ten people are outside the primary counts; runtime
+  isolation/reset still requires a compatible importer.
 - Query and invalid-input files currently contain planning placeholders. They
   are not a finished evaluation suite; expected query evidence is unpopulated.
 - Checkpoint oracle rows are specified targets, not executed observations.

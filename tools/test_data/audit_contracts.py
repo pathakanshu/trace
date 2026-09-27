@@ -144,6 +144,7 @@ def lifecycle_errors(records):
 
 
 def run_audit(root):
+    root = root.resolve()
     data = root / "demo/datasets" / DATASET
     fixtures = root / "tests/fixtures" / DATASET
     checks = []
@@ -207,15 +208,44 @@ def run_audit(root):
     expected_controls = json.loads((root / "demo/spec/quotas.json").read_text())["control_pack_excluded_from_primary"]
     try:
         control_rows = read_jsonl(control_path)
-        actual = dict(Counter(row.get("kind") for row in control_rows))
+        actual = dict(Counter(row.get("kind") for row in control_rows if isinstance(row, dict)))
         if actual != expected_controls:
             control_errors.append(f"counts {actual} != {expected_controls}")
+        valid_controls = []
         for row in control_rows:
             if not validator.is_valid(row):
                 control_errors.append("control record fails catalog schema")
-            control_id = str(row.get("id", ""))
+                continue
+            valid_controls.append(row)
+            control_id = row["id"]
             if not ID_PATTERN.fullmatch(control_id) or not 900001 <= int(control_id[-6:]) <= 999999:
                 control_errors.append("control ID is outside the reserved range")
+        if len(valid_controls) == len(control_rows):
+            control_ids = Counter(row["id"] for row in valid_controls)
+            control_errors.extend("duplicate control ID: " + ident for ident, count in control_ids.items() if count > 1)
+            missing_control, cross_control, future_control = reference_errors(valid_controls)
+            control_errors.extend(missing_control + cross_control + future_control + lifecycle_errors(valid_controls))
+            for source in [row for row in valid_controls if row["kind"] == "source"]:
+                raw_path = root / source["raw_path"]
+                if not raw_path.resolve().is_relative_to(root):
+                    control_errors.append(source["id"] + " raw path escapes repository")
+                    continue
+                raw_bytes = raw_path.read_bytes()
+                if hashlib.sha256(raw_bytes).hexdigest() != source["raw_sha256"]:
+                    control_errors.append(source["id"] + " raw source hash mismatch")
+                raw = json.loads(raw_bytes)
+                control_errors.extend(source["id"] + ": " + issue for issue in shape_errors(raw,
+                    "schema_version source_id report_reference publisher original_language published_time_text original_content entries"))
+                claims = [row for row in valid_controls if row["kind"] == "claim" and row["source_id"] == source["id"]]
+                if len(claims) != 5:
+                    control_errors.append(source["id"] + " must assert exactly five control claims")
+                if isinstance(raw, dict):
+                    if raw.get("publisher") != source["publisher"] or raw.get("source_id") != source["id"]:
+                        control_errors.append(source["id"] + " raw publisher/source mismatch")
+                    text = raw.get("original_content")
+                    for claim in claims:
+                        if not isinstance(text, str) or claim["provenance"]["original_excerpt"] not in text:
+                            control_errors.append(claim["id"] + " excerpt absent from original control source")
     except (OSError, ValueError) as error:
         control_errors.append(str(error).replace(str(root), "<repo>"))
     add("control_pack", control_errors, expected_controls, [rel(control_path)])
