@@ -1,0 +1,15 @@
+{
+  "fictional_exercise_record": true,
+  "source_id": "src-001231",
+  "title": "Exercise report 1231",
+  "claims": [
+    {
+      "claim_id": "clm-001561",
+      "excerpt": "Synthetic family-liaison note reports contact with Pema Sherpa and says no immediate help was requested."
+    },
+    {
+      "claim_id": "clm-001562",
+      "excerpt": "A fictional response-desk entry says Ramesh Ghale checked in safely; this report alone does not resolve identity."
+    }
+  ]
+}

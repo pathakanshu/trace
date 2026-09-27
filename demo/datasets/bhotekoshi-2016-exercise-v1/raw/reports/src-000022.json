@@ -1,0 +1,15 @@
+{
+  "fictional_exercise_record": true,
+  "source_id": "src-000022",
+  "title": "Exercise report 0022",
+  "claims": [
+    {
+      "claim_id": "clm-000045",
+      "excerpt": "Fictional family-liaison intake lists Kiran Poudel as not yet contacted; the time of last contact was not supplied."
+    },
+    {
+      "claim_id": "clm-000047",
+      "excerpt": "The synthetic intake ledger keeps an open contact request for Prakash Magar; this is not a historical case or identity finding."
+    }
+  ]
+}

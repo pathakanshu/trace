@@ -1,0 +1,15 @@
+{
+  "fictional_exercise_record": true,
+  "source_id": "src-000011",
+  "title": "Exercise report 0011",
+  "claims": [
+    {
+      "claim_id": "clm-000021",
+      "excerpt": "Fictional family-liaison intake lists Manisha Rai as not yet contacted; the time of last contact was not supplied."
+    },
+    {
+      "claim_id": "clm-000022",
+      "excerpt": "An exercise volunteer relay says relatives have not checked in with Anil Rai. No outcome is reported."
+    }
+  ]
+}

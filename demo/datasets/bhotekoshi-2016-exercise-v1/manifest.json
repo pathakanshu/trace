@@ -1,0 +1,2576 @@
+{
+  "dataset_id": "bhotekoshi-2016-exercise-v1",
+  "schema_version": "1.0",
+  "created_at": "2026-09-27T03:08:40-04:00",
+  "seed": 20160705,
+  "fictional_content_notice": "People, organizations, reports, media captions, and response activity are fictional. The 1,000-person workload is an exercise scale, not a historical missing-person count.",
+  "record_counts": {
+    "organization": 32,
+    "vote": 360,
+    "person": 1150,
+    "location": 170,
+    "source": 1800,
+    "investigation": 24,
+    "subscription": 150,
+    "facility": 36,
+    "contributor": 80,
+    "task": 96,
+    "contribution": 240,
+    "incident": 1,
+    "infrastructure": 30,
+    "hazard": 18,
+    "aid": 40,
+    "claim": 3600,
+    "media": 200
+  },
+  "record_shards": [
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/aid/part-0001.jsonl",
+      "sha256": "e0039d43ca5db6bda2ad48a10a83099a36a71ac2782ff0640d1e665d3edda777",
+      "byte_size": 11768,
+      "records": 40
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/claim/part-0001.jsonl",
+      "sha256": "68ffd44046e01a81bb4bc6b7bd55e1119a037a76d6b5f59b1700db0b42fc1f98",
+      "byte_size": 97454,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/claim/part-0002.jsonl",
+      "sha256": "ae5e144def39e1184cefe9e239772412c53261cf7a7183b4c04515156124f5c7",
+      "byte_size": 97090,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/claim/part-0003.jsonl",
+      "sha256": "66af4b53d12bb5f52bf312de5c7f06c1e96975d3ed696f1d8418f91d55745e52",
+      "byte_size": 97072,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/claim/part-0004.jsonl",
+      "sha256": "2f903e008cfeef8e9449ad309c0f813deb00b38daaae3ed1c9ed885a965a31f6",
+      "byte_size": 97086,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/claim/part-0005.jsonl",
+      "sha256": "9bfd248e56e7b9fb80dcfa9c91ee51bb1aa2b9b0e70f0994bd7b50e1ad1760a6",
+      "byte_size": 97080,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/claim/part-0006.jsonl",
+      "sha256": "5daebc014c1fffefd12f8ce8c94b61991d12978be257e8876a051fe8e8933fa6",
+      "byte_size": 97086,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/claim/part-0007.jsonl",
+      "sha256": "1659e0f37c9d10b59c328455e967e709d3bd6815de37812f4b63babb21afeb8c",
+      "byte_size": 97072,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/claim/part-0008.jsonl",
+      "sha256": "72eb8e56e981aa3e3bfb012d30bac9f6fbd446352b7d98d14df848e869a20e0d",
+      "byte_size": 97074,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/claim/part-0009.jsonl",
+      "sha256": "503d34c5fcb22afd4c85b04319eae336da289ef7f8335b7e7fa5ea94b46c4aa3",
+      "byte_size": 97036,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/claim/part-0010.jsonl",
+      "sha256": "d21bb9cd1eba51797d0bb461aa241a20a53e8104b2d53a17f645b2013ee9fc14",
+      "byte_size": 96686,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/claim/part-0011.jsonl",
+      "sha256": "9ecf5e073efae53986c23052504d46a649fcdea1a2f043ffa4e1856e34d2116d",
+      "byte_size": 96690,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/claim/part-0012.jsonl",
+      "sha256": "23036be5e4f0055f17c33df452cc0b7e77633b07b2c734cbe60d165af5c3b8b2",
+      "byte_size": 99210,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/claim/part-0013.jsonl",
+      "sha256": "0cf3e3a1768478d971aa0e648ca4a9a4ccd5ca4e7117bbb8ceb5a3a2228fb063",
+      "byte_size": 103750,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/claim/part-0014.jsonl",
+      "sha256": "54a8fee1fca1b48a3fcee02192c4728cd4f229306d8d99a01f726dd547243164",
+      "byte_size": 97652,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/claim/part-0015.jsonl",
+      "sha256": "665f5a695da2edea9cf670b5c1c9472a1e103abbfad204cb5cf9f1b8715067b5",
+      "byte_size": 91932,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/claim/part-0016.jsonl",
+      "sha256": "42f0352ec8b6c49fc86f2ceabfa58ed708bff27ff0911e4cb4257207a84a8e4b",
+      "byte_size": 96580,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/claim/part-0017.jsonl",
+      "sha256": "f54a01a60e4dfc3055761f8945c41511e3cb6c6e72c382b61f45033e3e69e103",
+      "byte_size": 95530,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/claim/part-0018.jsonl",
+      "sha256": "e6ff686dc44760d5fe34153876e702ebdf3d13c0de49d21894af7397cdec84df",
+      "byte_size": 96821,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/claim/part-0019.jsonl",
+      "sha256": "a2676bf5ef3d902cdf0d98cadb55e07ccdfc553b19ee22e4deb3ce24caf11ff7",
+      "byte_size": 95528,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/claim/part-0020.jsonl",
+      "sha256": "1229b211687ca542b3529f388b942261e608c47673bef727cd22230ddba9a513",
+      "byte_size": 93371,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/claim/part-0021.jsonl",
+      "sha256": "a053d1152ee6bab89496687f5aefb715174e79728d3ad484a952b8746d997e85",
+      "byte_size": 93026,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/claim/part-0022.jsonl",
+      "sha256": "da318237a3907e51992d1c1e4bffeaf5c53e5b6c7756d8b605bebffdaf8ca542",
+      "byte_size": 98196,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/claim/part-0023.jsonl",
+      "sha256": "838d3b0b4a3ad33b5283da15b92974e8ed7c0087ffe3f85d24e1a47f85bef742",
+      "byte_size": 98162,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/claim/part-0024.jsonl",
+      "sha256": "0f6ba3a90b7ea592dcddda745a55316f47ff1186d5cadb06e9f3e5578d919625",
+      "byte_size": 98182,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/claim/part-0025.jsonl",
+      "sha256": "ebaffafc9adea6b6278035930860fb56cfc890127e2003f6c4fbd02ad6b3c41f",
+      "byte_size": 97762,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/claim/part-0026.jsonl",
+      "sha256": "70412d38fb199713d7d1e429ba54578657578121f213618b0c2a400011f7b7d6",
+      "byte_size": 96968,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/claim/part-0027.jsonl",
+      "sha256": "b40693bed7a8b908f5ece5ae105ffdb1e374f820d656399561ed21863664076e",
+      "byte_size": 96988,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/claim/part-0028.jsonl",
+      "sha256": "61a81f59f5bba35db5f2545a94c442e45ae3974915a609ad44527710c15e55e3",
+      "byte_size": 97028,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/claim/part-0029.jsonl",
+      "sha256": "3e29a9c4acd4b3d15e3a477785bd7017d06d5ef7d5497aea9d858f3d2693c439",
+      "byte_size": 95636,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/claim/part-0030.jsonl",
+      "sha256": "5dd2261cf9a509ca4689469615a22481f0115b1c6d436d29bb8312faaa110e73",
+      "byte_size": 98435,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/claim/part-0031.jsonl",
+      "sha256": "f19b4e82102961764cadb777611265a6976e36767d16c1ded7b7af88afd28f29",
+      "byte_size": 100938,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/claim/part-0032.jsonl",
+      "sha256": "adbb49222704cda26c6d02b6c702d1aa158cd25bb157121bb12457cf34913785",
+      "byte_size": 98795,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/claim/part-0033.jsonl",
+      "sha256": "65daeb18cb85139311a5a7dd2a64a393afafd3577e51464f432227a47739012b",
+      "byte_size": 96948,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/claim/part-0034.jsonl",
+      "sha256": "72d93dcaf09ce80c0f398eaf7b7e99389b3e07782a879b59ab4b8cb08345b283",
+      "byte_size": 97308,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/claim/part-0035.jsonl",
+      "sha256": "d32987aaa51f752192d86f05f404cf4c94cfbccd4e71864302c72fa0d5e12ec4",
+      "byte_size": 98179,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/claim/part-0036.jsonl",
+      "sha256": "74d6350ec139e3754d6acffdbbd26c5484b4c42add9e90546dcb29136c53c6e7",
+      "byte_size": 99715,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/contribution/part-0001.jsonl",
+      "sha256": "8f0209da1072b8b4173d3fa192e41719ec4b8aa9ed043d3ec1e989a1b7480daa",
+      "byte_size": 78720,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/contribution/part-0002.jsonl",
+      "sha256": "0b901252d910312bacbda92354161d010daa1ddc0578e8418e42739f300c5772",
+      "byte_size": 80650,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/contribution/part-0003.jsonl",
+      "sha256": "28190b1817d25054552e76d325bef30829dc7bb6c404602e75bf40cd176c0e23",
+      "byte_size": 29080,
+      "records": 40
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/contributor/part-0001.jsonl",
+      "sha256": "1a735965f0061cba80cf4e75f65a813727f773e2d055c1080c81d8a842886d75",
+      "byte_size": 22820,
+      "records": 80
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/facility/part-0001.jsonl",
+      "sha256": "a5e0a4f6b70e162d9b415139ef13ec9f6ae7af29886b9828c95a15f1e5ca9c61",
+      "byte_size": 11872,
+      "records": 36
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/hazard/part-0001.jsonl",
+      "sha256": "d272586e8795ae32361732f97a10e1306e6be63a11055313ad3c56d0ca1719df",
+      "byte_size": 5572,
+      "records": 18
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/incident/part-0001.jsonl",
+      "sha256": "93393bfc45e6f32c15f38d12caac0c5e93b9ed03eb8325314f1f4bb44a2ff963",
+      "byte_size": 899,
+      "records": 1
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/infrastructure/part-0001.jsonl",
+      "sha256": "0c93cd8d96e6b81ac9929a60e9114821e461f865183803b43385aed121f857b0",
+      "byte_size": 10626,
+      "records": 30
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/investigation/part-0001.jsonl",
+      "sha256": "06f921606aa25b6f7530916453db3ed3f2674ac72119dd5988e666fe9dd969bf",
+      "byte_size": 15918,
+      "records": 24
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/location/part-0001.jsonl",
+      "sha256": "0d17ca62d2dfa2aeeb84b8812735887a056b541b23859e35e6d9d5bebacb0a07",
+      "byte_size": 91008,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/location/part-0002.jsonl",
+      "sha256": "eda92638fde6b1735190da0d13cc443801ebdc6dd863f0fc706f5c355e095f05",
+      "byte_size": 61708,
+      "records": 70
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/media/part-0001.jsonl",
+      "sha256": "4921a269ddbb93ad8546ebd38453cca134a19bf8b7ad87d7ea042fef56c25e36",
+      "byte_size": 114275,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/media/part-0002.jsonl",
+      "sha256": "f1f8e21dbea232e3184dd7c55a4d61fee4095124e2639659c8ccf746e5f6c462",
+      "byte_size": 114250,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/organization/part-0001.jsonl",
+      "sha256": "b6691ded84e88cd8be0b168e5d764b3af938962da42235b8767e59feb5cf48bf",
+      "byte_size": 11845,
+      "records": 32
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/person/part-0001.jsonl",
+      "sha256": "9f5cc1fe88d102ff5cceb5ec003528eb8c085e6df20c3085aaa6a30c5dde0bea",
+      "byte_size": 45507,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/person/part-0002.jsonl",
+      "sha256": "f1852115b1a32898c2d1e503e9f5e3673d2398b918667f810ab76bf4f7ad04d1",
+      "byte_size": 45402,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/person/part-0003.jsonl",
+      "sha256": "859a5778af75a254a8dea6ccd436e9d664859f2f81e816c56914b7215ae67342",
+      "byte_size": 45381,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/person/part-0004.jsonl",
+      "sha256": "5f66e478b482fd01556a050db7eecd0431f0dde691abec33e8580236735d9401",
+      "byte_size": 45399,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/person/part-0005.jsonl",
+      "sha256": "1eb968c379527e70de2a7e0d169a146f2449cc9cd0144c60b83bed319395d88f",
+      "byte_size": 45378,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/person/part-0006.jsonl",
+      "sha256": "c0f053ff71f3dfc54ff435fb4df33b28d1bc8387ed2485b4e3d78ed225678ff3",
+      "byte_size": 45408,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/person/part-0007.jsonl",
+      "sha256": "bb5bbd9c7e770da227d97ec2a7f48c9752f6d25e2bc56f71bd2ec990799eb899",
+      "byte_size": 45383,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/person/part-0008.jsonl",
+      "sha256": "fb245208e9ea47a485a3b99cf9cd37d8d124fb7266109ad594e4e1b7af4ae610",
+      "byte_size": 45376,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/person/part-0009.jsonl",
+      "sha256": "b1f7df20114d29a18fc270259a316a4dcf95dbdec36af407fdabdbb8590c0cf4",
+      "byte_size": 45462,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/person/part-0010.jsonl",
+      "sha256": "167815f333604171e8388a8ae0235113a6b8160265252406e0f174df94bd860f",
+      "byte_size": 46080,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/person/part-0011.jsonl",
+      "sha256": "44731ec6ddea2d8ffb1a24a8c3ea087cfe16a96ebc80d08c241817e895766f6a",
+      "byte_size": 46066,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/person/part-0012.jsonl",
+      "sha256": "029a0ed9d7d87547f55dbe9155e0fa76bcc528bdc1118fae53cbcbed1a62576c",
+      "byte_size": 23140,
+      "records": 50
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/source/part-0001.jsonl",
+      "sha256": "140ed6cbaaf80986c52fee905a97c6e6b96988ebd1c2f84366637043b53a3143",
+      "byte_size": 80322,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/source/part-0002.jsonl",
+      "sha256": "1770f2ef7b7f9c354ae80cfbe683239719f377f350d39d0c1d9af9468884aa7c",
+      "byte_size": 80312,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/source/part-0003.jsonl",
+      "sha256": "31e6d0ce7b2e3ebd52e97a05b828ca5f44320cdb0d8705eed9d86f53d9f25d03",
+      "byte_size": 80302,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/source/part-0004.jsonl",
+      "sha256": "2878df25ea3ab24f47ef394690d74a9b4f02b560f7bd387c283ed9bfc8812104",
+      "byte_size": 80292,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/source/part-0005.jsonl",
+      "sha256": "d9c636c4caf678812da0e37b18fd6039e79fd23efabfc76d28d42da2acffee0d",
+      "byte_size": 80282,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/source/part-0006.jsonl",
+      "sha256": "e58f0b1572fa13eaa6351ed74cf6a983ba952cf9636bef7cdf32413b0cb33eb9",
+      "byte_size": 80296,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/source/part-0007.jsonl",
+      "sha256": "e72e4764d09a195a9c64468844e0b5aa323bbddafe3d051ec51a8a6359b78482",
+      "byte_size": 80318,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/source/part-0008.jsonl",
+      "sha256": "6c22c10307a31a0e03a05ba2a142edff22674f80a056a61310d5912e62fd1a9d",
+      "byte_size": 80326,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/source/part-0009.jsonl",
+      "sha256": "66e0416f8aee9468813492d867c443e7643e71dc34c9e91b429eabea4d789543",
+      "byte_size": 80322,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/source/part-0010.jsonl",
+      "sha256": "f301bb0083103fc95ab6ddd6bf9a3bb0bb214550f1f182d11b91b620546f642e",
+      "byte_size": 80312,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/source/part-0011.jsonl",
+      "sha256": "f773ade98c7d56c9bde53e6194a55f55b19bc9dfff652aba2f3392f0cb68b4a3",
+      "byte_size": 80302,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/source/part-0012.jsonl",
+      "sha256": "d83222d628fea8d0165e85a6d6738893b7f7d497114f97262c3b532c37c64c1a",
+      "byte_size": 83892,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/source/part-0013.jsonl",
+      "sha256": "50038900a013d07bf8e0952b1a7189ef8ccdafad7cada05aeeb1e7f6c92a820e",
+      "byte_size": 83682,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/source/part-0014.jsonl",
+      "sha256": "54d4d9cf05e8e95b51c0357104d9e5ba5309736c1ea4bbdc3168d6904309de55",
+      "byte_size": 83396,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/source/part-0015.jsonl",
+      "sha256": "4e2ccf7974a462c73fbd2593f96ed2a4c374006c366a31959570de6d5a15a524",
+      "byte_size": 83400,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/source/part-0016.jsonl",
+      "sha256": "39405ed76cedaf80f79805a2b738d2e59b080c6a091504afa30b5424184a3372",
+      "byte_size": 81600,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/source/part-0017.jsonl",
+      "sha256": "4b0dc3db6901544ae9e23544956c10516b7c85590088af8c77a06ade10642527",
+      "byte_size": 79800,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/source/part-0018.jsonl",
+      "sha256": "1138f0fd023968a0984edbd419320e5b91ef4ae7f639dc7bbd196857acb0edbd",
+      "byte_size": 79800,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/subscription/part-0001.jsonl",
+      "sha256": "48963ff263875f106ad724bb61cc7f50836169db61f945b8e71f2d294a860fc0",
+      "byte_size": 38300,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/subscription/part-0002.jsonl",
+      "sha256": "40e0dc8a51dc1177344952236a13a68499c57f53da2c9ffdf80d54a505d925fc",
+      "byte_size": 19260,
+      "records": 50
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/task/part-0001.jsonl",
+      "sha256": "4654a14577e7f84fa054441edbbf646137ae968870f01d343ff5a6aee1c4bc5a",
+      "byte_size": 49476,
+      "records": 96
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/vote/part-0001.jsonl",
+      "sha256": "42d10736bfda4ee806ac4ec0b7a0ea6500135c9cf2a04dab4bcafb8a13e9212f",
+      "byte_size": 29800,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/vote/part-0002.jsonl",
+      "sha256": "2a71ae8c0cd8ab2aebf49688a07697d49bb0f0f0508ecee866891ea041ace1b9",
+      "byte_size": 29800,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/vote/part-0003.jsonl",
+      "sha256": "4580e368a6dd93dcd523f0b27c1d4934328b1ef929bdf7317ca4710a3c6d3344",
+      "byte_size": 30040,
+      "records": 100
+    },
+    {
+      "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/vote/part-0004.jsonl",
+      "sha256": "ad47d7de208f5521a1e32aa9871d4ca68a97bb2bffe9dcee38e8d4efd613171f",
+      "byte_size": 18120,
+      "records": 60
+    }
+  ],
+  "asset_bundle": {
+    "status": "partial_preview",
+    "release_url": "https://github.com/pathakanshu/trace/releases/tag/bhotekoshi-2016-exercise-v1-preview",
+    "release_tag": "bhotekoshi-2016-exercise-v1-preview",
+    "filename": "bhotekoshi-2016-exercise-v1-assets.zip",
+    "download_url": "https://github.com/pathakanshu/trace/releases/download/bhotekoshi-2016-exercise-v1-preview/bhotekoshi-2016-exercise-v1-assets.zip",
+    "sha256": "00629b3cc4b832e092f206b54f15c57d438e124dfaca97b904b4c1a21d8a444b",
+    "byte_size": 5029425,
+    "files": 400,
+    "images": 200,
+    "thumbnails": 200
+  },
+  "assets": [
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000001.png",
+      "sha256": "b1766c359ee4c516f93da31191c5c8ce672471947eb3daa67cb0b75bd39b60df",
+      "byte_size": 22943
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000002.png",
+      "sha256": "3ca0ce36715bd35effe7771191651c16fe3c1dc9892ccb24a9b3b94eb5d8147e",
+      "byte_size": 23624
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000003.png",
+      "sha256": "d1c6c101903bd81136ee9128c97abdf06b4941330637b42ac120e4b670573a73",
+      "byte_size": 24251
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000004.png",
+      "sha256": "8fc7f16b8b77de32cfa91b2aad077f3d0c0c1bf1f8cf61ff950b38c75d06b339",
+      "byte_size": 23727
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000005.png",
+      "sha256": "0a2d56939b173f0cfefdc527f7a644829b113544214a92194e53300748f5354a",
+      "byte_size": 23601
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000006.png",
+      "sha256": "a66b5d75127d401e04992cade6e74bbd52aaf1f748696a03468c9e0aee8543ff",
+      "byte_size": 23720
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000007.png",
+      "sha256": "dffa51e7c5d9844875a2ab39eec83feff2bb038a1f17ff37283081950ca98e26",
+      "byte_size": 22787
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000008.png",
+      "sha256": "f9795138ace5685b645ac305fa4b0b660cfeff32da761412b232b12c5968ee43",
+      "byte_size": 23717
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000009.png",
+      "sha256": "3e9fcb837e3e2ece04165a440a5e5146ee5076061ec5ff6bfcfbb9b08468607f",
+      "byte_size": 23486
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000010.png",
+      "sha256": "50147c47c2aac8e01b1e95bdab4b3a29dcc55d25b4393ffa86e95dcd639adddd",
+      "byte_size": 23349
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000011.png",
+      "sha256": "d56c5db026b6fe0be1f93c0157ba81de0404681220eea835b929ffd166aecb14",
+      "byte_size": 24357
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000012.png",
+      "sha256": "558c65ed246add9e97f242cdbf0f2af658a9b2ee4bb426d752274c92f05ea339",
+      "byte_size": 23952
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000013.png",
+      "sha256": "993147ea5671835d9b8cbbeca4959322c29b9a35a1945e9b539646804eb9e1b9",
+      "byte_size": 23418
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000014.png",
+      "sha256": "0f4f25e1009dd7be97e8649f39fbcf555406ca6be7cb8e0f72d40842657b14d8",
+      "byte_size": 22955
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000015.png",
+      "sha256": "cd763014b352b318535a7a496bf043b2a6283fcd0f9323d518b27ce09117a339",
+      "byte_size": 24626
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000016.png",
+      "sha256": "dc5ba411074305c1acbd87279afd7b507748551f5aca00aa45db0f40bf069be7",
+      "byte_size": 24539
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000017.png",
+      "sha256": "98b5fa3d9893cc252a3258f07346bbd834cf204a552fe30b9c7cc61688beaa14",
+      "byte_size": 23688
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000018.png",
+      "sha256": "52241dd69d871e7c0d5536a899ff43756dc6220e3cf25620725c75dc1123d355",
+      "byte_size": 22947
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000019.png",
+      "sha256": "e343f81f7be451d83e4ccb768256be1fe16e1f4aa8878b8badc563df7f12b0d5",
+      "byte_size": 24534
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000020.png",
+      "sha256": "572632f91f4195de09c05c0934221329732896a264864d685fc0deea53bd6f75",
+      "byte_size": 25019
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000021.png",
+      "sha256": "3e9e70cc5cd0d334fa616d57b38d93dab1d02b9540383a8b0beccb3d9eff2776",
+      "byte_size": 23957
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000022.png",
+      "sha256": "6f1dfdc35764cc7ce4a1cfef8ebfa2f3cafde43bbc6591efe69457a55b6e060b",
+      "byte_size": 23418
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000023.png",
+      "sha256": "031f1b6af9712a80298d3cf9b114c987aeafd3f4b48e37c6e0eebbfc3c4bc3d6",
+      "byte_size": 24149
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000024.png",
+      "sha256": "7bc641acb5774ec14dc08254f1124d9f196c1cd5905fde36430a86e07edbd3d2",
+      "byte_size": 24926
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000025.png",
+      "sha256": "aa5686984072fb85e19ea449ceab4e1b1caa4a4febe475df58b4804fc553c263",
+      "byte_size": 24635
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000026.png",
+      "sha256": "5bfa4ebd62d23b7456e6ec8923eb7e3e88ab188b982dd5f010f11a7212fbc15f",
+      "byte_size": 25626
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000027.png",
+      "sha256": "b97a4abd7a44aa3cbf42a2fb5f1ddaeb1bc9ae7dbc12208ac25b5780ad9ff898",
+      "byte_size": 25976
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000028.png",
+      "sha256": "11aedd69f6b5758c38ce8ba799a5fdfdfbd39e50a61bffe0a1312b3944d6558a",
+      "byte_size": 24138
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000029.png",
+      "sha256": "42227c2797645d9600a9aa3e3e27ec7a114223c67cdc1fc097cc698691283916",
+      "byte_size": 25040
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000030.png",
+      "sha256": "4bcafb6044d441936a1e35b35793fba98ca863673f2049ba5cc6aefe62109ea4",
+      "byte_size": 25314
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000031.png",
+      "sha256": "993b42146fd573f3c4de249ca7b009162fc065e845f57406dcab2488d90129ab",
+      "byte_size": 24588
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000032.png",
+      "sha256": "dde14becbc6b688375698cb43e9679618d70dd1da41fc4d1e90c61112f4132bb",
+      "byte_size": 23762
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000033.png",
+      "sha256": "ddc011cbde040e4e728fc9dfeb28eb849645dfb3b8fd2f3139bdd0608b042326",
+      "byte_size": 24473
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000034.png",
+      "sha256": "5149c6b5160ac36b2aea6024aa53229950d83938affba98c5b82b005d677039f",
+      "byte_size": 24884
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000035.png",
+      "sha256": "f7a598af391edbfab562d46a08035b5cd1318526608b836501d69083d2a30d19",
+      "byte_size": 23356
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000036.png",
+      "sha256": "0b4fbe71860d6200d28d2df535eaa5022bbb88a6cb3ebc386b1624c528d77307",
+      "byte_size": 29953
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000037.png",
+      "sha256": "dff575f539c247fd9d3354095ae2489e7be0be1633c335b5ef34df7c977e087c",
+      "byte_size": 28800
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000038.png",
+      "sha256": "a627901c0693b7928869fe57b9ad9943d9575ee05d50eac17a706409a63d4bf8",
+      "byte_size": 29597
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000039.png",
+      "sha256": "af183ce0f819705f9e36273c2676a9c98a72248b1b8933c47796d68ad90649e2",
+      "byte_size": 28419
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000040.png",
+      "sha256": "ac9346ba7385068cd3ac53c105ad6c211b56af91c7c7de1cfe8147fbbabe97a0",
+      "byte_size": 28903
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000041.png",
+      "sha256": "10a48b0c4123bb210ea29443979069f14b7b8f28df1fca79ab47747a0e70ef2f",
+      "byte_size": 30735
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000042.png",
+      "sha256": "87c0ec334e82be297eb1835e32e22e74c8896fe22f6624812da192c5b5281cd9",
+      "byte_size": 30111
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000043.png",
+      "sha256": "23b18c4649b8316a300e0048bd234455325dbb8db7e89d427d163f9d47b4136b",
+      "byte_size": 27231
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000044.png",
+      "sha256": "99993af3c3a484fea9033accd896158d8054fc979c8bd08fda0e97f7bcbe5c5b",
+      "byte_size": 30116
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000045.png",
+      "sha256": "d1865453b88a1cf6c5266ae3d18d174c9c65dfe79fa92380008168d2076e157c",
+      "byte_size": 28921
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000046.png",
+      "sha256": "70eadad45e19effec041f43b8ba547e6eee1a86d331e95a9d3f943745f68c57f",
+      "byte_size": 29771
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000047.png",
+      "sha256": "0676891d9873f362d1b43f23d7d9570c237dfa47814f4c253bd9b077e80ac980",
+      "byte_size": 29565
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000048.png",
+      "sha256": "91483a9080253e2255675121ebf5ed1b1f6746b75978e404d23f8fbba5d3a722",
+      "byte_size": 29067
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000049.png",
+      "sha256": "f5cdde53010f4b7cdf9273649e50d3e4b537fe0c3332a05a5b01cdae846d9966",
+      "byte_size": 28745
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000050.png",
+      "sha256": "d262f73773e56692e5c968e6f768b914683e45f5e081a41c32074488f4099e59",
+      "byte_size": 27931
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000051.png",
+      "sha256": "3b4d7452ec527f35fb49c4a215d077eb32f065112b2b44660a0f70f890e0b285",
+      "byte_size": 29400
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000052.png",
+      "sha256": "a1606eccc2693e564295a480211fb9606b1764d1df33feee6ad8d5b39640acc3",
+      "byte_size": 29402
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000053.png",
+      "sha256": "6fce4c11f0e73edb3b2c3e64b357f846a312a1cb3985608d207412115b36082e",
+      "byte_size": 29562
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000054.png",
+      "sha256": "1de78c32de5bc4e76a21755d45407b597b232a452f019eaec03e8ca80f01abe8",
+      "byte_size": 30428
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000055.png",
+      "sha256": "41cb9fddc0ad6a176b509eb392938a0ec2d501db08f2e8a1b1fef8044c8d4de8",
+      "byte_size": 29368
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000056.png",
+      "sha256": "4439f2dc48f268cf3095fbba5000dfbff0b49e37fdf4cac30d694f70f50d94d3",
+      "byte_size": 30276
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000057.png",
+      "sha256": "7cc5cfdc4498f707aba8715bd0b9fd252171f27bc06c29fadfbf5735e3d79dc1",
+      "byte_size": 28067
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000058.png",
+      "sha256": "4c6c46d8642ced2fc27ac8f41818b10877f2aaa85b482d69d13ad31c45d28bd4",
+      "byte_size": 28892
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000059.png",
+      "sha256": "d4a17312d3de39fec5c0fe1c58ca82b544554390b255477e70f68e73f8f923dd",
+      "byte_size": 29514
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000060.png",
+      "sha256": "362b772ab52a03b03d5a7ba659a324fc2a2804a15945f1924e377b49fa2b87d0",
+      "byte_size": 30449
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000061.png",
+      "sha256": "46c89144c2a6d07bf7f08da8a0aae557e0679ac0b0fea5e5e52b9ad7837a4e5d",
+      "byte_size": 22383
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000062.png",
+      "sha256": "7476bfde7d1faf643194d65c9468d1f0ffc1caf270a653c2d66cd4f2edb7874c",
+      "byte_size": 22240
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000063.png",
+      "sha256": "c05cc98102b410a2634ed8e10c6b7f1369820d9db7ef626a667c9e54055ee914",
+      "byte_size": 20510
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000064.png",
+      "sha256": "f2b4d01fffbc134eba3916b02befd56aca6a083604544f105c061923d868800a",
+      "byte_size": 22747
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000065.png",
+      "sha256": "f01c47b6a22e74328b37708ec1b566bff4fbad20679303f34f86a5e91c6b72ee",
+      "byte_size": 23498
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000066.png",
+      "sha256": "20585aa71a35b37971a797a9ab9dddc7f9ac5b20185693aa3c4305a59bbd8f55",
+      "byte_size": 23879
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000067.png",
+      "sha256": "61f2507b922f0054f4286df11019f4b0b4ca844c11530f322606e2119bb7d787",
+      "byte_size": 21993
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000068.png",
+      "sha256": "6b9b12f2bb52475c8fcfeed262c3a1af7994365eae8aa78cce819947ba979afa",
+      "byte_size": 22211
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000069.png",
+      "sha256": "b4d393f44d9417311b3de52668cf54e4aff2907d4ebf0d4711efa566b2ee8019",
+      "byte_size": 21907
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000070.png",
+      "sha256": "b66c530334c4874a75f6079b763c37cc53720caa443f3b9aa5a76469b4510f4e",
+      "byte_size": 22351
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000071.png",
+      "sha256": "76553f9e2137bd12b5e4a6eb4d8dd8c1b544edb818a1d789be7f58e2108577ec",
+      "byte_size": 21985
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000072.png",
+      "sha256": "5fb46a9e2cea0885149219c956edc31d8a66a15c92e43e234065bd94defed77a",
+      "byte_size": 21867
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000073.png",
+      "sha256": "092aa1927fdde9ef8c0fba0647f6866390f5d27b744e6c56ab02312688ed0e68",
+      "byte_size": 23063
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000074.png",
+      "sha256": "7aa9a0af18e5e347d4ae1659c5d18366178889b9ab36536171fd160c982231d1",
+      "byte_size": 21032
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000075.png",
+      "sha256": "72dd262a7dc1bcd4959243e5db5fd10f3d1a88fdc095d2928f2965539bddd33f",
+      "byte_size": 22653
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000076.png",
+      "sha256": "02d71d32e20162570e6821861f17352fd5705b538351bb628efe1e4de1113cd2",
+      "byte_size": 22081
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000077.png",
+      "sha256": "82ec8d7aad9bf330c3d6feb6b47e33cbfd128c09a9d7a1b0fc9474462f754e52",
+      "byte_size": 20981
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000078.png",
+      "sha256": "6cbd99d273211caf48fb5be35f74ab1653f7821f2f7c60003d1fff88e353c298",
+      "byte_size": 22873
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000079.png",
+      "sha256": "5f42bc7baf6de559ba2954ca677e4b1bd8df6133dcd5f87a0b7ff90c42117f38",
+      "byte_size": 21340
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000080.png",
+      "sha256": "31a7cd4d385a64d5d6a4dc355c74fb9e655823719c4a3cebe0015b6d7be4329c",
+      "byte_size": 23030
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000081.png",
+      "sha256": "5d22cd6e93c83c84c6fa191de7817d6f4bb726116de41c68c86636b983bf6e28",
+      "byte_size": 22634
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000082.png",
+      "sha256": "4b31a6fd5bd038d14a14a3bf19b5553ea00cd471990c445e32e1ff8dc0892e48",
+      "byte_size": 22003
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000083.png",
+      "sha256": "528193f7f2deb7cf8d247475563ef3c4c40177d5a5c24eed318d431ec49669a4",
+      "byte_size": 22200
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000084.png",
+      "sha256": "afedf71c67c2874a245f6d1ccd8fde4bf15fb81e99393ef3124b7b23084fcf64",
+      "byte_size": 21964
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000085.png",
+      "sha256": "3cc75b1c04379d986f951e9394de0a3dd9002612683501f84029017e0cdaf541",
+      "byte_size": 22364
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000086.png",
+      "sha256": "983b5c96651d530c6b51a41a8c4cf09728696c5ab7631d7af5c89e9b59202d80",
+      "byte_size": 19779
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000087.png",
+      "sha256": "b51e9fc7ec69ed55775ec2b09d3b35095987238eab64fd030b6f73a489de59ce",
+      "byte_size": 20129
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000088.png",
+      "sha256": "d43484120dc96c073e11af861a8d3f8a88e156b753ccafd3745403c2015d6620",
+      "byte_size": 20595
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000089.png",
+      "sha256": "0ff62098cf272f635dd68c4c3547ea7a19e7ab0aaeceeac7635cc539fce1b0ec",
+      "byte_size": 20591
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000090.png",
+      "sha256": "69c840ee5b5f482a6e00fe4f8712037287388c08883d0e38c9b530fd808c64d9",
+      "byte_size": 19916
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000091.png",
+      "sha256": "d3b4d36a8659e16a491a45bc48338086ab95880c97a85b4e42dc11c10864a225",
+      "byte_size": 19508
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000092.png",
+      "sha256": "0d665ed4367787bb7c1ae9929e1b8dcb1913ae34bdb5601708567a157a439b68",
+      "byte_size": 20547
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000093.png",
+      "sha256": "de5b066b986816f5a464bc969991d1ed4161a2124597f5aeb325e28c10614d28",
+      "byte_size": 19250
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000094.png",
+      "sha256": "52b971ff24a0eb435fcb2969b721d33e4a4f2970cb7204eaf0f4f2d7caf59294",
+      "byte_size": 21050
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000095.png",
+      "sha256": "103650ad60dfc02b313fbb598ac8994ab51050c448344cce0105ab06471a8c39",
+      "byte_size": 21064
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000096.png",
+      "sha256": "f7f71fc1be80e036b27014324ecb95c93cedbed10a5c0aaaf48196d13fae9932",
+      "byte_size": 20219
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000097.png",
+      "sha256": "4f481e6558f22d9a5753470eec41c174ab4d7274dcee1e2aff8a44677f29affd",
+      "byte_size": 19176
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000098.png",
+      "sha256": "9bbf19318612b10ba1fea0ac4110d4508acd9370dda9d283a0c452f92e963476",
+      "byte_size": 20374
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000099.png",
+      "sha256": "7245ba278a32b79ec5e904c7269e5c916106157e666d4e9738358e5acd8e6cb8",
+      "byte_size": 19123
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000100.png",
+      "sha256": "1dac0dfc6343e205ef994aba290a0299c6b028c461253feecf4d7b6794f67263",
+      "byte_size": 20731
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000101.png",
+      "sha256": "e3114af626be74a4516919eb2064b702a34c9f63211db34c833dbf897f171e38",
+      "byte_size": 19814
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000102.png",
+      "sha256": "46aaf601310f92c2a452adb3afb7919428f713d50c1b14b095903f71ff648f6e",
+      "byte_size": 20734
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000103.png",
+      "sha256": "52518202ea47751d1a5fefd63ae2658d395fa31a330908adfe3367ccec4afc56",
+      "byte_size": 21274
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000104.png",
+      "sha256": "bdd2c978db5cb449067efe510aa21d8b713533f4e082225c3059ac13f8786f90",
+      "byte_size": 19228
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000105.png",
+      "sha256": "52e4cf79f0e02ecbdc17f616c835068dd35956e2bd2285cfa4b61b849f4c3a65",
+      "byte_size": 19196
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000106.png",
+      "sha256": "b97ca46376df7bac26bafff86c7fa9979e8b87ee0166e0db8d2a3bfd30278a22",
+      "byte_size": 25352
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000107.png",
+      "sha256": "bc3ebce75233b2b30c89d9ff810cb6ceb321908baeb766f8026b9cec24e431f9",
+      "byte_size": 24561
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000108.png",
+      "sha256": "b511d21c3cc57ce72746c24170fe84acbd8be3c4ae517e4afda90ee78df8db1e",
+      "byte_size": 25145
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000109.png",
+      "sha256": "43c616c11234a3df271914bb9a2a4a6f4f00125fd1a5d056efdd89f87916417e",
+      "byte_size": 22890
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000110.png",
+      "sha256": "7bdd797ebdaf7d117ca5ac213814243c615f5b0b097558f11edb1e146e8123ae",
+      "byte_size": 24217
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000111.png",
+      "sha256": "db6c311dac92f8e046a865fb9d338bad0e534f06494d692ad51c004f66882e26",
+      "byte_size": 24830
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000112.png",
+      "sha256": "50afc5a99fd2c11f1e07ab1b7fea969bd7ae8977c46cafb94bef16a881f66b50",
+      "byte_size": 24451
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000113.png",
+      "sha256": "4c185dec8b4b1886efd4ab64178a7680cf5eb8eca568a153ab4b0fab493ea8f3",
+      "byte_size": 25188
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000114.png",
+      "sha256": "80ef8d4f28ba7c3c48ed03ce653cb3ab966ee9ecac37e39f3ebf6c44ed143365",
+      "byte_size": 24170
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000115.png",
+      "sha256": "a96ab76a8aa8f28306f183be73019437205edd2ff3965374fd585fc9daa9668f",
+      "byte_size": 24995
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000116.png",
+      "sha256": "7b2e82a1f9514345b1171e4b5a11e50d7a0238ffa931c53f2eac2324d800dd48",
+      "byte_size": 25268
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000117.png",
+      "sha256": "4868e2cd25a405050e2415dd801605a7505e257ae1350000c89207b195d066c7",
+      "byte_size": 24633
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000118.png",
+      "sha256": "442786a83e90ce8f87765cbc6b1966d6846b15c291c044532908a8459d56b1b8",
+      "byte_size": 24371
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000119.png",
+      "sha256": "86a0439a90c9eddc0f95d2f966fecf7d65c44a3cbe868ca5b1d625cee5d04f77",
+      "byte_size": 23953
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000120.png",
+      "sha256": "17aafe2f259dd1ad5985c2a285af8506c65f0d82ae9eac1f51cf58b509b9d124",
+      "byte_size": 24950
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000121.png",
+      "sha256": "b1766c359ee4c516f93da31191c5c8ce672471947eb3daa67cb0b75bd39b60df",
+      "byte_size": 22943
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000122.png",
+      "sha256": "3ca0ce36715bd35effe7771191651c16fe3c1dc9892ccb24a9b3b94eb5d8147e",
+      "byte_size": 23624
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000123.png",
+      "sha256": "d1c6c101903bd81136ee9128c97abdf06b4941330637b42ac120e4b670573a73",
+      "byte_size": 24251
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000124.png",
+      "sha256": "8fc7f16b8b77de32cfa91b2aad077f3d0c0c1bf1f8cf61ff950b38c75d06b339",
+      "byte_size": 23727
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000125.png",
+      "sha256": "0a2d56939b173f0cfefdc527f7a644829b113544214a92194e53300748f5354a",
+      "byte_size": 23601
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000126.png",
+      "sha256": "a66b5d75127d401e04992cade6e74bbd52aaf1f748696a03468c9e0aee8543ff",
+      "byte_size": 23720
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000127.png",
+      "sha256": "dffa51e7c5d9844875a2ab39eec83feff2bb038a1f17ff37283081950ca98e26",
+      "byte_size": 22787
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000128.png",
+      "sha256": "f9795138ace5685b645ac305fa4b0b660cfeff32da761412b232b12c5968ee43",
+      "byte_size": 23717
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000129.png",
+      "sha256": "3e9fcb837e3e2ece04165a440a5e5146ee5076061ec5ff6bfcfbb9b08468607f",
+      "byte_size": 23486
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000130.png",
+      "sha256": "50147c47c2aac8e01b1e95bdab4b3a29dcc55d25b4393ffa86e95dcd639adddd",
+      "byte_size": 23349
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000131.png",
+      "sha256": "d56c5db026b6fe0be1f93c0157ba81de0404681220eea835b929ffd166aecb14",
+      "byte_size": 24357
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000132.png",
+      "sha256": "558c65ed246add9e97f242cdbf0f2af658a9b2ee4bb426d752274c92f05ea339",
+      "byte_size": 23952
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000133.png",
+      "sha256": "993147ea5671835d9b8cbbeca4959322c29b9a35a1945e9b539646804eb9e1b9",
+      "byte_size": 23418
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000134.png",
+      "sha256": "0f4f25e1009dd7be97e8649f39fbcf555406ca6be7cb8e0f72d40842657b14d8",
+      "byte_size": 22955
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000135.png",
+      "sha256": "cd763014b352b318535a7a496bf043b2a6283fcd0f9323d518b27ce09117a339",
+      "byte_size": 24626
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000136.png",
+      "sha256": "dc5ba411074305c1acbd87279afd7b507748551f5aca00aa45db0f40bf069be7",
+      "byte_size": 24539
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000137.png",
+      "sha256": "98b5fa3d9893cc252a3258f07346bbd834cf204a552fe30b9c7cc61688beaa14",
+      "byte_size": 23688
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000138.png",
+      "sha256": "52241dd69d871e7c0d5536a899ff43756dc6220e3cf25620725c75dc1123d355",
+      "byte_size": 22947
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000139.png",
+      "sha256": "e343f81f7be451d83e4ccb768256be1fe16e1f4aa8878b8badc563df7f12b0d5",
+      "byte_size": 24534
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000140.png",
+      "sha256": "572632f91f4195de09c05c0934221329732896a264864d685fc0deea53bd6f75",
+      "byte_size": 25019
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000141.png",
+      "sha256": "3e9e70cc5cd0d334fa616d57b38d93dab1d02b9540383a8b0beccb3d9eff2776",
+      "byte_size": 23957
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000142.png",
+      "sha256": "6f1dfdc35764cc7ce4a1cfef8ebfa2f3cafde43bbc6591efe69457a55b6e060b",
+      "byte_size": 23418
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000143.png",
+      "sha256": "031f1b6af9712a80298d3cf9b114c987aeafd3f4b48e37c6e0eebbfc3c4bc3d6",
+      "byte_size": 24149
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000144.png",
+      "sha256": "7bc641acb5774ec14dc08254f1124d9f196c1cd5905fde36430a86e07edbd3d2",
+      "byte_size": 24926
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000145.png",
+      "sha256": "aa5686984072fb85e19ea449ceab4e1b1caa4a4febe475df58b4804fc553c263",
+      "byte_size": 24635
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000146.png",
+      "sha256": "5bfa4ebd62d23b7456e6ec8923eb7e3e88ab188b982dd5f010f11a7212fbc15f",
+      "byte_size": 25626
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000147.png",
+      "sha256": "b97a4abd7a44aa3cbf42a2fb5f1ddaeb1bc9ae7dbc12208ac25b5780ad9ff898",
+      "byte_size": 25976
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000148.png",
+      "sha256": "11aedd69f6b5758c38ce8ba799a5fdfdfbd39e50a61bffe0a1312b3944d6558a",
+      "byte_size": 24138
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000149.png",
+      "sha256": "42227c2797645d9600a9aa3e3e27ec7a114223c67cdc1fc097cc698691283916",
+      "byte_size": 25040
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000150.png",
+      "sha256": "4bcafb6044d441936a1e35b35793fba98ca863673f2049ba5cc6aefe62109ea4",
+      "byte_size": 25314
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000151.png",
+      "sha256": "993b42146fd573f3c4de249ca7b009162fc065e845f57406dcab2488d90129ab",
+      "byte_size": 24588
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000152.png",
+      "sha256": "dde14becbc6b688375698cb43e9679618d70dd1da41fc4d1e90c61112f4132bb",
+      "byte_size": 23762
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000153.png",
+      "sha256": "ddc011cbde040e4e728fc9dfeb28eb849645dfb3b8fd2f3139bdd0608b042326",
+      "byte_size": 24473
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000154.png",
+      "sha256": "5149c6b5160ac36b2aea6024aa53229950d83938affba98c5b82b005d677039f",
+      "byte_size": 24884
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000155.png",
+      "sha256": "f7a598af391edbfab562d46a08035b5cd1318526608b836501d69083d2a30d19",
+      "byte_size": 23356
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000156.png",
+      "sha256": "0b4fbe71860d6200d28d2df535eaa5022bbb88a6cb3ebc386b1624c528d77307",
+      "byte_size": 29953
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000157.png",
+      "sha256": "dff575f539c247fd9d3354095ae2489e7be0be1633c335b5ef34df7c977e087c",
+      "byte_size": 28800
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000158.png",
+      "sha256": "a627901c0693b7928869fe57b9ad9943d9575ee05d50eac17a706409a63d4bf8",
+      "byte_size": 29597
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000159.png",
+      "sha256": "af183ce0f819705f9e36273c2676a9c98a72248b1b8933c47796d68ad90649e2",
+      "byte_size": 28419
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000160.png",
+      "sha256": "ac9346ba7385068cd3ac53c105ad6c211b56af91c7c7de1cfe8147fbbabe97a0",
+      "byte_size": 28903
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000161.jpg",
+      "sha256": "ee13c6ec75890ebd3ba2c5d4b931706f070e7da9b701850d19af7fb24c6931b0",
+      "byte_size": 44725
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000162.jpg",
+      "sha256": "06b1c22b75892234e74b62980e598bb3a4c60d8b3977c378bdea4721fb272d33",
+      "byte_size": 43531
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000163.jpg",
+      "sha256": "e08b57f9fbb2fa6ea4381958602a4b63c7e072d8f5834a3d8ac44df827737718",
+      "byte_size": 38573
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000164.jpg",
+      "sha256": "b5df5088d96456b5f0feb5cdfe0c7924a4997b2d7527b202f2a46726801f69e8",
+      "byte_size": 42545
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000165.jpg",
+      "sha256": "4b0a9a5b514679cf40eb1de01d5b6449c2b57926951c3e265d12911deb7ec7e2",
+      "byte_size": 40603
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000166.jpg",
+      "sha256": "1d9f7f3583fe5612d926ce8907884289ebb0cc2b2ab1c70aeee14d2ec64b954d",
+      "byte_size": 42572
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000167.jpg",
+      "sha256": "789367e8658514a8ddfa43524a9f64b73a82f7cc4a40f125c1c28d99a3e06834",
+      "byte_size": 43642
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000168.jpg",
+      "sha256": "a154c6b02a1da8671383828c43c903ddb3ba4c59f07efff3d7e0d6b07ca869c4",
+      "byte_size": 41408
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000169.jpg",
+      "sha256": "7c22a00e7d1078e9c98ce72715082a2ecda3d219a1724cbeabbfd375a416670a",
+      "byte_size": 41093
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000170.jpg",
+      "sha256": "fcc3ab8958343e1b8ab8b19c9a659fcfdded7e1db6d082b347beb85f6e5c6235",
+      "byte_size": 40988
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000171.jpg",
+      "sha256": "5d98191db0ad6c49ccffd8bc7149de8c6b6ea02247ee38259bd0cc80bcec7400",
+      "byte_size": 41371
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000172.jpg",
+      "sha256": "88e7b7f5250d8e8582a7830477231ecdcdbab3bb2e9089e82189bdeee5e6a401",
+      "byte_size": 41916
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000173.jpg",
+      "sha256": "f0c72412b841d17afee5db54a2b5921a9bfa0be9e5d5b4525214ccd499b39a13",
+      "byte_size": 43439
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000174.jpg",
+      "sha256": "f0b492a84dd7d7ddd309125af2ac2cf63721675fd836282780e96649f32f6fad",
+      "byte_size": 43497
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000175.jpg",
+      "sha256": "84915677bb1ac2241282f2b0f89170924bedcf1ba1fb87a68d1dbbfdd50481bc",
+      "byte_size": 41422
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000176.jpg",
+      "sha256": "9825a32046dafc2e7df95a28455e359aeca0f58e28465f919ebace5d05049d50",
+      "byte_size": 42000
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000177.jpg",
+      "sha256": "2719638c0e6fe07fca5ca9e687734cf9a02461202b4ad94877ef6d8b9f33ed3b",
+      "byte_size": 39483
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000178.jpg",
+      "sha256": "51a4cd368fe5dfced30df758c8d8af5b92362764ac4c90acc99868a690ef6950",
+      "byte_size": 42990
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000179.jpg",
+      "sha256": "be4bfb3a5bb480169bb1c3687cd546871fbbd9570303fea20d86f5ec1a8d010d",
+      "byte_size": 43059
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000180.jpg",
+      "sha256": "9aef96c0bc3e1da4ca58d14446876219898c3e58a7687622c10493c571b988d5",
+      "byte_size": 44797
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000181.jpg",
+      "sha256": "ede75d4e1839988899d2d63c0590acd456fe2717bf34d95ca860555daae1709e",
+      "byte_size": 40605
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000182.jpg",
+      "sha256": "10c7dc584df32bc94128eeeca457524bfef4497a50f77c61489bf837d75dea14",
+      "byte_size": 39231
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000183.jpg",
+      "sha256": "da5b3020a792bf3969b6981c1688932e820aaf7ea6fa752a78306d0fa228ef6d",
+      "byte_size": 37486
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000184.jpg",
+      "sha256": "922daa710f51e5b119e028f8f44e95435c35e016906d944ac7ec653b3da1974d",
+      "byte_size": 40049
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000185.jpg",
+      "sha256": "23916e32cfc112c8daa5420cc9824aa482255c4ad7bc9ae01bcd6c701a24cd2f",
+      "byte_size": 42214
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000186.jpg",
+      "sha256": "452e3490426585a9556d6b051402969c7f7153d6fc336cd88333ac374ed6f395",
+      "byte_size": 43229
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000187.jpg",
+      "sha256": "0e836fefe00ecdc2e98363876e7f241b64beec0d06e4dbe3988db1b2b7b2c15d",
+      "byte_size": 39391
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000188.jpg",
+      "sha256": "f6b0d16ac258b1916e24ac0fbbe8f61c56ae27bf0bc9ccdec41b844c81dbe222",
+      "byte_size": 39984
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000189.jpg",
+      "sha256": "646fa7b2ca81fec08ffa28779d9a32f3048cfc46bf6b418d4155d145a641f21c",
+      "byte_size": 38941
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000190.jpg",
+      "sha256": "b5a39d88af58428ae369293071061b1ac471fa374bdde356c93525f2ebef5674",
+      "byte_size": 39839
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000191.jpg",
+      "sha256": "fc5f5f6fdffdd72be4773da39c67637ddfa69bd0816493b4d07345d0709de433",
+      "byte_size": 30981
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000192.jpg",
+      "sha256": "bf94625f9eea2975e1eea350edd134cfc82a9507659d0b18d5e2e4a543503e7f",
+      "byte_size": 32005
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000193.jpg",
+      "sha256": "f7f878f8edc582c7dea9df545eac658c9536bd2ef56dfd4ecf9025e28db0e413",
+      "byte_size": 29513
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000194.jpg",
+      "sha256": "8dc14e0fad630d32cb7d34459a099abbdc2746da3d1c72751fee97a71be216da",
+      "byte_size": 29941
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000195.jpg",
+      "sha256": "ba1ac9bc9a16a89876c86806f70307b54f8c152d0051c74856bb920d8a8c656e",
+      "byte_size": 33660
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000196.jpg",
+      "sha256": "65baf65fb66d298ea9f11b8350d892217792c1c91f4d2d9ffde82a5b4c4979c7",
+      "byte_size": 30979
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000197.jpg",
+      "sha256": "2e04b4de1cff71795eaa4509484642b254b98aeef2fbc5e4df72eb2e1515820d",
+      "byte_size": 31183
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000198.jpg",
+      "sha256": "092e81f7fa4d4e6baf390b59027032993304b40e7bb69a0e15b501532b178459",
+      "byte_size": 33376
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000199.jpg",
+      "sha256": "309c06daeb58ad26d4d0e0646a0c43893bf9769e63263e5c231dbc89053c106a",
+      "byte_size": 31034
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/images/med-000200.jpg",
+      "sha256": "49b8fb8d7c775fe4ac039b5a91e04f2e170c1505b1afa451d1d4708612683ee1",
+      "byte_size": 34655
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000001.webp",
+      "sha256": "483ebcede0937ac9591c110416bf685ddd81c3f1f3bada0b76559906bddba1e7",
+      "byte_size": 2708
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000002.webp",
+      "sha256": "2f5907a207a0304cad9ca3578e9b62921c1f7bfa72e61927899adcdb61ecdf26",
+      "byte_size": 2776
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000003.webp",
+      "sha256": "d5d723035bab0b615710db667b1288010d0b2e195cb5d2b24efaad7bc39d7053",
+      "byte_size": 2632
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000004.webp",
+      "sha256": "ef4bf1bd109217d5784b85521d8ed26ef5612eae80f835538864b275b1f61784",
+      "byte_size": 2788
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000005.webp",
+      "sha256": "57294953da4c969b5368bcb3d31ab7e6ac5e3962e4e096ff8f51491439c9d3a6",
+      "byte_size": 2536
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000006.webp",
+      "sha256": "9018bb51024c111532c6c42660d8fa58c873681fb3a624de395afb1db585d42e",
+      "byte_size": 2948
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000007.webp",
+      "sha256": "2fea7b3b651b8b0849f083d69162f83481664f1d68718477e67d677eb6a18efd",
+      "byte_size": 2670
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000008.webp",
+      "sha256": "738c3e5fa0f75874f970e802658a86ee8e6c7bcd8922fb5f497dbc56a250b84c",
+      "byte_size": 2888
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000009.webp",
+      "sha256": "54dfa4fa0ddf9b12db3a9613b39c8f434560d3b962bccf1fb24e1edc47b3ccbd",
+      "byte_size": 2372
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000010.webp",
+      "sha256": "8dd7a0733db2369402bbbd01ea538238dc75adb545c8f4d91f30331558bf47ec",
+      "byte_size": 2572
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000011.webp",
+      "sha256": "8ab79defa08d5a6dc7c99fa048e7b54913870f83503d45acef2045bf42a774c5",
+      "byte_size": 2728
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000012.webp",
+      "sha256": "3bcfa1392aaa1ceb531426f903a963a2a0a941ffb02e6950dd1d215cdb6e9c87",
+      "byte_size": 3110
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000013.webp",
+      "sha256": "187de745bd31e6a23ccbd2fe154d66c21b9f8cb76918a23d8c010793b9a2dabc",
+      "byte_size": 2496
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000014.webp",
+      "sha256": "4788e6b95307d442fae24347e3fbe571abc0c486df599060a548738c0abfc1d7",
+      "byte_size": 2624
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000015.webp",
+      "sha256": "969b71f9becba1bf6f59381833483d00ad463c16d28dc916b307a8f5be59f1c9",
+      "byte_size": 2804
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000016.webp",
+      "sha256": "6f4474114f8ce069f05070346763fef69dd3379775e3dafcbfc781d964296287",
+      "byte_size": 2986
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000017.webp",
+      "sha256": "1f6ef9b828c45ec4b24982080529719e9583732e546c7d451ec8429cec478ca9",
+      "byte_size": 2570
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000018.webp",
+      "sha256": "f7a8decbb74fa8ee49c65d331735ccc78c72d6b8bafb2e28d0ab7d68a78cef0b",
+      "byte_size": 2776
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000019.webp",
+      "sha256": "a889a46fdf3aea581f63f682b8d8d8eae1d87f7e3016c45473513265d472dabb",
+      "byte_size": 2646
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000020.webp",
+      "sha256": "ab94d0272203e12f51d82f83b22653cccee14651369519ed701f7f194bed4a22",
+      "byte_size": 2910
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000021.webp",
+      "sha256": "9ae9fb055aaceb044271dc951cb88e70021fbb2c9a220d0939ff01004ca24ca9",
+      "byte_size": 2550
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000022.webp",
+      "sha256": "7f1419c08bec855f6a6658d7875f35ff87dc0d63f70807c23bff1cd80c4c051c",
+      "byte_size": 2744
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000023.webp",
+      "sha256": "66607917e20bbaa968ea5dd3e72d153a95354c71a6cc856b6c7096be1eaf0454",
+      "byte_size": 2526
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000024.webp",
+      "sha256": "708767e258bb22574ca374a345faafd8f1e3c1296d933f0ffcb47b4b9533ae7e",
+      "byte_size": 2780
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000025.webp",
+      "sha256": "ab561b460d6e0b2b38803648a5ca3fca6d8bd4e9406543cf3faeb0606be5a80f",
+      "byte_size": 2584
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000026.webp",
+      "sha256": "cb955731374b4a3c7c89cc42cc3e6c7164299e0736e29b4373492f8ec11b198c",
+      "byte_size": 2780
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000027.webp",
+      "sha256": "e204f7d2baa699e0b0aca2340fbf9304d53cf76c00c5defedfdb16d096f680ed",
+      "byte_size": 3026
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000028.webp",
+      "sha256": "7602b2c8230b0ad75d123bb666e4e44443ceaba2aa2500ee7ff2a9ac63a2d5dd",
+      "byte_size": 2970
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000029.webp",
+      "sha256": "491d31c4eea3c4b66d51f39bae2546e0999631b69660c3a0883e99b554f86283",
+      "byte_size": 2990
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000030.webp",
+      "sha256": "2eb10a28a2508fcfe59d079fec50e49d6ed5c4e82efa94f1b0fbf3afcaf9952e",
+      "byte_size": 2944
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000031.webp",
+      "sha256": "a0cbda2b85858c94b8e15f36b474c2e880140cf3660c24217a61414f867507d1",
+      "byte_size": 2676
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000032.webp",
+      "sha256": "fb165e02d93a4b30d767c1c19890322dc52cec8ef12342a7d1accfe31b5a648a",
+      "byte_size": 2592
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000033.webp",
+      "sha256": "274c3fedc38ae1cc25941955e05162340d36e405772032d03d37fcd5b174e78f",
+      "byte_size": 2804
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000034.webp",
+      "sha256": "578857578f23b1350c49aa5e3e860562104654abdf48d5adf30b46022ab0ab82",
+      "byte_size": 2838
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000035.webp",
+      "sha256": "1422f5a68056c01e2907d006265ed5f7be46ac32c81d715a080b099a2925edb5",
+      "byte_size": 2584
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000036.webp",
+      "sha256": "c0d9c48d710612c2895986fbf643bc8c3c46240535a68e14e4bf95b46d105984",
+      "byte_size": 3218
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000037.webp",
+      "sha256": "c214fe62364b364c5e7bc882a06d79f6c1680ffb64951aa23109ba260665c7ed",
+      "byte_size": 2952
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000038.webp",
+      "sha256": "1ae12a26cf2c239113e1e89f4c23ea5dbdb45e28d595e8a25fc142a6bfeddfb7",
+      "byte_size": 3122
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000039.webp",
+      "sha256": "e0673e0fcba1275db13ea6edd0085bea2b9cdddcce7064441cce832d4405c354",
+      "byte_size": 3014
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000040.webp",
+      "sha256": "dccc474b94639111593a0c7f5ad88330ec106a3193d8f686ae896b8750edb237",
+      "byte_size": 2958
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000041.webp",
+      "sha256": "28b13c4f70706d19fcca7c661889d8e3b70723cc79fdfbb1440166db23726102",
+      "byte_size": 3352
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000042.webp",
+      "sha256": "34e31c3e6f52256c4dc751f70503723aec04adbb8d2467175517ea6f0d642540",
+      "byte_size": 3282
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000043.webp",
+      "sha256": "cd1c4fcd3e39b00effe760328dde9f5570bafe61911b9f4e98c00b2621fb5d40",
+      "byte_size": 2790
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000044.webp",
+      "sha256": "28d06f7c3f34568464bb2be5bb32c595587d720d32b03f9ee0ca701d9601f402",
+      "byte_size": 3192
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000045.webp",
+      "sha256": "fda9a671bf9ab5f7ab90b99d148bd81904422825f2e922750b5f29210b2f8a97",
+      "byte_size": 2980
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000046.webp",
+      "sha256": "6bcb89a9678802247ca9904c91b5557cc4024f2371d2a4ef9340dc4edda66c8b",
+      "byte_size": 3154
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000047.webp",
+      "sha256": "b62bb000a0b280bbab46c56d6687d060c66c37fa1a0f1f3320de134238e52a91",
+      "byte_size": 3132
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000048.webp",
+      "sha256": "8f81955a80237867e34bc700113a068d6481aec72089dcfbea1220866a2639f2",
+      "byte_size": 3088
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000049.webp",
+      "sha256": "5cf6155716c3f427299a79ad4a6abf473b2194e6814dcafa80f797159492468d",
+      "byte_size": 3110
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000050.webp",
+      "sha256": "6b1283fd3288d315578b32beabcdbaa20749e3caa27b79ee98cc311a0953f248",
+      "byte_size": 3082
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000051.webp",
+      "sha256": "45eb9d32897d21a31f70abef0919fa06547c7cefa0d459663303deb7c6860b70",
+      "byte_size": 3054
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000052.webp",
+      "sha256": "fbd55f77b8f951fe753a2d8b4d2298a21f98d7afafedc0c1163eb72490a7e359",
+      "byte_size": 3006
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000053.webp",
+      "sha256": "75e4065b7f589c5f2d0e3d45ebf82a607f5a78a156bad57108fc100874d7fac2",
+      "byte_size": 3064
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000054.webp",
+      "sha256": "ab3ee8fb13d9651a59b3d82c17f0e33154bdf77a655c42184074b5dd45500093",
+      "byte_size": 3272
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000055.webp",
+      "sha256": "c3e692169d8d35aca751cd112137d19ac407ebecefb44ae4855dd97eda2f8408",
+      "byte_size": 3148
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000056.webp",
+      "sha256": "a56965ad2575f8318efd6f9561b0fff470c99615227029682e3d616c47e46e59",
+      "byte_size": 3102
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000057.webp",
+      "sha256": "692d8f06224abbedc9b52cc5c29428d37177c504e42de591fb73b45694da5214",
+      "byte_size": 2876
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000058.webp",
+      "sha256": "b6d3122b16a39c0848c195c0d35695bbac4226f5f24617091ff9e268baaefa46",
+      "byte_size": 3200
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000059.webp",
+      "sha256": "7e1ff9330a851d9dac34720f575143d7cf7d9a8e9c11826c70b38b69bbd58179",
+      "byte_size": 3234
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000060.webp",
+      "sha256": "efcd09f8cef9243f022e22bc0829972bd0369ca70a08e760dafaddb6958ba4c8",
+      "byte_size": 3404
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000061.webp",
+      "sha256": "90b1af9baae5b97d938370ad289f97c45986791f5c8408ae51f1849209d55a5f",
+      "byte_size": 3156
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000062.webp",
+      "sha256": "53e00ee11088682a96c5c370cb30ca52de50e04e62544501d0cc54c51c0daf1d",
+      "byte_size": 2930
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000063.webp",
+      "sha256": "5f9f361321b91b85e0c762b16d02a76fb29f7128dfd53809514e21154bd7c787",
+      "byte_size": 2910
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000064.webp",
+      "sha256": "dd13b5f890cbbe34f33c2e7d9da79add9d6bf4d239a610da3bcfcc94cf615c82",
+      "byte_size": 2948
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000065.webp",
+      "sha256": "bef6f1b69cfc5daf8e752066dccc3d33628424f94310ec32c19eded46f7c354f",
+      "byte_size": 3088
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000066.webp",
+      "sha256": "f055b8186995dc919e8c25b3feb4d654dd839e5eadf8e4e7ca7f927fed3cbb82",
+      "byte_size": 3230
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000067.webp",
+      "sha256": "fb35dc026bab44184748f9240a5d1dc2237bdef7620b50aae8085dc270c9b20e",
+      "byte_size": 2934
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000068.webp",
+      "sha256": "94bcedcc7f419acc720c653dd66c95d0b78ed651a5c85f118c75538b8be38795",
+      "byte_size": 3066
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000069.webp",
+      "sha256": "bd181f998a3a76b0aefa31e7caf9990143fa068ae41c41f737320ff909895417",
+      "byte_size": 2938
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000070.webp",
+      "sha256": "41e947bad133fa198f3fac279bcc5e3cb9018b113b3f1213a5f343491ee9b809",
+      "byte_size": 3030
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000071.webp",
+      "sha256": "c2e8bcee3908df0f50c08221a2401ca69e5db3a3242cbfcf34f0e145ef86c51c",
+      "byte_size": 2810
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000072.webp",
+      "sha256": "40eb903aca6322b77f55bdb0db580c7e548216be62c19d3f96b8158277a70088",
+      "byte_size": 3014
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000073.webp",
+      "sha256": "dd03ee1406453c4979c8fda7c76d6c27a2d2334227ac35a9944e94aea0b946cb",
+      "byte_size": 2792
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000074.webp",
+      "sha256": "e63e3b7831d63c063bcbc9da08d408cf6c17ac69bb980d50dada371d5261ab6b",
+      "byte_size": 2860
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000075.webp",
+      "sha256": "293c21bb5c95c29fb704b177a0eb73888f40129301e9c86e9a40a04ecaefd1d9",
+      "byte_size": 2924
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000076.webp",
+      "sha256": "83831459f4ac91202771ff60562a649d5b84b8c2e5b63d2439030132b43e13c2",
+      "byte_size": 2894
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000077.webp",
+      "sha256": "b688fc075fdb0203273d8c198dfa130dfdc23433b37158385c5616e40eadcfdd",
+      "byte_size": 2952
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000078.webp",
+      "sha256": "d17339eaadefc847bb96371656747d9bac17e02b4e509b7728bd5a6e203c3ef0",
+      "byte_size": 2976
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000079.webp",
+      "sha256": "78dc34d848ba6d29f5eaa25c87fbdc68428362367e369c919ef04b4542d7ad14",
+      "byte_size": 2976
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000080.webp",
+      "sha256": "bf167226c7486f26c46fef00d29b104c70ea766f193c47276c77dc3b416600b1",
+      "byte_size": 3242
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000081.webp",
+      "sha256": "7840bd8f9fd34eb67913337ab4a516f5b77b34df834e813efef6ed5b83edc807",
+      "byte_size": 2930
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000082.webp",
+      "sha256": "04a4fdd95c94936f707d2296259b50e12c5417c0471e4d007a4bae969bcc3dc8",
+      "byte_size": 2898
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000083.webp",
+      "sha256": "5b688ad20f9af02c2d3a16d33766be6d7ec9019331cc81432d1373075eac9519",
+      "byte_size": 2868
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000084.webp",
+      "sha256": "b2e8a665c6f1f036edb5b3d54bc3fbbcf7a7d2ea5a605f318ba436d97d88763a",
+      "byte_size": 3080
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000085.webp",
+      "sha256": "6775188f7b87b8c1cad8b47f646963bfbea8e91c686f430ff2a21252f76a3df9",
+      "byte_size": 3066
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000086.webp",
+      "sha256": "c8748e3728fd92053f0363bbae9b1cd5ccce28df882403408914c1e4372ff26f",
+      "byte_size": 2368
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000087.webp",
+      "sha256": "62ce0e61a6a309a504100e7411318ce36eb1fbe31ad95af3b93c25fe424a80f9",
+      "byte_size": 2454
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000088.webp",
+      "sha256": "0f013dbaf867a343a129770188cc81662ec5dccefb087984999f1624d632c1a2",
+      "byte_size": 2540
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000089.webp",
+      "sha256": "e88d0e564d7397f6e2e5941f3f61a06dd88362105c53dc86cbe321a7db23b502",
+      "byte_size": 2406
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000090.webp",
+      "sha256": "8390771e12d561b32c67ac9799a99e39358af0edb6ad9bb8ac61aca52662d9e0",
+      "byte_size": 2388
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000091.webp",
+      "sha256": "ce1667cf2234778482360c4307aa9082e3ae919ebe0ee9db2eda27bccc0f2aa5",
+      "byte_size": 2192
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000092.webp",
+      "sha256": "7e91ecbd88d7d392562eb7430d1accca5fa38bffb24c590e3075a02079dbf14d",
+      "byte_size": 2696
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000093.webp",
+      "sha256": "fdefb8bc21eb5d7c7391e51d69d7bc6b6ebcf9f155c33c206ddb87a1d3dca7b5",
+      "byte_size": 2292
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000094.webp",
+      "sha256": "1afa7cca3f3ee1ca51c16c6e6783b865ece8f8b984408afaab0d43b3fd3bd3b8",
+      "byte_size": 2498
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000095.webp",
+      "sha256": "3999b860b2ee68053eb7c669e94183e0ae21a920e85e494e23574dab438f8acc",
+      "byte_size": 2418
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000096.webp",
+      "sha256": "f9283505921223afe9b296e915374e9b79cef8be5eb84d29368f798f8d021ad1",
+      "byte_size": 2344
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000097.webp",
+      "sha256": "2bcbe7a34aff74a1e744a9b1742273256cb2eda81f3e60087bd690551cb8cd3a",
+      "byte_size": 2382
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000098.webp",
+      "sha256": "1ccf2b841030e5ecb7c155625dc773811082d13ca25a1c558dc9be44cadeaaff",
+      "byte_size": 2546
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000099.webp",
+      "sha256": "15c067e784aace5e265f8a71449d0387712c6704c44aff124dbcb5bf04ec24ae",
+      "byte_size": 2262
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000100.webp",
+      "sha256": "18943600cb1cd99d8dbe8173fc225df98548b560b63bff87c5a6c86bac8a281d",
+      "byte_size": 2516
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000101.webp",
+      "sha256": "efc82b80dd305f7bd7717ba12adc9b6f47a39e7d1c8f404939a3ca1a87bb75f8",
+      "byte_size": 2318
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000102.webp",
+      "sha256": "c3b2056b060b48860ad1d1091e59170e4374f937d986b23ee0f6d08f3e54cd21",
+      "byte_size": 2388
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000103.webp",
+      "sha256": "dcc548de33b59382a028118400a67222806dd9347407bd58ec962eb095b5a42b",
+      "byte_size": 2520
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000104.webp",
+      "sha256": "1d8523920413dc51117901e7dc850625f1c9da25dc0894f532279bc751fdd044",
+      "byte_size": 2252
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000105.webp",
+      "sha256": "832bf279d58b7ed50fdbcb60b3338464c48e540bb51a0dc4c87131e77da70ef1",
+      "byte_size": 2248
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000106.webp",
+      "sha256": "cf9abf881c4f50548122e26c7b0df0bd9e8aae3c9bcad822bd257f5f02a5690b",
+      "byte_size": 2860
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000107.webp",
+      "sha256": "ede8ac97968fe251c928419ea97bf5010188a7ae7cf597bd4dd180ec86832032",
+      "byte_size": 3046
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000108.webp",
+      "sha256": "22167470a03721574811628ebed96bfc2f77c3ec5d61d78e2857902ca22a04e7",
+      "byte_size": 2790
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000109.webp",
+      "sha256": "34b442ec30020f883a1710ef81dbfcd6aa41bdb28676b8006ca4bcff2caedc3d",
+      "byte_size": 2756
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000110.webp",
+      "sha256": "184692abd111aeb2a7906aea377206ff177bcb32c94a2747a1c5d78b476255d4",
+      "byte_size": 2916
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000111.webp",
+      "sha256": "ca0b8d9ea01042be2c711e6668081fac9f0ee2640e85cc86d19237116175824c",
+      "byte_size": 2868
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000112.webp",
+      "sha256": "dd894ddb2af50d701fcde4b0c80ba3f5311c4332daf4b1f37ce6f62349f3e265",
+      "byte_size": 2878
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000113.webp",
+      "sha256": "56680a9c3e581b0c9a28af1161931a9ff33ef23d8178e8b1d2265adf0f4bb14d",
+      "byte_size": 3112
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000114.webp",
+      "sha256": "5652819119fdda6e1eb65d927d80a9c679fb67b8e9bdfc23ddf23199dd98eaa3",
+      "byte_size": 2582
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000115.webp",
+      "sha256": "6c976622e3d20e17d82f5d49b986bd8d29e4aa6271ee70a43c5e40e95aa7e9df",
+      "byte_size": 2772
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000116.webp",
+      "sha256": "bffd134790436b1b67f1ddb166d5bc17b5f8cca77aaae95d67965db406d1b84b",
+      "byte_size": 2890
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000117.webp",
+      "sha256": "d0385d02e68d2d4f69dce236dfe2aaa2f6c8a181ff3fe04d29a24866dfa45ff2",
+      "byte_size": 2616
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000118.webp",
+      "sha256": "6fda28f1d6ddee6e2242c1cc7806274d49e8fb9d8c2d9cf3541a9f42d2d2a842",
+      "byte_size": 2782
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000119.webp",
+      "sha256": "25d9ccf4894b278b5b3f5bc3aeafca6cb798d08bcc874479bf57245267574252",
+      "byte_size": 2840
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000120.webp",
+      "sha256": "f83a984b17cd518cae62f9cec7aac9379ffb19b57b186f05c973edce8905be83",
+      "byte_size": 2930
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000121.webp",
+      "sha256": "483ebcede0937ac9591c110416bf685ddd81c3f1f3bada0b76559906bddba1e7",
+      "byte_size": 2708
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000122.webp",
+      "sha256": "2f5907a207a0304cad9ca3578e9b62921c1f7bfa72e61927899adcdb61ecdf26",
+      "byte_size": 2776
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000123.webp",
+      "sha256": "d5d723035bab0b615710db667b1288010d0b2e195cb5d2b24efaad7bc39d7053",
+      "byte_size": 2632
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000124.webp",
+      "sha256": "ef4bf1bd109217d5784b85521d8ed26ef5612eae80f835538864b275b1f61784",
+      "byte_size": 2788
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000125.webp",
+      "sha256": "57294953da4c969b5368bcb3d31ab7e6ac5e3962e4e096ff8f51491439c9d3a6",
+      "byte_size": 2536
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000126.webp",
+      "sha256": "9018bb51024c111532c6c42660d8fa58c873681fb3a624de395afb1db585d42e",
+      "byte_size": 2948
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000127.webp",
+      "sha256": "2fea7b3b651b8b0849f083d69162f83481664f1d68718477e67d677eb6a18efd",
+      "byte_size": 2670
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000128.webp",
+      "sha256": "738c3e5fa0f75874f970e802658a86ee8e6c7bcd8922fb5f497dbc56a250b84c",
+      "byte_size": 2888
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000129.webp",
+      "sha256": "54dfa4fa0ddf9b12db3a9613b39c8f434560d3b962bccf1fb24e1edc47b3ccbd",
+      "byte_size": 2372
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000130.webp",
+      "sha256": "8dd7a0733db2369402bbbd01ea538238dc75adb545c8f4d91f30331558bf47ec",
+      "byte_size": 2572
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000131.webp",
+      "sha256": "8ab79defa08d5a6dc7c99fa048e7b54913870f83503d45acef2045bf42a774c5",
+      "byte_size": 2728
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000132.webp",
+      "sha256": "3bcfa1392aaa1ceb531426f903a963a2a0a941ffb02e6950dd1d215cdb6e9c87",
+      "byte_size": 3110
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000133.webp",
+      "sha256": "187de745bd31e6a23ccbd2fe154d66c21b9f8cb76918a23d8c010793b9a2dabc",
+      "byte_size": 2496
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000134.webp",
+      "sha256": "4788e6b95307d442fae24347e3fbe571abc0c486df599060a548738c0abfc1d7",
+      "byte_size": 2624
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000135.webp",
+      "sha256": "969b71f9becba1bf6f59381833483d00ad463c16d28dc916b307a8f5be59f1c9",
+      "byte_size": 2804
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000136.webp",
+      "sha256": "6f4474114f8ce069f05070346763fef69dd3379775e3dafcbfc781d964296287",
+      "byte_size": 2986
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000137.webp",
+      "sha256": "1f6ef9b828c45ec4b24982080529719e9583732e546c7d451ec8429cec478ca9",
+      "byte_size": 2570
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000138.webp",
+      "sha256": "f7a8decbb74fa8ee49c65d331735ccc78c72d6b8bafb2e28d0ab7d68a78cef0b",
+      "byte_size": 2776
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000139.webp",
+      "sha256": "a889a46fdf3aea581f63f682b8d8d8eae1d87f7e3016c45473513265d472dabb",
+      "byte_size": 2646
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000140.webp",
+      "sha256": "ab94d0272203e12f51d82f83b22653cccee14651369519ed701f7f194bed4a22",
+      "byte_size": 2910
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000141.webp",
+      "sha256": "9ae9fb055aaceb044271dc951cb88e70021fbb2c9a220d0939ff01004ca24ca9",
+      "byte_size": 2550
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000142.webp",
+      "sha256": "7f1419c08bec855f6a6658d7875f35ff87dc0d63f70807c23bff1cd80c4c051c",
+      "byte_size": 2744
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000143.webp",
+      "sha256": "66607917e20bbaa968ea5dd3e72d153a95354c71a6cc856b6c7096be1eaf0454",
+      "byte_size": 2526
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000144.webp",
+      "sha256": "708767e258bb22574ca374a345faafd8f1e3c1296d933f0ffcb47b4b9533ae7e",
+      "byte_size": 2780
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000145.webp",
+      "sha256": "ab561b460d6e0b2b38803648a5ca3fca6d8bd4e9406543cf3faeb0606be5a80f",
+      "byte_size": 2584
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000146.webp",
+      "sha256": "cb955731374b4a3c7c89cc42cc3e6c7164299e0736e29b4373492f8ec11b198c",
+      "byte_size": 2780
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000147.webp",
+      "sha256": "e204f7d2baa699e0b0aca2340fbf9304d53cf76c00c5defedfdb16d096f680ed",
+      "byte_size": 3026
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000148.webp",
+      "sha256": "7602b2c8230b0ad75d123bb666e4e44443ceaba2aa2500ee7ff2a9ac63a2d5dd",
+      "byte_size": 2970
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000149.webp",
+      "sha256": "491d31c4eea3c4b66d51f39bae2546e0999631b69660c3a0883e99b554f86283",
+      "byte_size": 2990
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000150.webp",
+      "sha256": "2eb10a28a2508fcfe59d079fec50e49d6ed5c4e82efa94f1b0fbf3afcaf9952e",
+      "byte_size": 2944
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000151.webp",
+      "sha256": "a0cbda2b85858c94b8e15f36b474c2e880140cf3660c24217a61414f867507d1",
+      "byte_size": 2676
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000152.webp",
+      "sha256": "fb165e02d93a4b30d767c1c19890322dc52cec8ef12342a7d1accfe31b5a648a",
+      "byte_size": 2592
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000153.webp",
+      "sha256": "274c3fedc38ae1cc25941955e05162340d36e405772032d03d37fcd5b174e78f",
+      "byte_size": 2804
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000154.webp",
+      "sha256": "578857578f23b1350c49aa5e3e860562104654abdf48d5adf30b46022ab0ab82",
+      "byte_size": 2838
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000155.webp",
+      "sha256": "1422f5a68056c01e2907d006265ed5f7be46ac32c81d715a080b099a2925edb5",
+      "byte_size": 2584
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000156.webp",
+      "sha256": "c0d9c48d710612c2895986fbf643bc8c3c46240535a68e14e4bf95b46d105984",
+      "byte_size": 3218
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000157.webp",
+      "sha256": "c214fe62364b364c5e7bc882a06d79f6c1680ffb64951aa23109ba260665c7ed",
+      "byte_size": 2952
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000158.webp",
+      "sha256": "1ae12a26cf2c239113e1e89f4c23ea5dbdb45e28d595e8a25fc142a6bfeddfb7",
+      "byte_size": 3122
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000159.webp",
+      "sha256": "e0673e0fcba1275db13ea6edd0085bea2b9cdddcce7064441cce832d4405c354",
+      "byte_size": 3014
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000160.webp",
+      "sha256": "dccc474b94639111593a0c7f5ad88330ec106a3193d8f686ae896b8750edb237",
+      "byte_size": 2958
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000161.webp",
+      "sha256": "b04030a8f4656b9be7052c227b50203af7b22baf99af85049280e2e494f6fc18",
+      "byte_size": 3278
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000162.webp",
+      "sha256": "16723b2e10db5ebae631b02355c8f2236929764fe903f7c4c087841a8c7d5cf8",
+      "byte_size": 3240
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000163.webp",
+      "sha256": "9121b19ef2b3f2d41d52720682c7e2a443e0a5e679528c486caae079a77c354a",
+      "byte_size": 2696
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000164.webp",
+      "sha256": "65491b319e9604277f4f7552e035addb7d581627670d4ddac333c2d82da0aa9a",
+      "byte_size": 3130
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000165.webp",
+      "sha256": "66f23282f6a2e7d8423e2db80668fdd3fcf9943d7a6965a63e364bcda3915a04",
+      "byte_size": 2946
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000166.webp",
+      "sha256": "ff08603dcaf503355c7c44638492a74dfb11a5c6bf6157c153abdac3bf3a7090",
+      "byte_size": 3114
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000167.webp",
+      "sha256": "c06aa4b5d68cb28333be438bf36eaca1009fdc5050b5f10f34aa538b9260864f",
+      "byte_size": 3088
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000168.webp",
+      "sha256": "44ee52206286a691ab0ca89711a134c095ecc370f2513f9c2b1495e3cd7889ce",
+      "byte_size": 2968
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000169.webp",
+      "sha256": "94a5430bd48e5002c7878253abbeaf52d7617b5ec95963ddaae454cae037cdb4",
+      "byte_size": 2998
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000170.webp",
+      "sha256": "fd6277f636266e205c34675c8f8feb3f810eeeabee5e3ca556425f967315362d",
+      "byte_size": 3068
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000171.webp",
+      "sha256": "6be893ebd5b26d17602611982d8ca9b42bf5b0c5ffbca7f97c8d8005e125530c",
+      "byte_size": 2996
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000172.webp",
+      "sha256": "da64e3d966ff8f943a30524cd3fc902895f6932d25e82675fcfc318661b6e203",
+      "byte_size": 2948
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000173.webp",
+      "sha256": "81f3018b29a1c5f260e3393c07749e60ee31f2055458c4b528798d2505985cc0",
+      "byte_size": 3012
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000174.webp",
+      "sha256": "d9a17ab170102a9b3fc5eb2e223909bd190814c07c33a98cdb2fbb1f8c8d9160",
+      "byte_size": 3218
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000175.webp",
+      "sha256": "de07751d624c87d17db937c476dd77438557d69cece08d2d6bb288e9b5e47184",
+      "byte_size": 3096
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000176.webp",
+      "sha256": "5df527beead1427c94343e5b4b94b56e55d875ca22e1f1f7cbfe3be961d59702",
+      "byte_size": 3030
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000177.webp",
+      "sha256": "8ca20d5655c36388bab6b02bb195decbacbc79c8cb4b33ba70ab366c991e406c",
+      "byte_size": 2804
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000178.webp",
+      "sha256": "b77b3bce8687c726fa1d36ed28139b3ef5d3c8202133246f10fe8ea673e6780d",
+      "byte_size": 3130
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000179.webp",
+      "sha256": "a3a9e73b662184e8dd7601ec8c990264d68288d3b53065d7041c52b221d41d97",
+      "byte_size": 3134
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000180.webp",
+      "sha256": "3d5ff97b1d9bbbc1cf751e78a0a9f6ed9c794cc180ad6a8b6d68247b5b2fbff3",
+      "byte_size": 3338
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000181.webp",
+      "sha256": "6c1222050dc2299f201f5ffd8929f633bf1fda3f53543590323d2d348d06395d",
+      "byte_size": 3152
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000182.webp",
+      "sha256": "cc44ef302efbb3fc45173a2ca25726274fe4592fd9f207b8557d921a111a73be",
+      "byte_size": 2920
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000183.webp",
+      "sha256": "a11702183b71f0f350ce2ae2dc7fb71e5603c8cacac7bb9dd2aca5ca1858ef9b",
+      "byte_size": 2910
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000184.webp",
+      "sha256": "08144564af825429a39789e3320d7450828efa54710ac038120fdd24d3374c81",
+      "byte_size": 2928
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000185.webp",
+      "sha256": "2af04d45350cc5fab16f25a803adfef2dbdfd36d79cce169f34c92651d322378",
+      "byte_size": 3078
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000186.webp",
+      "sha256": "4ed4d8238e2d3ff6d103eca2d82f368a56ee9fcab12fe5b403827b7bced29e02",
+      "byte_size": 3208
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000187.webp",
+      "sha256": "f2ce44371d3a45060374bab4ed8221c20ae876b9344af8e2d8bbb48b125312a4",
+      "byte_size": 2912
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000188.webp",
+      "sha256": "e88d39c99c48f39e3fa14fe2365221875fcdc3b73e997e33abe952b4494524ba",
+      "byte_size": 3072
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000189.webp",
+      "sha256": "e12d18d8fde68f3b92c27a9aec60bd795523f03a0cd2481ae97da3616953b7a9",
+      "byte_size": 2900
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000190.webp",
+      "sha256": "434527598a257e1856ff97cfccbb410ed26e21bea3b3a3ec99f617285627ac65",
+      "byte_size": 3028
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000191.webp",
+      "sha256": "a4ca4aafa0df8f16b8bd973408aae9d8de90c91be90e07319e3eaaeaa6fe09fa",
+      "byte_size": 2536
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000192.webp",
+      "sha256": "08ee153d606a1856aacec1c6a435d5e2f33c2ae6d63ec69be4753ef6c25fbf3c",
+      "byte_size": 2648
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000193.webp",
+      "sha256": "a96e425b619f4e12c7d51f1f376f5b7196b44e2d95a748cee5340a5ba49be0b0",
+      "byte_size": 2440
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000194.webp",
+      "sha256": "c9817d3cbbb8dc8a893d64fb68fcde17779c3be7e0ff3fd4c44c92c8e9a33617",
+      "byte_size": 2516
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000195.webp",
+      "sha256": "4eb5ffb5e90126150316d90086863577da4e97588421e5915064f0a52cc7d707",
+      "byte_size": 2732
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000196.webp",
+      "sha256": "e84c3f8e6b0f1fff2d1daaabd5d06070fb8e391ff733401bed2245b407d08176",
+      "byte_size": 2634
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000197.webp",
+      "sha256": "958753db9597ba3e737ad5f819318d69ef26ace1dc7db65a56d21f81f7d02f19",
+      "byte_size": 2624
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000198.webp",
+      "sha256": "e835aa8d11ed6cf20759e88566f72bccaa1c0fa2c138d98cbb4c336cf3052025",
+      "byte_size": 2790
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000199.webp",
+      "sha256": "31adf4f4e288b64b734699efb85dff08c078813ea00b12b66671a935df92e137",
+      "byte_size": 2642
+    },
+    {
+      "path": "demo/assets/bhotekoshi-2016-exercise-v1/thumbnails/med-000200.webp",
+      "sha256": "b65b63aab2de8be7ef61b592f2926e15752313149619bfd403a0d0dbfd085905",
+      "byte_size": 2894
+    }
+  ],
+  "geography": {
+    "status": "blocked",
+    "verified_location_records": 170,
+    "required_location_records": 1000
+  },
+  "runtime_outputs_prefilled": false
+}

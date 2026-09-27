@@ -1,0 +1,15 @@
+{
+  "fictional_exercise_record": true,
+  "source_id": "src-001150",
+  "title": "Exercise report 1150",
+  "claims": [
+    {
+      "claim_id": "clm-001399",
+      "excerpt": "A fictional response-desk entry says Pema Tamang checked in safely; this report alone does not resolve identity."
+    },
+    {
+      "claim_id": "clm-001400",
+      "excerpt": "An exercise intake sheet lists Ramesh Maharjan as reached. Original source history remains attached; this is not a verified result."
+    }
+  ]
+}

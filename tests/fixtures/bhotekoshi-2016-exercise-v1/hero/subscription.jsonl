@@ -1,0 +1,1 @@
+{"schema_version":"1.0","dataset_id":"bhotekoshi-2016-exercise-v1","id":"sub-000001","kind":"subscription","incident_id":"inc-000001","available_at":"2016-07-06T00:15:00Z","is_synthetic":true,"contributor_id":"act-000001","subject":{"kind":"person","id":"per-000001"},"created_at":"2016-07-06T00:15:00Z","delivery":"in_app","active":true,"event_types":["new_claim","status_change"]}

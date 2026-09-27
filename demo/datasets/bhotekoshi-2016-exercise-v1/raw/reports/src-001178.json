@@ -1,0 +1,15 @@
+{
+  "fictional_exercise_record": true,
+  "source_id": "src-001178",
+  "title": "Exercise report 1178",
+  "claims": [
+    {
+      "claim_id": "clm-001455",
+      "excerpt": "Competing fictional report says contacted safely; conflict intentionally retained."
+    },
+    {
+      "claim_id": "clm-001456",
+      "excerpt": "Competing fictional report still lists person missing; conflict intentionally retained."
+    }
+  ]
+}

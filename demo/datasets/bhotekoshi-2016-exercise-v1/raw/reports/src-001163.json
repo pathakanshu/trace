@@ -1,0 +1,15 @@
+{
+  "fictional_exercise_record": true,
+  "source_id": "src-001163",
+  "title": "Exercise report 1163",
+  "claims": [
+    {
+      "claim_id": "clm-001425",
+      "excerpt": "A fictional treatment-desk report says Nirmala Magar requested care; the severity and follow-up remain unknown."
+    },
+    {
+      "claim_id": "clm-001426",
+      "excerpt": "A fictional treatment-desk report says Bikash Tamang requested care; the severity and follow-up remain unknown."
+    }
+  ]
+}

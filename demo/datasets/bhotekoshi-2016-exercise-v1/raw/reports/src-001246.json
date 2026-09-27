@@ -1,0 +1,15 @@
+{
+  "fictional_exercise_record": true,
+  "source_id": "src-001246",
+  "title": "Exercise report 1246",
+  "claims": [
+    {
+      "claim_id": "clm-001591",
+      "excerpt": "A fictional treatment-desk report says Tsering Ghale requested care; the severity and follow-up remain unknown."
+    },
+    {
+      "claim_id": "clm-001592",
+      "excerpt": "A fictional treatment-desk report says Anil Thapa requested care; the severity and follow-up remain unknown."
+    }
+  ]
+}

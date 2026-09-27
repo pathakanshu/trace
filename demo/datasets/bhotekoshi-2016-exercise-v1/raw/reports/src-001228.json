@@ -1,0 +1,15 @@
+{
+  "fictional_exercise_record": true,
+  "source_id": "src-001228",
+  "title": "Exercise report 1228",
+  "claims": [
+    {
+      "claim_id": "clm-001555",
+      "excerpt": "Synthetic family-liaison note reports contact with Deepa Maharjan and says no immediate help was requested."
+    },
+    {
+      "claim_id": "clm-001556",
+      "excerpt": "A fictional response-desk entry says Sita Lama checked in safely; this report alone does not resolve identity."
+    }
+  ]
+}

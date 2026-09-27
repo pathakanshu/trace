@@ -1,0 +1,15 @@
+{
+  "fictional_exercise_record": true,
+  "source_id": "src-000123",
+  "title": "Exercise report 0123",
+  "claims": [
+    {
+      "claim_id": "clm-000257",
+      "excerpt": "Fictional family-liaison intake lists Manisha Koirala as not yet contacted; the time of last contact was not supplied."
+    },
+    {
+      "claim_id": "clm-000258",
+      "excerpt": "An exercise volunteer relay says relatives have not checked in with Hari Adhikari. No outcome is reported."
+    }
+  ]
+}

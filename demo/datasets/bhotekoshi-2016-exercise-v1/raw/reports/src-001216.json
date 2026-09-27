@@ -1,0 +1,15 @@
+{
+  "fictional_exercise_record": true,
+  "source_id": "src-001216",
+  "title": "Exercise report 1216",
+  "claims": [
+    {
+      "claim_id": "clm-001531",
+      "excerpt": "Synthetic family-liaison note reports contact with Manisha Malla and says no immediate help was requested."
+    },
+    {
+      "claim_id": "clm-001532",
+      "excerpt": "A fictional response-desk entry says Hari Shrestha checked in safely; this report alone does not resolve identity."
+    }
+  ]
+}

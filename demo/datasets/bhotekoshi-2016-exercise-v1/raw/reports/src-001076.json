@@ -1,0 +1,15 @@
+{
+  "fictional_exercise_record": true,
+  "source_id": "src-001076",
+  "title": "Exercise report 1076",
+  "claims": [
+    {
+      "claim_id": "clm-001251",
+      "excerpt": "Exercise publication records caption/context claim for med-000101, med-000102; these labeled placeholder images are not documentary evidence."
+    },
+    {
+      "claim_id": "clm-001252",
+      "excerpt": "Exercise publication records caption/context claim for med-000103, med-000104; these labeled placeholder images are not documentary evidence."
+    }
+  ]
+}

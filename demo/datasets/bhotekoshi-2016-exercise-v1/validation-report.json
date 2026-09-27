@@ -1,0 +1,156 @@
+{
+  "dataset_id": "bhotekoshi-2016-exercise-v1",
+  "generated_at": "2026-09-27T03:08:40-04:00",
+  "validator": "tools/test_data/validate_dataset.py",
+  "jsonschema_version": "4.25.1",
+  "summary": {
+    "records": 8027,
+    "counts": {
+      "organization": 32,
+      "vote": 360,
+      "person": 1150,
+      "location": 170,
+      "source": 1800,
+      "investigation": 24,
+      "subscription": 150,
+      "facility": 36,
+      "contributor": 80,
+      "task": 96,
+      "contribution": 240,
+      "incident": 1,
+      "infrastructure": 30,
+      "hazard": 18,
+      "aid": 40,
+      "claim": 3600,
+      "media": 200
+    },
+    "checks_passed": 19,
+    "checks_failed": 0,
+    "blocked_requirements": [
+      {
+        "requirement": "1000 verified locations",
+        "status": "blocked",
+        "expected": 1000,
+        "actual": 170,
+        "reason": "Only four current settlement anchors and river context are verified; no approved reporting zones, historical flood extent, Lamosanghu anchor, or suitable polygon input. No geometry was fabricated."
+      }
+    ]
+  },
+  "checks": [
+    {
+      "check": "JSONL UTF-8, parse, newline and shard limit",
+      "status": "pass",
+      "detail": "88 shards; maximum 100 records"
+    },
+    {
+      "check": "JSON Schema Draft 2020-12 + format checking",
+      "status": "pass",
+      "detail": "external system-Python check: pass"
+    },
+    {
+      "check": "unique record IDs",
+      "status": "pass",
+      "detail": "all primary IDs are unique"
+    },
+    {
+      "check": "exact primary record quotas excluding geography gate",
+      "status": "pass",
+      "detail": "{}"
+    },
+    {
+      "check": "geographic placement readiness",
+      "status": "blocked",
+      "detail": "170/1000; verified zones/areas unavailable; see generation-status.json"
+    },
+    {
+      "check": "foreign-key kind and reference closure",
+      "status": "pass",
+      "detail": "all checked references resolve"
+    },
+    {
+      "check": "source-to-claim cardinality histogram",
+      "status": "pass",
+      "detail": "actual {5: 100, 1: 900, 2: 500, 4: 300}; expected {1: 900, 2: 500, 4: 300, 5: 100}"
+    },
+    {
+      "check": "publisher type and source dependency DAG",
+      "status": "pass",
+      "detail": "org-type mismatches=0, edges=450, backward-only=True"
+    },
+    {
+      "check": "raw source hashes and excerpt provenance",
+      "status": "pass",
+      "detail": "hashes checked for 1800 reports; excerpts verified"
+    },
+    {
+      "check": "claims by subject kind",
+      "status": "pass",
+      "detail": "{'aid': 150, 'person': 2800, 'media': 150, 'facility': 100, 'organization': 50, 'infrastructure': 200, 'hazard': 150}"
+    },
+    {
+      "check": "person claim type quotas",
+      "status": "pass",
+      "detail": "{'MISSING': 1300, 'SEEN_AT_LOCATION': 550, 'PERSON_DETAIL': 140, 'FOUND_SAFE': 600, 'INJURED': 200, 'DECEASED': 10}"
+    },
+    {
+      "check": "200 actual images, measured hashes, dimensions, EXIF and thumbnails",
+      "status": "pass",
+      "detail": "200 files; 160 hashes; 5454870 bytes"
+    },
+    {
+      "check": "120 hidden image families, transformations and late-ingest cases",
+      "status": "pass",
+      "detail": "{'base_plus_exact_copy': 40, 'base_plus_resize': 20, 'base_plus_reencode': 10, 'base_plus_crop': 10, 'singleton': 40}"
+    },
+    {
+      "check": "private identity oracle counts",
+      "status": "pass",
+      "detail": "groups=1000, person records=1150, pairs=250, multiplicity={1: 865, 2: 120, 3: 15}"
+    },
+    {
+      "check": "contribution_types",
+      "status": "pass",
+      "detail": "actual={'TRANSLATION': 30, 'GEOLOCATION': 40, 'EARLIER_COPY': 25, 'SOURCE_CITATION': 25, 'COMMENT': 70, 'CORRECTION': 30, 'CHALLENGE': 20} expected={'COMMENT': 70, 'CORRECTION': 30, 'TRANSLATION': 30, 'GEOLOCATION': 40, 'EARLIER_COPY': 25, 'SOURCE_CITATION': 25, 'CHALLENGE': 20}"
+    },
+    {
+      "check": "vote_values",
+      "status": "pass",
+      "detail": "actual={'HELPFUL': 240, 'NOT_HELPFUL': 120} expected={'HELPFUL': 240, 'NOT_HELPFUL': 120}"
+    },
+    {
+      "check": "task_types",
+      "status": "pass",
+      "detail": "actual={'GEOLOCATE': 24, 'TRANSLATE': 24, 'FIND_EARLIER_COPY': 24, 'SOURCE_OR_CHALLENGE': 24} expected={'GEOLOCATE': 24, 'TRANSLATE': 24, 'FIND_EARLIER_COPY': 24, 'SOURCE_OR_CHALLENGE': 24}"
+    },
+    {
+      "check": "task_states",
+      "status": "pass",
+      "detail": "actual={'OPEN': 40, 'IN_PROGRESS': 20, 'SUBMITTED': 24, 'REVIEWED': 12} expected={'OPEN': 40, 'IN_PROGRESS': 20, 'SUBMITTED': 24, 'REVIEWED': 12}"
+    },
+    {
+      "check": "investigations_by_topic",
+      "status": "pass",
+      "detail": "actual={'PERSON_TIMELINE': 6, 'ACCESS_HAZARD': 6, 'AID_FACILITY': 6, 'MEDIA_LINEAGE': 6} expected={'PERSON_TIMELINE': 6, 'ACCESS_HAZARD': 6, 'AID_FACILITY': 6, 'MEDIA_LINEAGE': 6}"
+    },
+    {
+      "check": "private expectations separated from catalog inputs",
+      "status": "pass",
+      "detail": "no private truth/runtime result fields in catalog"
+    }
+  ],
+  "errors": [],
+  "blocked": [
+    {
+      "requirement": "1000 verified locations",
+      "status": "blocked",
+      "expected": 1000,
+      "actual": 170,
+      "reason": "Only four current settlement anchors and river context are verified; no approved reporting zones, historical flood extent, Lamosanghu anchor, or suitable polygon input. No geometry was fabricated."
+    }
+  ],
+  "limitations": [
+    "No compatible application importer/runtime replay was executed; no agent output is seeded.",
+    "Geographic zone readiness blocks the remaining 830 locations and full geographic acceptance.",
+    "OS/UI offline asset loading is not verified by this data-only validator."
+  ]
+}

@@ -1,0 +1,6 @@
+FICTIONAL EXERCISE REPORT src-001724
+Exercise observation 066 records a fictional slope_debris report at a named anchor; it is not a flood boundary.
+Exercise observation 067 records a fictional slope_debris report at a named anchor; it is not a flood boundary.
+Exercise observation 068 records a fictional slope_debris report at a named anchor; it is not a flood boundary.
+Exercise observation 069 records a fictional access_secondary report at a named anchor; it is not a flood boundary.
+Exercise observation 070 records a fictional access_secondary report at a named anchor; it is not a flood boundary.

@@ -1,0 +1,15 @@
+{
+  "fictional_exercise_record": true,
+  "source_id": "src-001117",
+  "title": "Exercise report 1117",
+  "claims": [
+    {
+      "claim_id": "clm-001333",
+      "excerpt": "Synthetic family-liaison note reports contact with Deepa Bhandari and says no immediate help was requested."
+    },
+    {
+      "claim_id": "clm-001334",
+      "excerpt": "A fictional response-desk entry says Sita Sherpa checked in safely; this report alone does not resolve identity."
+    }
+  ]
+}

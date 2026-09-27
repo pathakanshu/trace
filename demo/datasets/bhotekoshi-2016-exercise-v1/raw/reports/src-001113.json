@@ -1,0 +1,15 @@
+{
+  "fictional_exercise_record": true,
+  "source_id": "src-001113",
+  "title": "Exercise report 1113",
+  "claims": [
+    {
+      "claim_id": "clm-001325",
+      "excerpt": "A fictional response-desk entry says Nirmala Poudel checked in safely; this report alone does not resolve identity."
+    },
+    {
+      "claim_id": "clm-001326",
+      "excerpt": "An exercise intake sheet lists Bikash Magar as reached. Original source history remains attached; this is not a verified result."
+    }
+  ]
+}

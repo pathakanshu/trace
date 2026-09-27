@@ -1,0 +1,15 @@
+{
+  "fictional_exercise_record": true,
+  "source_id": "src-001227",
+  "title": "Exercise report 1227",
+  "claims": [
+    {
+      "claim_id": "clm-001553",
+      "excerpt": "A fictional response-desk entry says Kiran Magar checked in safely; this report alone does not resolve identity."
+    },
+    {
+      "claim_id": "clm-001554",
+      "excerpt": "An exercise intake sheet lists Prakash Tamang as reached. Original source history remains attached; this is not a verified result."
+    }
+  ]
+}

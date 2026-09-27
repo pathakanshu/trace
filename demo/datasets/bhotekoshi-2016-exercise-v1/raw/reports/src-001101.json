@@ -1,0 +1,15 @@
+{
+  "fictional_exercise_record": true,
+  "source_id": "src-001101",
+  "title": "Exercise report 1101",
+  "claims": [
+    {
+      "claim_id": "clm-001301",
+      "excerpt": "A fictional response-desk entry says Maya Gurung checked in safely; this report alone does not resolve identity."
+    },
+    {
+      "claim_id": "clm-001302",
+      "excerpt": "An exercise intake sheet lists Anil Rai as reached. Original source history remains attached; this is not a verified result."
+    }
+  ]
+}

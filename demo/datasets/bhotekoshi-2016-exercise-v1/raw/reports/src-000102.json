@@ -1,0 +1,15 @@
+{
+  "fictional_exercise_record": true,
+  "source_id": "src-000102",
+  "title": "Exercise report 0102",
+  "claims": [
+    {
+      "claim_id": "clm-000215",
+      "excerpt": "The synthetic intake ledger keeps an open contact request for Kiran Bhandari; this is not a historical case or identity finding."
+    },
+    {
+      "claim_id": "clm-000216",
+      "excerpt": "Fictional caller note: the household has not re-established contact with Prakash Sherpa; last-known place remains unreported."
+    }
+  ]
+}

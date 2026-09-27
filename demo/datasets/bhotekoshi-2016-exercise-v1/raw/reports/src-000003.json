@@ -1,0 +1,15 @@
+{
+  "fictional_exercise_record": true,
+  "source_id": "src-000003",
+  "title": "Exercise report 0003",
+  "claims": [
+    {
+      "claim_id": "clm-000005",
+      "excerpt": "Fictional family-liaison intake lists Nirmala Poudel as not yet contacted; the time of last contact was not supplied."
+    },
+    {
+      "claim_id": "clm-000006",
+      "excerpt": "An exercise volunteer relay says relatives have not checked in with Bikash Magar. No outcome is reported."
+    }
+  ]
+}

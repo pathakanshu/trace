@@ -1,0 +1,15 @@
+{
+  "fictional_exercise_record": true,
+  "source_id": "src-001209",
+  "title": "Exercise report 1209",
+  "claims": [
+    {
+      "claim_id": "clm-001517",
+      "excerpt": "A fictional response-desk entry says Gita Maharjan checked in safely; this report alone does not resolve identity."
+    },
+    {
+      "claim_id": "clm-001518",
+      "excerpt": "An exercise intake sheet lists Bimala Lama as reached. Original source history remains attached; this is not a verified result."
+    }
+  ]
+}

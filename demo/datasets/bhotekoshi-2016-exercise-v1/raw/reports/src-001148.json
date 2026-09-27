@@ -1,0 +1,15 @@
+{
+  "fictional_exercise_record": true,
+  "source_id": "src-001148",
+  "title": "Exercise report 1148",
+  "claims": [
+    {
+      "claim_id": "clm-001395",
+      "excerpt": "Synthetic family-liaison note reports contact with Pasang Malla and says no immediate help was requested."
+    },
+    {
+      "claim_id": "clm-001396",
+      "excerpt": "A fictional response-desk entry says Rita Shrestha checked in safely; this report alone does not resolve identity."
+    }
+  ]
+}

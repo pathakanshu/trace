@@ -1,0 +1,6 @@
+FICTIONAL EXERCISE REPORT src-001789
+Fictional exercise report 091 lists a 12 beds entry for this shelter scenario site; this is not a real facility.
+Fictional exercise report 092 lists a 5 items entry for this shelter scenario site; this is not a real facility.
+Fictional exercise report 093 lists a 12 beds entry for this aid_distribution scenario site; this is not a real facility.
+Fictional exercise report 094 lists a 5 items entry for this aid_distribution scenario site; this is not a real facility.
+Fictional exercise report 095 lists a 12 beds entry for this aid_distribution scenario site; this is not a real facility.

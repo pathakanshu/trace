@@ -1,0 +1,15 @@
+{
+  "fictional_exercise_record": true,
+  "source_id": "src-001151",
+  "title": "Exercise report 1151",
+  "claims": [
+    {
+      "claim_id": "clm-001401",
+      "excerpt": "Synthetic family-liaison note reports contact with Manisha Lama and says no immediate help was requested."
+    },
+    {
+      "claim_id": "clm-001402",
+      "excerpt": "A fictional response-desk entry says Hari Basnet checked in safely; this report alone does not resolve identity."
+    }
+  ]
+}

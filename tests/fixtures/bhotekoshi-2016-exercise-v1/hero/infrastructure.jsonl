@@ -1,0 +1,1 @@
+{"schema_version":"1.0","dataset_id":"bhotekoshi-2016-exercise-v1","id":"inf-000001","kind":"infrastructure","incident_id":"inc-000001","available_at":"2016-07-06T00:15:00Z","is_synthetic":true,"name":"Road Segment Exercise Subject 01","infrastructure_type":"ROAD_SEGMENT","location_ids":["loc-000877","loc-000878"],"operator_organization_id":"org-000020"}

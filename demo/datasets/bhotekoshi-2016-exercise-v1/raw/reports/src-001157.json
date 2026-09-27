@@ -1,0 +1,15 @@
+{
+  "fictional_exercise_record": true,
+  "source_id": "src-001157",
+  "title": "Exercise report 1157",
+  "claims": [
+    {
+      "claim_id": "clm-001413",
+      "excerpt": "Synthetic family-liaison note reports contact with Tsering Rai and says no immediate help was requested."
+    },
+    {
+      "claim_id": "clm-001414",
+      "excerpt": "A fictional response-desk entry says Anil Malla checked in safely; this report alone does not resolve identity."
+    }
+  ]
+}

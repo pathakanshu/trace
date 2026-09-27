@@ -1,0 +1,15 @@
+{
+  "fictional_exercise_record": true,
+  "source_id": "src-001210",
+  "title": "Exercise report 1210",
+  "claims": [
+    {
+      "claim_id": "clm-001519",
+      "excerpt": "Synthetic family-liaison note reports contact with Indira Basnet and says no immediate help was requested."
+    },
+    {
+      "claim_id": "clm-001520",
+      "excerpt": "A fictional response-desk entry says Karma Karki checked in safely; this report alone does not resolve identity."
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "dataset_id": "bhotekoshi-2016-exercise-v1",
+  "status": "partial_blocked",
+  "generated_at": "2026-09-27T07:06:00Z",
+  "blockers": [
+    {
+      "requirement": "1000 locations: 840 initial points and 40 areas",
+      "status": "blocked",
+      "reason": "Only four current mapped settlement anchors were verified; no approved sampling zones, historical flood boundary, Lamosanghu anchor, or area geometry is available. No coordinates were fabricated."
+    }
+  ],
+  "generated_media_is_placeholder": true,
+  "runtime_outputs_prefilled": false
+}

@@ -1,0 +1,15 @@
+{
+  "fictional_exercise_record": true,
+  "source_id": "src-001139",
+  "title": "Exercise report 1139",
+  "claims": [
+    {
+      "claim_id": "clm-001377",
+      "excerpt": "Synthetic family-liaison note reports contact with Suman Shrestha and says no immediate help was requested."
+    },
+    {
+      "claim_id": "clm-001378",
+      "excerpt": "A fictional response-desk entry says Tara Poudel checked in safely; this report alone does not resolve identity."
+    }
+  ]
+}

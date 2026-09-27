@@ -1,0 +1,15 @@
+{
+  "fictional_exercise_record": true,
+  "source_id": "src-001225",
+  "title": "Exercise report 1225",
+  "claims": [
+    {
+      "claim_id": "clm-001549",
+      "excerpt": "Synthetic family-liaison note reports contact with Gita Rai and says no immediate help was requested."
+    },
+    {
+      "claim_id": "clm-001550",
+      "excerpt": "A fictional response-desk entry says Bimala Malla checked in safely; this report alone does not resolve identity."
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "fictional_exercise_record": true,
+  "source_id": "src-001234",
+  "title": "Exercise report 1234",
+  "claims": [
+    {
+      "claim_id": "clm-001567",
+      "excerpt": "Synthetic family-liaison note reports contact with Sunita Khadka and says no immediate help was requested."
+    },
+    {
+      "claim_id": "clm-001568",
+      "excerpt": "A fictional response-desk entry says Nabin Rai checked in safely; this report alone does not resolve identity."
+    }
+  ]
+}

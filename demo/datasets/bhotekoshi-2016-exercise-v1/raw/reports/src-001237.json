@@ -1,0 +1,15 @@
+{
+  "fictional_exercise_record": true,
+  "source_id": "src-001237",
+  "title": "Exercise report 1237",
+  "claims": [
+    {
+      "claim_id": "clm-001573",
+      "excerpt": "Synthetic family-liaison note reports contact with Sanjay Tamang and says no immediate help was requested."
+    },
+    {
+      "claim_id": "clm-001574",
+      "excerpt": "A fictional response-desk entry says Maya Maharjan checked in safely; this report alone does not resolve identity."
+    }
+  ]
+}

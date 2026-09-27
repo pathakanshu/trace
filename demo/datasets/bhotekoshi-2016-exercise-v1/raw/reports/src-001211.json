@@ -1,0 +1,15 @@
+{
+  "fictional_exercise_record": true,
+  "source_id": "src-001211",
+  "title": "Exercise report 1211",
+  "claims": [
+    {
+      "claim_id": "clm-001521",
+      "excerpt": "An exercise intake sheet lists Kiran Bista as reached. Original source history remains attached; this is not a verified result."
+    },
+    {
+      "claim_id": "clm-001522",
+      "excerpt": "Synthetic family-liaison note reports contact with Prakash Bhandari and says no immediate help was requested."
+    }
+  ]
+}

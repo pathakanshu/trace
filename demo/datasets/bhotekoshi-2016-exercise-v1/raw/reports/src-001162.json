@@ -1,0 +1,15 @@
+{
+  "fictional_exercise_record": true,
+  "source_id": "src-001162",
+  "title": "Exercise report 1162",
+  "claims": [
+    {
+      "claim_id": "clm-001423",
+      "excerpt": "A fictional treatment-desk report says Arjun Shrestha requested care; the severity and follow-up remain unknown."
+    },
+    {
+      "claim_id": "clm-001424",
+      "excerpt": "A fictional treatment-desk report says Kusum Poudel requested care; the severity and follow-up remain unknown."
+    }
+  ]
+}

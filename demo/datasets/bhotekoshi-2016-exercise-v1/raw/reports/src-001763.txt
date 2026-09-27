@@ -1,0 +1,6 @@
+FICTIONAL EXERCISE REPORT src-001763
+Exercise aid ledger line 111 reports 5 items for this fictional offer entry; stock and delivery remain unverified.
+Exercise aid ledger line 112 reports 5 items for this fictional offer entry; stock and delivery remain unverified.
+Exercise aid ledger line 113 reports 5 items for this fictional delivery entry; stock and delivery remain unverified.
+Exercise aid ledger line 114 reports 5 items for this fictional delivery entry; stock and delivery remain unverified.
+Exercise aid ledger line 115 reports 5 items for this fictional delivery entry; stock and delivery remain unverified.

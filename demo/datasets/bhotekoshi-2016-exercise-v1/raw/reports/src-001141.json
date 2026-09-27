@@ -1,0 +1,15 @@
+{
+  "fictional_exercise_record": true,
+  "source_id": "src-001141",
+  "title": "Exercise report 1141",
+  "claims": [
+    {
+      "claim_id": "clm-001381",
+      "excerpt": "A fictional response-desk entry says Tsering Maharjan checked in safely; this report alone does not resolve identity."
+    },
+    {
+      "claim_id": "clm-001382",
+      "excerpt": "An exercise intake sheet lists Anil Lama as reached. Original source history remains attached; this is not a verified result."
+    }
+  ]
+}

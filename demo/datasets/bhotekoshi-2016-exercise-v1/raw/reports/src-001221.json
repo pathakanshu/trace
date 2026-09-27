@@ -1,0 +1,15 @@
+{
+  "fictional_exercise_record": true,
+  "source_id": "src-001221",
+  "title": "Exercise report 1221",
+  "claims": [
+    {
+      "claim_id": "clm-001541",
+      "excerpt": "A fictional response-desk entry says Sanjay Bhandari checked in safely; this report alone does not resolve identity."
+    },
+    {
+      "claim_id": "clm-001542",
+      "excerpt": "An exercise intake sheet lists Maya Sherpa as reached. Original source history remains attached; this is not a verified result."
+    }
+  ]
+}

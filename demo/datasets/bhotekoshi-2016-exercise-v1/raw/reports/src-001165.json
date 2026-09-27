@@ -1,0 +1,15 @@
+{
+  "fictional_exercise_record": true,
+  "source_id": "src-001165",
+  "title": "Exercise report 1165",
+  "claims": [
+    {
+      "claim_id": "clm-001429",
+      "excerpt": "A fictional treatment-desk report says Indira Basnet requested care; the severity and follow-up remain unknown."
+    },
+    {
+      "claim_id": "clm-001430",
+      "excerpt": "A fictional treatment-desk report says Karma Karki requested care; the severity and follow-up remain unknown."
+    }
+  ]
+}

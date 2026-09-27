@@ -1,0 +1,15 @@
+{
+  "fictional_exercise_record": true,
+  "source_id": "src-001230",
+  "title": "Exercise report 1230",
+  "claims": [
+    {
+      "claim_id": "clm-001559",
+      "excerpt": "A fictional response-desk entry says Milan Bista checked in safely; this report alone does not resolve identity."
+    },
+    {
+      "claim_id": "clm-001560",
+      "excerpt": "An exercise intake sheet lists Raju Bhandari as reached. Original source history remains attached; this is not a verified result."
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "fictional_exercise_record": true,
+  "source_id": "src-000111",
+  "title": "Exercise report 0111",
+  "claims": [
+    {
+      "claim_id": "clm-000233",
+      "excerpt": "Fictional family-liaison intake lists Suman Bista as not yet contacted; the time of last contact was not supplied."
+    },
+    {
+      "claim_id": "clm-000234",
+      "excerpt": "An exercise volunteer relay says relatives have not checked in with Tara Bhandari. No outcome is reported."
+    }
+  ]
+}

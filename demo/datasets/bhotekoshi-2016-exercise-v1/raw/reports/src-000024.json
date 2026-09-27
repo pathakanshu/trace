@@ -1,0 +1,15 @@
+{
+  "fictional_exercise_record": true,
+  "source_id": "src-000024",
+  "title": "Exercise report 0024",
+  "claims": [
+    {
+      "claim_id": "clm-000053",
+      "excerpt": "Fictional family-liaison intake lists Pasang Lama as not yet contacted; the time of last contact was not supplied."
+    },
+    {
+      "claim_id": "clm-000055",
+      "excerpt": "The synthetic intake ledger keeps an open contact request for Rita Basnet; this is not a historical case or identity finding."
+    }
+  ]
+}

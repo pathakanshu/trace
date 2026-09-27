@@ -1,0 +1,15 @@
+{
+  "fictional_exercise_record": true,
+  "source_id": "src-001240",
+  "title": "Exercise report 1240",
+  "claims": [
+    {
+      "claim_id": "clm-001579",
+      "excerpt": "A fictional treatment-desk report says Manisha Malla requested care; the severity and follow-up remain unknown."
+    },
+    {
+      "claim_id": "clm-001580",
+      "excerpt": "A fictional treatment-desk report says Hari Shrestha requested care; the severity and follow-up remain unknown."
+    }
+  ]
+}

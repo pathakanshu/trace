@@ -1,0 +1,15 @@
+{
+  "fictional_exercise_record": true,
+  "source_id": "src-001233",
+  "title": "Exercise report 1233",
+  "claims": [
+    {
+      "claim_id": "clm-001565",
+      "excerpt": "A fictional response-desk entry says Asha Adhikari checked in safely; this report alone does not resolve identity."
+    },
+    {
+      "claim_id": "clm-001566",
+      "excerpt": "An exercise intake sheet lists Dawa Gurung as reached. Original source history remains attached; this is not a verified result."
+    }
+  ]
+}

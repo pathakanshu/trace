@@ -1,0 +1,15 @@
+{
+  "fictional_exercise_record": true,
+  "source_id": "src-001102",
+  "title": "Exercise report 1102",
+  "claims": [
+    {
+      "claim_id": "clm-001303",
+      "excerpt": "Synthetic family-liaison note reports contact with Arjun Malla and says no immediate help was requested."
+    },
+    {
+      "claim_id": "clm-001304",
+      "excerpt": "A fictional response-desk entry says Kusum Shrestha checked in safely; this report alone does not resolve identity."
+    }
+  ]
+}

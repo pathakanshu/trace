@@ -1,0 +1,15 @@
+{
+  "fictional_exercise_record": true,
+  "source_id": "src-001222",
+  "title": "Exercise report 1222",
+  "claims": [
+    {
+      "claim_id": "clm-001543",
+      "excerpt": "Synthetic family-liaison note reports contact with Tsering Ghale and says no immediate help was requested."
+    },
+    {
+      "claim_id": "clm-001544",
+      "excerpt": "A fictional response-desk entry says Anil Thapa checked in safely; this report alone does not resolve identity."
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "fictional_exercise_record": true,
+  "source_id": "src-001213",
+  "title": "Exercise report 1213",
+  "claims": [
+    {
+      "claim_id": "clm-001525",
+      "excerpt": "Synthetic family-liaison note reports contact with Pasang Thapa and says no immediate help was requested."
+    },
+    {
+      "claim_id": "clm-001526",
+      "excerpt": "A fictional response-desk entry says Rita Koirala checked in safely; this report alone does not resolve identity."
+    }
+  ]
+}
