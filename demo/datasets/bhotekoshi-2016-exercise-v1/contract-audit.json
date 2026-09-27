@@ -1,6 +1,6 @@
 {
   "dataset_id": "bhotekoshi-2016-exercise-v1",
-  "generated_at": "2026-09-27T10:50:40Z",
+  "generated_at": "2026-09-27T10:55:38Z",
   "tools": [
     {
       "name": "tools/test_data/audit_contracts.py",
@@ -20,7 +20,7 @@
         "examples": [
           "row 1: missing: asset_tools, deviations, files, generated_at, generator, limitations, profiles, quota_path, sampler, scenario_clock_start, schema_path; unexpected: asset_bundle, assets, created_at, fictional_content_notice, geography, record_counts, record_shards, runtime_outputs_prefilled"
         ],
-        "manifest_sha256": "99db4a6df29b4288dcb7a27295b1d0c5b6423bac5d41ca5aa91a58f5700cbe58"
+        "manifest_sha256": "35b9bcbd3ae1f24e0092e7934e2c581c1668f7e440192ee42959febcf66bc1ae"
       },
       "expected": [
         "schema_version",

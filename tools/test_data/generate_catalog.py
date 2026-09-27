@@ -295,7 +295,10 @@ def build_claims_and_sources(plan, groups, facilities, infrastructure, hazards, 
     return claims,source_records,sources_by_id
 
 def build_media(sources_by_id,claims):
-    measurements=json.loads((DATA/"asset-measurements.json").read_text(encoding="utf-8"))["images"]
+    from repair_media_time import generation_start
+    receipt=json.loads((DATA/"asset-measurements.json").read_text(encoding="utf-8"))
+    asset_run_start=generation_start(receipt)
+    measurements=receipt["images"]
     claim_for={mid:c for c in claims if c["subject"]["kind"]=="media" for mid in c["supporting_media_ids"]}
     rows=[]
     for ix,m in enumerate(measurements,1):
@@ -309,7 +312,7 @@ def build_media(sources_by_id,claims):
         rec.update({"media_type":"image","source_id":source["id"],"description":"Locally generated, clearly labeled fictional placeholder illustration; not documentary imagery.",
           "published_caption":caption,"reported_capture_time":tim(None),"claimed_location_id":None,
           "asset_path":f"demo/assets/{DATASET}/images/{fname}","sha256":m["sha256"],"byte_size":m["byte_size"],"mime_type":m["mime_type"],"width_px":m["width_px"],"height_px":m["height_px"],
-          "duration_seconds":None,"actual_created_at":NOW_ISO,"license_id":"lic-000001","is_controlled_exercise_asset":True,
+          "duration_seconds":None,"actual_created_at":asset_run_start,"license_id":"lic-000001","is_controlled_exercise_asset":True,
           "embedded_metadata_is_synthetic":True,"thumbnail_path":f"demo/assets/{DATASET}/thumbnails/{Path(fname).stem}.webp","declared_predecessor_media_id":None,"frame_origin":None})
         rows.append(rec)
     return rows

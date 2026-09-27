@@ -27,11 +27,13 @@ of historical missing people.
   `00629b3cc4b832e092f206b54f15c57d438e124dfaca97b904b4c1a21d8a444b`.
   The actual bundle was restored twice into a fresh temporary checkout; both
   runs verified 400 files and the repeat preserved bytes/modification times.
-  A fresh Pillow file audit passes ten checks: hashes/properties, 160 distinct
+  A fresh Pillow file audit passes eleven checks: hashes/properties, 160 distinct
   image hashes, family geometry, EXIF coverage, thumbnails and chronology. All
-  40 derivative hashes also reproduce exactly with the in-memory generator recipe. The provenance check fails: all 200 catalog creation times (07:06Z) follow
-  saved measurements (00:42:47Z on 2026-09-27). No original generator version
-  is recorded. Its application-verification check remains blocked; no app signals were created.
+  40 derivative hashes also reproduce exactly with the in-memory generator recipe. The media timestamp defect is repaired from the original recorded asset-run
+  start (00:42:47Z on 2026-09-27), replacing the later catalog-run time (07:06Z).
+  Two manifest shard hashes and 40 hero copies were refreshed; source files and
+  binary assets are unchanged. Original encoder version is unrecorded. The
+  application-verification check remains blocked; no app signals were created.
 
 ## Measured defects that block claiming a complete corpus
 
@@ -46,7 +48,7 @@ of historical missing people.
 | Votes | 360 self-votes; 120 duplicate contributor/contribution pairs | Use distinct attributable non-author voters, one vote per pair, while retaining 240 helpful/120 not-helpful coverage |
 | Tasks | 36 submissions target different records from their tasks; reviewed snapshots lack cited claim evidence | Link actual appropriate contributions, reviewer evidence and times; do not claim that fixture snapshots are executed reviews |
 | Subscriptions | Maximum one distinct active follower on a hero Person | Cover two followers on one hero Person, no-follower person and mixed subject follows; test alerts only through actual execution |
-| Media provenance | All 200 claimed creation times follow their saved measurement timestamp; original generation tool version missing | Reconcile the saved provenance before license migration; do not infer creation from file mtime or current tool versions |
+| Media provenance | Creation-time metadata repaired from original asset-run receipt; original generation-tool version remains unrecorded | Preserve recorded batch time and unknown version honestly when migrating licenses; never infer historical versions from the current audit runtime |
 | Support files | Legacy manifest/license/checkpoint/scenario/action/report shapes | Migrate consumers together, populate real nested references and generated checksums; exact shape alone is insufficient |
 | Story focus | Shelter story points to TREATMENT fac-000001; correction/translation stories select COMMENT con-000031/con-000061; historical scenario points to media-caption clm-001151 | Reconcile narratives, typed focal records and cited actions while preserving the 50-identity hero quota |
 | Review plan | 80 confirmation actions contain two redundant triangle edges; only 78 distinct planned joins, projecting 1,072 groups | Select an 80-edge acyclic forest and author 20 evidence-supported rejection actions; validate before any real review |

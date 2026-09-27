@@ -1,6 +1,6 @@
 {
   "dataset_id": "bhotekoshi-2016-exercise-v1",
-  "generated_at": "2026-09-27T10:42:50Z",
+  "generated_at": "2026-09-27T10:55:40Z",
   "tools": [
     {
       "name": "tools/test_data/audit_media.py",
@@ -23,7 +23,7 @@
         "failure_count": 0,
         "examples": [],
         "decoded": 200,
-        "manifest_sha256": "99db4a6df29b4288dcb7a27295b1d0c5b6423bac5d41ca5aa91a58f5700cbe58"
+        "manifest_sha256": "35b9bcbd3ae1f24e0092e7934e2c581c1668f7e440192ee42959febcf66bc1ae"
       },
       "expected": "200 actual decoded images match catalog/manifest hash, bytes, dimensions and MIME",
       "evidence_paths": [
@@ -51,26 +51,13 @@
     },
     {
       "rule_id": "asset_creation_provenance_consistency",
-      "status": "fail",
+      "status": "pass",
       "observed": {
-        "failure_count": 200,
-        "examples": [
-          "med-000001: claimed creation follows saved asset measurement time",
-          "med-000002: claimed creation follows saved asset measurement time",
-          "med-000003: claimed creation follows saved asset measurement time",
-          "med-000004: claimed creation follows saved asset measurement time",
-          "med-000005: claimed creation follows saved asset measurement time",
-          "med-000006: claimed creation follows saved asset measurement time",
-          "med-000007: claimed creation follows saved asset measurement time",
-          "med-000008: claimed creation follows saved asset measurement time",
-          "med-000009: claimed creation follows saved asset measurement time",
-          "med-000010: claimed creation follows saved asset measurement time",
-          "med-000011: claimed creation follows saved asset measurement time",
-          "med-000012: claimed creation follows saved asset measurement time"
-        ],
+        "failure_count": 0,
+        "examples": [],
         "saved_measurement_time": "2026-09-27T00:42:47Z",
         "catalog_creation_times": [
-          "2026-09-27T07:06:00Z"
+          "2026-09-27T00:42:47Z"
         ],
         "saved_measurement_count": 200
       },
@@ -255,8 +242,8 @@
     }
   ],
   "summary": {
-    "pass": 10,
-    "fail": 1,
+    "pass": 11,
+    "fail": 0,
     "blocked": 1
   }
 }

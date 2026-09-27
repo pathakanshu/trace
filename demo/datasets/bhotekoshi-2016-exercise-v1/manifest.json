@@ -314,13 +314,13 @@
     },
     {
       "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/media/part-0001.jsonl",
-      "sha256": "4921a269ddbb93ad8546ebd38453cca134a19bf8b7ad87d7ea042fef56c25e36",
+      "sha256": "21555c3c7221f6acf4a52780da2d25c5901259b2867611f5e4beb1cf156c34c3",
       "byte_size": 114275,
       "records": 100
     },
     {
       "path": "demo/datasets/bhotekoshi-2016-exercise-v1/records/media/part-0002.jsonl",
-      "sha256": "f1f8e21dbea232e3184dd7c55a4d61fee4095124e2639659c8ccf746e5f6c462",
+      "sha256": "f12c0ce0c8533e82695f64b0721f69116c8ce31bf1fa2f0d64f6a6e762d1bc2d",
       "byte_size": 114250,
       "records": 100
     },

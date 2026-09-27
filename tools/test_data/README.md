@@ -117,8 +117,8 @@ cases use analysis without publishing: hostile text stays source data. None of
 these eight runtime cases has run; no agent response or success is prefilled.
 No nonexistent replay-action IDs are used as prerequisites.
 
-Actual tooling results: **145 distinct tests pass across two environments**.
-The schema environment runs 130 and explicitly skips fifteen Pillow tests. Run the
+Actual tooling results: **154 distinct tests pass across two environments**.
+The schema environment runs 139 and explicitly skips fifteen Pillow tests. Run the
 fifteen media checks with a Pillow-equipped tooling Python:
 `python3 -m unittest discover -s tools/test_data -p '*media*.py'`.
 That separate run passes all fifteen. Do not count skipped decoder checks as passes
@@ -250,7 +250,7 @@ In a Pillow-equipped tooling environment, run:
 measured validation results. Exit 2 means the implemented file checks passed but
 application verification is blocked; it is not a successful EvidenceWalker run.
 
-Actual run: Pillow 12.3.0 / Python 3.12.14, **10 pass / 1 fail / 1 blocked**.
+Actual run: Pillow 12.3.0 / Python 3.12.14, **11 pass / 0 fail / 1 blocked**.
 Decoded all 200 images and 200 thumbnails; actual SHA-256/bytes/dimensions/MIME
 match the catalog and manifest. There are 160 distinct image hashes, 120 disjoint
 families (40 exact, 20 resize, 10 reencode, 10 crop, 40 singleton), 36 GPS/24
@@ -306,14 +306,27 @@ media 10/0/1. Bundle restore verified all 400 files and the documented SHA-256;
 tracked files stayed clean and no .jac runtime store was created. This was a
 fresh checkout on the same laptop, not a second-laptop application rehearsal.
 
-The media creation-provenance consistency check finds 200 contradictory time
-assertions: catalog actual_created_at is 2026-09-27T07:06:00Z but the matching
-saved asset measurements have generated_at 2026-09-27T00:42:47Z. Measurement
-hashes, sizes, dimensions and EXIF flags still match all actual files. Original
-generation-tool version was not captured. License conversion is deferred until
-provenance is reconciled; no timestamp is inferred from mtime or replaced with
-the audit clock. Four regressions cover valid/equal ordering, reversed times,
-measurement coverage/byte drift and invalid/unknown timestamps.
+The first creation-provenance check exposed 200 mismatched timestamps. The
+catalog generator incorrectly used its own run time (07:06Z); `generate_assets.py`
+records the asset operation's start as STAMP in asset-measurements.json
+(2026-09-27T00:42:47Z). The catalog generator now uses that original receipt.
+This is a recorded batch-operation start, not per-file capture time, a copied
+filesystem mtime, or a new audit timestamp. Original encoder version is unrecorded.
+
+`python3 tools/test_data/repair_media_time.py` preflights without writes; `--write`
+corrects only the known mistaken timestamp, exact hero copies and affected
+manifest shard hashes. It requires receipt/catalog property agreement, verifies
+all 400 actual asset hashes, and rejects unexpected timestamps, stale manifests,
+changed hero copies or escaping paths. All destinations are preflighted before
+individual atomic replacements; concurrent edits are unsupported.
+
+Actual repair: 200 catalog rows, 40 hero copies, four files. All other primary
+fields and 1,800 raw reports remain byte-preserved; binary inventory and ZIP hash
+are unchanged. A repeat verified 400 assets and changed zero files. Nine tests
+cover input preservation, provenance, preflight failures, hash/hero refresh,
+symlink rejection, idempotence and the original generator regression. The separate
+media audit now passes all eleven implemented checks; application evidence remains
+blocked. No historic generator version is inferred from the current Pillow version.
 
 ## Fresh catalog quota coverage
 
