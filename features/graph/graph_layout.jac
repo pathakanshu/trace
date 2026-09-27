@@ -9,7 +9,7 @@ with a small force-directed (Fruchterman-Reingold) layout:
 Explicit cl keeps it in the client bundle (see components/shared/Display.jac).
 Math.* is the browser's JavaScript Math object.
 """
-import from .graph_helpers { kind_order }
+cl import from .graph_helpers { kind_order }
 sv import from .services { GraphNodeView, GraphEdgeView }
 
 # Returns {node_id: [x, y]} inside a width x height box.
@@ -51,7 +51,7 @@ cl def:pub layout_graph(
         if e.from_id in index_of and e.to_id in index_of and e.from_id != e.to_id];
 
     # Force iterations. Fewer on the capped corpus graph (401 nodes) to stay fast.
-    k = Math.sqrt(width * height / count) * 0.8;
+    k = Math.sqrt(width * height / count) * 0.45;
     temperature = width / 8;
     iterations = 150 if count <= 150 else 60;
     for _ in range(iterations) {
@@ -87,11 +87,11 @@ cl def:pub layout_graph(
             dxs[b] += ddx * pull;
             dys[b] += ddy * pull;
         }
-        # Move each node at most `temperature`, with a light pull to the centre
+        # Move each node at most `temperature`, with a pull to the centre
         # so unlinked records stay on screen, then cool down.
         for i in range(count) {
-            mx = dxs[i] - (xs[i] - cx) * 0.05;
-            my = dys[i] - (ys[i] - cy) * 0.05;
+            mx = dxs[i] - (xs[i] - cx) * 0.6;
+            my = dys[i] - (ys[i] - cy) * 0.6;
             moved = Math.sqrt(mx * mx + my * my);
             if moved > 0 {
                 limit = Math.min(moved, temperature);

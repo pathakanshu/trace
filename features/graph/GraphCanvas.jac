@@ -43,9 +43,10 @@ def:pub GraphCanvas(
         return text if len(text) <= 24 else text[:23] + "…";
     }
 
+    # Narrow screens scroll the diagram sideways instead of shrinking labels to specks.
     return <figure className="flex flex-col gap-2">
-        <div className="overflow-hidden rounded-lg border border-border bg-card">
-            <svg viewBox="0 0 900 520" role="img" className="block h-auto w-full"
+        <div className="overflow-x-auto rounded-lg border border-border bg-card">
+            <svg viewBox="0 0 900 520" role="img" className="block h-auto w-full min-w-[40rem]"
                 aria-label={"Diagram of " + str(len(graph.nodes)) + " records and " + str(len(graph.edges)) + " links. Use the record list below for keyboard access."}>
                 <defs>
                     <marker id="trace-graph-arrow" viewBox="0 0 10 10" refX="10" refY="5"
@@ -80,7 +81,7 @@ def:pub GraphCanvas(
                             <title>{n.kind + ": " + n.label}</title>
                             <circle cx={p[0]} cy={p[1]} r={r} className={cn(kind_fill(n.kind), "stroke-card")} strokeWidth={1.5} />
                             {n.id == selectedId and <circle cx={p[0]} cy={p[1]} r={r + 4} className="fill-none stroke-ring" strokeWidth={2} />}
-                            {show_label(n) and <text x={p[0]} y={p[1] - r - 5} textAnchor="middle" fontSize={11}
+                            {show_label(n) and <text x={p[0]} y={p[1] - r - 5} textAnchor="middle" fontSize={13}
                                 className="fill-foreground stroke-card" strokeWidth={3} paintOrder="stroke">{short_label(n.label)}</text>}
                         </g>
                     }
