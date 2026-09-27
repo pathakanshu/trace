@@ -53,24 +53,28 @@ import quadratic); corpus lookups use a field filter so they walk real edges.
 
 ## Anshu (map, integration)
 
-Working on: corridor map + corpus report heat layer on `codex/anshu-map-scale`.
+Done: corridor map + corpus report heat layer on `codex/anshu-map-scale`.
 Reserved: `features/map/*`, `services/geo.jac`, new
 `features/map/bhotekoshi-corridor.geojson`, README Map section, this section/log.
 Task 1 landed on main: **34f3d9a / 48b597f**. Current OSM river/settlements,
 faint district, corridor fit and ODbL attribution; not a measured flood extent.
-Task 2 consumer ready: exact-coordinate aggregation, weighted heat, clickable
+Task 2 consumer **3088d5d** + integration follow-up: exact-coordinate aggregation, weighted heat, clickable
 high-zoom circles, keyboard status breakdown, top-20 list, empty-count fallback.
 Miguel's backend/import registration landed in 814a07d during rebase.
-Eight count browser checks use labeled component fixtures; real imported-corpus
-integration and the rebased gates are next.
+Real persisted corpus integration passes: 1,356 located / 2,244 unlocated
+reports, 170 records grouped at four coordinates; Tatopani 345, Kodari 339,
+Khadichaur 339, Bahrabise 333. Import retry creates nothing; no corpus alerts.
+The browser test sets the requested incident ID and forwards the real backend
+response unchanged. Shared incident-selector UI remains Miguel's integration.
 
-Validation: **59 Jac tests**, **54-file compiler gate**, production web bundle;
-**9 Maya browser checks + 8 density component checks**, zero page errors.
+Validation: **66 Jac tests**, **56-file compiler gate**, production web bundle;
+**9 Maya + 8 density fixture + 4 real corpus browser checks**, zero page errors.
 Hospital update creates one alert; source history/reload/reset remain correct.
 375px caption/legend/list have no document overflow. Actual local Maya screenshot:
-`/private/tmp/trace-corridor-mobile.png` (Anshu's machine, not a portable asset).
+`/private/tmp/trace-corridor-mobile.png` and `/private/tmp/trace-real-corpus-mobile.png`
+(Anshu's machine, not portable assets).
 Own isolated server 8092 stopped after checks; active developer checkout untouched.
-Hosted preview, actual imported corpus counts and physical phone not exercised.
+Hosted preview and physical phone not exercised. Maya reset preserves corpus counts.
 
 Miguel has registered the endpoint in 814a07d with:
 `import from services.geo { get_boundaries, get_bhotekoshi_corridor }`.
@@ -201,3 +205,5 @@ Working on: (fill in)
 - 08:58 main: incident switcher (Maya story / corpus), Load exercise corpus in Demo controls, corpus totals strip; People status chips, 100 of N and server search; Organizations ranked by report_count; Graph per-kind totals and cap note. Demo-only controls and report checker hidden for the corpus. 66 tests, gate passed; browser-checked Maya reset + one hospital alert and the corpus views.
 
 - 08:55 codex/anshu-map-scale: 34f3d9a/48b597f corridor on main; density consumer and map label fix ready. 9 real Maya + 8 mocked-count browser checks pass, 375px screenshot `/private/tmp/trace-corridor-mobile.png`. Backend fields/import registration remain Miguel-owned; final rebase/test/compiler gates precede push.
+
+- 09:00 codex/anshu-map-scale 3088d5d + integration follow-up: rebased on Miguel 814a07d. Real persisted corpus → map pass (1356 located, 2244 unlocated, 170 records, four settlement points); 9 Maya + 8 fixture + 4 real corpus browser checks, no page errors, 375px screenshots above. main.jac registration already wired by Miguel. Shared incident-selector UI/hosted deployment remain his side; final rebase + 66-test / compiler gates before main push.

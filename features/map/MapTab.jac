@@ -14,6 +14,7 @@ def:pub MapTab(snapshot: DashboardSnapshot, onRefresh: Callable[[], any], active
     groups: list[dict] = aggregate_places(counts, settlementAnchors);
     located: int = (snapshot as any).located_reports or 0;
     unlocated: int = (snapshot as any).unlocated_reports or 0;
+    show_places: bool = not snapshot.is_corpus and (len(snapshot.locations) <= 20 or len(groups) == 0);
     selectedGroups: list[dict] = [g for g in groups if g["key"] == selectedSettlement];
     def choose_settlement(key: str) -> None { selectedSettlement = key; selectedId = ""; }
     def choose_place(id: str) -> None { selectedId = id; selectedSettlement = ""; }
@@ -30,14 +31,14 @@ def:pub MapTab(snapshot: DashboardSnapshot, onRefresh: Callable[[], any], active
             <IncidentMap locations={snapshot.locations} people={snapshot.people} active={active} focusLocationId={focusLocationId} focusRequest={focusRequest} onSelect={choose_place} reportGroups={groups} onSelectSettlement={choose_settlement} onCorridorReady={lambda (features: list) { settlementAnchors = features; }} />
         </div>
         <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs" aria-label="Map status legend">
-            {for status in (["MISSING", "REVIEW", "FOUND_SAFE", "UNKNOWN"] if len(snapshot.locations) <= 20 or len(groups) == 0 else []) {
+            {for status in (["MISSING", "REVIEW", "FOUND_SAFE", "UNKNOWN"] if show_places else []) {
                 <span key={status} className="inline-flex items-center gap-2">
                     <span className={"size-2.5 rounded-full " + pin_dot(status)} aria-hidden="true" />{pin_label(status)}
                 </span>
             }}
             <span className="inline-flex items-center gap-2"><span className="h-0.5 w-5 bg-map-water" aria-hidden="true" />{"Current river linework"}</span>
         </div>
-        {len(snapshot.locations) <= 20 and <p className="text-xs text-muted-foreground">{"Pin colour follows linked people's current reports; needs review includes conflicting reports, injury, or death. District outline: Sindhupalchok. Pins are reported media locations, not live person tracking. Unknown or invalid coordinates are omitted."}</p>}
+        {show_places and <p className="text-xs text-muted-foreground">{"Pin colour follows linked people's current reports; needs review includes conflicting reports, injury, or death. District outline: Sindhupalchok. Pins are reported media locations, not live person tracking. Unknown or invalid coordinates are omitted."}</p>}
         <p className="min-w-0 break-words text-xs text-muted-foreground" aria-label="River corridor context">{"Bhote Koshi river corridor (current OpenStreetMap linework). Not a measured 2016 flood extent. The translucent band is a visual guide along the river."}</p>
         {(len(counts) > 0 or located > 0 or unlocated > 0) and <section className="min-w-0 flex flex-col gap-3" aria-label="Report density">
             <p className="break-words text-sm" aria-live="polite">{str(located) + " reports with a location, clustered at " + str(len(groups)) + " settlements; " + str(unlocated) + " reports have no verified location."}</p>
@@ -65,7 +66,7 @@ def:pub MapTab(snapshot: DashboardSnapshot, onRefresh: Callable[[], any], active
                 </section>
             }}
         </section>}
-        {(len(snapshot.locations) <= 20 or len(groups) == 0) and <>
+        {show_places and <>
         <div className="flex flex-wrap gap-2" aria-label="Reported places">
             {for place in snapshot.locations[:20] {
                 <button key={place.id} type="button" aria-pressed={selectedId == place.id}

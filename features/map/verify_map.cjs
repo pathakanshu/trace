@@ -8,7 +8,7 @@ if (!['localhost', '127.0.0.1'].includes(new URL(base).hostname)) {
 const results = [];
 const browserErrors = [];
 const pass = name => { results.push(name); console.log('PASS', name); };
-const bridgeButton = page => page.getByRole('button', { name: /^Bhote Koshi Bridge ·/ });
+const bridgeButton = page => page.getByLabel('Reported places', { exact: true }).getByRole('button', { name: /^Bhote Koshi Bridge ·/ });
 const currentPanel = page => page.getByLabel('Current reports for linked people', { exact: true });
 async function openPage(browser, boundaryMode = '') {
   const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
