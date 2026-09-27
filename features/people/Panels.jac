@@ -26,7 +26,8 @@ def:pub PeoplePanel(
     people: list[PersonView],
     duplicates: list[DuplicateCandidate],
     selectedId: str,
-    onSelect: Callable[[str], None]
+    onSelect: Callable[[str], None],
+    onReview: Callable[[str], None]
 ) -> JsxElement {
     return <section className="flex flex-col gap-3">
         <SectionHeading title="People" subtitle="Select someone to see every report about them." />
@@ -57,7 +58,16 @@ def:pub PeoplePanel(
                 </div>
                 <span className="text-sm">{d.person_a + " and " + d.person_b}</span>
                 <span className="text-xs text-muted-foreground">{"Why we think so: " + ", ".join(d.reasons)}</span>
-                <span className="text-xs italic text-muted-foreground">{"We keep them separate until someone who knows them confirms."}</span>
+                {d.decision == "PENDING" and <span className="text-xs italic text-muted-foreground">{"We keep them separate until someone who knows them confirms."}</span>}
+                {d.decision != "PENDING" and <span className={cn("text-xs font-medium", "text-status-safe" if d.decision == "CONFIRMED" else "text-status-missing")}>
+                    {("Confirmed same person" if d.decision == "CONFIRMED" else "Rejected: different people") + " by " + d.reviewer + ", " + friendly_time(d.decided_at)}
+                </span>}
+                <div>
+                    <button type="button" onClick={lambda { onReview(d.person_a_id + "|" + d.person_b_id); }}
+                        className="mt-1 inline-flex h-8 items-center rounded-md border border-border bg-card px-3 text-xs font-medium hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring outline-none">
+                        {"Review match" if d.decision == "PENDING" else "View review"}
+                    </button>
+                </div>
             </div>
         }}
     </section>;
