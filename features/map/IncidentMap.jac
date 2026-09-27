@@ -5,6 +5,7 @@ access token, so the demo keeps working offline.
 
 What it draws:
   - district + province borders from geometry.topo.json (via get_boundaries)
+  - OpenStreetMap rivers across Nepal as muted context (via get_nepal_rivers)
   - current OSM river corridor and settlement labels, with district outline
   - one pin per Location node from the Trace graph
 
@@ -20,7 +21,7 @@ import from "topojson-client" { feature }
 import from ...lib.utils { cn }
 import from .Density { density_geojson }
 import from .Status { linked_people, pin_status, pin_label, pin_dot }
-sv import from ...services.geo { get_boundaries, get_bhotekoshi_corridor }
+sv import from ...services.geo { get_boundaries, get_bhotekoshi_corridor, get_nepal_rivers }
 sv import from ...services.trace { LocationView, PersonView }
 
 # The incident's district in geometry.topo.json (सिन्धुपाल्चोक / Sindhupalchok).
@@ -72,13 +73,32 @@ def add_boundary_layers(map_obj: any, topo: any) -> None {
         "id": "province-line", "type": "line", "source": "provinces",
         "paint": {"line-color": css_var("--muted-foreground"), "line-width": 1.2, "line-opacity": 0.6}
     });
-    # Requests may finish in either order; late boundaries stay under the river.
-    first_overlay = "report-heat" if map_obj.getLayer("report-heat") else "corridor-band";
-    if map_obj.getLayer(first_overlay) {
+    # Requests may finish in any order; late boundaries stay under every river.
+    above = first_layer(map_obj, ["nepal-rivers", "report-heat", "corridor-band"]);
+    if above {
         for layer in ["district-fill", "district-line", "province-line"] {
-            map_obj.moveLayer(layer, first_overlay);
+            map_obj.moveLayer(layer, above);
         }
     }
+}
+
+# First existing layer id from a bottom-to-top list, or None.
+def first_layer(map_obj: any, ids: list[str]) -> any {
+    for layer_id in ids {
+        if map_obj.getLayer(layer_id) { return layer_id; }
+    }
+    return None;
+}
+
+# Context rivers stay thin and muted so the affected Bhote Koshi reads first.
+def add_river_layers(map_obj: any, rivers: any) -> None {
+    map_obj.addSource("nepal-rivers", {"type": "geojson", "data": rivers,
+        "attribution": "© <a href='https://www.openstreetmap.org/copyright' target='_blank' rel='noopener noreferrer'>OpenStreetMap contributors</a> (ODbL)"});
+    map_obj.addLayer({"id": "nepal-rivers", "type": "line", "source": "nepal-rivers",
+        "layout": {"line-cap": "round", "line-join": "round"},
+        "paint": {"line-color": css_var("--map-water", 1.0), "line-opacity": 0.55,
+            "line-width": ["interpolate", ["linear"], ["zoom"], 6, 0.6, 10, 1.2, 14, 2]}},
+        first_layer(map_obj, ["report-heat", "corridor-band"]));
 }
 
 
@@ -88,14 +108,16 @@ def add_corridor_layers(map_obj: any, corridor: any) -> list {
     map_obj.addLayer({"id": "corridor-band", "type": "line", "source": "bhotekoshi-corridor",
         "filter": ["==", ["geometry-type"], "LineString"],
         "layout": {"line-cap": "round", "line-join": "round"},
-        "paint": {"line-color": css_var("--map-water", 1.0), "line-opacity": 0.13,
+        "paint": {"line-color": css_var("--status-warning", 1.0), "line-opacity": 0.13,
             "line-width": ["interpolate", ["linear"], ["zoom"], 8, 10, 12, 28, 16, 52]}});
+    # Warning colour keeps the affected river distinct from the blue context rivers.
     map_obj.addLayer({"id": "corridor-river", "type": "line", "source": "bhotekoshi-corridor",
         "filter": ["==", ["geometry-type"], "LineString"],
         "layout": {"line-cap": "round", "line-join": "round"},
-        "paint": {"line-color": css_var("--map-water", 1.0), "line-opacity": 0.9,
+        "paint": {"line-color": css_var("--status-warning", 1.0), "line-opacity": 0.95,
             "line-width": ["interpolate", ["linear"], ["zoom"], 8, 1.5, 12, 3.5, 16, 6]}});
-    if map_obj.getLayer("report-heat") { map_obj.moveLayer("report-heat", "corridor-band"); }
+    # Three of the four corpus settlements sit on this river, so report heat stays above it.
+    if map_obj.getLayer("report-heat") { map_obj.moveLayer("report-heat"); }
     if map_obj.getLayer("report-circles") { map_obj.moveLayer("report-circles"); }
     labels: list = [];
     # HTML labels keep offline text rendering independent of a remote glyph server.
@@ -126,9 +148,9 @@ def update_density(map_obj: any, groups: list) -> None {
     map_obj.addSource("report-counts", {"type": "geojson", "data": data});
     map_obj.addLayer({"id": "report-heat", "type": "heatmap", "source": "report-counts",
         "paint": {"heatmap-weight": weight,
-            "heatmap-intensity": ["interpolate", ["linear"], ["zoom"], 8, 0.6, 12, 1.2, 16, 2],
-            "heatmap-radius": ["interpolate", ["linear"], ["zoom"], 8, 14, 12, 28, 16, 42],
-            "heatmap-opacity": ["interpolate", ["linear"], ["zoom"], 10, 0.7, 14, 0.2, 16, 0],
+            "heatmap-intensity": ["interpolate", ["linear"], ["zoom"], 8, 2.5, 12, 3, 16, 3],
+            "heatmap-radius": ["interpolate", ["linear"], ["zoom"], 8, 32, 12, 60, 16, 80],
+            "heatmap-opacity": ["interpolate", ["linear"], ["zoom"], 10, 0.85, 13, 0.6, 16, 0],
             "heatmap-color": ["interpolate", ["linear"], ["heatmap-density"],
                 0, css_var("--primary", 0.0), 0.2, css_var("--map-water"),
                 0.4, css_var("--primary"), 0.7, css_var("--status-warning"), 1, css_var("--status-missing")]}});
@@ -136,7 +158,6 @@ def update_density(map_obj: any, groups: list) -> None {
         "paint": {"circle-color": css_var("--primary"), "circle-opacity": 0.75,
             "circle-stroke-color": css_var("--background"), "circle-stroke-width": 2,
             "circle-radius": ["interpolate", ["linear"], ["get", "report_count"], 1, 7, 500, 20, 1500, 30]}});
-    if map_obj.getLayer("corridor-band") { map_obj.moveLayer("report-heat", "corridor-band"); }
 }
 
 # A small HTML pin. Classes use theme tokens.
@@ -188,6 +209,11 @@ def:pub IncidentMap(locations: list[LocationView], people: list[PersonView], act
                 "style": blank_style(),
                 "bounds": [[85.82, 27.74], [86.00, 28.06]],
                 "fitBoundsOptions": {"padding": 42},
+                # Zoom out no further than all of Nepal; one world copy only.
+                "minZoom": 6,
+                "maxZoom": 14,
+                "maxBounds": [[79.0, 25.5], [89.5, 31.2]],
+                "renderWorldCopies": False,
                 "attributionControl": False
             });
             mapRef.current = map_obj;
@@ -200,6 +226,7 @@ def:pub IncidentMap(locations: list[LocationView], people: list[PersonView], act
                 # Later refreshes and tab switches preserve the viewport.
                 status = "ready";
                 load_boundaries(map_obj);
+                load_rivers(map_obj);
                 load_corridor(map_obj);
                 map_obj.on("click", "report-circles", lambda (event: any) {
                     if event.features and len(event.features) > 0 and onSettlementRef.current {
@@ -238,6 +265,16 @@ def:pub IncidentMap(locations: list[LocationView], people: list[PersonView], act
             if mapRef.current == map_obj { boundaryStatus = "unavailable"; }
         } finally {
             if boundaryTimerRef.current { clearTimeout(boundaryTimerRef.current); }
+        }
+    }
+
+    # Context rivers are optional: any failure leaves the rest of the map as is.
+    async def load_rivers(map_obj: any) -> None {
+        try {
+            rivers: any = await get_nepal_rivers();
+            if mapRef.current == map_obj and not rivers["error"] { add_river_layers(map_obj, rivers); }
+        } except Exception {
+            return;
         }
     }
 

@@ -79,3 +79,17 @@ def:pub get_bhotekoshi_corridor() -> dict {
     }
     return _cache["corridor"];
 }
+
+# OpenStreetMap waterway=river ways inside Nepal (ODbL), simplified to about 400 m.
+def:pub get_nepal_rivers() -> dict {
+    if "rivers" not in _cache {
+        try {
+            with open("features/map/nepal-rivers.geojson", encoding="utf-8") as fh {
+                _cache["rivers"] = json.load(fh);
+            }
+        } except Exception {
+            return {"error": "Bundled Nepal rivers are unavailable"};
+        }
+    }
+    return _cache["rivers"];
+}

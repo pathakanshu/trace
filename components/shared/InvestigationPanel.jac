@@ -21,10 +21,14 @@ def usage_line(usage_source: str, total_tokens: int) -> str {
 def:pub InvestigationPanel(snapshot: DashboardSnapshot, onRefresh: Callable[[], any]) -> JsxElement {
     has selectedId: str = "", selectedClaim: str = "", passphrase: str = "",
         busy: bool = False, liveResponse: any = None, liveIncident: str = "", error: str = "";
-    personId = selectedId or (snapshot.people[0].id if snapshot.people else "");
-    people = [p for p in snapshot.people if p.id == personId];
+    # Reset recreates people and claims with new ids, so a stored selection
+    # only counts while it still exists in the current snapshot.
+    selectedPeople = [p for p in snapshot.people if p.id == selectedId];
+    people = selectedPeople if selectedPeople else snapshot.people[:1];
+    personId = people[0].id if people else "";
     claims = people[0].claims if people else [];
-    claimId = selectedClaim or (claims[-1].id if claims else "");
+    claimIds = [c.id for c in claims];
+    claimId = selectedClaim if selectedClaim in claimIds else (claims[-1].id if claims else "");
 
     # Existing runs come straight from the snapshot, so a REPLAYED result shows
     # up on load without clicking Investigate. Most recent by run_at wins.
