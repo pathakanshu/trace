@@ -230,6 +230,19 @@ def run_audit(root):
     add("rumor_temporal_opposition", rumor_errors, "Each fictional death rumor has visible equal-time or unknown-time opposing status evidence",
         [rel(identity_path), rel(data / "records")], ["Does not prove any report true/false or check all challenge attribution semantics."])
 
+    identity_contract_errors = []
+    try:
+        from generate_identities import validate_identities
+        validate_identities(read_jsonl(identity_path), {row["id"]: row for row in records},
+            json.loads((fixtures / "allocation-plan.json").read_text()),
+            json.loads((data / "context/geography.geojson").read_text()),
+            json.loads((root / "demo/spec/quotas.json").read_text())["identity_oracle"])
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        identity_contract_errors.append(str(error).replace(str(root), "<repo>"))
+    add("private_identity_contract", identity_contract_errors, "Allocated private IDs/membership/ages preserved; complete Person partition and quota bands; initial place follows existing report",
+        [rel(identity_path), rel(data / "records/person"), rel(data / "records/claim")],
+        ["50 existing initial point locations and 950 unknown initial locations; the geographic quota remains blocked. Private labels are not runtime identity decisions."])
+
     query_path = fixtures / "queries.jsonl"
     query_errors = []
     try:
@@ -343,7 +356,7 @@ def run_audit(root):
     summary = dict(Counter(check["status"] for check in checks))
     summary = {status: summary.get(status, 0) for status in ("pass", "fail", "blocked")}
     return {"dataset_id": DATASET, "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "tools": [{"name": "tools/test_data/audit_contracts.py", "version": "1.7"}, {"name": "jsonschema", "version": version("jsonschema")}],
+            "tools": [{"name": "tools/test_data/audit_contracts.py", "version": "1.8"}, {"name": "jsonschema", "version": version("jsonschema")}],
             "checks": checks, "summary": summary}
 
 

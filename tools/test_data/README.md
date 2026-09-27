@@ -42,7 +42,7 @@ it does not fall back to a stale schema report when jsonschema is unavailable.
 
 Run its own offline checks with:
 `python3 -m unittest discover -s tools/test_data -p test_contract_audit.py`.
-The current corpus audit has 15 pass / 14 fail / 2 blocked; failures are intentional
+The current corpus audit has 17 pass / 13 fail / 2 blocked; failures are intentional
 findings in the partial dataset, not successful runtime behavior.
 
 ## Isolated control pack
@@ -116,8 +116,8 @@ cases use analysis without publishing: hostile text stays source data. None of
 these eight runtime cases has run; no agent response or success is prefilled.
 No nonexistent replay-action IDs are used as prerequisites.
 
-Actual tooling results: **81 distinct tests pass across two environments**.
-The schema environment runs 78 and explicitly skips three Pillow tests. Run the
+Actual tooling results: **91 distinct tests pass across two environments**.
+The schema environment runs 88 and explicitly skips three Pillow tests. Run the
 three decoder checks with a Pillow-equipped tooling Python:
 `python3 -m unittest discover -s tools/test_data -p test_negative_media.py`.
 That separate run passes all three. Do not count skipped decoder checks as passes
@@ -194,3 +194,20 @@ Seven input-boundary tests verify rejection before any fixture generation;
 valid Unicode and null unknown values are preserved. Strict JSONL audit parsing
 also rejects repeated object keys, so malformed input cannot hide behind a
 last-key-wins decoder. Existing public rows remain unchanged.
+
+## Contract-shaped private identities
+
+`python3 tools/test_data/generate_identities.py` preserves all 1,000 allocated
+private IDs, person membership, primary record choices and canonical ages, while
+writing the exact identity-oracle contract. It derives the initial location only
+from the existing initial MISSING claim: 50 point locations and 950 unknowns.
+Clusters use the cited context feature labels already attached to those points;
+no coordinates or absent reporting zones are invented. This does not fulfill the
+geographic coverage quota. Public records and source history are unchanged.
+
+Seven tests verify the saved shape, all-person partition, age/multiplicity quotas,
+stable allocation, unknown geography, missing evidence, unsupported clusters and
+rejected fabricated/extra decision fields. Three additional writer tests cover
+repeat byte/mtime preservation, rejected escaping paths and non-finite output.
+Query/negative/identity writers share this confined idempotent output routine.
+The generator hookup now preserves these contract-shaped private identities.

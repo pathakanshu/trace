@@ -1,10 +1,10 @@
 {
   "dataset_id": "bhotekoshi-2016-exercise-v1",
-  "generated_at": "2026-09-27T09:54:06Z",
+  "generated_at": "2026-09-27T09:57:34Z",
   "tools": [
     {
       "name": "tools/test_data/audit_contracts.py",
-      "version": "1.7"
+      "version": "1.8"
     },
     {
       "name": "jsonschema",
@@ -93,23 +93,10 @@
     },
     {
       "rule_id": "support_shape:oracle/identities.jsonl",
-      "status": "fail",
+      "status": "pass",
       "observed": {
-        "failure_count": 1000,
-        "examples": [
-          "row 1: missing: id, initial_cluster, initial_location_id, initial_precision, primary_person_id; unexpected: hero, identity_id",
-          "row 2: missing: id, initial_cluster, initial_location_id, initial_precision, primary_person_id; unexpected: hero, identity_id",
-          "row 3: missing: id, initial_cluster, initial_location_id, initial_precision, primary_person_id; unexpected: hero, identity_id",
-          "row 4: missing: id, initial_cluster, initial_location_id, initial_precision, primary_person_id; unexpected: hero, identity_id",
-          "row 5: missing: id, initial_cluster, initial_location_id, initial_precision, primary_person_id; unexpected: hero, identity_id",
-          "row 6: missing: id, initial_cluster, initial_location_id, initial_precision, primary_person_id; unexpected: hero, identity_id",
-          "row 7: missing: id, initial_cluster, initial_location_id, initial_precision, primary_person_id; unexpected: hero, identity_id",
-          "row 8: missing: id, initial_cluster, initial_location_id, initial_precision, primary_person_id; unexpected: hero, identity_id",
-          "row 9: missing: id, initial_cluster, initial_location_id, initial_precision, primary_person_id; unexpected: hero, identity_id",
-          "row 10: missing: id, initial_cluster, initial_location_id, initial_precision, primary_person_id; unexpected: hero, identity_id",
-          "row 11: missing: id, initial_cluster, initial_location_id, initial_precision, primary_person_id; unexpected: hero, identity_id",
-          "row 12: missing: id, initial_cluster, initial_location_id, initial_precision, primary_person_id; unexpected: hero, identity_id"
-        ]
+        "failure_count": 0,
+        "examples": []
       },
       "expected": [
         "id",
@@ -657,6 +644,23 @@
       ]
     },
     {
+      "rule_id": "private_identity_contract",
+      "status": "pass",
+      "observed": {
+        "failure_count": 0,
+        "examples": []
+      },
+      "expected": "Allocated private IDs/membership/ages preserved; complete Person partition and quota bands; initial place follows existing report",
+      "evidence_paths": [
+        "tests/fixtures/bhotekoshi-2016-exercise-v1/oracle/identities.jsonl",
+        "demo/datasets/bhotekoshi-2016-exercise-v1/records/person",
+        "demo/datasets/bhotekoshi-2016-exercise-v1/records/claim"
+      ],
+      "limitations": [
+        "50 existing initial point locations and 950 unknown initial locations; the geographic quota remains blocked. Private labels are not runtime identity decisions."
+      ]
+    },
+    {
       "rule_id": "query_evidence_and_cutoffs",
       "status": "pass",
       "observed": {
@@ -857,8 +861,8 @@
     }
   ],
   "summary": {
-    "pass": 15,
-    "fail": 14,
+    "pass": 17,
+    "fail": 13,
     "blocked": 2
   }
 }

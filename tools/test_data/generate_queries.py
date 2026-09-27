@@ -12,7 +12,7 @@ import json
 import re
 from collections import Counter
 from datetime import datetime, timedelta, timezone
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parents[2]
 DATASET = "bhotekoshi-2016-exercise-v1"
@@ -185,13 +185,28 @@ def validate_queries(queries, catalog, quota):
             raise ValueError("Required sources do not match the required claims")
 
 
+def write_fixture_jsonl(root, name, rows):
+    root = root.resolve()
+    relative = PurePosixPath(name)
+    if relative.is_absolute() or ".." in relative.parts or "\\" in name or relative.as_posix() != name:
+        raise ValueError("Invalid private fixture path")
+    directory = root / "tests/fixtures" / DATASET
+    path = directory / name
+    if not path.resolve().is_relative_to(directory):
+        raise ValueError("Private fixture path escapes approved directory")
+    content = "".join(json.dumps(row, ensure_ascii=False, separators=(",", ":"), allow_nan=False) + "\n" for row in rows)
+    if path.exists() and path.read_text(encoding="utf-8") == content:
+        return
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(content, encoding="utf-8")
+
+
 def write_queries(root):
     catalog = read_catalog(root)
     queries = build_queries(catalog)
     quota = json.loads((root / "demo/spec/quotas.json").read_text())["evaluation"]["query_types"]
     validate_queries(queries, catalog, quota)
-    path = root / "tests/fixtures" / DATASET / "queries.jsonl"
-    path.write_text("".join(json.dumps(q, ensure_ascii=False, separators=(",", ":")) + "\n" for q in queries), encoding="utf-8")
+    write_fixture_jsonl(root, "queries.jsonl", queries)
     return queries
 
 

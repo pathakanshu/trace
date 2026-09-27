@@ -405,7 +405,8 @@ def main():
     write_cases(ROOT)
     # Private expected identity membership is isolated from all importable
     # records. Identity oracle groups are labels, not application input.
-    jsonl(FIX/"oracle/identities.jsonl",[{"identity_id":g["identity_id"],"person_ids":g["person_ids"],"hero":g["hero"],"canonical_age":g["canonical_age"]} for g in groups])
+    from generate_identities import write_identities
+    write_identities(ROOT)
     # Geography contract intentionally blocks the unverified 830 locations;
     # this status is machine-readable and visible in validation output.
     blockers=[{"requirement":"1000 locations: 840 initial points and 40 areas","status":"blocked","reason":"Only four current mapped settlement anchors were verified; no approved sampling zones, historical flood boundary, Lamosanghu anchor, or area geometry is available. No coordinates were fabricated."}]

@@ -58,17 +58,17 @@ kinds need an explicit application mapping; do not silently drop them.
 
 The older `schema-validation.json` and `validation-report.json` cover 19 limited
 checks; their zero failures do **not** mean complete contract conformance.
-The stricter supplementary `contract-audit.json` reports **15 checks passed,
-14 failed, 2 blocked**. All 8,027 primary records pass the catalog JSON Schema,
+The stricter supplementary `contract-audit.json` reports **17 checks passed,
+13 failed, 2 blocked**. All 8,027 primary records pass the catalog JSON Schema,
 but 153 references reveal records before their release time. Manifest, license,
-identity/checkpoint oracle, replay and validation-report
+checkpoint oracle, replay and validation-report
 support shapes differ from the documented contract. The separate 26-record
 control pack now passes its file checks. See each rule's measured examples; no application replay was run.
 
 This audit leaves the catalog, stable IDs, media bundle and previous reports
 unchanged. Repair release dependencies and support contracts before building a
 complete importer/replay around this preview. Top-level shape checks do not
-exhaustively validate nested semantics. The data tools' 81 distinct tests pass across schema and Pillow environments;
+exhaustively validate nested semantics. The data tools' 91 distinct tests pass across schema and Pillow environments;
 its corpus audit intentionally exits 1 for the observed data failures.
 
 - All 1,800 original source hashes match. However, the 1,260 JSON sources use
@@ -81,6 +81,9 @@ its corpus audit intentionally exits 1 for the observed data failures.
 - Geography is 170/1,000: the remaining 830 records require verified geographic
   inputs. The current points reuse four settlement anchors; no approved area
   polygons or historical flood boundary are supplied.
+- Private identity rows now match the specified contract, preserving all IDs,
+  membership and ages. Initial locations are 50 existing points and 950 unknowns;
+  the geography deficit is explicit and no runtime identity decisions are seeded.
 - The control pack is under `tests/fixtures/bhotekoshi-2016-exercise-v1/control/`.
   Its two incidents and ten people are outside the primary counts; runtime
   isolation/reset still requires a compatible importer.

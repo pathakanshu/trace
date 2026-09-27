@@ -14,6 +14,9 @@ of historical missing people.
   full-catalog records: 62 Person, 304 claims, 125 sources, 40 media, 54 locations,
   one incident and required supporting records. It now has complete reference
   closure. A scenario ID in its manifest does not mean the story is executable.
+- Contract-shaped private identity labels preserve all IDs, membership and ages.
+  Initial locations are 50 existing points and 950 unknowns; this is incomplete
+  geography, not an inferred location for absent reports.
 - 40 concrete negative inputs and 40 distinct research questions with actual
   claim/source citations and release cutoffs. No generated answers.
 - Separate reset-control inputs: 26 records (two incidents, ten people, two
@@ -37,7 +40,7 @@ of historical missing people.
 | Votes | 360 self-votes; 120 duplicate contributor/contribution pairs | Use distinct attributable non-author voters, one vote per pair, while retaining 240 helpful/120 not-helpful coverage |
 | Tasks | 36 submissions target different records from their tasks; reviewed snapshots lack cited claim evidence | Link actual appropriate contributions, reviewer evidence and times; do not claim that fixture snapshots are executed reviews |
 | Subscriptions | Maximum one distinct active follower on a hero Person | Cover two followers on one hero Person, no-follower person and mixed subject follows; test alerts only through actual execution |
-| Support files | Legacy manifest/license/identity/checkpoint/scenario/action/report shapes | Migrate consumers together, populate real nested references and generated checksums; exact shape alone is insufficient |
+| Support files | Legacy manifest/license/checkpoint/scenario/action/report shapes | Migrate consumers together, populate real nested references and generated checksums; exact shape alone is insufficient |
 | Story focus | Shelter story points to TREATMENT fac-000001; correction/translation stories select COMMENT con-000031/con-000061; historical scenario points to media-caption clm-001151 | Reconcile narratives, typed focal records and cited actions while preserving the 50-identity hero quota |
 | Runtime | No compatible full-corpus importer/replay runner has been invoked | Explicit supported/deferred/rejected mappings, real persistence/retry/reset/alert traces, twice-reset rehearsal, then another laptop |
 

@@ -15,7 +15,7 @@ import zlib
 from collections import Counter
 from pathlib import Path
 
-from generate_queries import ROOT, DATASET, read_catalog, at
+from generate_queries import ROOT, DATASET, read_catalog, at, write_fixture_jsonl
 
 FIELDS = set('id category description input_encoding input precondition_action_ids expected_error_class expected_record_delta required_capability'.split())
 CATEGORIES = ('MALFORMED_MISSING', 'BAD_CROSS_INCIDENT_REF', 'TIME_SEMANTICS', 'MEDIA_PATH_SIZE', 'RETRY_INJECTION_UNSUPPORTED')
@@ -151,8 +151,7 @@ def write_cases(root):
     cases=build_cases(read_catalog(root))
     quota=json.loads((root/'demo/spec/quotas.json').read_text())['evaluation']['invalid_input_categories']
     validate_cases(cases,quota)
-    path=root/'tests/fixtures'/DATASET/'invalid-inputs.jsonl'
-    path.write_text(''.join(json.dumps(c,ensure_ascii=False,separators=(',',':'))+'\n' for c in cases),encoding='utf-8')
+    write_fixture_jsonl(root,'invalid-inputs.jsonl',cases)
     return len(cases)
 
 
