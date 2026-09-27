@@ -26,11 +26,11 @@ Rules:
 
 ## Miguel (investigation stages)
 
-Working on: stage 3, investigation panel and Graph nodes.
-Files: `components/shared/InvestigationPanel.jac`, `services/trace.jac`
-(adds `investigations` to `DashboardSnapshot` only), `features/graph/*`.
-Next: stage 4 live checks of five report cases, README demo steps,
-`docs/DEPLOY_CHECKLIST.md`, JacHammer deploy.
+Working on: stage 4, live eval of five report cases (needs the key and
+passphrase in the running shell), then the JacHammer deploy.
+Files: `docs/INVESTIGATION.md`, `README.md` (top, model config, demo steps),
+`docs/DEPLOY_CHECKLIST.md`.
+Next: fill the PENDING eval rows, deploy with `docs/DEPLOY_CHECKLIST.md`.
 
 ## Anshu (map, integration)
 

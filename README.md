@@ -2,9 +2,16 @@
 
 **One incident. Every trace.**
 
-Trace is a Jac disaster-reporting demo with one persistent incident graph and five
-tabs: Map, People, Media, Organizations, and Graph. Sources make claims; new reports
-retain earlier claims and their provenance. All people and reports are fictional.
+Trace keeps a flood incident as one persistent graph of sources, claims, people and
+alerts. When a hospital reports a missing person safe, Trace alerts the family's
+subscription and keeps the police report beside it instead of overwriting it. When a
+relief group relays that news, a reviewer can ask Trace where the report got its
+information: NVIDIA Nemotron labels the attribution, and Jac decides what happens
+next (stop, retrieve the named source and compare, or hand it to a person). Labels
+come from the model; every action, traversal, timestamp and number comes from Jac.
+
+It is one Jac app with five tabs: Map, People, Media, Organizations, and Graph. All
+people and reports are fictional.
 
 ## Start here
 
@@ -28,7 +35,28 @@ jac start --dev main.jac
 
 Open the URL printed by the server. Run only one server against this checkout's
 `.jac/data/` graph store. The core demo needs no model credentials. Live report checks need
-the server settings in the investigation guide linked above.
+the server settings below.
+
+### Model configuration
+
+| Setting | Value |
+| --- | --- |
+| Model | `nvidia_nim/nvidia/nemotron-3.5-lightning-30b-a3b` (NVIDIA hosted API) |
+| Client | Jac `by llm()` (byLLM) over litellm 1.102.1, typed enum outputs |
+| Call settings | temperature 0, 96 output tokens, no retries, reasoning off, 20 s limit |
+| Prompt version | `report-lineage-v2` |
+| Calls per check | at most 2 (attribution, then one source comparison for a relay) |
+
+| Environment variable | Purpose |
+| --- | --- |
+| `NVIDIA_NIM_API_KEY` | NVIDIA API key, server-side only. |
+| `TRACE_LIVE_PASSPHRASE` | Required for live checks; typed into the People panel. Unset means live checks are off. |
+| `TRACE_MODEL_REQUEST_CAP` | Optional lifetime request cap for the server's ledger (default 200, 1-1000). |
+| `LITELLM_LOCAL_MODEL_COST_MAP=True` | Stops litellm downloading its price list at startup. |
+
+Every request is written to `.trace-local/model-usage.json` before it is sent and is
+never refunded; Reset does not touch it. Details, statuses and the evaluated cases are
+in [docs/INVESTIGATION.md](docs/INVESTIGATION.md).
 
 ## Current behavior and limits
 
@@ -46,12 +74,17 @@ the server settings in the investigation guide linked above.
   remain simulated. Real EXIF extraction, C2PA, and video analysis are not implemented.
 - Graph inspects real node IDs, typed edges, identity reviews, and upload copy links
   from the shared snapshot. Derived/candidate links are labeled. Investigation runs
-  and media contribution child nodes are not yet projected.
+  appear as Investigation nodes with a stored edge from the incident and derived
+  edges to the claims they cite. Media contribution child nodes are not projected.
 - People also offers a capped NVIDIA Nemotron check of one source report's
   attribution, with at most one follow-up source comparison. The model returns
   labels only; Jac chooses the next step. Results are advisory, stored separately
-  from claims, and unavailable without the server passphrase and key. Offline tests
-  use a mock model and do not establish semantic accuracy.
+  from claims, and unavailable without the server passphrase and key. Each result
+  is labeled LIVE (answered now), CACHED (a saved run reused) or REPLAYED (a
+  recorded real run re-created on Reset for the two seeded reports), with the
+  model id, the original run time and token usage. Offline tests use a mock model;
+  label quality rests on the handful of live cases in the investigation guide, not
+  on a benchmark.
 - No authentication, public publishing, continuous monitoring, or external alert
   delivery. CGX/PFIF import, free-text extraction, broader community workflows, and the
   large planned corpus are not implemented. Retry guarantees are tested sequentially.
@@ -100,13 +133,31 @@ location loop; no changes to the investigation snapshot fields or seed are neede
 
 ## Demo and checks
 
-1. Use **Demo controls → Reset demo** to load the starting fixtures.
-2. In **Organizations**, choose **Load hospital example → Review report → Publish demo report**.
-3. Inspect the retained police claim, hospital report, and new notification in
-   People, Organizations, and Graph. Inspect a map pin's linked source evidence.
-4. Publish the same form again: no additional claim or alert. Reload to check persistence.
-5. Reset to restore the scenario; unrelated incidents and shared nodes must survive.
-   **Simulate hospital report** remains the scripted fallback.
+The story, in order:
+
+1. **Reset demo** (Demo controls) loads the fixtures and re-creates two recorded runs.
+2. **People**: select the Nepal Police report. It shows REPLAYED, COMPLETED, labeled
+   DIRECT. Select the community report: REPLAYED, NEEDS_REVIEW, labeled RELAY; Jac
+   retrieved the police report it names and cites both excerpts. No model call.
+3. **Organizations**: **Load hospital example → Review report → Publish demo report**.
+   One new alert for Asha Gurung's subscription; the police MISSING claim stays.
+4. **Organizations**: publish a Flood Relief Demo report for Maya Gurung whose text
+   relays the hospital, for example: "According to Central Hospital Demo, Maya
+   Gurung, 24, was admitted in stable condition this morning. Our team has not seen
+   her." (a new reference, e.g. `NGO-RELAY-001`). No new alert: the status is unchanged.
+5. **People**: select that report, type the passphrase, **Investigate**. Result is
+   LIVE: attribution, Jac's retrieval of the hospital report, one comparison, both
+   excerpts cited, usage and the ledger-backed cap. Investigating again shows CACHED.
+6. **Graph**: the Investigation nodes link to the claims they cite.
+
+Publishing the same form again creates no additional claim or alert. Reset restores
+the scenario; unrelated incidents and shared nodes survive. **Simulate hospital
+report** remains the scripted fallback for step 3.
+
+**When live is unavailable** (no passphrase, key, network or budget): step 5 shows
+UNAVAILABLE or BUDGET_LIMIT with the server's message and sends nothing. The story
+still works from the two REPLAYED runs in step 2, which are real recorded Nemotron
+outputs, labeled as recorded with their original run time.
 
 ```sh
 jac test tests features/people/test_identity_review.jac features/graph/test_graph.jac features/media/test_media.jac features/media/test_media_integration.jac
