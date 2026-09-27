@@ -1,6 +1,7 @@
 """Gabriel's workspace. Search and selection belong to this tab, not the shell."""
 import from .Panels { PeoplePanel, ClaimsPanel }
 import from .IdentityReview { IdentityReview }
+import from .PeopleStats { PeopleStats }
 import from .CorpusPeople { CorpusPeople }
 import from ...components.shared.Display { SectionHeading }
 import from ...components.shared.Scale { is_corpus_snapshot }
@@ -79,6 +80,7 @@ def:pub PeopleTab(snapshot: DashboardSnapshot, onRefresh: Callable[[], any], onS
 
     return <div className="flex flex-col gap-5">
         <SectionHeading title="People" subtitle="Find a case, compare source reports, and review possible identity matches." />
+        <PeopleStats people={snapshot.people} duplicates={snapshot.duplicates} />
         <label className="flex max-w-xl flex-col gap-2 text-sm">
             <span className="font-medium">{"Search people"}</span>
             <input type="search" value={query}
