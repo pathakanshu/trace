@@ -55,6 +55,49 @@ import quadratic); corpus lookups use a field filter so they walk real edges.
 
 ## Anshu (map, integration)
 
+Ready for review: **`codex/media-voting`**, integrated with main **bd69ba7**.
+Assets **f5cb70d**; gallery/voting/tooling **492f396**; main integration **a097641**, preserving Miguel's shared UI fixes.
+No push to main. Original primary checkout is still on its existing branch.
+
+- 20 supplied photos + nine clips, all with small JPEG thumbnails; search,
+  Photos/Videos filters, 12-card pagination, Most useful / Newest added sorting.
+  No video element/source exists until Play; browser network checks found zero
+  video requests before Play. Full PNGs open only on request.
+- Shared, persistent, removable browser-scoped usefulness votes. New
+  `graph/media_votes.jac` attaches MediaVote children to canonical root-level Media.
+  Existing graph definitions, incident projections, demo/reset and investigation
+  code untouched. Files are a shared review library; unknown source/date/location
+  remain labeled and no association with the selected incident is asserted.
+- Integration: merge the **whole branch including assets**. The one new main import
+  is `import from features.media.community { CommunityMediaView, community_media, set_media_vote }`.
+  No new dependency or configuration. Preserve `.jac/data/` to preserve votes.
+  See `features/media/README.md` for deployment, provenance and verification.
+- Preserved 29 original files (336,244,450 bytes) in ignored
+  `media-originals/user-supplied-20260927/` in Anshu's primary checkout. Deployable
+  `assets/community-media/` contains 29 primary files (131,992,315 bytes) and
+  29 thumbnails (1,375,359 bytes). PNGs unchanged; MOVs have labeled H.264 copies.
+  Manifest SHA-256: `a029ee6ece040a5cad4d5f8458be0af4da228054162e9e93bd5f7f9bc5fb7b4d`.
+- Actual checks: **89 Jac tests passed** (five new offline voting tests),
+  **77-file compiler gate passed**, production web build passed. **Nine real
+  browser checks passed**, zero page errors: decoded thumbnails, no eager video
+  requests, playback, pagination, correct numeric 10-vs-2 ranking, saved vote/undo,
+  independent browsers, search and 375px. Asset audit recomputed all hashes,
+  dimensions, codec/duration and fast-start properties against preserved originals.
+  Server restart retained the vote, canonical graph IDs, both incidents and Maya
+  source/alert state; all temporary test votes were removed.
+- Latest-main compatibility: Miguel independently fixed the same three native
+  type errors in **bd69ba7**. Integration **a097641** keeps his shared files exactly;
+  no final diff to the dashboard/banner, investigation, map, existing graph or services.
+  Local browser also passed reset → hospital banner → Show on map, retaining both
+  claims and exactly one alert, with no overflow at 375px.
+- Limits: one removable vote per browser, no authenticated voter uniqueness.
+  Jac 0.34.1 static serving ignores Range (200/full file): the **clicked** clip may
+  buffer fully; the gallery does not download any video before Play. No EXIF,
+  video analysis, truth rating or model calls. Hosted JacHammer remains untested.
+  Evidence on Anshu's host: `/private/tmp/trace-media-browser.json`,
+  `/private/tmp/trace-media-integrity.json`, `/private/tmp/trace-media-restart-result.txt`,
+  `/private/tmp/trace-media-gallery.png`, `/private/tmp/trace-media-mobile.png`.
+
 Done: deterministic person timeline on `codex/person-timeline`, **37e25a8**,
 rebased on main **8489a32**. Ready for Miguel to cherry-pick/review; not merged.
 New read-only `person_timeline(incident_id, person_id)` endpoint and shared People
