@@ -2,6 +2,8 @@
 
 **One incident. Every trace.**
 
+🏆 **Winner — 1st Place, Agentic AI Track at JacHacks 2026**
+
 Trace keeps a flood incident as one persistent graph of sources, claims, people and
 alerts. When a hospital reports a missing person safe, Trace alerts the family's
 subscription and keeps the police report beside it instead of overwriting it. When a
