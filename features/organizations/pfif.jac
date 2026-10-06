@@ -11,6 +11,7 @@ import from graph.edges { HasOrganization }
 import from walkers.ingest { IngestWalker }
 import from walkers.watch { WatchWalker }
 import from demo.names { INCIDENT_NAME }
+import from services.access { require_write }
 
 glob PFIF_MAX_CHARS: int = 200000;
 glob PFIF_STATUS_TO_CLAIM: dict[str, str] = {
@@ -27,8 +28,9 @@ obj PfifResult {
 
 # Jac 0.34 RPC may turn raised exceptions into a null response, so validation
 # failures come back in the result for the form to show.
-def:pub import_pfif(incident_id: str, organization_id: str, xml_text: str) -> PfifResult {
+def:pub import_pfif(incident_id: str, organization_id: str, xml_text: str, passphrase: str = "") -> PfifResult {
     try {
+        require_write(passphrase);
         return _import_pfif(incident_id, organization_id, xml_text);
     } except ValueError as exc {
         return PfifResult(error=str(exc));

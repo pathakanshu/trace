@@ -36,7 +36,7 @@ impl PublishReport.publish -> None {
         result = await publish_report(incident_id=snapshot.incident_id,
             organization_id=organizationId, person_id=personId, claim_type=claimType,
             summary=summary, reported_at=reportedAt, source_reference=reference,
-            original_content=original);
+            original_content=original, passphrase=edit_key());
         if not result {
             error = "No response received. Keep the same report reference and retry to avoid duplicates.";
             busy = False;

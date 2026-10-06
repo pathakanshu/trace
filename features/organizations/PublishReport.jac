@@ -1,6 +1,7 @@
 """Small structured form: review locally, then publish one sourced graph claim."""
 import from ...components.ui.button { Button }
 import from ...components.shared.Display { status_sentence }
+import from ...components.shared.EditLock { edit_key }
 sv import from ...services.trace { DashboardSnapshot }
 sv import from .services { publish_report }
 

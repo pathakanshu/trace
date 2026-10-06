@@ -1,5 +1,6 @@
 """PFIF 1.4 import for organizations, with the accepted fields spelled out."""
 import from ...components.ui.button { Button }
+import from ...components.shared.EditLock { edit_key }
 sv import from ...services.trace { DashboardSnapshot }
 sv import from .pfif { import_pfif, PfifResult }
 
@@ -53,7 +54,7 @@ def:pub PfifImport(snapshot: DashboardSnapshot, onRefresh: Callable[[], any]) ->
         error = "";
         result = None;
         try {
-            response = await import_pfif(snapshot.incident_id, organizationId, xmlText);
+            response = await import_pfif(snapshot.incident_id, organizationId, xmlText, edit_key());
             if not response { error = "No response received. Try again; repeated imports are safe."; }
             elif response.error { error = response.error; }
             else { result = response; await onRefresh(); }

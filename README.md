@@ -223,6 +223,13 @@ Publishing the same form again creates no additional claim or alert. Reset resto
 the scenario; unrelated incidents and shared nodes survive. Story step 3,
 **Publish the hospital report**, is the scripted shortcut for step 3 here.
 
+**Write lock.** On a server that sets `TRACE_LIVE_PASSPHRASE`, publishing a report,
+PFIF import, and media upload, edit, delete, comment and claim all require that
+passphrase (`services/access.jac`); the footer shows **Unlock editing**, which keeps
+it for the browser tab. Reading, the story bar (including its prepared hospital
+report and Start over) and identity review stay open to every visitor. With the
+variable unset, as in local work and tests, nothing is locked.
+
 There is no presenter tray. The exercise corpus is imported the first time the
 incident list is requested on an empty store (about 3 s locally; a fresh JacHammer
 sandbox took about 25 s when it was a manual step), so the incident switcher can
