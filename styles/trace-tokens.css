@@ -12,9 +12,9 @@
   - This file adds Trace-specific tokens the same way: one value under :root
     (light) and one under .dark. It is a separate file so `jac retheme` never
     overwrites it.
-  - The app currently turns dark mode on by adding the `dark` class to <html>
-    (see components/TraceDashboard.jac). Light mode later = remove that class
-    (e.g. a toggle button). No component needs to change.
+  - The app starts in light mode. The header toggle turns dark mode on by adding
+    the `dark` class to <html> (see components/TraceDashboard.jac). No component
+    needs to change.
 
   RULE: components use token classes only (bg-card, text-status-safe,
   font-display...). Never raw colours like bg-zinc-900 or text-red-500.

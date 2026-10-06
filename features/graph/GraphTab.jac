@@ -109,7 +109,7 @@ def:pub GraphTab(snapshot: DashboardSnapshot, onRefresh: Callable[[], any]) -> J
         </div>
 
         {if len(g.nodes) == 0 {
-            <EmptyPanel icon={Share08Icon} title="No records in this incident" text="Seed or reset the demo to add reports, people and media." />
+            <EmptyPanel icon={Share08Icon} title="No records in this incident" text="Use Start over in Maya's story to restore its reports, people and media." />
             skip;
         }}
 

@@ -6,8 +6,7 @@ Panels remain mounted so switching tabs does not discard drafts or filters.
 """
 import from "@hugeicons/react" { HugeiconsIcon }
 import from "@hugeicons/core-free-icons" {
-    Refresh01Icon, Hospital01Icon, UserSearch01Icon, Notification01Icon,
-    Settings01Icon, Cancel01Icon, Database01Icon, Sun03Icon, Moon02Icon,
+    Sun03Icon, Moon02Icon,
     MapsIcon, UserMultipleIcon, Image01Icon, Building03Icon, Share08Icon
 }
 import from .ui.button { Button }
@@ -23,11 +22,11 @@ import from ..features.media.MediaTab { MediaTab }
 import from ..features.organizations.OrganizationsTab { OrganizationsTab }
 import from ..features.graph.GraphTab { GraphTab }
 sv import from ..services.trace {
-    DashboardSnapshot, IncidentOption, get_dashboard, reset_demo, add_hospital_update, run_watch,
-    run_resolve, list_incidents, load_corpus
+    DashboardSnapshot, IncidentOption, get_dashboard, reset_demo, add_hospital_update,
+    list_incidents
 }
 
-glob USE_DARK_THEME: bool = True;
+glob USE_DARK_THEME: bool = False;
 glob DASHBOARD_TABS: list[str] = ["Map", "People", "Media", "Sources", "Graph"];
 glob TAB_ICONS: list = [MapsIcon, UserMultipleIcon, Image01Icon, Building03Icon, Share08Icon];
 
@@ -64,7 +63,6 @@ def:pub TraceDashboard() -> JsxElement {
         error: str = "",
         notice: str = "",
         activeTab: str = "Map",
-        showDemo: bool = False,
         mapFocusId: str = "", mapFocusRequest: int = 0,
         incidents: list[IncidentOption] = [], incidentId: str = "",
         darkMode: bool = USE_DARK_THEME,
@@ -83,11 +81,8 @@ def:pub TraceDashboard() -> JsxElement {
     async def loadIncidentSnapshot(targetId: str) -> None;
     async def loadIncidents -> None;
     async def handleSelectIncident(targetId: str) -> None;
-    async def handleLoadCorpus -> None;
     async def handleReset -> None;
     async def handleHospitalUpdate -> None;
-    async def handleRunWatch -> None;
-    async def handleRunResolve -> None;
     def handleTabKey(event: any, index: int) -> None;
     def handleShowOnMap(claimId: str) -> None;
     def handleShowPersonOnMap(personId: str) -> None;
@@ -106,7 +101,6 @@ def:pub TraceDashboard() -> JsxElement {
     snap = snapshot;
     hospital_added = snap.hospital_update_added if snap else False;
     corpus_view = is_corpus_snapshot(snap);
-    has_corpus = len([i for i in incidents if i.kind == "corpus"]) > 0;
     banner_alerts = [a for a in snap.alerts if bannerId != "" and (a.id or a.created_at) == bannerId] if snap and not corpus_view else [];
 
     return <div className="flex min-h-svh flex-col bg-background text-foreground">
@@ -134,7 +128,7 @@ def:pub TraceDashboard() -> JsxElement {
                                 onClick={lambda { handleSelectIncident("" if opt.kind == "demo" else opt.id); }}
                                 className={"min-h-9 rounded px-3 py-1.5 text-left text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-60 " +
                                     ("bg-primary text-primary-foreground" if (opt.kind == "demo" and incidentId == "") or (opt.kind != "demo" and opt.id == incidentId) else "text-muted-foreground hover:bg-accent hover:text-foreground")}>
-                                {"Maya story (demo)" if opt.kind == "demo" else (opt.name + " - " + fmt_count(opt.record_count) + " records")}
+                                {"Maya's story (guided)" if opt.kind == "demo" else (opt.name + " - " + fmt_count(opt.record_count) + " records")}
                             </button>
                         }}
                         {busy == "switch" and <span role="status" className="px-2 text-xs text-muted-foreground">{"Loading incident..."}</span>}
@@ -144,33 +138,8 @@ def:pub TraceDashboard() -> JsxElement {
                         title={"Switch to light theme" if darkMode else "Switch to dark theme"}>
                         <HugeiconsIcon icon={Sun03Icon if darkMode else Moon02Icon} strokeWidth={2} />
                     </Button>
-                    <Button variant="ghost" size="sm" onClick={lambda { showDemo = not showDemo; }}>
-                        <HugeiconsIcon icon={Cancel01Icon if showDemo else Settings01Icon} strokeWidth={2} />
-                        {"Hide demo controls" if showDemo else "Demo controls"}
-                    </Button>
                 </div>
             </div>
-            {showDemo and <div className="flex flex-wrap items-center gap-2 border-t border-border bg-muted/40 pt-2.5 pb-2.5 pl-4 pr-4 md:pl-6 md:pr-6">
-                <span className="mr-2 text-xs text-muted-foreground">{"Presenter tools:"}</span>
-                {not has_corpus and <Button variant="outline" size="sm" disabled={busy != ""} onClick={handleLoadCorpus}>
-                    <HugeiconsIcon icon={Database01Icon} strokeWidth={2} />
-                    {"Loading corpus, this can take a minute..." if busy == "corpus" else "Load exercise corpus"}
-                </Button>}
-                {corpus_view and <span className="text-xs text-muted-foreground">{"The hospital report, update check, match search and reset act on the Maya story. Switch to it to use them."}</span>}
-                {not corpus_view and <Button size="sm" disabled={busy != "" or hospital_added} onClick={handleHospitalUpdate}>
-                    <HugeiconsIcon icon={Hospital01Icon} strokeWidth={2} />
-                    {"Adding..." if busy == "hospital" else ("Hospital report added" if hospital_added else "Simulate hospital report")}
-                </Button>}
-                {not corpus_view and <Button variant="outline" size="sm" disabled={busy != ""} onClick={handleRunWatch}>
-                    <HugeiconsIcon icon={Notification01Icon} strokeWidth={2} />{"Check for updates"}
-                </Button>}
-                {not corpus_view and <Button variant="outline" size="sm" disabled={busy != ""} onClick={handleRunResolve}>
-                    <HugeiconsIcon icon={UserSearch01Icon} strokeWidth={2} />{"Look for possible matches"}
-                </Button>}
-                {not corpus_view and <Button variant="outline" size="sm" disabled={busy != ""} onClick={handleReset}>
-                    <HugeiconsIcon icon={Refresh01Icon} strokeWidth={2} />{"Reset demo" if busy != "reset" else "Resetting..."}
-                </Button>}
-            </div>}
         </header>
 
         {snap and not corpus_view and <StoryBar step={storyStep} hospitalAdded={hospital_added} busy={busy}
@@ -233,8 +202,8 @@ def:pub TraceDashboard() -> JsxElement {
             </aside>
         </div>}
         <footer className="mt-auto flex flex-wrap justify-between gap-2 border-t border-border px-4 py-3 text-xs text-muted-foreground md:px-6">
-            <span>{"Demo with made-up people. Reports can be wrong: confirm with the source."}</span>
-            <span>{"Built with Jac for JacHacks UMich"}</span>
+            <span>{"Example incident with made-up people and organizations. Reports can be wrong: confirm with the source."}</span>
+            <span>{"Built with Jac at JacHacks UMich"}</span>
         </footer>
     </div>;
 }

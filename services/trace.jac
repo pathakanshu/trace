@@ -28,12 +28,16 @@ import from walkers.watch { WatchWalker, STATUS_CLAIMS }
 import from demo.seed { seed_demo, INCIDENT_NAME, PERSON_NAME, HOSPITAL_UPDATE }
 import from features.graph.services { GraphSnapshot, build_graph_snapshot }
 import from demo.corpus {
-    CORPUS_INCIDENT_NAME, CORPUS_SCAN_CACHE, unmapped_counts, read_kind
+    CORPUS_INCIDENT_NAME, CORPUS_SCAN_CACHE, unmapped_counts, read_kind,
+    load_exercise_corpus, corpus_incident
 }
 
 # The corpus has 1,150 people; the browser gets a page of them plus counts.
 glob CORPUS_PEOPLE_LIMIT: int = 100;
 glob CORPUS_GRAPH_NODES: int = 400;
+# A dict so the flag can be set without rebinding the glob. It stops requests
+# that arrive during the first import from each starting another one.
+glob CORPUS_AUTOLOAD: dict = {"busy": False};
 
 # ---------- View objects sent to the UI ----------
 
@@ -298,6 +302,18 @@ def:pub get_dashboard(incident_id: str = "") -> DashboardSnapshot {
 # The incidents a viewer can switch between. Seeds the demo on first use.
 def:pub list_incidents() -> list[IncidentOption] {
     if not _incident() { seed_demo(); }
+    # A new deploy starts with an empty store. Import the exercise corpus on the
+    # first listing so visitors never have to load it by hand. The import skips
+    # records that already exist, and a failure leaves the Maya incident usable.
+    if corpus_incident() is None and not CORPUS_AUTOLOAD["busy"] {
+        CORPUS_AUTOLOAD["busy"] = True;
+        try {
+            load_exercise_corpus();
+        } except Exception as e {
+            print("Exercise corpus import failed: " + str(e));
+        }
+        CORPUS_AUTOLOAD["busy"] = False;
+    }
     # Concurrent first requests on an empty store can each seed a demo copy.
     # Offer only the copy every other call uses; Reset removes the extras.
     demo = _incident();
@@ -309,7 +325,8 @@ def:pub list_incidents() -> list[IncidentOption] {
             "corpus" if incident.name == CORPUS_INCIDENT_NAME else "");
         if not kind or (kind == "demo" and jid(incident) != demo_id) { continue; }
         options.append(IncidentOption(id=jid(incident), name=incident.name, kind=kind,
-            record_count=sum(_scan(incident).totals.values())));
+            # +1 for the incident record, so this matches the Graph tab's total.
+            record_count=sum(_scan(incident).totals.values()) + 1));
     }
     options.sort(key=lambda (o: IncidentOption) -> int { return 0 if o.kind == "demo" else 1; });
     return options;

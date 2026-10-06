@@ -35,10 +35,9 @@ async function waitText(locator, text) {
     ...(process.env.TRACE_BROWSER_EXECUTABLE ? { executablePath: process.env.TRACE_BROWSER_EXECUTABLE } : {}) });
   try {
     const page = await openPage(browser);
-    await page.getByRole('button', { name: 'Demo controls', exact: true }).click();
     await Promise.all([page.waitForResponse(r => r.url().endsWith('/function/get_dashboard')),
-      page.getByRole('button', { name: 'Reset demo', exact: true }).click()]);
-    await page.getByRole('button', { name: 'Reset demo', exact: true }).waitFor();
+      page.getByRole('button', { name: 'Start over', exact: true }).click()]);
+    await page.getByRole('button', { name: 'Start over', exact: true }).waitFor();
     await page.getByRole('button', { name: 'Inspect Bhote Koshi Bridge · Missing', exact: true }).waitFor();
     await bridgeButton(page).focus();
     await page.keyboard.press('Enter');
@@ -47,7 +46,8 @@ async function waitText(locator, text) {
     assert.match(await page.getByRole('button', { name: 'Inspect Bhote Koshi Bridge · Missing', exact: true }).locator('span').first().getAttribute('class'), /bg-status-missing/);
     pass('keyboard place selection and cited Missing status');
 
-    await page.getByRole('button', { name: 'Simulate hospital report', exact: true }).click();
+    await page.getByRole('button', { name: 'Hospital says safe' }).click();
+    await page.getByRole('button', { name: 'Publish the hospital report', exact: true }).click();
     await waitText(currentPanel(page), 'Maya Gurung · Reported safe');
     assert.match(await currentPanel(page).innerText(), /Central Hospital Demo/);
     assert.match(await page.getByLabel('Location evidence', { exact: true }).innerText(), /Nepal Police Demo/);
@@ -114,10 +114,9 @@ async function waitText(locator, text) {
     await page.reload();
     await page.getByRole('button', { name: 'Inspect Bhote Koshi Bridge · Reported safe', exact: true }).waitFor();
     pass('updated map status persists after reload');
-    await page.getByRole('button', { name: 'Demo controls', exact: true }).click();
     await Promise.all([page.waitForResponse(r => r.url().endsWith('/function/get_dashboard')),
-      page.getByRole('button', { name: 'Reset demo', exact: true }).click()]);
-    await page.getByRole('button', { name: 'Reset demo', exact: true }).waitFor();
+      page.getByRole('button', { name: 'Start over', exact: true }).click()]);
+    await page.getByRole('button', { name: 'Start over', exact: true }).waitFor();
     await page.getByRole('button', { name: 'Inspect Bhote Koshi Bridge · Missing', exact: true }).waitFor();
     await page.getByText('No notifications yet', { exact: true }).waitFor();
     pass('reset restores Missing and removes the demo alert');

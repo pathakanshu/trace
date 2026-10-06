@@ -29,15 +29,15 @@ def:pub PublishReport(snapshot: DashboardSnapshot, onRefresh: Callable[[], any])
         <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
             <div>
                 <h3 className="font-display text-2xl">{"Publish a report"}</h3>
-                <p className="mt-1 max-w-2xl text-sm text-muted-foreground">{"Fictional demo institutions only. This selector does not verify an organization's identity. Every report keeps its source and history."}</p>
+                <p className="mt-1 max-w-2xl text-sm text-muted-foreground">{"Fictional institutions only. This selector does not verify an organization's identity. Every report keeps its source and history."}</p>
             </div>
             <Button variant="outline" size="sm" disabled={busy} onClick={loadExample}>{"Load hospital example"}</Button>
         </div>
-        {len(organizations) == 0 and <p className="mb-3 text-sm text-status-warning">{"No demo institutions yet. Use Reset demo in Demo controls to load the updated fixtures."}</p>}
+        {len(organizations) == 0 and <p className="mb-3 text-sm text-status-warning">{"No institutions yet. Use Start over in Maya's story to load them."}</p>}
         <form onSubmit={review} className="flex flex-col gap-4">
             <fieldset disabled={busy or reviewing} className="grid min-w-0 gap-4 md:grid-cols-2 disabled:opacity-70">
                 <label className="flex min-w-0 flex-col gap-1 text-sm">
-                    <span>{"Demo organization"}</span>
+                    <span>{"Organization"}</span>
                     <select required value={organizationId} onChange={lambda (e: ChangeEvent) { organizationId = e.target.value; }} className="h-11 w-full rounded-md border border-input bg-background px-3">
                         <option value="">{"Choose an organization"}</option>
                         {for org in organizations { <option key={org.id} value={org.id}>{org.name}</option> }}
@@ -85,7 +85,7 @@ def:pub PublishReport(snapshot: DashboardSnapshot, onRefresh: Callable[[], any])
             <p className="whitespace-pre-wrap text-sm">{original}</p>
             <p className="text-xs text-muted-foreground">{"This adds a source claim and checks subscriptions for updates. Earlier reports stay available."}</p>
             <div className="flex flex-wrap gap-2">
-                <Button disabled={busy} onClick={publish}>{"Publishing..." if busy else "Publish demo report"}</Button>
+                <Button disabled={busy} onClick={publish}>{"Publishing..." if busy else "Publish report"}</Button>
                 <Button variant="outline" disabled={busy} onClick={lambda { reviewing = False; }}>{"Edit report"}</Button>
             </div>
         </div>}
