@@ -17,14 +17,13 @@ import from graph.nodes {
 }
 # NOTE: every edge type you traverse (e.g. f"<-:About:<-") MUST be imported.
 import from graph.edges { Involves, Contains, About, Depicts, LocatedAt, HasSubscription, SupportedBy, HasOrganization }
+import from demo.names { INCIDENT_NAME, PERSON_NAME }
 import from demo.reset { clear_incident }
 import from demo.recorded { load_recorded_investigations }
 import from walkers.ingest { IngestWalker }
 import from walkers.evidence { EvidenceWalker }
 import from walkers.watch { WatchWalker }
 
-glob INCIDENT_NAME: str = "Bhote Koshi Flood Demo";
-glob PERSON_NAME: str = "Maya Gurung";
 
 # The one scripted update used by the "Add Hospital Update" button.
 glob HOSPITAL_UPDATE: dict = {

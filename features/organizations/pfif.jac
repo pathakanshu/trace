@@ -10,7 +10,7 @@ import from graph.nodes { Incident }
 import from graph.edges { HasOrganization }
 import from walkers.ingest { IngestWalker }
 import from walkers.watch { WatchWalker }
-import from demo.seed { INCIDENT_NAME }
+import from demo.names { INCIDENT_NAME }
 
 glob PFIF_MAX_CHARS: int = 200000;
 glob PFIF_STATUS_TO_CLAIM: dict[str, str] = {
