@@ -3,7 +3,7 @@ import from graph.nodes { Incident }
 import from graph.edges { Involves, HasOrganization }
 import from walkers.ingest { IngestWalker }
 import from walkers.watch { WatchWalker }
-import from demo.seed { INCIDENT_NAME }
+import from demo.names { INCIDENT_NAME }
 
 obj PublishResult {
     has claim_id: str, duplicate: bool, alerts_created: int, error: str = "";
