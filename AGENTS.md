@@ -7,7 +7,7 @@ Four Python-capable undergraduates are learning Jac overnight. **Working demo â†
 
 ## Start here
 
-Read `README.md` for current behavior, setup, and code locations, then `docs/TEAM.md` for ownership and shared interfaces. Read feature contracts only when changing that feature. `docs/plans/` contains future proposals and dataset specifications, not runtime schemas or instructions to implement during unrelated work. Use code and tests to establish what exists; update current docs when behavior changes.
+Read `README.md` for setup and code locations and `docs/LIMITS.md` for current behavior, then `docs/TEAM.md` for ownership and shared interfaces. Read feature contracts only when changing that feature. `docs/plans/` contains future proposals and dataset specifications, not runtime schemas or instructions to implement during unrelated work. Use code and tests to establish what exists; update current docs when behavior changes.
 
 ## Event and Stack
 
@@ -38,7 +38,7 @@ Use EXIF, controlled images/frames, and tested hashes; avoid unsupported crop/vi
 
 ## Demo direction and broader vision
 
-The target story below includes unimplemented steps (see README for current limits). Build toward one incident through a map, evidence drawer, timeline, graph, and agent trace:
+The target story below includes unimplemented steps (see `docs/LIMITS.md` for current limits). Build toward one incident through a map, evidence drawer, timeline, graph, and agent trace:
 
 1. Ingest police/volunteer records for fictional Maya; show claims appearing.
 2. Review and confirm identity association, preserving both sources.
