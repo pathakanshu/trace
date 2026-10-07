@@ -11,7 +11,9 @@ rewrites `[jachammer] project_id`.
 - [ ] Project environment variables (project level, not global, so they reach a
       permanent deploy):
   - `NVIDIA_NIM_API_KEY`: the NVIDIA key (exact name; an older entry was `NVIDIA`).
-  - `TRACE_LIVE_PASSPHRASE`: the demo passphrase. Share it only with presenters.
+  - `TRACE_LIVE_PASSPHRASE`: the team passphrase. Share it only with the team. It
+    gates live model checks and, when set, also locks publishing, PFIF import and
+    media changes for visitors (footer → **Unlock editing**).
   - `TRACE_MODEL_REQUEST_CAP`: `50` for the public deploy. The ledger is per
     deploy, so this bounds spending even if it resets with a new sandbox.
   - `LITELLM_LOCAL_MODEL_COST_MAP`: `True`.
@@ -26,7 +28,8 @@ rewrites `[jachammer] project_id`.
 3. People → community report: REPLAYED, NEEDS_REVIEW, RELAY to Nepal Police Demo,
    two citations, model id and the recorded run time. Nepal Police report: REPLAYED,
    NEEDS_REVIEW, RELAY with no named source.
-4. Organizations → **Load hospital example → Review → Publish**: exactly one new alert,
+4. Footer → **Unlock editing** with the passphrase (publishing is refused before
+   that). Organizations → **Load hospital example → Review → Publish**: exactly one new alert,
    police MISSING claim still listed.
 5. Organizations → publish the Flood Relief Demo relay from the README demo steps
    (reference `NGO-RELAY-001`).

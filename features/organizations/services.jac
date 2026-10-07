@@ -4,6 +4,7 @@ import from graph.edges { Involves, HasOrganization }
 import from walkers.ingest { IngestWalker }
 import from walkers.watch { WatchWalker }
 import from demo.names { INCIDENT_NAME }
+import from services.access { require_write }
 
 obj PublishResult {
     has claim_id: str, duplicate: bool, alerts_created: int, error: str = "";
@@ -13,8 +14,9 @@ obj PublishResult {
 # validation failures explicitly so the form can show actionable feedback.
 def:pub publish_report(incident_id: str, organization_id: str, person_id: str,
     claim_type: str, summary: str, reported_at: str, source_reference: str,
-    original_content: str) -> PublishResult {
+    original_content: str, passphrase: str = "") -> PublishResult {
     try {
+        require_write(passphrase);
         return _publish_report(incident_id, organization_id, person_id, claim_type,
             summary, reported_at, source_reference, original_content);
     } except ValueError as exc {

@@ -2,6 +2,7 @@ import from ...components.shared.Display { SectionHeading }
 sv import from ...services.trace { DashboardSnapshot }
 sv import from .media_upload { UploadRecord, upload_image, list_incident_media, check_media_duplicates, edit_media, delete_media, add_media_comment, add_media_assertion }
 import from ...components.ui.button { Button }
+import from ...components.shared.EditLock { edit_key, write_error }
 
 # A single card and persistent controls for one canonical Media node.
 def:pub MediaRecordCard(item: UploadRecord, onRefresh: Callable[[], any], readOnly: bool = False) -> JsxElement {
@@ -16,20 +17,20 @@ def:pub MediaRecordCard(item: UploadRecord, onRefresh: Callable[[], any], readOn
     async def save_edit {
         busy = True;
         try {
-            await edit_media(item.id, item.incident, title, source, description);
+            await edit_media(item.id, item.incident, title, source, description, edit_key());
             editing = False;
             await onRefresh();
-        } except Exception as e { error = "Could not save media details: " + str(e); }
+        } except Exception as e { error = "Could not save media details: " + write_error(e); }
         busy = False;
     }
     async def save_comment {
         if not comment.strip() { error = "Write a comment first."; return; }
         busy = True;
         try {
-            await add_media_comment(item.id, item.incident, comment, author);
+            await add_media_comment(item.id, item.incident, comment, author, edit_key());
             comment = "";
             await onRefresh();
-        } except Exception as e { error = "Could not add comment: " + str(e); }
+        } except Exception as e { error = "Could not add comment: " + write_error(e); }
         busy = False;
     }
     async def save_assertion {
@@ -39,21 +40,21 @@ def:pub MediaRecordCard(item: UploadRecord, onRefresh: Callable[[], any], readOn
         }
         busy = True;
         try {
-            await add_media_assertion(item.id, item.incident, "LOCATION_OR_SOURCE", claim_value, claim_source, claim_provenance);
+            await add_media_assertion(item.id, item.incident, "LOCATION_OR_SOURCE", claim_value, claim_source, claim_provenance, edit_key());
             claim_value = "";
             claim_source = "";
             claim_provenance = "";
             await onRefresh();
-        } except Exception as e { error = "Could not add claim: " + str(e); }
+        } except Exception as e { error = "Could not add claim: " + write_error(e); }
         busy = False;
     }
     async def remove_record {
         busy = True;
         try {
-            removed = await delete_media(item.id, item.incident);
+            removed = await delete_media(item.id, item.incident, edit_key());
             if removed { confirm_delete = False; await onRefresh(); }
             else { error = "This media item was not found in the selected incident."; }
-        } except Exception as e { error = "Could not delete media: " + str(e); }
+        } except Exception as e { error = "Could not delete media: " + write_error(e); }
         busy = False;
     }
 
@@ -142,11 +143,11 @@ def:pub MediaTab(snapshot: DashboardSnapshot, onRefresh: Callable[[], any]) -> J
         if not preview { error = "Choose an image to preview before uploading."; return; }
         busy = True;
         try {
-            await upload_image(incident, selected_name, source, preview);
+            await upload_image(incident, selected_name, source, preview, edit_key());
             preview = ""; selected_name = ""; source = "";
             notice = "Image saved as a Media record. Exact matches use SHA-256 within this incident.";
             await refresh_media();
-        } except Exception as e { error = "Upload failed: " + str(e); }
+        } except Exception as e { error = "Upload failed: " + write_error(e); }
         busy = False;
     }
     async def do_duplicate_check {

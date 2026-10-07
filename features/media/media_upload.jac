@@ -4,6 +4,7 @@ import hashlib;
 import from datetime { datetime, timezone }
 import from graph.nodes { Incident, Media, MediaMetadata, MediaComment, MediaAssertion, VerificationSignal }
 import from graph.edges { Contains, HasSignal, SupportedBy, ExactCopyOf }
+import from services.access { require_write }
 
 obj MediaCommentView {
     has id: str, body: str, author: str, created_at: str;
@@ -22,7 +23,8 @@ obj UploadRecord {
 }
 
 # Validate the decoded bytes, then create a canonical Media node under the existing incident.
-def:pub upload_image(incident: str, filename: str, source_reference: str, data_url: str) -> UploadRecord {
+def:pub upload_image(incident: str, filename: str, source_reference: str, data_url: str, passphrase: str = "") -> UploadRecord {
+    require_write(passphrase);
     if not incident.strip() { raise ValueError("Enter the incident name to scope this media item."); }
     if not source_reference.strip() { raise ValueError("Enter the supplied source or reference."); }
     if len(data_url) > 8_000_000 { raise ValueError("Choose an image under 6 MB."); }
@@ -115,7 +117,8 @@ def:pub check_media_duplicates(incident: str) -> list[UploadRecord] {
     return [_record_view(incident_node, item) for item in items];
 }
 
-def:pub edit_media(media_id: str, incident: str, display_name: str, source_reference: str, description: str) -> UploadRecord | None {
+def:pub edit_media(media_id: str, incident: str, display_name: str, source_reference: str, description: str, passphrase: str = "") -> UploadRecord | None {
+    require_write(passphrase);
     incident_node = _find_incident(incident);
     if incident_node is None { return None; }
     for item in [incident_node ->:Contains:->] {
@@ -132,7 +135,8 @@ def:pub edit_media(media_id: str, incident: str, display_name: str, source_refer
     return None;
 }
 
-def:pub delete_media(media_id: str, incident: str) -> bool {
+def:pub delete_media(media_id: str, incident: str, passphrase: str = "") -> bool {
+    require_write(passphrase);
     incident_node = _find_incident(incident);
     if incident_node is None { return False; }
     for item in [incident_node ->:Contains:->] {
@@ -160,7 +164,8 @@ def:pub delete_media(media_id: str, incident: str) -> bool {
     return False;
 }
 
-def:pub add_media_comment(media_id: str, incident: str, body: str, author: str) -> MediaCommentView | None {
+def:pub add_media_comment(media_id: str, incident: str, body: str, author: str, passphrase: str = "") -> MediaCommentView | None {
+    require_write(passphrase);
     incident_node = _find_incident(incident);
     if incident_node is None or not body.strip() { return None; }
     for item in [incident_node ->:Contains:->] {
@@ -173,7 +178,8 @@ def:pub add_media_comment(media_id: str, incident: str, body: str, author: str) 
     return None;
 }
 
-def:pub add_media_assertion(media_id: str, incident: str, assertion_type: str, value: str, source: str, provenance: str) -> MediaAssertionView | None {
+def:pub add_media_assertion(media_id: str, incident: str, assertion_type: str, value: str, source: str, provenance: str, passphrase: str = "") -> MediaAssertionView | None {
+    require_write(passphrase);
     incident_node = _find_incident(incident);
     if incident_node is None or not value.strip() or not source.strip() { return None; }
     for item in [incident_node ->:Contains:->] {

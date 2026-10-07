@@ -16,6 +16,7 @@ import from .shared.InvestigationPanel { InvestigationPanel }
 import from .shared.Scale { CorpusTotals, is_corpus_snapshot, fmt_count }
 import from .shared.StoryBar { StoryBar, story_tab }
 import from .shared.AlertBanner { AlertBanner }
+import from .shared.EditLock { EditLock }
 import from ..features.map.MapTab { MapTab }
 import from ..features.people.PeopleTab { PeopleTab }
 import from ..features.media.MediaTab { MediaTab }
@@ -203,6 +204,7 @@ def:pub TraceDashboard() -> JsxElement {
         </div>}
         <footer className="mt-auto flex flex-wrap justify-between gap-2 border-t border-border px-4 py-3 text-xs text-muted-foreground md:px-6">
             <span>{"Example incident with made-up people and organizations. Reports can be wrong: confirm with the source."}</span>
+            <EditLock />
             <span>{"Built with Jac at JacHacks UMich"}</span>
         </footer>
     </div>;
