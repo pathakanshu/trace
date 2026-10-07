@@ -44,7 +44,7 @@ consume the shared interface. Extend reset and its isolation checks for new type
 
 Use [the publishing contract](PUBLISHING.md) for source/report/alert behavior and
 [the investigation guide](INVESTIGATION.md) for the report checker.
-Current feature limits live in [README](../README.md); evidence and product rules
+Current feature limits live in [LIMITS.md](LIMITS.md); evidence and product rules
 live in [AGENTS.md](../AGENTS.md).
 
 Graph tab: `get_dashboard()` sets `snap.graph = build_graph_snapshot(incident,

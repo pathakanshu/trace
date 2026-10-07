@@ -31,7 +31,7 @@ rewrites `[jachammer] project_id`.
 4. Footer → **Unlock editing** with the passphrase (publishing is refused before
    that). Organizations → **Load hospital example → Review → Publish**: exactly one new alert,
    police MISSING claim still listed.
-5. Organizations → publish the Flood Relief Demo relay from the README demo steps
+5. Organizations → publish the Flood Relief Demo relay from the demo steps in `docs/DEMO.md`
    (reference `NGO-RELAY-001`).
 6. People → that report → **Investigate** with an empty passphrase: UNAVAILABLE, no call.
 7. Same report with the passphrase: LIVE, RELAY to Central Hospital Demo, comparison,

@@ -4,30 +4,72 @@
 
 🏆 **Winner — 1st Place, Agentic AI Track at JacHacks 2026**
 
-Trace keeps a flood incident as one persistent graph of sources, claims, people and
-alerts. When a hospital reports a missing person safe, Trace alerts the family's
-subscription and keeps the police report beside it instead of overwriting it. When a
-relief group relays that news, a reviewer can ask Trace where the report got its
-information: NVIDIA Nemotron labels the attribution, and Jac decides what happens
-next (stop, retrieve the named source and compare, or hand it to a person). Labels
-come from the model; every action, traversal, timestamp and number comes from Jac.
+Trace keeps a disaster as one persistent graph of sources, claims, people and alerts, so a
+new report sits beside the old ones instead of overwriting them.
 
-It is one Jac app with five tabs: Map, People, Media, Sources, and Graph. All
-people and reports are fictional.
+![Maya's story in Trace: reported missing, a possible duplicate record reviewed, the hospital reports her safe and her family is alerted, the source of a relayed report is checked, and the incident graph](docs/images/maya-story.gif)
 
-## Start here
+After a flood, the police say Maya is missing. A day later a hospital says she is
+safe. Most tools would flip a status field and lose the first report. Trace keeps
+both, alerts the family member who subscribed to her, and can tell you where each
+report got its information.
 
-- [AGENTS.md](AGENTS.md): engineering and evidence rules.
-- [Team contract](docs/TEAM.md): ownership, tab interfaces, and integration checks.
-- [Publishing contract](docs/PUBLISHING.md): report validation, provenance, alerts, and reset.
-- [Report investigation](docs/INVESTIGATION.md): the Nemotron report-attribution check, its setup, request cap, ledger, statuses, and tests.
+It is one [Jac](https://docs.jaseci.org/) app with five tabs: Map, People, Media,
+Sources and Graph. All people, organizations and reports are fictional.
 
-## Install and run
+## How it works
 
-Use the **Jac 0.34.1 native binary**, the tested version for this JacHammer scaffold.
-Check `jac --version` first; do not substitute a different CLI version or the
-`jaclang` PyPI package. See the [official installation guide](https://docs.jaseci.org/quick-guide/install/).
-Commands below assume `jac` resolves to the working 0.34.1 binary.
+Every screen reads the same graph. A source publishes a claim about a person; a
+walker follows the edges from that claim to the people subscribed to her and writes
+an alert.
+
+```mermaid
+flowchart LR
+    O[Organization] -->|publishes| S[Source]
+    S -->|asserts| C[Claim]
+    C -->|about| P[Person]
+    P -->|followed by| Sub[Subscription]
+    Sub -->|receives| A[Alert]
+    C -.->|checked by| I[Investigation]
+```
+
+### 1. Reports are kept, never replaced
+
+The police `MISSING` report and the hospital `FOUND_SAFE` report both stay on Maya's
+timeline, each with who said it and when. The status shown is a cited summary of
+those reports.
+
+![Maya's timeline with the police and hospital reports side by side](docs/images/people-timeline.png)
+
+### 2. A person decides whether two records are the same
+
+"Maya Gurung" and "Maya G." might be one person. Trace lists the rule-based
+similarities, the differences and what is unknown, then waits for a reviewer. Both
+records stay separate either way.
+
+![Match review panel listing similarities, differences and unknowns for two records](docs/images/people-match-review.png)
+
+### 3. The model labels, Jac decides
+
+A volunteer post says "According to Nepal Police". NVIDIA Nemotron labels the
+attribution (direct, relay or unclear). Jac then chooses the next step: stop,
+retrieve the named source and compare, or hand it to a person. Labels come from the
+model; every action, traversal, timestamp and number comes from Jac.
+
+![Source check result: Nemotron labels the report a relay and Jac retrieves the police report it names](docs/images/source-check.png)
+
+### 4. The graph is the app
+
+The Graph tab draws the stored nodes and typed edges behind every other tab, with
+live physics written in Jac and no graph library.
+
+![Node-link diagram of the incident graph with people, claims, sources, media and alerts](docs/images/graph-diagram.png)
+
+## Run it
+
+You need the **Jac 0.34.1 native binary**, the version this was tested with. Do not
+substitute another CLI version or the `jaclang` PyPI package. See the
+[official installation guide](https://docs.jaseci.org/quick-guide/install/).
 
 ```sh
 jac --version
@@ -35,11 +77,12 @@ jac install
 jac start --dev main.jac
 ```
 
-Open the URL printed by the server. Run only one server against this checkout's
-`.jac/data/` graph store. The core demo needs no model credentials. Live report checks need
-the server settings below.
+Open the URL printed by the server and follow the story bar at the top: four steps,
+each with a button that runs the real action. Run only one server against this
+checkout's `.jac/data/` graph store. The core story needs no model credentials.
 
-### Model configuration
+<details>
+<summary>Live model checks (optional)</summary>
 
 | Setting | Value |
 | --- | --- |
@@ -52,7 +95,7 @@ the server settings below.
 | Environment variable | Purpose |
 | --- | --- |
 | `NVIDIA_NIM_API_KEY` | NVIDIA API key, server-side only. |
-| `TRACE_LIVE_PASSPHRASE` | Required for live checks; typed into the People panel. Unset means live checks are off. |
+| `TRACE_LIVE_PASSPHRASE` | Required for live checks (typed into the People panel) and, when set, for publishing, PFIF import and media changes. Unset means live checks are off and nothing is locked. |
 | `TRACE_MODEL_REQUEST_CAP` | Optional lifetime request cap for the server's ledger (default 200, 1-1000). |
 | `LITELLM_LOCAL_MODEL_COST_MAP=True` | Stops litellm downloading its price list at startup. |
 
@@ -60,185 +103,19 @@ Every request is written to `.trace-local/model-usage.json` before it is sent an
 never refunded; Reset does not touch it. Details, statuses and the evaluated cases are
 in [docs/INVESTIGATION.md](docs/INVESTIGATION.md).
 
-## Current behavior and limits
+</details>
 
-- Sources (organizations) previews and publishes structured demo reports for an explicit person ID.
-  Identical retries return the existing claim; changed content requires a new reference.
-- WatchWalker creates in-app alerts from new source claims. Strictly newer dated
-  reports are updates; differing latest or undated reports require review.
-- People shows sourced timelines and deterministic name/age match candidates.
-  Human reviewers can confirm/reject associations with attribution and history.
-  Decisions preserve both records and do not merge timelines or change status.
-- Map uses bundled Nepal boundaries and graph-backed evidence pins. Reported
-  locations are unverified. No street tiles or map API key are needed.
-- Media supports image uploads, real SHA-256 copy matching, editable upload details,
-  comments, and attributed assertions through the shared snapshot. Seeded checks
-  remain simulated. Real EXIF extraction, C2PA, and video analysis are not implemented.
-- Graph inspects real node IDs, typed edges, identity reviews, and upload copy links
-  from the shared snapshot. Derived/candidate links are labeled. Investigation runs
-  appear as Investigation nodes with a stored edge from the incident and derived
-  edges to the claims they cite. Media contribution child nodes are not projected.
-  A node-link diagram above the list draws the same projection, styled after Jac's
-  `/graph` viewer, with live physics written in Jac (no graph library). Records animate
-  into a deterministic layout, dragging one pulls its neighbours along, and pressing one
-  opens it in the inspector. There is no pan/zoom yet, and the corpus draws only its
-  capped 401 records. "Jac's viewer" embeds the runtime's own `/graph` page, which shows
-  every node on the server (all incidents). It loads only when chosen.
-- People also offers a capped NVIDIA Nemotron check of one source report's
-  attribution, with at most one follow-up source comparison. The model returns
-  labels only; Jac chooses the next step. Results are advisory, stored separately
-  from claims, and unavailable without the server passphrase and key. Each result
-  is labeled LIVE (answered now), CACHED (a saved run reused) or REPLAYED (a
-  recorded real run re-created on Reset for the two seeded reports), with the
-  model id, the original run time and token usage. Offline tests use a mock model;
-  label quality rests on the handful of live cases in the investigation guide, not
-  on a benchmark.
-- No authentication, public publishing, continuous monitoring, or external alert
-  delivery. CGX/PFIF import, free-text extraction, broader community workflows, and the
-  large planned corpus are not implemented. Retry guarantees are tested sequentially.
+## What is real and what is not
 
-### Map
+Publishing, alerts, identity review, the timeline, SHA-256 copy matching of uploaded
+images and the graph all run on stored data. The seeded media checks (EXIF, C2PA,
+synthetic-media) are simulated and labeled as such in the UI. The two source checks
+shown on first load are real recorded Nemotron runs, labeled REPLAYED. There is no
+authentication, continuous monitoring or external alert delivery.
 
-The initial view frames the Bhote Koshi river corridor. Current OpenStreetMap
-linework (four separate mapped ways) and Kodari, Tatopani, Bahrabise and Khadichaur
-labels sit above a faint district background. The translucent river band is a
-visual guide, **not a measured 2016 flood extent**. © OpenStreetMap contributors
-(ODbL); attribution is available on the map. The bundled 18,016-byte GeoJSON is
-an exact copy from `codex/test-data`; its provenance/archive references resolve
-on that branch, not to a bundled corpus here. No other corpus inputs were copied.
-Other rivers are OpenStreetMap `waterway=river` ways inside Nepal (ODbL, Overpass extract of 2026-09-27), simplified to about 400 m in `features/map/nepal-rivers.geojson`.
+The full list is in [docs/LIMITS.md](docs/LIMITS.md).
 
-When the dashboard supplies `place_counts`, Map aggregates exact coordinates
-without jitter and draws a heat layer weighted by report count. High-zoom circles
-and the keyboard-accessible list open settlement totals and missing/safe/other
-source assertions. The list shows at most the 20 busiest coordinates. The caption
-separates located and unlocated reports; neither the glow nor the river band is
-an uncertainty or flood boundary. Counts are reports, not unique people or media
-locations. An empty count list preserves the Maya pins and evidence panel.
-The additive count backend/importer is owned by Miguel. It is integrated from
-814a07d; the map consumes its fields without changing the importer or schema.
-
-The corridor loads independently of boundaries and evidence, with its own
-five-second unavailable message and late recovery. HTML settlement labels need
-no external glyph service. `get_bhotekoshi_corridor` is the server endpoint;
-registered alongside `get_boundaries` in `main.jac` by Miguel.
-
-People reports with mapped evidence offer **Show on map**. It opens Map,
-selects the first linked place in snapshot order, and centers its pin. Repeating
-the link centers it again; normal tab switches preserve the viewport and People
-search. Reports without valid mapped evidence have no link. This navigation
-follows the report's media location, not the person's current whereabouts.
-
-Pins show the most urgent current report among people linked by a claim at that
-media location: Missing, Needs review, Reported safe, then No current status.
-Needs review includes conflicting reports, injury, or death. The evidence panel
-cites current person reports separately from the retained media-linked reports.
-A pin remains a reported media location; a status update does not relocate anyone.
-The bridge changes from Missing to Reported safe after the hospital update while
-retaining the police report. The seeded market has no linked person report and
-therefore shows No current status. Identity candidates are not silently combined.
-
-Pins and the keyboard-accessible place list work while district boundaries load.
-A failed request or five-second delay displays a boundaries-unavailable message;
-a late success restores boundaries without changing selection or viewport.
-The map observes container resizing and keeps viewport/selection across tabs.
-
-Map checks (27 September, corridor/count consumer): 66 Jac tests and the
-whole-program compiler gate pass, as does the production web client build. Nine real
-Maya browser checks pass (hospital update/one alert, retained police evidence,
-reload/reset, keyboard selection, pan/zoom/tab preservation, and failed/slow
-boundaries). Eight additional browser component checks use explicitly mocked
-count responses: exact-coordinate aggregation, 170 rows to four points,
-high-zoom circle selection, source-status sums, top-20 cap, empty fallback and
-corridor failure. Both suites pass at 375px with no document overflow or page
-errors. These count fixtures are not an importer or a corpus execution result.
-Four further checks pass against the real persisted corpus: idempotent import,
-1,356 located / 2,244 unlocated reports at 170 records / four coordinates,
-correct settlement status totals, 375px rendering, and reset isolation. The test
-uses the shared incident-selector UI and unchanged backend responses. Counts were
-Tatopani 345, Kodari 339, Khadichaur 339 and Bahrabise 333. No corpus alerts were
-created. Local screenshots on Anshu's host:
-`/private/tmp/trace-corridor-mobile.png` and
-`/private/tmp/trace-real-corpus-mobile.png`.
-Hosted deployment and physical-phone rehearsal remain untested.
-
-If a development preview retains a compiler overlay after a source correction,
-stop it and rebuild before restarting. A stale generated
-`.jac/client/.jac-build-error.json` may retain the old error; remove that marker
-only after a successful build confirms the correction. Do not reset shared data.
-
-```sh
-jac test features/map/test_map.jac
-jac build --check_only
-jac build --client web
-# Separate terminal, in an isolated checkout with its own .jac/data:
-jac start --dev --port 8092 --api_port 8093 main.jac
-# With Playwright already available to Node (no application dependency added):
-TRACE_MAP_URL=http://localhost:8092 node features/map/verify_map.cjs
-TRACE_MAP_URL=http://localhost:8092 node features/map/verify_density.cjs
-# Imports/reuses the real corpus in this isolated preview:
-TRACE_MAP_URL=http://localhost:8092 node features/map/verify_corpus_map.cjs
-```
-
-The browser check resets the preview's demo. It accepts localhost only.
-Set `TRACE_BROWSER_EXECUTABLE` to an existing Chromium executable if needed;
-`NODE_PATH` can point to existing Playwright packages. Set `TRACE_MAP_SCREENSHOT`
-to capture the 375px result. Shared integration change: a defaulted
-`LocationEvidenceView.person_id` filled from the claim's `About` edge in the
-location loop; no changes to the investigation snapshot fields or seed are needed.
-
-## Demo and checks
-
-**Guided story bar.** In the Maya story, a bar under the header walks through four
-steps: reported missing, same person?, hospital says safe, where did it come from?
-Each step switches to the right tab and shows a large caption; its button runs the
-real action (open the reports, open the match review, publish the prepared hospital
-report, scroll to the source check). The hospital step shows a large banner built
-from the stored alert, with the police report still listed beside it. **Start over**
-resets the Maya story for everyone using the site; it is the only reset control. The
-app opens in light mode, and the sun/moon button switches light and dark themes (remembered in
-this browser; projectors usually read better in light). The map legend sits inside
-the map; caveats are behind the (i) buttons and "How to read this map".
-
-The detailed story, in order:
-
-1. **Start over** (story bar) loads the fixtures and re-creates two recorded runs.
-2. **People**: select the community report ("According to Nepal Police Demo...").
-   It shows REPLAYED, NEEDS_REVIEW, labeled RELAY; Jac retrieved the police report it
-   names and cites both excerpts. The police report itself is labeled RELAY with no
-   named source (the officer recorded what the family said), so it also goes to a
-   person rather than being accepted as first-hand. No model call.
-3. **Sources**: **Load hospital example → Review report → Publish report**.
-   One new alert for Asha Gurung's subscription; the police MISSING claim stays.
-4. **Sources**: publish a Flood Relief Demo report for Maya Gurung whose text
-   relays the hospital, for example: "According to Central Hospital Demo, Maya
-   Gurung, 24, was admitted in stable condition this morning. Our team has not seen
-   her." (a new reference, e.g. `NGO-RELAY-001`). No new alert: the status is unchanged.
-5. **People**: select that report, type the passphrase, **Investigate**. Result is
-   LIVE: attribution, Jac's retrieval of the hospital report, one comparison, both
-   excerpts cited, usage and the ledger-backed cap. Investigating again shows CACHED.
-6. **Graph**: the Investigation nodes link to the claims they cite.
-
-Publishing the same form again creates no additional claim or alert. Reset restores
-the scenario; unrelated incidents and shared nodes survive. Story step 3,
-**Publish the hospital report**, is the scripted shortcut for step 3 here.
-
-**Write lock.** On a server that sets `TRACE_LIVE_PASSPHRASE`, publishing a report,
-PFIF import, and media upload, edit, delete, comment and claim all require that
-passphrase (`services/access.jac`); the footer shows **Unlock editing**, which keeps
-it for the browser tab. Reading, the story bar (including its prepared hospital
-report and Start over) and identity review stay open to every visitor. With the
-variable unset, as in local work and tests, nothing is locked.
-
-There is no presenter tray. The exercise corpus is imported the first time the
-incident list is requested on an empty store (about 3 s locally; a fresh JacHammer
-sandbox took about 25 s when it was a manual step), so the incident switcher can
-appear a little after the page does.
-
-**When live is unavailable** (no passphrase, key, network or budget): step 5 shows
-UNAVAILABLE or BUDGET_LIMIT with the server's message and sends nothing. The story
-still works from the two REPLAYED runs in step 2, which are real recorded Nemotron
-outputs, labeled as recorded with their original run time.
+## Tests
 
 ```sh
 jac test tests features/people/test_identity_review.jac features/graph/test_graph.jac features/media/test_media.jac features/media/test_media_integration.jac
@@ -246,11 +123,20 @@ jac build --check_only
 jac build --client web
 ```
 
-The investigation suite uses a mock model (byLLM `MockLLM`) and a temporary ledger;
-it makes no network or paid model calls. Browser acceptance steps are in the team contract; previously recorded
-publishing/browser verification and its limits are in the publishing contract.
-Local preview is the tested deployment fallback; public hosted access and a second
-physical device still need verification.
+The investigation suite uses a mock model and a temporary ledger; it makes no network
+or paid model calls.
+
+## More documentation
+
+| Page | What it covers |
+| --- | --- |
+| [docs/DEMO.md](docs/DEMO.md) | The guided story step by step, the write lock, and what happens when live checks are unavailable |
+| [docs/LIMITS.md](docs/LIMITS.md) | Current behavior and limits of every tab |
+| [docs/MAP.md](docs/MAP.md) | Map data sources, pin rules and the browser checks |
+| [docs/INVESTIGATION.md](docs/INVESTIGATION.md) | The Nemotron source check: setup, request cap, ledger, statuses and tests |
+| [docs/PUBLISHING.md](docs/PUBLISHING.md) | Report validation, provenance, alerts and reset |
+| [docs/TEAM.md](docs/TEAM.md) | Ownership, tab interfaces and integration checks |
+| [AGENTS.md](AGENTS.md) | Engineering and evidence rules |
 
 ## Code map
 
@@ -270,9 +156,18 @@ physical device still need verification.
 `.trace-local/` holds the persistent model request ledger. Neither is source code or a
 cleanup target. `geometry.topo.json` is required map data.
 
-## Future reference only
+[Dataset rules](docs/plans/test-data/TEST_DATA_RULES.md) and their linked schemas
+describe a future corpus, not current fixtures or APIs.
 
-[Dataset rules](docs/plans/test-data/TEST_DATA_RULES.md) and their linked schemas,
-quotas, and generation prompt specify a future corpus, not current fixtures or APIs.
-Read these only for work on that corpus; current code,
-tests, and the feature contracts above describe the implemented app.
+## Team
+
+Built in one night at JacHacks 2026 by four undergraduates learning Jac as they went.
+
+| Person | Owned |
+| --- | --- |
+| Anshu Pathak | Sources and Map tabs, ingestion, shared integration |
+| Miguel Orti Vila | Graph tab and the graph schema |
+| Gabriel Salvatore | People tab and identity matching |
+| Aidana Kuat Adilbekyzy | Media tab and evidence checks |
+
+![The team presenting Trace at JacHacks with the full graph on the projectors](docs/images/jachacks-presenting.jpg)
