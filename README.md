@@ -195,19 +195,20 @@ Each step switches to the right tab and shows a large caption; its button runs t
 real action (open the reports, open the match review, publish the prepared hospital
 report, scroll to the source check). The hospital step shows a large banner built
 from the stored alert, with the police report still listed beside it. **Start over**
-is the same Reset. The sun/moon button switches light and dark themes (remembered in
+resets the Maya story for everyone using the site; it is the only reset control. The
+app opens in light mode, and the sun/moon button switches light and dark themes (remembered in
 this browser; projectors usually read better in light). The map legend sits inside
 the map; caveats are behind the (i) buttons and "How to read this map".
 
 The detailed story, in order:
 
-1. **Reset demo** (Demo controls) loads the fixtures and re-creates two recorded runs.
+1. **Start over** (story bar) loads the fixtures and re-creates two recorded runs.
 2. **People**: select the community report ("According to Nepal Police Demo...").
    It shows REPLAYED, NEEDS_REVIEW, labeled RELAY; Jac retrieved the police report it
    names and cites both excerpts. The police report itself is labeled RELAY with no
    named source (the officer recorded what the family said), so it also goes to a
    person rather than being accepted as first-hand. No model call.
-3. **Sources**: **Load hospital example → Review report → Publish demo report**.
+3. **Sources**: **Load hospital example → Review report → Publish report**.
    One new alert for Asha Gurung's subscription; the police MISSING claim stays.
 4. **Sources**: publish a Flood Relief Demo report for Maya Gurung whose text
    relays the hospital, for example: "According to Central Hospital Demo, Maya
@@ -219,8 +220,13 @@ The detailed story, in order:
 6. **Graph**: the Investigation nodes link to the claims they cite.
 
 Publishing the same form again creates no additional claim or alert. Reset restores
-the scenario; unrelated incidents and shared nodes survive. **Simulate hospital
-report** remains the scripted fallback for step 3.
+the scenario; unrelated incidents and shared nodes survive. Story step 3,
+**Publish the hospital report**, is the scripted shortcut for step 3 here.
+
+There is no presenter tray. The exercise corpus is imported the first time the
+incident list is requested on an empty store (about 3 s locally; a fresh JacHammer
+sandbox took about 25 s when it was a manual step), so the incident switcher can
+appear a little after the page does.
 
 **When live is unavailable** (no passphrase, key, network or budget): step 5 shows
 UNAVAILABLE or BUDGET_LIMIT with the server's message and sends nothing. The story

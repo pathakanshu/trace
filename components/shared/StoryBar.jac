@@ -1,7 +1,7 @@
-"""Guided walk through Maya's story for live demos. Coordinate changes with Anshu.
+"""Guided walk through Maya's story for first-time visitors. Coordinate changes with Anshu.
 
 Each step only switches the view and explains it. The big button runs the real
-action (the same handlers as Demo controls), so nothing is faked or automatic.
+action against the graph, so nothing is faked or automatic.
 """
 import from "@hugeicons/react" { HugeiconsIcon }
 import from "@hugeicons/core-free-icons" {
@@ -27,8 +27,8 @@ glob STORY_STEPS: list[dict] = [
     {"short": "Hospital says safe",
      "title": "The hospital says Maya is safe",
      "caption": "Central Hospital reports Maya safe. The police report still says missing, so Trace shows both side by side and alerts her family.",
-     "action": "Publish the demo hospital report",
-     "note": "This button publishes the prepared demo report; the Sources tab can publish one by hand. Under the hood, IngestWalker stores the report, then WatchWalker walks from Maya to everyone following her and creates one alert each."},
+     "action": "Publish the hospital report",
+     "note": "This button publishes a prepared example report; the Sources tab can publish one by hand. Under the hood, IngestWalker stores the report, then WatchWalker walks from Maya to everyone following her and creates one alert each."},
     {"short": "Where did it come from?",
      "title": "Where did this report come from?",
      "caption": "The volunteer post says \"According to Nepal Police\". Trace asks NVIDIA Nemotron who is being quoted, then compares the post with that source.",

@@ -10,7 +10,7 @@ impl TraceDashboard.loadDashboard -> None {
     await loadIncidentSnapshot(incidentId);
 }
 
-# "" is the Maya demo incident. The id is passed in because a state update made
+# "" is the Maya incident. The id is passed in because a state update made
 # in the same handler is not visible until the next render.
 impl TraceDashboard.loadIncidentSnapshot(targetId: str) -> None {
     try {
@@ -23,7 +23,9 @@ impl TraceDashboard.loadIncidentSnapshot(targetId: str) -> None {
 }
 
 # Sequential on purpose: both calls seed an empty store, and running them at
-# once created duplicate demo incidents on a fresh preview.
+# once created duplicate Maya incidents on a fresh preview. On a new deploy the
+# incident list also imports the exercise corpus, so it can take a while; the
+# page is already usable and the switcher appears when it returns.
 impl TraceDashboard.loadStartup -> None {
     await loadDashboard();
     await loadIncidents();
@@ -33,7 +35,7 @@ impl TraceDashboard.loadIncidents -> None {
     try {
         incidents = await list_incidents();
     } except Exception as e {
-        # The switcher is optional; the demo incident still loads without it.
+        # The switcher is optional; the Maya incident still loads without it.
         incidents = [];
     }
 }
@@ -47,23 +49,11 @@ impl TraceDashboard.handleSelectIncident(targetId: str) -> None {
     busy = "";
 }
 
-impl TraceDashboard.handleLoadCorpus -> None {
-    busy = "corpus";
-    try {
-        await load_corpus();
-        await loadIncidents();
-        notice = "Exercise corpus loaded. Choose it in the incident selector.";
-    } except Exception as e {
-        error = "Loading the exercise corpus failed: " + str(e);
-    }
-    busy = "";
-}
-
 impl TraceDashboard.handleReset -> None {
     busy = "reset";
     try {
         await reset_demo();
-        notice = "Demo reset. Maya Gurung is back to one police report saying she is missing.";
+        notice = "Started over. Maya Gurung is back to one police report saying she is missing.";
         bannerId = "";
         storyStep = 1;
         activeTab = "Map";
@@ -88,30 +78,6 @@ impl TraceDashboard.handleHospitalUpdate -> None {
         }
     } except Exception as e {
         error = "Hospital update failed: " + str(e);
-    }
-    busy = "";
-}
-
-impl TraceDashboard.handleRunWatch -> None {
-    busy = "watch";
-    try {
-        created = await run_watch();
-        notice = "Checked for new reports: " + str(created) + " new alert(s).";
-        await loadDashboard();
-    } except Exception as e {
-        error = "WatchWalker failed: " + str(e);
-    }
-    busy = "";
-}
-
-impl TraceDashboard.handleRunResolve -> None {
-    busy = "resolve";
-    try {
-        found = await run_resolve();
-        notice = "Found " + str(len(found)) + " possible match(es). Nothing was merged.";
-        await loadDashboard();
-    } except Exception as e {
-        error = "ResolveWalker failed: " + str(e);
     }
     busy = "";
 }

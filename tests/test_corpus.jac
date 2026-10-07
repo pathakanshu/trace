@@ -14,6 +14,17 @@ def corpus_id() -> str {
     return str(load_exercise_corpus()["incident_id"]);
 }
 
+# Keep this first: it needs a store the corpus has not been imported into yet.
+test "the incident list imports the corpus when it is missing" {
+    assert corpus_incident() is None;
+    options = list_incidents();
+    assert sorted([o.kind for o in options]) == ["corpus", "demo"];
+    corpus = [o for o in options if o.kind == "corpus"][0];
+    assert corpus.record_count == get_dashboard(corpus.id).graph.total_nodes;
+    list_incidents();
+    assert len([i for i in [root -->[?:Incident, name == CORPUS_INCIDENT_NAME]]]) == 1;
+}
+
 test "import counts every mapped kind and reports the rest" {
     result = load_exercise_corpus();
     imported = result["imported"];
