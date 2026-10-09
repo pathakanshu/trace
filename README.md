@@ -83,6 +83,11 @@ live physics written in Jac and no graph library.
 
 ![Node-link diagram of the incident graph with people, claims, sources, media and alerts](docs/images/graph-diagram.png)
 
+Switch to Jac's built-in viewer and the same tab shows every node on the server. With
+the exercise corpus loaded that is 7,094 nodes and 11,307 edges.
+
+![Jac's built-in graph viewer showing the whole server: 7,094 nodes and 11,307 edges, colored by node type](docs/images/graph-whole-server.jpg)
+
 ## Run it
 
 You need the **Jac 0.34.1 native binary**, the version this was tested with. Do not
