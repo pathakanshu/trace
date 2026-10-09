@@ -7,13 +7,6 @@
 Trace keeps a disaster as one persistent graph of sources, claims, people and alerts, so a
 new report sits beside the old ones instead of overwriting them.
 
-<p>
-  <a href="https://docs.jaseci.org/"><img alt="Built with Jac 0.34.1" src="https://img.shields.io/badge/Jac-0.34.1-f97316"></a>
-  <a href="docs/INVESTIGATION.md"><img alt="Model: NVIDIA Nemotron" src="https://img.shields.io/badge/model-NVIDIA%20Nemotron-76b900"></a>
-</p>
-
-[How it works](#how-it-works) · [Run it](#run-it) · [Demo walkthrough](docs/DEMO.md) · [Documentation](#more-documentation)
-
 <p align="center">
   <img alt="Maya's story in Trace: reported missing, a possible duplicate record reviewed, the hospital reports her safe and her family is alerted, the source of a relayed report is checked, and the incident graph" src="docs/images/maya-story.gif">
 </p>
@@ -28,15 +21,6 @@ report got its information.
 
 It is one [Jac](https://docs.jaseci.org/) app with five tabs: Map, People, Media,
 Sources and Graph. All people, organizations and reports are fictional.
-
-## Highlights
-
-- **Nothing is overwritten.** Every report stays on the timeline with who said it and when. The status you see is a cited summary of those reports.
-- **Alerts follow the graph.** A new claim travels the edges to whoever subscribed to that person and writes one alert. Publishing the same report twice creates no second alert.
-- **People confirm identity.** Possible duplicates come with the rule-based reasons for and against, then wait for a reviewer. The records are never merged silently.
-- **The model labels, Jac decides.** NVIDIA Nemotron classifies where a report got its information. Every action, traversal, timestamp and number comes from Jac.
-- **Copies are found by hash.** Uploaded images are matched by SHA-256, so a repost is linked to the image it copies instead of counting as fresh evidence.
-- **One Jac app.** Graph, walkers, backend and client are a single program, including the live graph physics.
 
 ## How it works
 
