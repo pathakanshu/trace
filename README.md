@@ -7,7 +7,12 @@
 Trace keeps a disaster as one persistent graph of sources, claims, people and alerts, so a
 new report sits beside the old ones instead of overwriting them.
 
-![Maya's story in Trace: reported missing, a possible duplicate record reviewed, the hospital reports her safe and her family is alerted, the source of a relayed report is checked, and the incident graph](docs/images/maya-story.gif)
+<p align="center">
+  <img alt="Maya's story in Trace: reported missing, a possible duplicate record reviewed, the hospital reports her safe and her family is alerted, the source of a relayed report is checked, and the incident graph" src="docs/images/maya-story.gif">
+</p>
+<p align="center">
+  <i>Maya's story, start to finish: reported missing, matched, reported safe, traced to its source.</i>
+</p>
 
 After a flood, the police say Maya is missing. A day later a hospital says she is
 safe. Most tools would flip a status field and lose the first report. Trace keeps
@@ -23,15 +28,12 @@ Every screen reads the same graph. A source publishes a claim about a person; a
 walker follows the edges from that claim to the people subscribed to her and writes
 an alert.
 
-```mermaid
-flowchart LR
-    O[Organization] -->|publishes| S[Source]
-    S -->|asserts| C[Claim]
-    C -->|about| P[Person]
-    P -->|followed by| Sub[Subscription]
-    Sub -->|receives| A[Alert]
-    C -.->|checked by| I[Investigation]
-```
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/images/graph-shape-dark.svg">
+    <img alt="An Organization publishes a Source, which asserts a Claim about a Person. The Person has a Subscription, which receives an Alert. An InvestigationRun cites the Claim." src="docs/images/graph-shape-light.svg" width="760">
+  </picture>
+</p>
 
 ### 1. Reports are kept, never replaced
 
@@ -64,6 +66,11 @@ The Graph tab draws the stored nodes and typed edges behind every other tab, wit
 live physics written in Jac and no graph library.
 
 ![Node-link diagram of the incident graph with people, claims, sources, media and alerts](docs/images/graph-diagram.png)
+
+Switch to Jac's built-in viewer and the same tab shows every node on the server. With
+the exercise corpus loaded that is 7,094 nodes and 11,307 edges.
+
+![Jac's built-in graph viewer showing the whole server: 7,094 nodes and 11,307 edges, colored by node type](docs/images/graph-whole-server.jpg)
 
 ## Run it
 
